@@ -8,7 +8,7 @@ import { entitlement, perShare, quoteRedeem, sharesForDeltas, observe, pendingAc
 import { effectiveMultiplier, feeSchedule, issuerControls } from "./lib/token2022.ts";
 import { jupiterLastTrade, prestocksMarks, jupiterSellQuote, EXCLUDE_DEXES } from "./lib/sources.ts";
 import type { SellQuote } from "./lib/sources.ts";
-import { poolAccounts, quoteSwap, SIDE_BUY } from "./lib/amm.ts";
+import { poolAccounts, quoteSwap, SIDE_BUY, decodePool } from "./lib/amm.ts";
 import { decodeMultisig } from "./lib/squads.ts";
 import { accountDiscriminator, decodeAccount } from "./lib/idl.ts";
 import { PRESTOCKS_MULTISIG } from "./lib/prestocks.ts";
@@ -396,8 +396,20 @@ export class Valuation {
     const total = w.reduce((a, x) => a + x, 0);
     const amm = this.cfg.registry.fixture_amm;
     const usdc = this.cfg.registry.usdc;
-    const pools = active.map((l) => poolAccounts(amm.program_id, l.fixture_mint, usdc.mint, usdc.token_program));
+    if (!amm?.program_id || !usdc?.mint) {
+      throw Object.assign(new Error("registry has no fixture_amm.program_id or usdc.mint; run scripts/amm/seed-pools.ts for this cluster"), { status: 409 });
+    }
+    const usdcProgram = usdc.token_program ?? "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+    const pools = active.map((l) => poolAccounts(amm.program_id, l.fixture_mint, usdc.mint, usdcProgram));
+    // Pool accounts and reserves are read from chain; the LP fee comes from the pool account itself
+    // (authoritative), not the registry, so a stale or partial registry can't skew the quote.
     const res = await this.rpc.accounts(pools.flatMap((p) => [p.legVault.toBase58(), p.usdcVault.toBase58()]));
+    const poolAccs = await this.rpc.accounts(pools.map((p) => p.pool.toBase58()), "base64");
+    const poolInfo = poolAccs.values.map((a: any) => { try { return a ? decodePool(Buffer.from(a.data[0], "base64")) : null; } catch { return null; } });
+    const missing = active.filter((_l, k) => !poolInfo[k]);
+    if (missing.length) {
+      throw Object.assign(new Error(`no fixture_amm pool on ${b.cluster} for ${missing.map((l) => l.symbol).join(", ")} (program ${amm.program_id}); run scripts/amm/seed-pools.ts`), { status: 409 });
+    }
     const seedBy = new Map((amm.pools ?? []).map((p: any) => [p.index, p]));
     const deltas: bigint[] = b.legs.map(() => 0n);
     const minDeltas: bigint[] = b.legs.map(() => 0n);
@@ -407,7 +419,8 @@ export class Valuation {
       allocated += slice;
       const legRes = BigInt(res.values[2 * k]?.data?.parsed?.info?.tokenAmount?.amount ?? "0");
       const usdcRes = BigInt(res.values[2 * k + 1]?.data?.parsed?.info?.tokenAmount?.amount ?? "0");
-      const q = legRes && usdcRes && slice ? quoteSwap({ side: SIDE_BUY, amountIn: slice, legReserve: legRes, usdcReserve: usdcRes, lpFeeBps: amm.lp_fee_bps, legFeeBps: l.fee.now_bps }) : null;
+      const lpFee = poolInfo[k]!.fee_bps;
+      const q = legRes && usdcRes && slice ? quoteSwap({ side: SIDE_BUY, amountIn: slice, legReserve: legRes, usdcReserve: usdcRes, lpFeeBps: lpFee, legFeeBps: l.fee.now_bps }) : null;
       const delta = q?.delivered ?? 0n; // lands straight in the vault, net of the leg's transfer fee
       const minOut = (delta * BigInt(10_000 - slippageBps)) / 10_000n;
       deltas[l.index] = delta;
@@ -421,10 +434,10 @@ export class Valuation {
         expected_delta_raw: delta.toString(), min_out_raw: minOut.toString(), transfer_fee_raw: (q?.out_fee ?? 0n).toString(),
         route: {
           router: "fixture_amm", program: amm.program_id, pool: pools[k].pool.toBase58(), leg_vault: pools[k].legVault.toBase58(), usdc_vault: pools[k].usdcVault.toBase58(),
-          lp_fee_bps: amm.lp_fee_bps, reserves: { leg_raw: legRes.toString(), usdc_raw: usdcRes.toString(), slot: res.slot },
+          lp_fee_bps: lpFee, lp_fee_source: "pool account (chain)", reserves: { leg_raw: legRes.toString(), usdc_raw: usdcRes.toString(), slot: res.slot },
           pool_usd_per_raw: poolPrice?.toPrecision(12) ?? null, mainnet_last_trade_usd_per_raw: mainPrice ?? null,
           pool_vs_mainnet_bps: poolPrice && mainPrice ? bps(poolPrice, Number(mainPrice)) : null,
-          price_source: seed ? `pool seeded from ${seed.seed.source} at ${seed.seed.seeded_at} (blockId ${seed.seed.jupiter.blockId}); swap maths = fixture_amm constant product on measured input` : "pool not seeded",
+          price_source: seed?.seed ? `pool seeded from ${seed.seed.source} at ${seed.seed.seeded_at} (blockId ${seed.seed.jupiter?.blockId ?? "?"}); swap maths = fixture_amm constant product on measured input` : "no seed record in the registry; price = current pool reserves",
           swap_accounts: "fixtures/amm/src/lib.rs `swap`: pool, leg_mint, usdc_mint, leg_vault[w], usdc_vault[w], taker[s], source[w], destination[w], token_2022, token",
         },
       };
@@ -445,7 +458,7 @@ export class Valuation {
       expected_shares_raw: expectedShares?.toString() ?? null,
       min_shares_raw: minShares?.toString() ?? null,
       shares_formula: "min over active legs of floor(delta_i x (S + C_i) / owned_i), owned before the deposit (spec 01)",
-      packing: { legs_per_transaction: 4, transactions: chunk(idx, 4) },
+      packing: depositPacking(idx),
     };
   }
 
@@ -524,11 +537,34 @@ function controlsView(c: ReturnType<typeof issuerControls>) {
   };
 }
 
-function chunk<T>(a: T[], n: number): T[][] {
-  const out: T[][] = [];
-  for (let i = 0; i < a.length; i += n) out.push(a.slice(i, i + n));
-  return out;
+/**
+ * Deposit packing per spec 02 Budgets (A's fork run, program 700004c): at most 3 legs per transaction,
+ * 2 when a leg is 2-hop or shares the transaction with open_deposit_ticket; finalize separately.
+ * fixture_amm routes are single-hop. A full 7-leg deposit is 4 transactions. B's SDK still packs by
+ * serialized bytes and account locks (64) and has the final say; this is the plan, not a measurement.
+ */
+function depositPacking(legs: number[], hops: Record<number, number> = {}) {
+  const txs: { kind: string; legs: number[] }[] = [];
+  let i = 0;
+  const cap = (first: boolean, next: number[]) => (first || next.some((l) => (hops[l] ?? 1) > 1) ? 2 : 3);
+  let first = true;
+  while (i < legs.length) {
+    let n = cap(first, legs.slice(i, i + 3));
+    if (!first && legs.slice(i, i + n).some((l) => (hops[l] ?? 1) > 1)) n = 2;
+    txs.push({ kind: first ? "open_deposit_ticket + ticket_swap_leg" : "ticket_swap_leg", legs: legs.slice(i, i + n) });
+    i += n;
+    first = false;
+  }
+  txs.push({ kind: "finalize_deposit", legs: [] });
+  return {
+    rule: "spec 02 Budgets: <= 3 legs per transaction; 2 when a leg is 2-hop or shares the transaction with open; finalize separate",
+    route_hops: "fixture_amm: 1 hop per leg",
+    transactions: txs,
+    transaction_count: txs.length,
+    note: "B's SDK packs by serialized bytes and the 64 account-lock limit and has the final say.",
+  };
 }
+
 
 const B58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 function bs58(buf: Buffer): string {
