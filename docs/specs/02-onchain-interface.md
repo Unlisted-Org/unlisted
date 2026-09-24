@@ -179,6 +179,21 @@ Agent B diffed Agent A's IDL (`program@c141837`) against this spec (`docs/report
 | 8 | `open_deposit_ticket` reads `(mint, vault)×n` as remaining accounts | **Ratified**, and now part of this spec: it is needed for the availability check. |
 | — | Meaning of `amount` in `ClaimSettled` / `TicketLeg::Paid` | **`amount` is the gross debited from the vault** (the model's `floor(...)`, reconcilable with `A_i`). A new field **`received`** is the owner's measured net of the transfer fee. |
 
+### Router route rules (from A's fork findings, 2026-09-25)
+
+- **`excludeDexes=Manifest,1DEX`** for every route the program executes, and for every `sell_now` quote in spec 03, so quoted routes stay executable.
+  - Manifest: its quotes ignore the transfer fee.
+  - 1DEX: it requires a system-owned taker, so it can't route with a PDA.
+  - Hadron, Flux, BisonFi and TesseraV also failed on the fork. That looks like stale prop-AMM state on the fork, not a real limit; re-check on devnet or a fresh fork before excluding them.
+- A route may list a basket-owned token account other than the destination (e.g. `route_v2` lists the basket's USDC ATA, which is `usdc_reserve`, at index 2 in basket-signed sells). **The program requires every basket-owned token account in the route, other than the intended source and destination, to be unchanged after the CPI.**
+
+### Further IDL differences, ratified
+
+- `ClaimCreated.reason` uses `ClaimReason`.
+- `pending_router` is a struct with the same bytes as the specified tuple.
+- Errors 6018–6024 are added. A lists them in its report; this spec will copy them when it lands.
+- `bootstrap` is **authority-only**. That is stricter than the spec, and accepted.
+
 ## Events
 
 ```rust
@@ -214,8 +229,9 @@ RouterProposed    { router: Pubkey, effective_ts: i64 }
     - At `maxAccounts=20`: still 3.
   - **Follow-up (Agent B, commit 754be17 on `app`):** v2 `/build` accepts `useSharedAccounts=true` but ignores it: it always returns `route_v2`, never `shared_accounts_route_v2`. Ticket-owned intermediate accounts are therefore needed (1 per single-hop leg, 2 per multi-hop leg). Closing them in `finalize_deposit` makes it **4 transactions** (1,051 / 1,169 / 930 / 738 bytes; 48 / 53 / 36 / 35 accounts).
   - **Plan for 4 transactions per deposit under one wallet approval.**
-  - **Open question for A (fork):** `route_v2` also lists the ticket PDA's own output account even when `destinationTokenAccount` is the vault. If that account needn't exist, the count likely drops to 3.
-  - A must prove the final count on the cloned-mainnet fork with the real program.
+  - **Resolved by A on the fork (commit 700004c):** `route_v2` **does** need the taker's own output account to exist even when `destinationTokenAccount` is set. Without it Jupiter fails with `0x1789` (6025 InvalidTokenAccount), reproduced on 2 legs. The SDK keeps creating it, and `finalize_deposit` / `abort_deposit` close it.
+  - **Still open:** A's fork run with the real program fits only **2 legs per transaction** (34–45 accounts, 877–1,056 bytes). 3 legs did not fit on the routes seen, because the byte limit binds. B's SDK-only packing fitted 3. A's final report sets the count.
+  - **CPI depth is 4 on every leg** (basket → Jupiter → AMM → Token-2022), including 2-hop routes. Proven on the fork.
 - **CPI depth:** basket → router → AMM → Token-2022 is 4 levels, exactly the current limit (`raise_cpi_nesting_limit_to_8` is not active). A must prove this with Jupiter on the cloned-mainnet fork and report any route that exceeds it.
 
 ## Authority: what it can and can't do
