@@ -197,7 +197,10 @@ RouterProposed    { router: Pubkey, effective_ts: i64 }
   - **Measured by Agent B on 2026-09-25** (live Jupiter v2 routes, all 7 legs, with a basket lookup table, nothing signed): the 64-account-lock limit binds.
     - At `maxAccounts=30`: **3 transactions per deposit**: [open + 2 legs] 51 accounts, [3 legs] 43, [2 legs + finalize] 49.
     - At `maxAccounts=20`: still 3.
-  - **Plan for 3 transactions per deposit under one wallet approval.** A must prove the count on the cloned-mainnet fork with the real program.
+  - **Follow-up (Agent B, commit 754be17 on `app`):** v2 `/build` accepts `useSharedAccounts=true` but ignores it: it always returns `route_v2`, never `shared_accounts_route_v2`. Ticket-owned intermediate accounts are therefore needed (1 per single-hop leg, 2 per multi-hop leg). Closing them in `finalize_deposit` makes it **4 transactions** (1,051 / 1,169 / 930 / 738 bytes; 48 / 53 / 36 / 35 accounts).
+  - **Plan for 4 transactions per deposit under one wallet approval.**
+  - **Open question for A (fork):** `route_v2` also lists the ticket PDA's own output account even when `destinationTokenAccount` is the vault. If that account needn't exist, the count likely drops to 3.
+  - A must prove the final count on the cloned-mainnet fork with the real program.
 - **CPI depth:** basket → router → AMM → Token-2022 is 4 levels, exactly the current limit (`raise_cpi_nesting_limit_to_8` is not active). A must prove this with Jupiter on the cloned-mainnet fork and report any route that exceeds it.
 
 ## Authority: what it can and can't do
