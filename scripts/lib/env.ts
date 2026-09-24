@@ -7,7 +7,7 @@
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve, dirname } from "node:path";
-import { Keypair } from "@solana/web3.js";
+import { Keypair } from "../../services/valuation/src/lib/web3.ts";
 import { Rpc } from "../../services/valuation/src/lib/rpc.ts";
 
 export const REPO = resolve(import.meta.dirname, "..", "..");
