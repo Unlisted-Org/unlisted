@@ -117,7 +117,12 @@ This reads the mint's extension data directly. It does not depend on client-supp
 
 ## Instructions
 
-Every instruction that touches leg `i` runs `observe(i)` first (spec 01). Accounts are listed in order. `[w]` = writable, `[s]` = signer. `legs*` means the per-leg accounts for every active leg, passed as remaining accounts in order `(mint, vault, user_token_account)`.
+Every instruction that touches leg `i` runs `observe(i)` first (spec 01). Accounts are listed in order. `[w]` = writable, `[s]` = signer.
+
+**Encoding rules** (settled 2026-09-25 after Agent B's report `docs/reports/2026-09-25-app-ticket-packing.md` on branch `app`):
+- `legs*` means the per-leg accounts for every active leg, passed as **remaining accounts after all named accounts, including the token programs**. The order is `(mint, vault, user_token_account)` per leg, in leg order.
+- Array arguments written `[T; n]` are encoded as **`Vec<T>`**. The program checks `len == n_legs` and fails with `MathOverflow` otherwise.
+- **Optional accounts** (e.g. `redeem`'s `usdc_reserve`) are Anchor `Option<Account>`.
 
 ### Setup and authority
 
@@ -136,8 +141,8 @@ Every instruction that touches leg `i` runs `observe(i)` first (spec 01). Accoun
 | `bootstrap` | depositor[s], basket[w], share_mint[w], depositor_share_ata[w], `legs*`, token programs | `gross: [u64; n]` | Only once, into an empty basket. Mints `INITIAL_SHARES`. |
 | `deposit_in_kind` | depositor[s], basket[w], share_mint[w], depositor_share_ata[w], `legs*`, token programs | `gross: [u64; n], min_shares` | Every leg available. Uses `transfer_checked` from the depositor into each vault and measures each delta. Mint formula from spec 01. |
 | `open_deposit_ticket` | owner[s], basket, ticket[w], escrow[w], owner_usdc[w], usdc_mint, token_program, associated_token_program, system_program | `nonce, usdc_in, expiry_slots ≤ TICKET_MAX_AGE_SLOTS` | Every leg available; deposits enabled. |
-| `ticket_swap_leg` | owner[s], basket[w], ticket[w], escrow[w], leg mint, leg vault[w], router_program, + route accounts | `leg, usdc_amount, min_out, route_data: Vec<u8>` | Router in allowlist. The ticket PDA signs the router CPI as taker. Measures the vault delta, requires `≥ min_out`, credits norm. Up to 4 legs per transaction (see *Budgets*). |
-| `finalize_deposit` | owner[s], basket[w], ticket[w], escrow[w], owner_usdc[w], share_mint[w], owner_share_ata[w], `(mint, vault)×n` | `min_shares` | All legs landed. Mints shares, refunds leftover USDC, closes the ticket. |
+| `ticket_swap_leg` | owner[s], basket[w], ticket[w], escrow[w], leg mint, leg vault[w], router_program, + route accounts | `leg, usdc_amount, min_out, route_data: Vec<u8>` | Router in allowlist. The ticket PDA signs the router CPI as taker. Measures the vault delta, requires `≥ min_out`, credits norm. 2–3 legs per transaction (see *Budgets*). **Intermediate accounts:** routes should use the router's shared intermediate accounts (Jupiter `useSharedAccounts=true`), so none is owned by the ticket PDA. If a route needs a ticket-owned intermediate token account, the owner pays to create it, and `finalize_deposit` / `abort_deposit` close every ticket-owned token account passed as remaining accounts (the ticket PDA signs), refunding the rent to the owner. `onlyDirectRoutes` is not used: it costs price. |
+| `finalize_deposit` | owner[s], basket[w], ticket[w], escrow[w], owner_usdc[w], share_mint[w], owner_share_ata[w], token_program, token_2022_program, then remaining: `(mint, vault)×n`, then any ticket-owned intermediate token accounts | `min_shares` | All legs landed. Mints shares, refunds leftover USDC, closes intermediate accounts and the ticket (rent to owner). |
 | `unwind_leg` | owner[s], basket[w], ticket[w], escrow[w], leg mint, leg vault[w], router_program, + route accounts | `leg, min_usdc_out, route_data` | After expiry, or at the owner's request before finalize: sells the ticket's landed amount of the leg back into the escrow. |
 | `abort_deposit` | owner[s], basket, ticket[w], escrow[w], owner_usdc[w] | — | Every landed leg is unwound. Refunds the escrow and closes the ticket. |
 
@@ -152,12 +157,12 @@ Every instruction that touches leg `i` runs `observe(i)` first (spec 01). Accoun
 
 ### Maintenance (all permissionless)
 
-| Instruction | Args | Purpose |
-|---|---|---|
-| `observe` | `legs: u8 mask` | Runs `observe` on the listed legs so a shortfall is emitted without waiting for a user action. The UI and the watcher call it. |
-| `harvest` | `leg` | CPIs `harvest_withheld_tokens_to_mint` for the leg's vault. |
-| `convert_listed_leg` | `leg, amount ≤ max_convert_chunk, min_usdc_out, route_data` | After `convert_after`, once `C_i == 0`. The basket PDA sells into `usdc_reserve`. Marks the leg `Retired` when `owned_i == 0`. |
-| `reinvest_reserve` | `leg, usdc_amount, min_out, route_data` | Buys remaining legs in equal USDC slices (`reserve_at_retirement / active_legs`). Output measured into each vault. |
+| Instruction | Accounts | Args | Purpose |
+|---|---|---|---|
+| `observe` | cranker[s], basket[w], then remaining: `(mint, vault)` for each leg in the mask, in leg order | `legs: u8 mask` | Runs `observe` on the listed legs so a shortfall is emitted without waiting for a user action. The UI and the watcher call it. |
+| `harvest` | cranker[s], basket, leg mint[w], leg vault[w], token_2022_program | `leg` | CPIs `harvest_withheld_tokens_to_mint` for the leg's vault. |
+| `convert_listed_leg` | cranker[s], basket[w], leg mint, leg vault[w], usdc_mint, usdc_reserve[w], router_program, + route accounts | `leg, amount ≤ max_convert_chunk, min_usdc_out, route_data` | After `convert_after`, once `C_i == 0`. The basket PDA signs the router CPI and sells into `usdc_reserve`. Marks the leg `Retired` when `owned_i == 0`. |
+| `reinvest_reserve` | cranker[s], basket[w], usdc_mint, usdc_reserve[w], leg mint, leg vault[w], router_program, + route accounts | `leg, usdc_amount, min_out, route_data` | Buys remaining legs in equal USDC slices (`reserve_at_retirement / active_legs`). The basket PDA signs. Output measured into each vault. |
 
 ## Events
 
@@ -189,7 +194,10 @@ RouterProposed    { router: Pubkey, effective_ts: i64 }
 
 - **In-kind deposit or redeem:** about 27 accounts (7 × 3 per-leg accounts, plus basket, share mint, user share account, user, and two token programs), under the 64-lock limit, in one transaction.
 - **`ticket_swap_leg`:** 17–29 route accounts at `maxAccounts=30`, plus about 8 program accounts.
-  - Phase 0 packed 4 legs into 1,056 bytes and 45 accounts at `maxAccounts=20`. With program accounts added, plan for **4 legs per transaction and 2 transactions per deposit**. A must prove the real count.
+  - **Measured by Agent B on 2026-09-25** (live Jupiter v2 routes, all 7 legs, with a basket lookup table, nothing signed): the 64-account-lock limit binds.
+    - At `maxAccounts=30`: **3 transactions per deposit**: [open + 2 legs] 51 accounts, [3 legs] 43, [2 legs + finalize] 49.
+    - At `maxAccounts=20`: still 3.
+  - **Plan for 3 transactions per deposit under one wallet approval.** A must prove the count on the cloned-mainnet fork with the real program.
 - **CPI depth:** basket → router → AMM → Token-2022 is 4 levels, exactly the current limit (`raise_cpi_nesting_limit_to_8` is not active). A must prove this with Jupiter on the cloned-mainnet fork and report any route that exceeds it.
 
 ## Authority: what it can and can't do
