@@ -113,10 +113,22 @@ async function main() {
   if (process.argv.includes("--init-only")) return;
   const st = coder.accounts.decode("Basket", (await conn.getAccountInfo(basket))!.data) as any;
   if (!st.bootstrapped) {
+    // Equal weight by value at inception (spec 01): the same USD per leg, priced per raw unit from the mainnet
+    // Jupiter price v3 figures C recorded in the registry when seeding the fixture pools (blockId per leg).
+    const usdPerLeg = Number(process.env.CANONICAL_USD_PER_LEG ?? 100);
+    const pools = reg.fixture_amm?.pools ?? [];
     const gross: bigint[] = [];
-    for (const m of MINTS) gross.push((await conn.getTokenAccountBalance(spl.getAssociatedTokenAddressSync(m, authority.publicKey, false, T22))).value.amount as any);
+    rec.inceptionPricing = { usdPerLeg, source: "Jupiter price v3 usdPricePrescaled (mainnet), as recorded in fixtures/registry.json fixture_amm.pools[].seed", legs: [] as any[] };
+    for (const [i, m] of MINTS.entries()) {
+      const p = pools.find((x: any) => x.leg_mint === m.toBase58());
+      const usdPerRaw = Number(p.seed.usd_per_raw_target);
+      const g = BigInt(Math.floor(usdPerLeg / usdPerRaw));
+      const held = BigInt((await conn.getTokenAccountBalance(spl.getAssociatedTokenAddressSync(m, authority.publicKey, false, T22))).value.amount);
+      if (held < g) throw new Error(`leg ${i}: need ${g} raw, the authority holds ${held}`);
+      gross.push(g);
+      rec.inceptionPricing.legs.push({ symbol: legs[i].symbol, usdPerRaw, mainnetBlock: p.seed.jupiter?.blockId, fetchedAt: p.seed.jupiter?.fetched_at, gross: g.toString() });
+    }
     rec.bootstrapGross = gross.map(String);
-    if (gross.some((g) => BigInt(g) === 0n)) throw new Error("the authority holds no tokens of some leg: " + rec.bootstrapGross.join(","));
     await send("bootstrap (in kind, INITIAL_SHARES)", [ix("bootstrap", { depositor: authority.publicKey, basket, share_mint: shareMint.publicKey,
       depositor_share_ata: spl.getAssociatedTokenAddressSync(shareMint.publicKey, authority.publicKey) }, { gross: gross.map((g) => bn(BigInt(g))) },
     MINTS.flatMap((m, i) => [{ pubkey: m, isSigner: false, isWritable: false }, { pubkey: vaults[i], isSigner: false, isWritable: true },
