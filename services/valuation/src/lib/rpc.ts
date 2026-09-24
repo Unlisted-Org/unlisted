@@ -44,7 +44,7 @@ export class Rpc {
 
   async call<T = any>(method: string, params: unknown[] = []): Promise<T> {
     let lastErr: unknown;
-    for (let attempt = 0; attempt < 6; attempt++) {
+    for (let attempt = 0; attempt < 9; attempt++) {
       const url = this.urls[attempt % this.urls.length];
       try {
         const res = await fetch(url, {
@@ -55,7 +55,7 @@ export class Rpc {
         });
         if (res.status === 429 || res.status >= 500) {
           lastErr = new RpcError(`${url} HTTP ${res.status}`);
-          await sleep(500 * 2 ** attempt);
+          await sleep(Math.min(20_000, 500 * 2 ** attempt));
           continue;
         }
         const body: any = parseExact(await res.text());
@@ -67,7 +67,7 @@ export class Rpc {
       } catch (e) {
         if (e instanceof RpcError && e.code !== undefined) throw e;
         lastErr = e;
-        await sleep(500 * 2 ** attempt);
+        await sleep(Math.min(20_000, 500 * 2 ** attempt));
       }
     }
     throw lastErr;

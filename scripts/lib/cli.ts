@@ -8,11 +8,20 @@ import type { Cluster } from "./env.ts";
 export function splToken(c: Cluster, args: string[], opts: { feePayer?: string; json?: boolean } = {}): any {
   const full = ["-C", cliConfig(c), ...args, "--fee-payer", opts.feePayer ?? ISSUER_KEY];
   if (opts.json !== false) full.push("--output", "json");
-  let out: string;
-  try {
-    out = execFileSync("spl-token", full, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-  } catch (e: any) {
-    throw new Error(`spl-token ${args.join(" ")} failed:\n${e.stdout ?? ""}\n${e.stderr ?? ""}`);
+  let out = "";
+  for (let attempt = 0; ; attempt++) {
+    try {
+      out = execFileSync("spl-token", full, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+      break;
+    } catch (e: any) {
+      const msg = `${e.stdout ?? ""}\n${e.stderr ?? ""}`;
+      // Public devnet RPC rate limits: back off and retry. Callers make retries safe (fixed mint keypairs).
+      if (attempt < 6 && /429|Too Many Requests|rate limit|Blockhash not found|BlockhashNotFound|timed out|connection closed/i.test(msg)) {
+        execFileSync("sleep", [String(Math.min(30, 3 * 2 ** attempt))]);
+        continue;
+      }
+      throw Object.assign(new Error(`spl-token ${args.join(" ")} failed:\n${msg}`), { output: msg });
+    }
   }
   if (opts.json === false) return out;
   try {
