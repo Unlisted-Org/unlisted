@@ -29,7 +29,7 @@ export class FixtureAmmRouter implements Router {
       source: "fixture_amm (devnet; prices seeded from mainnet last trade)",
       priceImpactBps: null,
       preInstructions: [],
-      leftOpenAccounts: [],
+      intermediateAccounts: [],
     };
   }
 }

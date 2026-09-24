@@ -16,13 +16,14 @@ export interface SwapRoute {
   source: string;
   priceImpactBps: number | null;
   /**
-   * Top-level instructions the route needs first, paid by the user: creation of intermediate
-   * token accounts owned by the taker PDA (multi-hop routes). They stay open after the swap
-   * because only the PDA could close them (see docs/reports, packing findings).
+   * Top-level instructions the route needs first, paid by the user: creation of token accounts
+   * owned by the taker PDA that the route references (intermediate hops, and the taker's own
+   * output account when the router lists it). Spec 02: finalize_deposit / abort_deposit close
+   * them in-program and refund the rent to the owner.
    */
   preInstructions: TransactionInstruction[];
-  /** Intermediate accounts the route leaves open (rent the user pays and does not get back). */
-  leftOpenAccounts: PublicKey[];
+  /** Taker-owned token accounts the route needs; passed to finalize/abort as remaining accounts. */
+  intermediateAccounts: PublicKey[];
 }
 
 export interface SwapRequest {
@@ -36,6 +37,8 @@ export interface SwapRequest {
   slippageBps: number;
   /** Pays for any intermediate token accounts the route needs (the user). */
   payer?: PublicKey;
+  /** Ask the router for shared intermediate accounts (spec 02). Jupiter v2 /build currently ignores it. */
+  useSharedAccounts?: boolean;
 }
 
 export interface Router {

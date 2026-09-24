@@ -32,3 +32,40 @@ Listed in `sdk/src/instructions.ts` `INTERFACE_ASSUMPTIONS`:
 - Maintenance instructions (`observe`, `harvest`, `convert_listed_leg`, `reinvest_reserve`) have args but no account lists in spec 02; the SDK's lists are guesses until the IDL.
 
 The SDK will be checked against `programs/basket/idl/basket.json` with `sdk/scripts/idl-check.ts` once A publishes it; differences will be reported, not adapted.
+
+---
+
+## Follow-up after the spec owner's decision (spec 02 at main `7968a9f`)
+
+### `useSharedAccounts=true` on Jupiter v2 `/build`: accepted, ignored
+
+Requests at 2026-09-24 ~19:20Z (taker = off-curve PDA, `destinationTokenAccount` set, `maxAccounts=30`, `excludeDexes=Manifest`), for OPENAI (multi-hop, Whirlpool → Meteora DLMM) and ANDURIL (single hop), each with `useSharedAccounts=true` and `false`:
+- All four return HTTP 200 with the **same** swap instruction: discriminator `bb64facc31c4af14` = `route_v2`. `shared_accounts_route_v2` would be `d19853937cfed8e9`.
+- The setup (ATA creations with the PDA as payer) and cleanup (`CloseAccount` of the intermediate wSOL account) are identical with and without the flag.
+- Recorded: `sdk/test/fixtures/jupiter-build-usdc-openai-multihop-useSharedAccounts.json`.
+
+So v2 `/build` gives no shared-accounts route; ticket-owned token accounts are still needed. The SDK still sends `useSharedAccounts=true`, in case Jupiter starts honouring it.
+
+### `route_v2` also lists the taker's own output account
+
+Even with `destinationTokenAccount` = the vault, `route_v2` keeps `user_destination_token_account` (the ticket PDA's ATA for the leg mint) at account index 2, and `/build` returns a setup instruction that creates it.
+- It is **not verified** whether `route_v2` requires that account to exist when a destination override is given. A can settle this on the fork.
+- Until then the SDK takes the safe path, per spec 02:
+  - the owner pays to create every ticket-owned token account the swap references (all except the source escrow);
+  - the SDK passes them to `finalize_deposit` / `abort_deposit` as remaining accounts after `(mint, vault)×n`, for the program to close with rent back to the owner.
+- That is one account per single-hop leg and two per multi-hop leg: 9 at the measured moment.
+
+### Packing with those accounts closed in `finalize_deposit`
+
+Measured 2026-09-24T19:21:57Z (`2026-09-25-app-packing-maxaccounts30-with-intermediates.json`), `maxAccounts=30`, with a basket lookup table:
+
+| Tx | Contents | Bytes | Accounts |
+|---|---|---|---|
+| 1 | open + 2 legs | 1,051 | 48 |
+| 2 | 3 legs | 1,169 | 53 |
+| 3 | 2 legs | 930 | 36 |
+| 4 | finalize, closing 9 intermediates | 738 | 35 |
+
+- **4 transactions**, still one wallet approval.
+- Finalize no longer fits alongside the last 2 legs, because the 9 intermediates are per-ticket addresses that can't be in the shared lookup table.
+- If A shows on the fork that `route_v2` doesn't need the output ATA when a destination is given, the SDK stops creating it. That leaves only the multi-hop intermediates, which likely brings this back to 3 transactions.

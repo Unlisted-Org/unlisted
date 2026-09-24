@@ -49,13 +49,13 @@ async function main() {
   const shareAta = ata(owner, shareMint, TOKEN_PROGRAM_ID);
   const fin = [createAssociatedTokenAccountIdempotentInstruction(owner, shareAta, owner, shareMint, TOKEN_PROGRAM_ID),
     ix.finalizeDeposit({ programId, owner, basket, ticket, escrow, ownerUsdc, shareMint, ownerShareAta: shareAta,
-      legs: routes.map((x) => ({ mint: x.mint, vault: x.vault })), minShares: 1n }).ix];
+      legs: routes.map((x) => ({ mint: x.mint, vault: x.vault })), minShares: 1n, intermediates: routes.flatMap((x) => x.r.intermediateAccounts) }).ix];
   const routeLuts = routes.flatMap((x) => x.r.lookupTables);
   const basketLut = { key: Keypair.generate().publicKey, addresses: basketLookupAddresses({ programId, basket, shareMint, usdcMint: MAINNET_USDC,
     legs: routes.map((x) => ({ mint: x.mint, vault: x.vault })), routers: [JUPITER_V6_PROGRAM_ID] }) };
   const perLeg = routes.map((x, i) => ({
     leg: x.c.symbol, route: x.r.label, routeAccounts: x.r.routeAccounts.length, luts: x.r.lookupTables.length,
-    intermediateAccounts: x.r.leftOpenAccounts.length, quotedOut: x.r.quotedOut.toString(),
+    intermediateAccounts: x.r.intermediateAccounts.map((a) => a.toBase58()), quotedOut: x.r.quotedOut.toString(),
     alone: measure(owner, blockhash, swaps[i], x.r.lookupTables),
   }));
   const result: any = { measuredAt: new Date().toISOString(), usdcPerLeg: usdcPerLeg.toString(), maxAccounts, perLeg, packings: {} };

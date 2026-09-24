@@ -67,10 +67,10 @@ const built: Record<string, string[]> = {
   settle_claim: ix.settleClaim({ ...P, cranker: k(), basket: k(), ticket: k(), legMint: k(), legVault: k(), ownerTokenAccount: k(), leg: 0 }).named.map((n) => n.name),
   settle_leg_usdc: ix.settleLegUsdc({ ...P, owner: k(), basket: k(), ticket: k(), legMint: k(), legVault: k(), ownerUsdc: k(), routerProgram: k(), routeAccounts: [], leg: 0, minUsdcOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
   close_redemption: ix.closeRedemption({ ...P, owner: k(), ticket: k() }).named.map((n) => n.name),
-  observe: ix.observeIx({ ...P, basket: k(), legs, mask: 1 }).named.map((n) => n.name),
-  harvest: ix.harvest({ ...P, basket: k(), legMint: k(), legVault: k(), leg: 0 }).named.map((n) => n.name),
-  convert_listed_leg: ix.convertListedLeg({ ...P, cranker: k(), basket: k(), legMint: k(), legVault: k(), usdcReserve: k(), routerProgram: k(), routeAccounts: [], leg: 0, amount: 1n, minUsdcOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
-  reinvest_reserve: ix.reinvestReserve({ ...P, cranker: k(), basket: k(), legMint: k(), legVault: k(), usdcReserve: k(), routerProgram: k(), routeAccounts: [], leg: 0, usdcAmount: 1n, minOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
+  observe: ix.observeIx({ ...P, cranker: k(), basket: k(), legs, mask: 1 }).named.map((n) => n.name),
+  harvest: ix.harvest({ ...P, cranker: k(), basket: k(), legMint: k(), legVault: k(), leg: 0 }).named.map((n) => n.name),
+  convert_listed_leg: ix.convertListedLeg({ ...P, cranker: k(), basket: k(), legMint: k(), legVault: k(), usdcMint: k(), usdcReserve: k(), routerProgram: k(), routeAccounts: [], leg: 0, amount: 1n, minUsdcOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
+  reinvest_reserve: ix.reinvestReserve({ ...P, cranker: k(), basket: k(), usdcMint: k(), usdcReserve: k(), legMint: k(), legVault: k(), routerProgram: k(), routeAccounts: [], leg: 0, usdcAmount: 1n, minOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
 };
 
 function loadIdl(): any {

@@ -28,6 +28,9 @@ export class JupiterRouter implements Router {
     u.searchParams.set("slippageBps", String(req.slippageBps));
     u.searchParams.set("maxAccounts", String(this.opts.maxAccounts ?? JUPITER_MAX_ACCOUNTS));
     u.searchParams.set("excludeDexes", this.opts.excludeDexes ?? JUPITER_EXCLUDE_DEXES);
+    // Spec 02 asks for shared intermediate accounts. Measured 2026-09-25: /build accepts the
+    // parameter (HTTP 200) but still returns route_v2 with taker-owned intermediates.
+    u.searchParams.set("useSharedAccounts", String(req.useSharedAccounts ?? true));
     return u.toString();
   }
 
@@ -42,18 +45,19 @@ export class JupiterRouter implements Router {
   static parse(j: any, req: SwapRequest): SwapRoute {
     if (!j.swapInstruction) throw new RouterError(`jupiter: no swapInstruction (${j.error ?? "unknown"})`);
     // Setup instructions are ATA creations paid by the taker. The taker is a PDA and can't sign at
-    // top level, so each needed one is re-issued with the user as payer. The output ATA isn't
-    // needed (destinationTokenAccount is the vault) and is skipped. Anything else is refused.
+    // top level, so each one the swap references is re-issued with the user as payer, and listed
+    // for finalize_deposit / abort_deposit to close (spec 02). Anything else is refused.
     const si = j.swapInstruction as JupIx;
+    if (!si.accounts.some((a) => a.pubkey === req.destination.toBase58())) throw new RouterError("jupiter: destination account not in route");
     const inSwap = new Set(si.accounts.map((a) => a.pubkey));
     const preInstructions: TransactionInstruction[] = [];
-    const leftOpenAccounts: PublicKey[] = [];
+    const intermediateAccounts: PublicKey[] = [];
     for (const s of (j.setupInstructions ?? []) as JupIx[]) {
       if (s.programId !== ASSOCIATED_TOKEN_PROGRAM_ID.toBase58()) throw new RouterError(`jupiter: unsupported setup instruction ${s.programId}`);
       const [, ataKey, owner, mint, system, tokenProgram] = s.accounts;
-      // The taker's source account (the ticket escrow, or the basket vault on a sale) already
-      // exists, and its output account is replaced by the destination override: skip both.
-      if (mint.pubkey === req.inputMint.toBase58() || mint.pubkey === req.outputMint.toBase58()) continue;
+      // The taker's source account (the ticket escrow, or the basket vault on a sale) already exists.
+      if (mint.pubkey === req.inputMint.toBase58()) continue;
+      // Not referenced by the swap (e.g. the output ATA once destinationTokenAccount replaced it).
       if (!inSwap.has(ataKey.pubkey)) continue;
       if (!req.payer) throw new RouterError("jupiter: route needs an intermediate token account; pass payer");
       preInstructions.push(new TransactionInstruction({
@@ -68,10 +72,10 @@ export class JupiterRouter implements Router {
         ],
         data: Buffer.from([1]), // CreateIdempotent
       }));
-      leftOpenAccounts.push(new PublicKey(ataKey.pubkey));
+      intermediateAccounts.push(new PublicKey(ataKey.pubkey));
     }
-    // A cleanup that closes an intermediate wSOL account needs the PDA's signature: dropped, and
-    // the account is reported as left open. Any other extra instruction is refused.
+    // A cleanup that closes an intermediate account needs the PDA's signature: dropped here,
+    // because finalize_deposit closes it in-program. Any other extra instruction is refused.
     if (j.cleanupInstruction && j.cleanupInstruction.programId !== "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
       throw new RouterError(`jupiter: unsupported cleanup instruction ${j.cleanupInstruction.programId}`);
     }
@@ -96,7 +100,7 @@ export class JupiterRouter implements Router {
       source: "jupiter swap/v2 build",
       priceImpactBps: j.priceImpactPct != null ? Math.round(Number(j.priceImpactPct) * 10_000) : null,
       preInstructions,
-      leftOpenAccounts,
+      intermediateAccounts,
     };
   }
 }

@@ -115,6 +115,7 @@ export async function planUsdcDeposit(p: {
     ix.finalizeDeposit({
       programId, owner, basket: v.address, ticket, escrow, ownerUsdc, shareMint: v.basket.shareMint, ownerShareAta: shareAta,
       legs: v.legs.map((l) => ({ mint: l.mint, vault: l.vault })), minShares: p.minShares,
+      intermediates: legs.flatMap((t) => t.route.intermediateAccounts),
     }).ix,
   ];
   const luts = [...basketLut(v), ...legs.flatMap((t) => t.route.lookupTables)];

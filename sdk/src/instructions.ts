@@ -12,10 +12,10 @@ import {
 } from "./constants.js";
 
 export const INTERFACE_ASSUMPTIONS = [
-  "Array args written `[T; n]` in spec 02 (gross, mirror_of) are encoded as Borsh Vec<T> (u32 length prefix), since n is a runtime value.",
-  "`legs*` are Anchor remaining accounts, so they are appended after every named account (spec 02's tables list some named accounts, e.g. token programs, after legs*).",
+  "Array args written `[T; n]` (gross, mirror_of) are Borsh Vec<T>; the program checks len == n_legs (ratified).",
+  "`legs*` are Anchor remaining accounts after every named account, token programs included (ratified in spec 02 at main 7968a9f).",
   "`token programs` = token_program (classic SPL, for the share mint and USDC) then token_2022_program (legs).",
-  "redeem: usdc_reserve is always passed (Anchor optional accounts use the program id as the 'None' placeholder when not converting).",
+  "redeem: usdc_reserve is an Anchor Option<Account>; None is encoded as the program id (ratified).",
   "`route accounts` for ticket_swap_leg / unwind_leg / settle_leg_usdc / convert_listed_leg / reinvest_reserve are remaining accounts after the named ones, with signer flags cleared (the PDA signs inside the CPI).",
   "Instruction discriminators are Anchor's sha256('global:<snake_name>')[0..8].",
 ];
@@ -48,6 +48,10 @@ export function legsRemaining(legs: LegAccounts[], withUser: boolean): AccountMe
     }
   }
   return out;
+}
+
+function intermediatesRemaining(xs: PublicKey[] = []): AccountMeta[] {
+  return xs.map((pubkey) => ({ pubkey, isWritable: true, isSigner: false }));
 }
 
 /** Route accounts from a router, passed through as remaining accounts. PDAs can't sign at top level. */
@@ -142,12 +146,14 @@ export function ticketSwapLeg(p: {
 
 export function finalizeDeposit(p: {
   programId: PublicKey; owner: PublicKey; basket: PublicKey; ticket: PublicKey; escrow: PublicKey; ownerUsdc: PublicKey;
-  shareMint: PublicKey; ownerShareAta: PublicKey; legs: LegAccounts[]; minShares: bigint;
+  shareMint: PublicKey; ownerShareAta: PublicKey; legs: LegAccounts[]; minShares: bigint; intermediates?: PublicKey[];
 }): BuiltIx {
   const named = [acc("owner", p.owner, true, true), acc("basket", p.basket, true), acc("ticket", p.ticket, true), acc("escrow", p.escrow, true),
     acc("owner_usdc", p.ownerUsdc, true), acc("share_mint", p.shareMint, true), acc("owner_share_ata", p.ownerShareAta, true),
-    acc("token_program", TOKEN_PROGRAM_ID)];
-  return build(p.programId, "finalize_deposit", named, new Writer().u64(p.minShares), legsRemaining(p.legs, false));
+    ...tokenPrograms()];
+  // Remaining: (mint, vault)×n, then every ticket-owned intermediate token account to close (spec 02).
+  return build(p.programId, "finalize_deposit", named, new Writer().u64(p.minShares),
+    [...legsRemaining(p.legs, false), ...intermediatesRemaining(p.intermediates)]);
 }
 
 export function unwindLeg(p: {
@@ -159,10 +165,14 @@ export function unwindLeg(p: {
   return build(p.programId, "unwind_leg", named, new Writer().u8(p.leg).u64(p.minUsdcOut).bytesVec(p.routeData), routeRemaining(p.routeAccounts));
 }
 
-export function abortDeposit(p: { programId: PublicKey; owner: PublicKey; basket: PublicKey; ticket: PublicKey; escrow: PublicKey; ownerUsdc: PublicKey }): BuiltIx {
+export function abortDeposit(p: {
+  programId: PublicKey; owner: PublicKey; basket: PublicKey; ticket: PublicKey; escrow: PublicKey; ownerUsdc: PublicKey; intermediates?: PublicKey[];
+}): BuiltIx {
+  // Spec 02 lists owner, basket, ticket, escrow, owner_usdc. The token program is needed for the
+  // refund; intermediates follow as remaining accounts. To confirm against the IDL.
   const named = [acc("owner", p.owner, true, true), acc("basket", p.basket), acc("ticket", p.ticket, true), acc("escrow", p.escrow, true),
     acc("owner_usdc", p.ownerUsdc, true), acc("token_program", TOKEN_PROGRAM_ID)];
-  return build(p.programId, "abort_deposit", named, new Writer());
+  return build(p.programId, "abort_deposit", named, new Writer(), intermediatesRemaining(p.intermediates));
 }
 
 // ---------------- Redeem ----------------
@@ -204,34 +214,35 @@ export function closeRedemption(p: { programId: PublicKey; owner: PublicKey; tic
 }
 
 // ---------------- Maintenance (permissionless) ----------------
-// Spec 02 gives only args for these; the accounts below are the minimum each needs and are
-// the least certain part of this file until the IDL exists.
+// Account lists from spec 02 (main 7968a9f).
 
-export function observeIx(p: { programId: PublicKey; basket: PublicKey; legs: { mint: PublicKey; vault: PublicKey }[]; mask: number }): BuiltIx {
-  return build(p.programId, "observe", [acc("basket", p.basket, true)], new Writer().u8(p.mask), legsRemaining(p.legs, false));
+export function observeIx(p: { programId: PublicKey; cranker: PublicKey; basket: PublicKey; legs: { mint: PublicKey; vault: PublicKey }[]; mask: number }): BuiltIx {
+  // Remaining: (mint, vault) for each leg in the mask, in leg order. `legs` is the full leg list.
+  const inMask = p.legs.filter((_, i) => (p.mask >> i) & 1);
+  return build(p.programId, "observe", [acc("cranker", p.cranker, true, true), acc("basket", p.basket, true)], new Writer().u8(p.mask), legsRemaining(inMask, false));
 }
 
-export function harvest(p: { programId: PublicKey; basket: PublicKey; legMint: PublicKey; legVault: PublicKey; leg: number }): BuiltIx {
-  return build(p.programId, "harvest", [acc("basket", p.basket), acc("leg_mint", p.legMint, true), acc("leg_vault", p.legVault, true),
-    acc("token_2022_program", TOKEN_2022_PROGRAM_ID)], new Writer().u8(p.leg));
+export function harvest(p: { programId: PublicKey; cranker: PublicKey; basket: PublicKey; legMint: PublicKey; legVault: PublicKey; leg: number }): BuiltIx {
+  return build(p.programId, "harvest", [acc("cranker", p.cranker, true, true), acc("basket", p.basket), acc("leg_mint", p.legMint, true),
+    acc("leg_vault", p.legVault, true), acc("token_2022_program", TOKEN_2022_PROGRAM_ID)], new Writer().u8(p.leg));
 }
 
 export function convertListedLeg(p: {
-  programId: PublicKey; cranker: PublicKey; basket: PublicKey; legMint: PublicKey; legVault: PublicKey; usdcReserve: PublicKey;
+  programId: PublicKey; cranker: PublicKey; basket: PublicKey; legMint: PublicKey; legVault: PublicKey; usdcMint: PublicKey; usdcReserve: PublicKey;
   routerProgram: PublicKey; routeAccounts: AccountMeta[]; leg: number; amount: bigint; minUsdcOut: bigint; routeData: Uint8Array;
 }): BuiltIx {
   const named = [acc("cranker", p.cranker, true, true), acc("basket", p.basket, true), acc("leg_mint", p.legMint), acc("leg_vault", p.legVault, true),
-    acc("usdc_reserve", p.usdcReserve, true), acc("router_program", p.routerProgram)];
+    acc("usdc_mint", p.usdcMint), acc("usdc_reserve", p.usdcReserve, true), acc("router_program", p.routerProgram)];
   return build(p.programId, "convert_listed_leg", named, new Writer().u8(p.leg).u64(p.amount).u64(p.minUsdcOut).bytesVec(p.routeData),
     routeRemaining(p.routeAccounts));
 }
 
 export function reinvestReserve(p: {
-  programId: PublicKey; cranker: PublicKey; basket: PublicKey; legMint: PublicKey; legVault: PublicKey; usdcReserve: PublicKey;
+  programId: PublicKey; cranker: PublicKey; basket: PublicKey; usdcMint: PublicKey; usdcReserve: PublicKey; legMint: PublicKey; legVault: PublicKey;
   routerProgram: PublicKey; routeAccounts: AccountMeta[]; leg: number; usdcAmount: bigint; minOut: bigint; routeData: Uint8Array;
 }): BuiltIx {
-  const named = [acc("cranker", p.cranker, true, true), acc("basket", p.basket, true), acc("leg_mint", p.legMint), acc("leg_vault", p.legVault, true),
-    acc("usdc_reserve", p.usdcReserve, true), acc("router_program", p.routerProgram)];
+  const named = [acc("cranker", p.cranker, true, true), acc("basket", p.basket, true), acc("usdc_mint", p.usdcMint), acc("usdc_reserve", p.usdcReserve, true),
+    acc("leg_mint", p.legMint), acc("leg_vault", p.legVault, true), acc("router_program", p.routerProgram)];
   return build(p.programId, "reinvest_reserve", named, new Writer().u8(p.leg).u64(p.usdcAmount).u64(p.minOut).bytesVec(p.routeData),
     routeRemaining(p.routeAccounts));
 }
