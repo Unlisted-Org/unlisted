@@ -174,4 +174,6 @@ These are the same events the app shows as banners.
 
 1. **Values match live reads.** For one stated devnet slot and one stated mainnet slot, every raw number in `/v1/basket` matches a direct RPC read, and every `sell_now` leg matches a `simulateTransaction` of the quoted route to within ±0.1%. The check fails if either side is recomputed from the other.
 2. **Redeem quotes match the program.** `/v1/quote/redeem` equals the devnet `redeem` transaction's measured payout for the same shares, per leg, to the unit.
-3. **Multiplier handling is proven.** A multiplier change on a fixture (issuer scenario suite) changes `reference.usd` and display fields only after the effective timestamp. Raw fields must not change.
+3. **Multiplier handling is proven.** A multiplier change on a fixture (issuer scenario suite) changes **only display fields** (`legs[].multiplier`, per-share UI amounts), and **only after** the effective timestamp. **Raw fields and every USD value (`sell_now`, `last_trade`, `reference`) must not change.**
+   - A multiplier change never changes what raw holdings are worth. USD values are priced per raw unit from the mirrored mainnet mint, whose own multiplier governs the mainnet price.
+   - Corrected 2026-09-25: the first version wrongly required `reference.usd` to move. Raised by Agent C in `docs/reports/2026-09-25-ops-multiplier-acceptance.md` on `ops`.
