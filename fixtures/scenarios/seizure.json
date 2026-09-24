@@ -1,0 +1,164 @@
+{
+  "scenario": "seizure",
+  "cluster": "devnet",
+  "description": "Fixture issuer burns from a vault as permanent delegate (PreStocks did this to 29 holder accounts on 2025-09-19).",
+  "fixture_issuer": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+  "runs": [
+    {
+      "action": "seize",
+      "actor": "ops",
+      "note": null,
+      "at": "2026-09-24T21:44:38Z",
+      "target": {
+        "vault": "BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv",
+        "vault_owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+        "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+        "symbol": "ANDURIL",
+        "mirror_of": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+        "standin": true
+      },
+      "steps": [
+        {
+          "step": "permanent-delegate BurnChecked 30886091 raw from vault",
+          "signature": "2FysrxL8tDRFXgx1wzJYmufum1FBHVyANG7mzaiH4KzhhM6A8npq1AmhG63SedkxX1EFBvZ4pv7acSrVqzUc1Mkd",
+          "slot": 503668247,
+          "block_time": 1790286274,
+          "block_time_iso": "2026-09-24T21:44:34Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503668237,
+        "epoch": 1165,
+        "read_at": "2026-09-24T21:44:33Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "308860913",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "2442980869371",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503668263,
+        "epoch": 1165,
+        "read_at": "2026-09-24T21:44:37Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "277974822",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "2443073526324",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503668240,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "309850913",
+          "vault_withheld_after_raw": 10000
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503668264,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "278964822",
+          "vault_withheld_after_raw": 10000
+        }
+      ],
+      "seized_raw": "30886091",
+      "ok": true
+    }
+  ]
+}

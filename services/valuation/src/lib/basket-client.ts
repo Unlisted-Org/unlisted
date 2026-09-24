@@ -57,3 +57,12 @@ export function ixRedeem(idl: Idl, p: { owner: string; shareMint: string; nonce:
     ticket: redeemTicketPda(idl.address, basket, p.owner, p.nonce).toBase58(),
   }, { nonce: p.nonce, shares: p.shares, mode: p.mode }, triples(basket, p.owner, p.legs));
 }
+
+/** settle_claim (permissionless once the leg is available): pays the claim in kind to the owner. */
+export function ixSettleClaim(idl: Idl, p: { cranker: string; shareMint: string; ticket: string; owner: string; leg: number; mint: string }) {
+  const basket = basketPda(idl.address, p.shareMint).toBase58();
+  return build(idl, "settle_claim", {
+    cranker: p.cranker, basket, ticket: p.ticket, leg_mint: p.mint, leg_vault: ata(basket, p.mint, TOKEN_2022_PROGRAM).toBase58(),
+    owner_token_account: ata(p.owner, p.mint, TOKEN_2022_PROGRAM).toBase58(), share_mint: p.shareMint,
+  }, { leg: p.leg });
+}

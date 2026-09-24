@@ -20,7 +20,7 @@ import { homedir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { Connection, Keypair, PublicKey, Transaction, ComputeBudgetProgram } from "../src/lib/web3.ts";
 import { loadIdl, decodeAccount, decodeEvents } from "../src/lib/idl.ts";
-import { ixRedeem, basketPda, redeemTicketPda } from "../src/lib/basket-client.ts";
+import { ixRedeem, basketPda, redeemTicketPda, ixSettleClaim } from "../src/lib/basket-client.ts";
 import { ata } from "../src/lib/amm.ts";
 import { TOKEN_2022_PROGRAM } from "../src/lib/token2022.ts";
 
@@ -45,13 +45,16 @@ async function rawAmounts(keys: string[]) {
   const r = await conn.getMultipleAccountsInfo(keys.map((k) => new PublicKey(k)), "confirmed");
   return r.map((a) => (a ? a.data.readBigUInt64LE(64).toString() : null));
 }
-const issuerScenario = (action: string) => execFileSync("node", [join(REPO, "scripts/scenarios/issuer.ts"), action, "--cluster", CLUSTER, "--symbol", pauseSym!, "--note", "verify/redeem-payout.ts"], { encoding: "utf8" });
+const issuerScenario = (action: string, vault: string) => execFileSync("node", [join(REPO, "scripts/scenarios/issuer.ts"), action, "--cluster", CLUSTER, "--vault", vault, "--note", "verify/redeem-payout.ts (basket vault)"], { encoding: "utf8" });
 
 const basket = basketPda(idl.address, shareMint).toBase58();
 const bacc = await conn.getAccountInfo(new PublicKey(basket), "confirmed");
 const b = decodeAccount(idl, "Basket", bacc!.data);
 const legs = b.legs.slice(0, b.n_legs).map((l: any, i: number) => ({ index: i, mint: l.mint, vault: l.vault, user: ata(holder.publicKey, l.mint, TOKEN_2022_PROGRAM).toBase58() }));
-if (pauseSym) issuerScenario("pause");
+const regPath = join(REPO, "fixtures", CLUSTER === "local" ? ".local/registry.json" : "registry.json");
+const pauseLeg = pauseSym ? legs.find((l: any) => l.mint === JSON.parse(readFileSync(regPath, "utf8")).legs.find((x: any) => x.symbol === pauseSym).mint) : null;
+if (pauseSym && !pauseLeg) throw new Error(`no leg ${pauseSym}`);
+if (pauseLeg) issuerScenario("pause", pauseLeg.vault);
 
 const R0 = await rawAmounts(legs.map((l: any) => l.vault));
 const quote: any = await (await fetch(`${API}/v1/quote/redeem?shares=${shares}&mode=${mode}`)).json();
@@ -69,7 +72,7 @@ tx.sign(holder);
 const sig = await conn.sendRawTransaction(tx.serialize());
 await conn.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, "confirmed");
 const t = await conn.getTransaction(sig, { commitment: "confirmed", maxSupportedTransactionVersion: 0 });
-if (pauseSym) issuerScenario("resume");
+if (pauseLeg) issuerScenario("resume", pauseLeg.vault);
 if (!t || t.meta?.err) throw new Error(`redeem failed: ${JSON.stringify(t?.meta?.err)} ${t?.meta?.logMessages?.slice(-5).join(" | ")}`);
 
 const keys = t.transaction.message.getAccountKeys().staticAccountKeys.map((k) => k.toBase58());
@@ -78,8 +81,35 @@ const ticket = decodeAccount(idl, "RedemptionTicket", (await conn.getAccountInfo
 const events = decodeEvents(idl, t.meta!.logMessages ?? [], idl.address);
 const redeemed = events.find((e) => e.name === "Redeemed")?.data;
 
+// Claim settlement (paused-leg run): after resume, the API's claim valuation vs settle_claim's payout.
+let settlement: any = null;
+if (pauseLeg) {
+  const ticketAddr = redeemTicketPda(idl.address, basket, holder.publicKey.toBase58(), nonce).toBase58();
+  const pos: any = await (await fetch(`${API}/v1/position/${holder.publicKey.toBase58()}`)).json();
+  const claim = (pos.claims ?? []).find((x: any) => x.ticket === ticketAddr && x.leg === pauseLeg.index);
+  const V0 = await rawAmounts([pauseLeg.vault]);
+  const six = ixSettleClaim(idl, { cranker: holder.publicKey.toBase58(), shareMint, ticket: ticketAddr, owner: holder.publicKey.toBase58(), leg: pauseLeg.index, mint: pauseLeg.mint });
+  const stx = new Transaction().add(ComputeBudgetProgram.setComputeUnitLimit({ units: 400_000 }), six);
+  stx.feePayer = holder.publicKey;
+  const sbh = await conn.getLatestBlockhash("confirmed");
+  stx.recentBlockhash = sbh.blockhash;
+  stx.sign(holder);
+  const ssig = await conn.sendRawTransaction(stx.serialize());
+  await conn.confirmTransaction({ signature: ssig, blockhash: sbh.blockhash, lastValidBlockHeight: sbh.lastValidBlockHeight }, "confirmed");
+  const st = await conn.getTransaction(ssig, { commitment: "confirmed", maxSupportedTransactionVersion: 0 });
+  const ev = decodeEvents(idl, st?.meta?.logMessages ?? [], idl.address).find((e) => e.name === "ClaimSettled")?.data;
+  const skeys = st!.transaction.message.getAccountKeys().staticAccountKeys.map((k) => k.toBase58());
+  const sbal = (list: any[], acct: string) => { const e = list.find((x) => skeys[x.accountIndex] === acct); return e ? BigInt(e.uiTokenAmount.amount) : 0n; };
+  const vPre = sbal(st!.meta!.preTokenBalances!, pauseLeg.vault), vPost = sbal(st!.meta!.postTokenBalances!, pauseLeg.vault);
+  const uPre = sbal(st!.meta!.preTokenBalances!, pauseLeg.user), uPost = sbal(st!.meta!.postTokenBalances!, pauseLeg.user);
+  settlement = { signature: ssig, slot: st?.slot, api_entitlement_now_raw: claim?.entitlement_now_raw ?? null, vault_at_api_read: V0[0], vault_pre_in_tx: vPre.toString(),
+    measured_gross_raw: (vPre - vPost).toString(), measured_received_raw: (uPost - uPre).toString(), claim_settled_event: ev ?? null,
+    match: claim?.entitlement_now_raw === (vPre - vPost).toString() && V0[0] === vPre.toString() && ev?.amount === (vPre - vPost).toString() && ev?.received === (uPost - uPre).toString() };
+  console.log(`settle_claim ${pauseSym}: api entitlement ${settlement.api_entitlement_now_raw} measured gross ${settlement.measured_gross_raw} received ${settlement.measured_received_raw} event ${JSON.stringify(ev)} ${settlement.match ? "OK" : "MISMATCH"}`);
+}
+
 const rows: any[] = [];
-let ok = stable;
+let ok = stable && (settlement ? settlement.match : true);
 for (const q of quote.legs) {
   const l = legs[q.index];
   const tl = ticket.legs[q.index];
@@ -103,6 +133,6 @@ console.log(`redeem ${sig} slot ${t.slot}; quote slot ${quote.as_of_slot}; vault
 const out = join(import.meta.dirname, "out", `redeem-payout-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, JSON.stringify({ check: "/v1/quote/redeem vs measured redeem payout, per leg, to the unit", cluster: CLUSTER, program: idl.address, basket, share_mint: shareMint, holder: holder.publicKey.toBase58(), shares: shares.toString(), mode, paused_leg: pauseSym ?? null,
-  quote_slot: quote.as_of_slot, redeem_signature: sig, redeem_slot: t.slot, vaults_stable_across_quote: stable, legs: rows, redeemed_event: redeemed ?? null, events: events.map((e) => e.name), all_match: ok }, (_k, v) => (typeof v === "bigint" ? v.toString() : v), 1));
+  quote_slot: quote.as_of_slot, redeem_signature: sig, redeem_slot: t.slot, vaults_stable_across_quote: stable, legs: rows, claim_settlement: settlement, redeemed_event: redeemed ?? null, events: events.map((e) => e.name), all_match: ok }, (_k, v) => (typeof v === "bigint" ? v.toString() : v), 1));
 console.log(out);
 process.exit(ok ? 0 : 1);

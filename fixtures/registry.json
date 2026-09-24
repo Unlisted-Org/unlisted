@@ -959,5 +959,53 @@
     "read_at": "2026-09-24T21:21:13Z"
   },
   "created_at_slot": 503660920,
-  "updated_at": "2026-09-24T21:25:15Z"
+  "updated_at": "2026-09-24T21:25:15Z",
+  "standin_vaults": {
+    "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+    "derivation": "PDA([\"standin-vault\"], fixture_amm aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF)",
+    "vaults": [
+      {
+        "index": 0,
+        "symbol": "OPENAI",
+        "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+        "vault": "9fPPiCyn26RPiMJ2iFYMzmdFpfmxPTjR1o6RBWH1rt68"
+      },
+      {
+        "index": 1,
+        "symbol": "ANTHROPIC",
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ"
+      },
+      {
+        "index": 2,
+        "symbol": "NEURALINK",
+        "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+        "vault": "9u36QUfCYyhGzMfiD8okUzSeggXBCKjwmty9F9HRJyDq"
+      },
+      {
+        "index": 3,
+        "symbol": "ANDURIL",
+        "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+        "vault": "BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv"
+      },
+      {
+        "index": 4,
+        "symbol": "POLYMARKET",
+        "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+        "vault": "2NDCXCCBPx3yxhhd3VU7Q5H4XWv3TBmKYgBvHGNQ7Mku"
+      },
+      {
+        "index": 5,
+        "symbol": "KALSHI",
+        "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+        "vault": "GCdZoNYWhqEYNXwCrC9EBVgd3quEpS9sUbdrRTgNX7xJ"
+      },
+      {
+        "index": 6,
+        "symbol": "FIGUREAI",
+        "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+        "vault": "9D4CxAk8FasJMMuJnkxjYjLTmj8wvmk4ucHw3FSA8FQo"
+      }
+    ]
+  }
 }

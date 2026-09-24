@@ -1,0 +1,113 @@
+{
+  "scenario": "standin-vaults",
+  "cluster": "devnet",
+  "description": "",
+  "fixture_issuer": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+  "runs": [
+    {
+      "actor": "ops",
+      "at": "2026-09-24T21:31:27Z",
+      "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+      "vaults": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "vault": "9fPPiCyn26RPiMJ2iFYMzmdFpfmxPTjR1o6RBWH1rt68",
+          "tx": {
+            "step": "create stand-in vault OPENAI",
+            "signature": "eFXt5mbwthYBJtYaaG4Rp8HcnoV8krS7H9yq3h77gkwyxUPJLR46dYkCNbgDeKSQpi8piDg1wRxEQGhFGpNsWHN",
+            "slot": 503663343,
+            "block_time": 1790285461,
+            "block_time_iso": "2026-09-24T21:31:01Z",
+            "err": null
+          }
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+          "tx": {
+            "step": "create stand-in vault ANTHROPIC",
+            "signature": "4b3PZ9K1nNe3NNyoazNYTWyZ6W7DyrVsKEA4td8ZfnBGdxFMbGAd4hERAq7gLEiUiY84RZHsjErzhy5bSpYrCBrR",
+            "slot": 503663382,
+            "block_time": 1790285468,
+            "block_time_iso": "2026-09-24T21:31:08Z",
+            "err": null
+          }
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "vault": "9u36QUfCYyhGzMfiD8okUzSeggXBCKjwmty9F9HRJyDq",
+          "tx": {
+            "step": "create stand-in vault NEURALINK",
+            "signature": "4oHgNsT7rU24Uw7svQ6H4Qgvcj9jGGQyBT6kZSFNf3TEE6N9X61zKPt3mQieQMxAEdMc7DxUeGSdYF4cuDqZbybk",
+            "slot": 503663415,
+            "block_time": 1790285473,
+            "block_time_iso": "2026-09-24T21:31:13Z",
+            "err": null
+          }
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "vault": "BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv",
+          "tx": {
+            "step": "create stand-in vault ANDURIL",
+            "signature": "3ykyMBQrbLaNJ2sjYwe4zzmDoy3SwZ1JAZCBCdVEjr3dUYBL9wH6jzVPkZZjzzfmDunouL7sZiKdP4y91qeWEPkt",
+            "slot": 503663432,
+            "block_time": 1790285476,
+            "block_time_iso": "2026-09-24T21:31:16Z",
+            "err": null
+          }
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "vault": "2NDCXCCBPx3yxhhd3VU7Q5H4XWv3TBmKYgBvHGNQ7Mku",
+          "tx": {
+            "step": "create stand-in vault POLYMARKET",
+            "signature": "5BL1RvuFR97PyScMpvmRt5v9b2tSPCVKjqHFD8uux6f2C1B76DBNRYSVVpruN5zUwuRUZqBLBHcUcykUaRXby89U",
+            "slot": 503663448,
+            "block_time": 1790285479,
+            "block_time_iso": "2026-09-24T21:31:19Z",
+            "err": null
+          }
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "vault": "GCdZoNYWhqEYNXwCrC9EBVgd3quEpS9sUbdrRTgNX7xJ",
+          "tx": {
+            "step": "create stand-in vault KALSHI",
+            "signature": "49HsfUz1KbS5arp8rhAQEtSyXHGYBRbe1myq5fLedTDaQh71T31wEXUgAdpUaavyhLLGf2P3qXBEo8dfM2oJBPFY",
+            "slot": 503663464,
+            "block_time": 1790285482,
+            "block_time_iso": "2026-09-24T21:31:22Z",
+            "err": null
+          }
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "vault": "9D4CxAk8FasJMMuJnkxjYjLTmj8wvmk4ucHw3FSA8FQo",
+          "tx": {
+            "step": "create stand-in vault FIGUREAI",
+            "signature": "5wMBXgbrqmFmcDzAZDkTYbxHQhAqDHGyLbbGBxZNh7kdtfyMb7j7fRxgnYKETNx7LuX9gGQJzmC2rSpFW6VXnQ3x",
+            "slot": 503663479,
+            "block_time": 1790285484,
+            "block_time_iso": "2026-09-24T21:31:24Z",
+            "err": null
+          }
+        }
+      ]
+    }
+  ]
+}

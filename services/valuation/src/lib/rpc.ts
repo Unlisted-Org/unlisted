@@ -22,6 +22,22 @@ export class RpcError extends Error {
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /**
+ * Public RPCs rate-limit per IP, and every agent on this machine shares that IP: space calls per URL
+ * (RPC_SPACING_MS, default 250 ms; local validator unthrottled) and back off longer on 429.
+ */
+const lastCall = new Map<string, number>();
+async function pace(url: string) {
+  if (url.includes("127.0.0.1") || url.includes("localhost")) return;
+  const gap = Number(process.env.RPC_SPACING_MS ?? 250);
+  for (;;) {
+    const wait = (lastCall.get(url) ?? 0) + gap - Date.now();
+    if (wait <= 0) break;
+    await sleep(wait);
+  }
+  lastCall.set(url, Date.now());
+}
+
+/**
  * JSON.parse that keeps integers above 2^53 exact, as strings (e.g. maximumFee = u64::MAX, which a
  * plain parse turns into 18446744073709552000). Uses the reviver's source-text access (Node >= 21).
  */
@@ -44,8 +60,9 @@ export class Rpc {
 
   async call<T = any>(method: string, params: unknown[] = []): Promise<T> {
     let lastErr: unknown;
-    for (let attempt = 0; attempt < 9; attempt++) {
+    for (let attempt = 0; attempt < 12; attempt++) {
       const url = this.urls[attempt % this.urls.length];
+      await pace(url);
       try {
         const res = await fetch(url, {
           method: "POST",
@@ -55,7 +72,7 @@ export class Rpc {
         });
         if (res.status === 429 || res.status >= 500) {
           lastErr = new RpcError(`${url} HTTP ${res.status}`);
-          await sleep(Math.min(20_000, 500 * 2 ** attempt));
+          await sleep(Math.min(30_000, 1000 * 2 ** attempt));
           continue;
         }
         const body: any = parseExact(await res.text());
@@ -67,7 +84,7 @@ export class Rpc {
       } catch (e) {
         if (e instanceof RpcError && e.code !== undefined) throw e;
         lastErr = e;
-        await sleep(Math.min(20_000, 500 * 2 ** attempt));
+        await sleep(Math.min(30_000, 1000 * 2 ** attempt));
       }
     }
     throw lastErr;
