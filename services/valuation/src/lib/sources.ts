@@ -8,21 +8,45 @@ const PRESTOCKS = process.env.PRESTOCKS_URL ?? "https://prestocks.com/api/presto
 
 const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
-async function getJson(url: string, tries = 4): Promise<any> {
+/** Jupiter's keyless endpoints rate-limit bursts: at most JUP_CONCURRENCY calls in flight, spaced out. */
+const JUP_CONCURRENCY = Number(process.env.JUP_CONCURRENCY ?? 2);
+const JUP_SPACING_MS = Number(process.env.JUP_SPACING_MS ?? 350);
+let inFlight = 0;
+let lastStart = 0;
+const waiters: (() => void)[] = [];
+async function slot<T>(f: () => Promise<T>): Promise<T> {
+  while (inFlight >= JUP_CONCURRENCY) await new Promise<void>((r) => waiters.push(r));
+  inFlight++;
+  const wait = lastStart + JUP_SPACING_MS - Date.now();
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+  lastStart = Date.now();
+  try {
+    return await f();
+  } finally {
+    inFlight--;
+    waiters.shift()?.();
+  }
+}
+
+async function getJson(url: string, tries = 7): Promise<any> {
   let last: unknown;
+  const jup = url.includes("jup.ag");
   for (let i = 0; i < tries; i++) {
     try {
-      const headers: Record<string, string> = { accept: "application/json" };
-      if (process.env.JUP_API_KEY && url.includes("jup.ag")) headers["x-api-key"] = process.env.JUP_API_KEY;
-      const r = await fetch(url, { headers, signal: AbortSignal.timeout(20_000) });
-      if (r.status === 429 || r.status >= 500) throw new Error(`${url} HTTP ${r.status}`);
-      const body = await r.json();
-      if (!r.ok) throw Object.assign(new Error(`${url} HTTP ${r.status}: ${JSON.stringify(body).slice(0, 300)}`), { status: r.status, body });
-      return body;
+      const once = async () => {
+        const headers: Record<string, string> = { accept: "application/json" };
+        if (process.env.JUP_API_KEY && jup) headers["x-api-key"] = process.env.JUP_API_KEY;
+        const r = await fetch(url, { headers, signal: AbortSignal.timeout(20_000) });
+        if (r.status === 429 || r.status >= 500) throw Object.assign(new Error(`${url.split("?")[0]} HTTP ${r.status}`), { retry: true });
+        const body = await r.json();
+        if (!r.ok) throw Object.assign(new Error(`${url.split("?")[0]} HTTP ${r.status}: ${JSON.stringify(body).slice(0, 300)}`), { status: r.status, body });
+        return body;
+      };
+      return await (jup ? slot(once) : once());
     } catch (e: any) {
       last = e;
       if (e?.status && e.status < 500 && e.status !== 429) throw e;
-      await new Promise((r) => setTimeout(r, 400 * 2 ** i));
+      await new Promise((r) => setTimeout(r, Math.min(8000, 500 * 2 ** i)));
     }
   }
   throw last;

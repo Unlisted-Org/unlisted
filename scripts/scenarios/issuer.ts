@@ -10,7 +10,7 @@
 //   hook-on | hook-off                            TransferHook program set to fixture_hook / cleared
 //   freeze | thaw                                 FreezeAccount / ThawAccount on the vault itself
 //   default-state  --state frozen|initialized     DefaultAccountState update (watcher event)
-//   standin-vaults [--raw <n>]                    create + fund a stand-in vault per leg (see below)
+//   standin-vaults [--raw <n>]                    create (and optionally fund) a stand-in vault per leg
 //
 // Options: --actor <name> (recorded; default "ops"), --note <text>.
 //
@@ -132,11 +132,11 @@ async function ensureIssuerHolds(mint: string, decimals: number) {
 
 async function standinVaults() {
   const owner = standinOwner();
-  const raw = BigInt(arg("raw", "1000000000")!);
+  const raw = BigInt(arg("raw", "0")!); // 0: create only; scripts/fixtures/standin-basket.ts funds them
   const out: any[] = [];
   for (const leg of reg.legs) {
     const v = ixCreateAtaIdempotent(issuer.publicKey, owner, leg.mint, TOKEN_2022_PROGRAM);
-    const tx = await send(c, `create + fund stand-in vault ${leg.symbol}`, [v.ix, ixMintToChecked(TOKEN_2022_PROGRAM, leg.mint, v.address, issuer.publicKey, raw, leg.decimals)], [issuer]);
+    const tx = await send(c, `create stand-in vault ${leg.symbol}${raw ? ` + fund ${raw} raw` : ""}`, raw ? [v.ix, ixMintToChecked(TOKEN_2022_PROGRAM, leg.mint, v.address, issuer.publicKey, raw, leg.decimals)] : [v.ix], [issuer]);
     out.push({ index: leg.index, symbol: leg.symbol, mint: leg.mint, vault: v.address.toBase58(), tx });
     console.log(`${leg.symbol}: stand-in vault ${v.address.toBase58()}`);
   }
