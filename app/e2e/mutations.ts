@@ -26,12 +26,35 @@ const MUTANTS = [
     from: "  if (mint.paused) reasons.push(\"paused\");",
     to: "  if (false && mint.paused) reasons.push(\"paused\");",
   },
-];
+  {
+    id: "price-panel-not-api",
+    what: "Price panel's 'if you redeemed now' shows the API's last_trade instead of its sell_now (needs E2E_VALUATION_URL)",
+    file: "app/src/components/Panels.tsx",
+    from: "<div className=\"big\" data-usd={v.sell_now.usd}>{fmtUsd(v.sell_now.usd)}</div>",
+    to: "<div className=\"big\" data-usd={v.last_trade.usd}>{fmtUsd(v.last_trade.usd)}</div>",
+    needsApi: true,
+  },
+  {
+    id: "unrecorded-drop-off-by-one",
+    what: "Legs table under-reports an unrecorded vault drop by one unit",
+    file: "app/src/components/Panels.tsx",
+    from: "data-raw={(l.state.accounted - l.state.balance).toString()}",
+    to: "data-raw={(l.state.accounted - l.state.balance - 1n).toString()}",
+    spec: "seizure",
+  },
+  {
+    id: "stored-multiplier",
+    what: "Legs table shows the mint's stored multiplier field instead of the effective one (killed only where they differ, e.g. devnet NEURALINK)",
+    file: "sdk/src/token2022.ts",
+    from: "  return BigInt(Math.floor(nowUnix)) >= s.newMultiplierEffectiveTimestamp ? s.newMultiplier : s.multiplier;",
+    to: "  return s.multiplier;",
+  },
+] as { id: string; what: string; file: string; from: string; to: string; spec?: string; needsApi?: boolean }[];
 
 const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1] : null;
 const cluster = (process.env.E2E_ENV ?? "local") === "devnet" ? "devnet" : "localnet";
 const results: any[] = [];
-for (const m of MUTANTS.filter((x) => !only || x.id === only)) {
+for (const m of MUTANTS.filter((x) => (!only || x.id === only) && (!x.needsApi || process.env.E2E_VALUATION_URL))) {
   const path = join(ROOT, m.file);
   const original = readFileSync(path, "utf8");
   if (!original.includes(m.from)) throw new Error(`${m.id}: target text not found in ${m.file}`);
@@ -40,7 +63,7 @@ for (const m of MUTANTS.filter((x) => !only || x.id === only)) {
   let passed = false;
   writeFileSync(path, original.replace(m.from, m.to));
   try {
-    out = execFileSync("npx", ["playwright", "test", "flow", "--timeout", "1500000"], {
+    out = execFileSync("npx", ["playwright", "test", m.spec ?? "flow", "--timeout", "1500000"], {
       cwd: resolve(HERE, ".."), encoding: "utf8", env: { ...process.env, E2E_MUTATION: m.id }, stdio: ["ignore", "pipe", "pipe"], maxBuffer: 64 << 20,
     });
     passed = true;
@@ -50,8 +73,8 @@ for (const m of MUTANTS.filter((x) => !only || x.id === only)) {
     writeFileSync(path, original);
   }
   const clean = out.replace(/\u001b\[[0-9;]*m/g, "");
-  const failure = clean.split("\n").filter((l) => /Error:|Expected|Received|at .*flow\.spec\.ts:\d+/.test(l)).slice(0, 8).map((l) => l.trim());
-  const r = { id: m.id, what: m.what, file: m.file, startedAt, finishedAt: new Date().toISOString(), result: passed ? "SURVIVED" : "killed", failure, runFile: /run file: (\S+)/.exec(clean)?.[1] ?? null };
+  const failure = clean.split("\n").filter((l) => /Error:|Expected|Received|at .*\.spec\.ts:\d+/.test(l)).slice(0, 8).map((l) => l.trim());
+  const r = { id: m.id, what: m.what, file: m.file, spec: m.spec ?? "flow", valuationApi: process.env.E2E_VALUATION_URL ?? null, startedAt, finishedAt: new Date().toISOString(), result: passed ? "SURVIVED" : "killed", failure, runFile: /run file: (\S+)/.exec(clean)?.[1] ?? null };
   results.push(r);
   console.log(`${m.id}: ${r.result}${failure.length ? `\n  ${failure.join("\n  ")}` : ""}`);
 }

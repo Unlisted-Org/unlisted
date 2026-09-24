@@ -148,7 +148,7 @@ export function LegsTable({ v, pos, api, onObserve, busy }: { v: BasketView; pos
         <table data-testid="legs-table">
           <thead>
             <tr>
-              <th>Leg</th><th>Available?</th><th>Transfer fee now</th><th>Scheduled</th><th>Vault balance</th><th>Accounted</th><th>Claim units</th>
+              <th>Leg</th><th>Available?</th><th>Transfer fee now</th><th>Scheduled</th><th title="Scaled-UI multiplier in effect now. Display only: raw amounts and shares never change.">Display multiplier</th><th>Vault balance</th><th>Accounted</th><th>Claim units</th>
               <th>Per share</th><th>Weight at inception</th>{pos && <th>You hold (entitlement)</th>}
             </tr>
           </thead>
@@ -162,6 +162,11 @@ export function LegsTable({ v, pos, api, onObserve, busy }: { v: BasketView; pos
                   <td data-testid={`leg-availability-${l.symbol}`}>{l.unavailable.length ? l.unavailable.map((r) => REASON_TEXT[r] ?? r).join(", ") : "available"}</td>
                   <td data-testid={`leg-fee-${l.symbol}`}>{l.feeNow ? `${l.feeNow.bps} bps` : "none"}</td>
                   <td>{l.feePending ? `${l.feePending.bps} bps from epoch ${l.feePending.epoch}` : "—"}</td>
+                  {/* The EFFECTIVE multiplier (spec 01): the mint's stored `multiplier` field is superseded once newMultiplier's timestamp passes. */}
+                  <td data-testid={`leg-multiplier-${l.symbol}`} data-value={String(l.multiplier)}>
+                    {l.mintInfo.scaledUi ? `×${l.multiplier}` : "none"}
+                    {l.mintInfo.scaledUi && l.mintInfo.scaledUi.multiplier !== l.multiplier && <span className="muted"> (stored field {l.mintInfo.scaledUi.multiplier}, superseded)</span>}
+                  </td>
                   <td data-testid={`leg-balance-${l.symbol}`} data-raw={l.state.balance.toString()}>{fmtRaw(l.state.balance)}</td>
                   <td>{fmtRaw(l.state.accounted)}
                     {l.state.balance < l.state.accounted && (

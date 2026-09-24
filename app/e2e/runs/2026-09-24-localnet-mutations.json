@@ -64,6 +64,40 @@
         "before: 34 passed (34)",
         "after: 1 failed | 34 passed (35)"
       ]
+    },
+    {
+      "id": "price-panel-not-api",
+      "what": "Price panel's 'if you redeemed now' shows the API's last_trade instead of its sell_now (needs E2E_VALUATION_URL)",
+      "file": "app/src/components/Panels.tsx",
+      "spec": "flow",
+      "valuationApi": "http://127.0.0.1:8907",
+      "startedAt": "2026-09-24T22:31:59.056Z",
+      "finishedAt": "2026-09-24T22:35:11.898Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toBe(expected) // Object.is equality",
+        "Expected: \"match\"",
+        "Received: \"panel [\\\"475611.774352\\\",\\\"475611.774352\\\",\\\"421961.138379\\\"]; 23 API responses received, latest [\\\"169380.354551\\\",\\\"475611.774352\\\",\\\"421961.138379\\\"]\"",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:74:32"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
+    },
+    {
+      "id": "unrecorded-drop-off-by-one",
+      "what": "Legs table under-reports an unrecorded vault drop by one unit",
+      "file": "app/src/components/Panels.tsx",
+      "spec": "seizure",
+      "valuationApi": null,
+      "startedAt": "2026-09-24T22:35:12.365Z",
+      "finishedAt": "2026-09-24T22:35:31.299Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toBe(expected) // Object.is equality",
+        "Expected: 20196000000n",
+        "Received: 20195999999n",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/seizure.spec.ts:88:66"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet-seizure.json"
     }
   ]
 }

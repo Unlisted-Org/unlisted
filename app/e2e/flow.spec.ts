@@ -11,7 +11,7 @@ import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BasketClient, TOKEN_PROGRAM_ID, math, openClaims, parseEventsFromLogs, transferFee } from "@stocklana/sdk";
-import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, returnSol, mintPausedByRpc, redemptionTickets, tokenAmount, tokenAmounts, txOk } from "./harness";
+import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, returnSol, mintPausedByRpc, multipliersByRpc, redemptionTickets, tokenAmount, tokenAmounts, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
@@ -75,6 +75,17 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
       rec.add({ step: "price panel shows the valuation API's three values", by: "test wallet (browser)", signatures: [],
         checks: { values: await shown(), apiGeneratedAt: match.as_of?.generated_at, apiDevnetSlot: match.as_of?.slot, apiMainnetSlot: match.as_of?.mainnet_slot, pricingBasis: match.pricing_basis?.kind } });
     }
+
+    // Display multiplier: the app shows the EFFECTIVE scaled-UI multiplier, never the stored field
+    // (e.g. devnet NEURALINK: stored 2, newMultiplier 1 already in effect).
+    const mults = await multipliersByRpc(env, env.legs.map((l) => new PublicKey(l.mint)));
+    for (const [i, l] of env.legs.entries()) {
+      const m = mults[i];
+      if (m && Math.abs(Date.now() / 1000 - m.at) < 120) continue; // a change taking effect right now: skip rather than race it
+      await expect(page.getByTestId(`leg-multiplier-${l.symbol}`)).toHaveAttribute("data-value", String(m ? m.effective : 1));
+    }
+    rec.add({ step: "legs table shows each mint's effective display multiplier (RPC jsonParsed)", by: "test wallet (browser)", signatures: [],
+      checks: { multipliers: Object.fromEntries(env.legs.map((l, i) => [l.symbol, mults[i]])) } });
 
     // ---------------------------------------------------------------- 1. deposit in kind
     const shareMint = new PublicKey(env.shareMint);

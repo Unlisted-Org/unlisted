@@ -222,6 +222,22 @@ export async function tokenAmounts(env: E2eEnv, owner: PublicKey, mints: PublicK
   return r.value.map((a: any) => (a ? BigInt(a.data.parsed.info.tokenAmount.amount) : 0n));
 }
 
+/**
+ * Scaled-UI multiplier per mint as decoded by the RPC node's jsonParsed (one request), and the one in
+ * effect at the current cluster block time. Mints without the extension give null.
+ */
+export async function multipliersByRpc(env: E2eEnv, mints: PublicKey[]): Promise<({ stored: number; effective: number; next: number; at: number } | null)[]> {
+  const c = conn(env);
+  const r = await c.getMultipleParsedAccounts(mints, { commitment: "confirmed" });
+  const now = await c.getBlockTime(r.context.slot).catch(() => null) ?? Math.floor(Date.now() / 1000);
+  return r.value.map((a: any) => {
+    const e = a?.data?.parsed?.info?.extensions?.find((x: any) => x.extension === "scaledUiAmountConfig");
+    if (!e) return null;
+    const stored = Number(e.state.multiplier), next = Number(e.state.newMultiplier), at = Number(e.state.newMultiplierEffectiveTimestamp);
+    return { stored, next, at, effective: now >= at ? next : stored };
+  });
+}
+
 /** Paused flag as decoded by the RPC node's own jsonParsed, not by the SDK. */
 export async function mintPausedByRpc(env: E2eEnv, mint: PublicKey): Promise<boolean> {
   const r: any = await conn(env).getParsedAccountInfo(mint, "confirmed");

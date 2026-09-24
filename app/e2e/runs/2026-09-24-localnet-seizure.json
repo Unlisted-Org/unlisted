@@ -94,6 +94,74 @@
         "e2e/runs/2026-09-24-localnet-seizure-2-recorded-banner.png",
         "e2e/runs/2026-09-24-localnet-seizure-3-page.png"
       ]
+    },
+    {
+      "startedAt": "2026-09-24T22:35:14.027Z",
+      "finishedAt": "2026-09-24T22:35:31.038Z",
+      "outcome": "failed",
+      "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 20196000000n\nReceived: 20195999999n",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "mutation": "unrecorded-drop-off-by-one",
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "XFnAfZzCNW8vWSYSmatudTPWmA8j9w9bfvnzb83dDtB",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c (program logic unchanged through 399b7b0)",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "Ha2gSnpie132qQ1pLpRb3XXYbed8FNEk3f9stmQVg7T8",
+        "kind": "Stocklana Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": null,
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "BsvJVCVdYkyct3DYRRejCTbvHxT5dhaB27PqiVLsXt6u3Le6h3xg88JqGvVmMAGz4KGUjLMqeMRL47TQ9gAAGPY"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "46fXJ3shiiumozNrvtwzvVrHT5kS4qqsDq9bXgcNKYSvW4LBH8gQfh8yupETpy6rTLwZzhNgQuyZLsWu5Y7rjvo1",
+            "3k1sjgjTGq9znWfofrxsooqMVMPRLabfubL6wmY4ry4mBXSVjAVkcvziVnZF9WDFBQaP2LiQJqiV4PiFHW8LUxnJ",
+            "2brpkTEbiYVpuiMG9esnvRyKCuCazd6LpTmooWKRbtvDW7RDRrHkFYFBUDA1TLgLUgiaKHLWBxvfB4EqmAs7mLjS"
+          ]
+        },
+        {
+          "step": "deposit in kind (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "2o6NUHfftPKiEHyPFGMBr6VTwuDK45eVQ7RfeyHmuHq5iihV3FwGTZbBSFamXhaH1DSpr8Asu6ujnQgubQ2LgswW"
+          ],
+          "checks": {
+            "shares": "20000000"
+          }
+        },
+        {
+          "step": "issuer seizes 20196000000 raw (20%) from the NEURALINK vault as permanent delegate",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "57t2Hsx7hjgowujqXqgEwyePetEjHTwkT4JiPhw1U66Yzi9pmMmQ3sGkhqKTRgvLqjYsudh4N9yQWQyDXsRYZ4Pq"
+          ]
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-seizure-failure.png"
+      ]
     }
   ]
 }
