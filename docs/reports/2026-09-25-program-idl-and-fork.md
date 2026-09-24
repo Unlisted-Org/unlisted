@@ -174,3 +174,23 @@ One NEURALINK attempt (Meteora DLMM → Whirlpool) failed inside Whirlpool with 
 | Open ticket escapes a shortfall (finalize ignores the loss index) | `test_open_ticket_bears_shortfall_pro_rata` |
 | Paused leg paid instead of turned into a claim | 9 partial-redemption tests (Token-2022 `MintPaused` aborts the whole redemption) |
 | Loss index never moves | 3 shortfall tests (state differs at the observe after a seizure) |
+
+## 6. Devnet: built, rehearsed, not yet run
+
+- **Deploy binary.** 374,704 bytes (sha256 `80db3bac…7dcc`; the no-idl default, reproducible).
+  - Programdata rent is **1.904 SOL**. `solana program deploy` also needs a buffer of the same size during the deploy, refunded afterwards, so the peak is about **3.81 SOL**.
+  - Loader-v4, which would avoid the buffer, is inactive on devnet (SIMD-0167).
+- **Scenario suite** `tests/program/devnet/scenarios.ts`, in the six spec 02 fixture scenarios:
+  - seizure;
+  - pause-mid-redemption: one leg, several legs, seizure while a claim is open, settle after resume;
+  - fee-change-mid-position;
+  - multiplier-change-mid-position;
+  - hook-switched-on;
+  - frozen-vault.
+
+  It records every signature in `tests/program/devnet/<scenario>.json`. Refusals never land, so they are recorded from a simulation of the signed transaction.
+- **Rehearsal.** `devnet/dryrun.sh` ran the suite on a local test validator (mainnet Token-2022 binary, the deploy binary). All six scenarios pass and 89 checks pass.
+- **Measured cost.** Setup is 0.169 SOL (7 fixture mints, fixture USDC, lookup table, user accounts). Each scenario is about 0.037 SOL. The total needed is **≈ 4.2 SOL peak and ≈ 2.3 SOL net**.
+- **Fixture mints.** Agent C's `fixtures/registry.json` does not exist yet, so the suite creates its own seven fixture mints. `~/.config/solana/stocklana/program.json` is their issuer (mint, pause, freeze, fee, hook and multiplier authority, and permanent delegate).
+- **Fee change on devnet.** The 300 bps fee takes effect two epochs (~2 days) later, so on devnet the suite proves the scheduled change and the old fee still applying. The effect itself is proven in LiteSVM and on the fork (the real epoch-1043 change).
+- **Status.** The key has 0 SOL. `solana airdrop` failed at 19:41 and 20:42 UTC (rate limit).
