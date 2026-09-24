@@ -94,7 +94,7 @@ pub struct RedemptionTicket {
     pub usdc_out: u64,                // accumulated in Usdc mode, paid on close
 }
 pub enum TicketLeg {
-    Paid { amount: u64 },                          // settled
+    Paid { amount: u64, received: u64 },           // amount = gross debited from the vault; received = owner's measured net
     Claim { units: u64, reason: ClaimReason },     // C_i units; the amount is fixed only at settlement
     None,
 }
@@ -140,7 +140,7 @@ Every instruction that touches leg `i` runs `observe(i)` first (spec 01). Accoun
 |---|---|---|---|
 | `bootstrap` | depositor[s], basket[w], share_mint[w], depositor_share_ata[w], `legs*`, token programs | `gross: [u64; n]` | Only once, into an empty basket. Mints `INITIAL_SHARES`. |
 | `deposit_in_kind` | depositor[s], basket[w], share_mint[w], depositor_share_ata[w], `legs*`, token programs | `gross: [u64; n], min_shares` | Every leg available. Uses `transfer_checked` from the depositor into each vault and measures each delta. Mint formula from spec 01. |
-| `open_deposit_ticket` | owner[s], basket, ticket[w], escrow[w], owner_usdc[w], usdc_mint, token_program, associated_token_program, system_program | `nonce, usdc_in, expiry_slots ≤ TICKET_MAX_AGE_SLOTS` | Every leg available; deposits enabled. |
+| `open_deposit_ticket` | owner[s], basket, ticket[w], escrow[w], owner_usdc[w], usdc_mint, token_program, associated_token_program, system_program, then remaining: `(mint, vault)×n` | `nonce, usdc_in, expiry_slots ≤ TICKET_MAX_AGE_SLOTS` | Every leg available; deposits enabled. |
 | `ticket_swap_leg` | owner[s], basket[w], ticket[w], escrow[w], leg mint, leg vault[w], router_program, + route accounts | `leg, usdc_amount, min_out, route_data: Vec<u8>` | Router in allowlist. The ticket PDA signs the router CPI as taker. Measures the vault delta, requires `≥ min_out`, credits norm. 2–3 legs per transaction (see *Budgets*). **Intermediate accounts:** routes should use the router's shared intermediate accounts (Jupiter `useSharedAccounts=true`), so none is owned by the ticket PDA. If a route needs a ticket-owned intermediate token account, the owner pays to create it, and `finalize_deposit` / `abort_deposit` close every ticket-owned token account passed as remaining accounts (the ticket PDA signs), refunding the rent to the owner. `onlyDirectRoutes` is not used: it costs price. |
 | `finalize_deposit` | owner[s], basket[w], ticket[w], escrow[w], owner_usdc[w], share_mint[w], owner_share_ata[w], token_program, token_2022_program, then remaining: `(mint, vault)×n`, then any ticket-owned intermediate token accounts | `min_shares` | All legs landed. Mints shares, refunds leftover USDC, closes intermediate accounts and the ticket (rent to owner). |
 | `unwind_leg` | owner[s], basket[w], ticket[w], escrow[w], leg mint, leg vault[w], router_program, + route accounts | `leg, min_usdc_out, route_data` | After expiry, or at the owner's request before finalize: sells the ticket's landed amount of the leg back into the escrow. |
@@ -164,6 +164,21 @@ Every instruction that touches leg `i` runs `observe(i)` first (spec 01). Accoun
 | `convert_listed_leg` | cranker[s], basket[w], leg mint, leg vault[w], usdc_mint, usdc_reserve[w], router_program, + route accounts | `leg, amount ≤ max_convert_chunk, min_usdc_out, route_data` | After `convert_after`, once `C_i == 0`. The basket PDA signs the router CPI and sells into `usdc_reserve`. Marks the leg `Retired` when `owned_i == 0`. |
 | `reinvest_reserve` | cranker[s], basket[w], usdc_mint, usdc_reserve[w], leg mint, leg vault[w], router_program, + route accounts | `leg, usdc_amount, min_out, route_data` | Buys remaining legs in equal USDC slices (`reserve_at_retirement / active_legs`). The basket PDA signs. Output measured into each vault. |
 
+## Amendments from the IDL review (2026-09-25)
+
+Agent B diffed Agent A's IDL (`program@c141837`) against this spec (`docs/reports/2026-09-25-app-idl-diff.md` on `app`). The spec owner's rulings:
+
+| # | Difference | Ruling |
+|---|---|---|
+| 1 | `initialize_basket` takes `routers: Vec<Pubkey>` | **Ratified.** This is the initial allowlist; the 48 h timelock applies to later additions. |
+| 2 | `bootstrap` takes `initial_shares: u64` | **Reversed.** Remove the arg; bootstrap always mints `INITIAL_SHARES` (spec 01). |
+| 3 | `abort_deposit` adds `token_program`, `token_2022_program` | **Ratified.** |
+| 4 | `redeem` adds optional `owner_usdc` after `usdc_reserve` | **Ratified.** Pays the pro-rata USDC reserve during an IPO conversion. |
+| 5, 6 | `settle_claim`, `settle_leg_usdc` add `share_mint` (last) | **Ratified.** `S` is the share mint's supply and isn't stored. |
+| 7 | New instruction `remove_router` | **Ratified.** Authority only, immediate (see *Authority*). |
+| 8 | `open_deposit_ticket` reads `(mint, vault)×n` as remaining accounts | **Ratified**, and now part of this spec: it is needed for the availability check. |
+| — | Meaning of `amount` in `ClaimSettled` / `TicketLeg::Paid` | **`amount` is the gross debited from the vault** (the model's `floor(...)`, reconcilable with `A_i`). A new field **`received`** is the owner's measured net of the transfer fee. |
+
 ## Events
 
 ```rust
@@ -172,7 +187,7 @@ SurplusObserved   { leg: u8, expected: u64, actual: u64, slot: u64 }
 Minted            { owner: Pubkey, shares: u64, deltas: [u64; MAX_LEGS], path: MintPath /* InKind | Ticket | Bootstrap */ }
 Redeemed          { owner: Pubkey, ticket: Pubkey, shares: u64, paid: [u64; MAX_LEGS], claims_mask: u8 }
 ClaimCreated      { owner: Pubkey, ticket: Pubkey, leg: u8, units: u64, reason: Unavailable /* Paused | Hook | Frozen */ }
-ClaimSettled      { owner: Pubkey, ticket: Pubkey, leg: u8, units: u64, amount: u64 }
+ClaimSettled      { owner: Pubkey, ticket: Pubkey, leg: u8, units: u64, amount: u64 /* gross from vault */, received: u64 /* owner's measured net */ }
 LegListing        { leg: u8, convert_after: i64, deadline: i64 }
 LegConverted      { leg: u8, amount: u64, usdc: u64 }
 LegRetired        { leg: u8 }
