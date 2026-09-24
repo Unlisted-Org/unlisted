@@ -1,0 +1,728 @@
+{
+ "as_of": {
+  "generated_at": "2026-09-24T22:48:38Z",
+  "last_poll": {
+   "mainnet": {
+    "at": "2026-09-24T22:36:01.719Z",
+    "slot": 450165543
+   },
+   "devnet": {
+    "at": "2026-09-24T22:36:20.327Z",
+    "slot": 503686952
+   }
+  }
+ },
+ "watching": [
+  {
+   "cluster": "mainnet",
+   "authority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+   "multisig": "53Ab3Rqx1a5uiV7qmsX4qbdbrqstVDpnH4LoJGfsZsU8",
+   "mints": 7
+  },
+  {
+   "cluster": "devnet",
+   "authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "multisig": null,
+   "mints": 7
+  }
+ ],
+ "program_events": {
+  "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+  "basket": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV"
+ },
+ "filter": {
+  "since_slot": 0,
+  "since_mainnet_slot": 0
+ },
+ "events": [
+  {
+   "id": "devnet:4A4hhYzd37wxcjorFZv5VQ5JjWHq6FW6pKVMWGXXUZoVKpfYARFswsMKpo4T1GYY6qzScupkhPHDzU79G6iUVBUG:Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs:MultiplierChangeScheduled:{\"multiplier\":\"1\",\"effective_ts\":1790289020,\"effective_at\":\"2026-09-24T22:30:20Z\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+   "symbol": "NEURALINK",
+   "leg": 2,
+   "signature": "4A4hhYzd37wxcjorFZv5VQ5JjWHq6FW6pKVMWGXXUZoVKpfYARFswsMKpo4T1GYY6qzScupkhPHDzU79G6iUVBUG",
+   "slot": 503684784,
+   "block_time": 1790289018,
+   "block_time_iso": "2026-09-24T22:30:18Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "MultiplierChangeScheduled",
+   "before": {
+    "multiplier": "2",
+    "effective_ts": 1790288983
+   },
+   "after": {
+    "multiplier": "1",
+    "effective_ts": 1790289020,
+    "effective_at": "2026-09-24T22:30:20Z"
+   }
+  },
+  {
+   "id": "devnet:4NmACHtUjeiULrRaShJAf7crCD26ayiTxtMsFUpECia1ZSViuakP9ZWy3UK1jRV7KxVBrsRZ3FzYSxxG7iXwBhse:Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs:MultiplierChangeScheduled:{\"multiplier\":\"2\",\"effective_ts\":1790288983,\"effective_at\":\"2026-09-24T22:29:43Z\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+   "symbol": "NEURALINK",
+   "leg": 2,
+   "signature": "4NmACHtUjeiULrRaShJAf7crCD26ayiTxtMsFUpECia1ZSViuakP9ZWy3UK1jRV7KxVBrsRZ3FzYSxxG7iXwBhse",
+   "slot": 503683698,
+   "block_time": 1790288836,
+   "block_time_iso": "2026-09-24T22:27:16Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "MultiplierChangeScheduled",
+   "before": {
+    "multiplier": "1",
+    "effective_ts": 0
+   },
+   "after": {
+    "multiplier": "2",
+    "effective_ts": 1790288983,
+    "effective_at": "2026-09-24T22:29:43Z"
+   }
+  },
+  {
+   "id": "devnet:2ZupaV4ymEzfeVgax7WCGBvvXzFT7BAxeQ3cWLuV7Lvaq8dqdXDy9NDtwJEFqc7ArxdLJCbEGHSXYprX7ZVvL5Cy:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:DefaultStateChanged:{\"state\":\"initialized\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "2ZupaV4ymEzfeVgax7WCGBvvXzFT7BAxeQ3cWLuV7Lvaq8dqdXDy9NDtwJEFqc7ArxdLJCbEGHSXYprX7ZVvL5Cy",
+   "slot": 503683415,
+   "block_time": 1790288789,
+   "block_time_iso": "2026-09-24T22:26:29Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "DefaultStateChanged",
+   "before": {
+    "state": "frozen"
+   },
+   "after": {
+    "state": "initialized"
+   }
+  },
+  {
+   "id": "devnet:24is8M9MahYSr8KVDTZoNWERwbNishVMu2QbgehRJhWPwxoChx2JNN9jBMFtC2RMfEvqhNzbnuWtifiYmzZ71i8L:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:DefaultStateChanged:{\"state\":\"frozen\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "24is8M9MahYSr8KVDTZoNWERwbNishVMu2QbgehRJhWPwxoChx2JNN9jBMFtC2RMfEvqhNzbnuWtifiYmzZ71i8L",
+   "slot": 503683345,
+   "block_time": 1790288778,
+   "block_time_iso": "2026-09-24T22:26:18Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "DefaultStateChanged",
+   "before": {
+    "state": "initialized"
+   },
+   "after": {
+    "state": "frozen"
+   }
+  },
+  {
+   "id": "devnet:5zLhSWAskcctZuX1iSDvAxvSUGcuQ3BwtJzinaG1XvQSb5DLh6V5LHqYCRSA3HNKapia6woEzphV1fqBS8bDaHng:Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ:HookSet:{\"program_id\":null}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+   "symbol": "FIGUREAI",
+   "leg": 6,
+   "signature": "5zLhSWAskcctZuX1iSDvAxvSUGcuQ3BwtJzinaG1XvQSb5DLh6V5LHqYCRSA3HNKapia6woEzphV1fqBS8bDaHng",
+   "slot": 503683241,
+   "block_time": 1790288760,
+   "block_time_iso": "2026-09-24T22:26:00Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "HookSet",
+   "before": {
+    "program_id": "5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ"
+   },
+   "after": {
+    "program_id": null
+   }
+  },
+  {
+   "id": "devnet:4voJ5Vc2mLkm3jWSgyr5SckTcVyYD8MYmKotn78Z3ahppsPpbg91wxzro1VHyFMPqMdPMSd9W3MxaQAEs5uVVy7r:Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ:HookSet:{\"program_id\":\"5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+   "symbol": "FIGUREAI",
+   "leg": 6,
+   "signature": "4voJ5Vc2mLkm3jWSgyr5SckTcVyYD8MYmKotn78Z3ahppsPpbg91wxzro1VHyFMPqMdPMSd9W3MxaQAEs5uVVy7r",
+   "slot": 503683172,
+   "block_time": 1790288749,
+   "block_time_iso": "2026-09-24T22:25:49Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "HookSet",
+   "before": {
+    "program_id": null
+   },
+   "after": {
+    "program_id": "5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ"
+   }
+  },
+  {
+   "id": "devnet:3eeuqYAyX1rwkg1cNQS8QqdnPbGVrBimBJ8kP533HVEMee5zmM8uJpyTQSH9VohA9WnPMXJxFbCeE1LkfCPMgH9Y:D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9:ClaimSettled:{\"owner\":\"DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u\",\"ticket\":\"5sxhJ33xwz2ivhRRZLrP5Ff6RDj5QfYi2V1gf31Hvdq6\",\"leg\":5,\"units\":\"5000000\",\"amount\":\"558478\",\"received\":\"552893\"}",
+   "kind": "program",
+   "type": "ClaimSettled",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+    "ticket": "5sxhJ33xwz2ivhRRZLrP5Ff6RDj5QfYi2V1gf31Hvdq6",
+    "leg": 5,
+    "units": "5000000",
+    "amount": "558478",
+    "received": "552893"
+   },
+   "leg": 5,
+   "symbol": "KALSHI",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "signature": "3eeuqYAyX1rwkg1cNQS8QqdnPbGVrBimBJ8kP533HVEMee5zmM8uJpyTQSH9VohA9WnPMXJxFbCeE1LkfCPMgH9Y",
+   "slot": 503683092,
+   "block_time": 1790288735,
+   "block_time_iso": "2026-09-24T22:25:35Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:3BabkbVuCN8Rv2DMtrfsvQpawZqZ7sZL8PEAQsem1tzE5AYXYGTNLvNQUCywsGpRwUWak12ffkx5e5HKkCC4sKVF:D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9:Resumed:{\"paused\":false}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "symbol": "KALSHI",
+   "leg": 5,
+   "signature": "3BabkbVuCN8Rv2DMtrfsvQpawZqZ7sZL8PEAQsem1tzE5AYXYGTNLvNQUCywsGpRwUWak12ffkx5e5HKkCC4sKVF",
+   "slot": 503682900,
+   "block_time": 1790288704,
+   "block_time_iso": "2026-09-24T22:25:04Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "Resumed",
+   "before": {
+    "paused": true
+   },
+   "after": {
+    "paused": false
+   }
+  },
+  {
+   "id": "devnet:at9q4HaDD3SoomXPoYmXcymbNQtkyst5JRAcquHmKEEDrad3ZUhjztm15wwm3PD7oAq5XACTJYP3nCcLEPntmxT:D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9:ClaimCreated:{\"owner\":\"DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u\",\"ticket\":\"5sxhJ33xwz2ivhRRZLrP5Ff6RDj5QfYi2V1gf31Hvdq6\",\"leg\":5,\"units\":\"5000000\",\"reason\":{\"kind\":\"Paused\"}}",
+   "kind": "program",
+   "type": "ClaimCreated",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+    "ticket": "5sxhJ33xwz2ivhRRZLrP5Ff6RDj5QfYi2V1gf31Hvdq6",
+    "leg": 5,
+    "units": "5000000",
+    "reason": {
+     "kind": "Paused"
+    }
+   },
+   "leg": 5,
+   "symbol": "KALSHI",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "signature": "at9q4HaDD3SoomXPoYmXcymbNQtkyst5JRAcquHmKEEDrad3ZUhjztm15wwm3PD7oAq5XACTJYP3nCcLEPntmxT",
+   "slot": 503682859,
+   "block_time": 1790288697,
+   "block_time_iso": "2026-09-24T22:24:57Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:at9q4HaDD3SoomXPoYmXcymbNQtkyst5JRAcquHmKEEDrad3ZUhjztm15wwm3PD7oAq5XACTJYP3nCcLEPntmxT::Redeemed:{\"owner\":\"DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u\",\"ticket\":\"5sxhJ33xwz2ivhRRZLrP5Ff6RDj5QfYi2V1gf31Hvdq6\",\"shares\":\"5000000\",\"paid\":[\"250628\",\"474489\",\"1160535\",\"3027145\",\"3363049\",\"0\",\"2771254\",\"0\"],\"claims_mask\":32}",
+   "kind": "program",
+   "type": "Redeemed",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+    "ticket": "5sxhJ33xwz2ivhRRZLrP5Ff6RDj5QfYi2V1gf31Hvdq6",
+    "shares": "5000000",
+    "paid": [
+     "250628",
+     "474489",
+     "1160535",
+     "3027145",
+     "3363049",
+     "0",
+     "2771254",
+     "0"
+    ],
+    "claims_mask": 32
+   },
+   "signature": "at9q4HaDD3SoomXPoYmXcymbNQtkyst5JRAcquHmKEEDrad3ZUhjztm15wwm3PD7oAq5XACTJYP3nCcLEPntmxT",
+   "slot": 503682859,
+   "block_time": 1790288697,
+   "block_time_iso": "2026-09-24T22:24:57Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:54a2pa92oBWKxGuvfcJmNjSRAWM34H1ZAdqzDo34yGwxZD7V3dVTC83xDMDLQSjFToA7tcUZVjjMvvKdFpkzZdpg:D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9:Paused:{\"paused\":true}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "symbol": "KALSHI",
+   "leg": 5,
+   "signature": "54a2pa92oBWKxGuvfcJmNjSRAWM34H1ZAdqzDo34yGwxZD7V3dVTC83xDMDLQSjFToA7tcUZVjjMvvKdFpkzZdpg",
+   "slot": 503682672,
+   "block_time": 1790288666,
+   "block_time_iso": "2026-09-24T22:24:26Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "Paused",
+   "before": {
+    "paused": false
+   },
+   "after": {
+    "paused": true
+   }
+  },
+  {
+   "id": "devnet:5xn1xzpTZWoXkZVt55cgtqXSej4ELfcYC6QSQJwCgNwq9DArjToQ9A3KHRY7x7gMPf9XNJaUVbYvA7Gs9yfcTPJW::Redeemed:{\"owner\":\"DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u\",\"ticket\":\"EvDP7uX6ECmqiRhHgMACDciRkiPEz7g6pfXyjLwKqE82\",\"shares\":\"5000000\",\"paid\":[\"250628\",\"474489\",\"1160535\",\"3027145\",\"3363049\",\"552893\",\"2771254\",\"0\"],\"claims_mask\":0}",
+   "kind": "program",
+   "type": "Redeemed",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+    "ticket": "EvDP7uX6ECmqiRhHgMACDciRkiPEz7g6pfXyjLwKqE82",
+    "shares": "5000000",
+    "paid": [
+     "250628",
+     "474489",
+     "1160535",
+     "3027145",
+     "3363049",
+     "552893",
+     "2771254",
+     "0"
+    ],
+    "claims_mask": 0
+   },
+   "signature": "5xn1xzpTZWoXkZVt55cgtqXSej4ELfcYC6QSQJwCgNwq9DArjToQ9A3KHRY7x7gMPf9XNJaUVbYvA7Gs9yfcTPJW",
+   "slot": 503682599,
+   "block_time": 1790288654,
+   "block_time_iso": "2026-09-24T22:24:14Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:36ME63RSX234NucEyXNfAUevP6dd4FM9ydhcojkX4rXCW2xmzaU8PFxBGSwYDdm96fXdivrKFvZ7oq3JuDmigDhY::Minted:{\"owner\":\"DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u\",\"shares\":\"20000002\",\"deltas\":[\"1012643\",\"1917131\",\"4689036\",\"12230897\",\"13588084\",\"2233917\",\"11196993\",\"0\"],\"path\":{\"kind\":\"InKind\"}}",
+   "kind": "program",
+   "type": "Minted",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+    "shares": "20000002",
+    "deltas": [
+     "1012643",
+     "1917131",
+     "4689036",
+     "12230897",
+     "13588084",
+     "2233917",
+     "11196993",
+     "0"
+    ],
+    "path": {
+     "kind": "InKind"
+    }
+   },
+   "signature": "36ME63RSX234NucEyXNfAUevP6dd4FM9ydhcojkX4rXCW2xmzaU8PFxBGSwYDdm96fXdivrKFvZ7oq3JuDmigDhY",
+   "slot": 503682452,
+   "block_time": 1790288629,
+   "block_time_iso": "2026-09-24T22:23:49Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:2weWhQfGSWZZ7Df5J1dECSdBSBuCDYw763aV1YSvBmHp7xtUXCcBnFDCqAsDAW1K659JaZ6ZhVWUvVHVkXNtGjVR:5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+   "symbol": "POLYMARKET",
+   "leg": 4,
+   "signature": "2weWhQfGSWZZ7Df5J1dECSdBSBuCDYw763aV1YSvBmHp7xtUXCcBnFDCqAsDAW1K659JaZ6ZhVWUvVHVkXNtGjVR",
+   "slot": 503677892,
+   "block_time": 1790287874,
+   "block_time_iso": "2026-09-24T22:11:14Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": {
+    "bps": 300,
+    "effective_epoch": 1167
+   },
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:57EMkMZxSsBBxD7mqmW5rm6rXMPihDSHcfYgupwMnhd8NhmzCbwq5fcHodpjsta9suRzWmbp9vgj8oNXksWm7KWP:kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q:AccountThawed:{\"account\":\"8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ\",\"owner\":\"D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+   "symbol": "ANTHROPIC",
+   "leg": 1,
+   "signature": "57EMkMZxSsBBxD7mqmW5rm6rXMPihDSHcfYgupwMnhd8NhmzCbwq5fcHodpjsta9suRzWmbp9vgj8oNXksWm7KWP",
+   "slot": 503677792,
+   "block_time": 1790287857,
+   "block_time_iso": "2026-09-24T22:10:57Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "AccountThawed",
+   "after": {
+    "account": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+    "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG"
+   }
+  },
+  {
+   "id": "devnet:4vzAdrE7iahMLcs5W2G4YsfaQ6grKLPHPBLPyzNCiLLHBzHi94afzW6xMS3nsekWZCK6szqtF7vsu8bV4Njazwsd:kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q:AccountFrozen:{\"account\":\"8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ\",\"owner\":\"D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+   "symbol": "ANTHROPIC",
+   "leg": 1,
+   "signature": "4vzAdrE7iahMLcs5W2G4YsfaQ6grKLPHPBLPyzNCiLLHBzHi94afzW6xMS3nsekWZCK6szqtF7vsu8bV4Njazwsd",
+   "slot": 503677692,
+   "block_time": 1790287841,
+   "block_time_iso": "2026-09-24T22:10:41Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "AccountFrozen",
+   "after": {
+    "account": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+    "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG"
+   }
+  },
+  {
+   "id": "devnet:2FysrxL8tDRFXgx1wzJYmufum1FBHVyANG7mzaiH4KzhhM6A8npq1AmhG63SedkxX1EFBvZ4pv7acSrVqzUc1Mkd:AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m:PermanentDelegateSeizure:{\"account\":\"BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv\",\"owner\":\"D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG\",\"via\":\"burnChecked\",\"amount_raw\":\"30886091\",\"destination\":null}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+   "symbol": "ANDURIL",
+   "leg": 3,
+   "signature": "2FysrxL8tDRFXgx1wzJYmufum1FBHVyANG7mzaiH4KzhhM6A8npq1AmhG63SedkxX1EFBvZ4pv7acSrVqzUc1Mkd",
+   "slot": 503668247,
+   "block_time": 1790286274,
+   "block_time_iso": "2026-09-24T21:44:34Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "PermanentDelegateSeizure",
+   "after": {
+    "account": "BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv",
+    "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+    "via": "burnChecked",
+    "amount_raw": "30886091",
+    "destination": null
+   }
+  },
+  {
+   "id": "devnet:4tgiPRfHeyfnN2zpJmgNUTKrj3ZF4UhQwKrG3BQM1hHRoZZafririXsbiqsYPvFHmqx95CJMCneGa4trX8f5wamw::Minted:{\"owner\":\"DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb\",\"shares\":\"9974697\",\"deltas\":[\"505052\",\"956164\",\"2338626\",\"6100117\",\"6776948\",\"1114132\",\"5584330\",\"0\"],\"path\":{\"kind\":\"Ticket\"}}",
+   "kind": "program",
+   "type": "Minted",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+    "shares": "9974697",
+    "deltas": [
+     "505052",
+     "956164",
+     "2338626",
+     "6100117",
+     "6776948",
+     "1114132",
+     "5584330",
+     "0"
+    ],
+    "path": {
+     "kind": "Ticket"
+    }
+   },
+   "signature": "4tgiPRfHeyfnN2zpJmgNUTKrj3ZF4UhQwKrG3BQM1hHRoZZafririXsbiqsYPvFHmqx95CJMCneGa4trX8f5wamw",
+   "slot": 503663425,
+   "block_time": 1790285475,
+   "block_time_iso": "2026-09-24T21:31:15Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:ZhLs24LtobytL6C9kXKBDkcFb5ZksxiBH8117jrwq9Q9nBNfBbsYuZH4ivsvLUBtHZSFdh7TJ8NS1XRpYqByD8U::Minted:{\"owner\":\"DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb\",\"shares\":\"1000000000\",\"deltas\":[\"50632051\",\"95856472\",\"234451686\",\"611544608\",\"679404019\",\"111695755\",\"559849553\",\"0\"],\"path\":{\"kind\":\"Bootstrap\"}}",
+   "kind": "program",
+   "type": "Minted",
+   "cluster": "devnet",
+   "data": {
+    "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+    "shares": "1000000000",
+    "deltas": [
+     "50632051",
+     "95856472",
+     "234451686",
+     "611544608",
+     "679404019",
+     "111695755",
+     "559849553",
+     "0"
+    ],
+    "path": {
+     "kind": "Bootstrap"
+    }
+   },
+   "signature": "ZhLs24LtobytL6C9kXKBDkcFb5ZksxiBH8117jrwq9Q9nBNfBbsYuZH4ivsvLUBtHZSFdh7TJ8NS1XRpYqByD8U",
+   "slot": 503662749,
+   "block_time": 1790285363,
+   "block_time_iso": "2026-09-24T21:29:23Z",
+   "detected_by": "program-log",
+   "source": "devnet basket program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv logs (IDL-decoded)"
+  },
+  {
+   "id": "devnet:2xHEyKL8xgXBtXLz7S2z8MhHcCFYNv5umrs4isbfgz2caEsz2Gr6tbGYZ1Hoys6vp19UqfGrd5bNcALbULw8RDvh:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:MultiplierChangeScheduled:{\"multiplier\":\"1.4861347\",\"effective_ts\":1790285056,\"effective_at\":\"2026-09-24T21:24:16Z\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "2xHEyKL8xgXBtXLz7S2z8MhHcCFYNv5umrs4isbfgz2caEsz2Gr6tbGYZ1Hoys6vp19UqfGrd5bNcALbULw8RDvh",
+   "slot": 503659818,
+   "block_time": 1790284876,
+   "block_time_iso": "2026-09-24T21:21:16Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "MultiplierChangeScheduled",
+   "before": {
+    "multiplier": "1",
+    "effective_ts": 0
+   },
+   "after": {
+    "multiplier": "1.4861347",
+    "effective_ts": 1790285056,
+    "effective_at": "2026-09-24T21:24:16Z"
+   }
+  },
+  {
+   "id": "devnet:4khb9X71Xj6tNr3HhvH2HPJveevfAK8jR4hxi3DeqGeRtnNM7BehbAVwo9Dtd5TaNocYVGCu42VHyGF9tfLpRtUn:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:MultiplierChangeScheduled:{\"multiplier\":\"1\",\"effective_ts\":0,\"effective_at\":null}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "4khb9X71Xj6tNr3HhvH2HPJveevfAK8jR4hxi3DeqGeRtnNM7BehbAVwo9Dtd5TaNocYVGCu42VHyGF9tfLpRtUn",
+   "slot": 503659800,
+   "block_time": 1790284873,
+   "block_time_iso": "2026-09-24T21:21:13Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "MultiplierChangeScheduled",
+   "before": {
+    "multiplier": "1",
+    "effective_ts": 0
+   },
+   "after": {
+    "multiplier": "1",
+    "effective_ts": 0,
+    "effective_at": null
+   }
+  },
+  {
+   "id": "devnet:2uuV9aN1tN2gLi3TFv9YTdzA39bQP6xdeYPCFDDoVRsiCKQWM8zux6TWTkVru7UsZrSTEnwxspsaiYu2svnEcpWj:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:MultiplierChangeScheduled:{\"multiplier\":\"1\",\"effective_ts\":0,\"effective_at\":null}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "2uuV9aN1tN2gLi3TFv9YTdzA39bQP6xdeYPCFDDoVRsiCKQWM8zux6TWTkVru7UsZrSTEnwxspsaiYu2svnEcpWj",
+   "slot": 503659140,
+   "block_time": 1790284764,
+   "block_time_iso": "2026-09-24T21:19:24Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "MultiplierChangeScheduled",
+   "before": {
+    "multiplier": "1.4861347",
+    "effective_ts": 1790284512
+   },
+   "after": {
+    "multiplier": "1",
+    "effective_ts": 0,
+    "effective_at": null
+   }
+  },
+  {
+   "id": "devnet:47xsh7Zjmod3VUFzd9a8E9x6xGDNDNxk79AF1sGAm5MhzFQPLsVrMc1XWzibvUGZcag1NRMuprp8HMitx26FqCFA:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:MultiplierChangeScheduled:{\"multiplier\":\"1.4861347\",\"effective_ts\":1790284512,\"effective_at\":\"2026-09-24T21:15:12Z\"}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "47xsh7Zjmod3VUFzd9a8E9x6xGDNDNxk79AF1sGAm5MhzFQPLsVrMc1XWzibvUGZcag1NRMuprp8HMitx26FqCFA",
+   "slot": 503657928,
+   "block_time": 1790284564,
+   "block_time_iso": "2026-09-24T21:16:04Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "MultiplierChangeScheduled",
+   "before": null,
+   "after": {
+    "multiplier": "1.4861347",
+    "effective_ts": 1790284512,
+    "effective_at": "2026-09-24T21:15:12Z"
+   }
+  },
+  {
+   "id": "devnet:2E96jXz4kk6vbEQjh8LwK2AYifUgEDWtCKwVVZ8uZFhSs3iJoZHgL3RfgiwMuyfrgUNL56iAiMqGBaJtsuYy8B3q:Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+   "symbol": "FIGUREAI",
+   "leg": 6,
+   "signature": "2E96jXz4kk6vbEQjh8LwK2AYifUgEDWtCKwVVZ8uZFhSs3iJoZHgL3RfgiwMuyfrgUNL56iAiMqGBaJtsuYy8B3q",
+   "slot": 503657913,
+   "block_time": 1790284561,
+   "block_time_iso": "2026-09-24T21:16:01Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:Jot1R4vadNpFPC5JtS8boATqNNouGnKVJcyVyS8DW8zxJYhqDHrTjcpKTC7thbyrD4MYxA1oFoZEwqV7ogBLqSZ:D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "symbol": "KALSHI",
+   "leg": 5,
+   "signature": "Jot1R4vadNpFPC5JtS8boATqNNouGnKVJcyVyS8DW8zxJYhqDHrTjcpKTC7thbyrD4MYxA1oFoZEwqV7ogBLqSZ",
+   "slot": 503657814,
+   "block_time": 1790284545,
+   "block_time_iso": "2026-09-24T21:15:45Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:3xSRduz48bqX3KMunWwWin9v6KR69EhPGzrYvSRzFpiZ86j8nXM1PFo2SDsmBCNXVaEzZiFzx9GhppTQcZR9efgG:5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+   "symbol": "POLYMARKET",
+   "leg": 4,
+   "signature": "3xSRduz48bqX3KMunWwWin9v6KR69EhPGzrYvSRzFpiZ86j8nXM1PFo2SDsmBCNXVaEzZiFzx9GhppTQcZR9efgG",
+   "slot": 503657715,
+   "block_time": 1790284528,
+   "block_time_iso": "2026-09-24T21:15:28Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:5iDS1Wgwqi1cQGMGEfUwYqkvxzDeBUQWMM6NirQNjAPnfXrh25i663u1zLjQjKvzA6ecrcYT1BSCih99rHvwTeNA:AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+   "symbol": "ANDURIL",
+   "leg": 3,
+   "signature": "5iDS1Wgwqi1cQGMGEfUwYqkvxzDeBUQWMM6NirQNjAPnfXrh25i663u1zLjQjKvzA6ecrcYT1BSCih99rHvwTeNA",
+   "slot": 503657562,
+   "block_time": 1790284503,
+   "block_time_iso": "2026-09-24T21:15:03Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:4euNxJjcE1SkdwXU2WonZuTFeXkK6GDZ3FNfuituJhcAVdm78NsiNQBouA7Yoz2TErxzDUPS5ZniHcwBjMG1pGF3:Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+   "symbol": "NEURALINK",
+   "leg": 2,
+   "signature": "4euNxJjcE1SkdwXU2WonZuTFeXkK6GDZ3FNfuituJhcAVdm78NsiNQBouA7Yoz2TErxzDUPS5ZniHcwBjMG1pGF3",
+   "slot": 503657465,
+   "block_time": 1790284487,
+   "block_time_iso": "2026-09-24T21:14:47Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:3VaHN5C41kD6ffH3oVvuzfSjLi99ooUSgSvrPJ6CTS9dffyYvdb61q5TaXMiXt6PxuaaGHUCvDKAYno4XCewfk8v:kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+   "symbol": "ANTHROPIC",
+   "leg": 1,
+   "signature": "3VaHN5C41kD6ffH3oVvuzfSjLi99ooUSgSvrPJ6CTS9dffyYvdb61q5TaXMiXt6PxuaaGHUCvDKAYno4XCewfk8v",
+   "slot": 503657372,
+   "block_time": 1790284471,
+   "block_time_iso": "2026-09-24T21:14:31Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  },
+  {
+   "id": "devnet:5aUMxFidK5B3vwhRg1duSQMRtJUo7mQfpi8ZBUFNjdFRBFKZ9cYr3khxwgHykSu5ctVW51qMr77NRbddzMLaeVkV:AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M:FeeChangeScheduled:{\"bps\":300,\"maximum_fee\":\"18446744073709551615\",\"effective_epoch\":1167}",
+   "kind": "issuer",
+   "cluster": "devnet",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "symbol": "OPENAI",
+   "leg": 0,
+   "signature": "5aUMxFidK5B3vwhRg1duSQMRtJUo7mQfpi8ZBUFNjdFRBFKZ9cYr3khxwgHykSu5ctVW51qMr77NRbddzMLaeVkV",
+   "slot": 503655693,
+   "block_time": 1790284191,
+   "block_time_iso": "2026-09-24T21:09:51Z",
+   "detected_by": "transaction",
+   "source": "devnet getTransaction (jsonParsed) of issuer authority 3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+   "type": "FeeChangeScheduled",
+   "before": null,
+   "after": {
+    "bps": 300,
+    "maximum_fee": "18446744073709551615",
+    "effective_epoch": 1167
+   }
+  }
+ ],
+ "errors": []
+}
