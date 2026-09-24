@@ -349,6 +349,177 @@
         "err": null
       },
       "ok": true
+    },
+    {
+      "action": "multiplier",
+      "actor": "ops",
+      "note": "reset stored field to mainnet's (approved by spec owner after A's refund run)",
+      "at": "2026-09-24T22:57:23Z",
+      "target": {
+        "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+        "symbol": "NEURALINK",
+        "mirror_of": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+        "vault": null,
+        "probe_vault": "9u36QUfCYyhGzMfiD8okUzSeggXBCKjwmty9F9HRJyDq",
+        "note": "mint-level action; probes use the leg's stand-in vault"
+      },
+      "steps": [
+        {
+          "step": "UpdateMultiplier 1 effective null",
+          "signature": "2o1FtXa2uzWaXompLgYzbQSsproUxZg33N3q3XzBQWQapkFjZp5PEZN92UkCgfFv4FHNLGWEVDP6whZThaDXEoNf",
+          "slot": 503694558,
+          "block_time": 1790290639,
+          "block_time_iso": "2026-09-24T22:57:19Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503694548,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:57:18Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "118409942",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "2",
+            "effective": "1",
+            "effective_since": "2026-09-24T22:30:20Z",
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 1790289020
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1289552784920",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503694577,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:57:23Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "118409942",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1289552784920",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503694550,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "119399942",
+          "vault_withheld_after_raw": 10000
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503694579,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "119399942",
+          "vault_withheld_after_raw": 10000
+        }
+      ],
+      "effective_ts": 0,
+      "effective_at": null,
+      "chain_ui_amount_before": {
+        "kind": "simulation (no signature)",
+        "what": "AmountToUiAmount(1000000000 raw)",
+        "slot": 503694551,
+        "ui_amount": "1",
+        "err": null
+      },
+      "chain_ui_amount_after_tx": {
+        "kind": "simulation (no signature)",
+        "what": "AmountToUiAmount(1000000000 raw)",
+        "slot": 503694573,
+        "ui_amount": "1",
+        "err": null
+      },
+      "ok": true
     }
   ]
 }
