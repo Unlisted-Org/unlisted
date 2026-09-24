@@ -8,6 +8,7 @@
 //   pause | resume                                PausableExtension on the vault's mint
 //   fee            --bps <n> [--wait]             SetTransferFee (takes effect two epochs out)
 //   multiplier     --value <x> --in-seconds <n> [--wait]   UpdateMultiplier with a near-future timestamp
+//                  (or --at <unix ts>; --at 0 resets the stored field too)
 //   hook-on | hook-off                            TransferHook program set to fixture_hook / cleared
 //   freeze | thaw                                 FreezeAccount / ThawAccount on the vault itself
 //   default-state  --state frozen|initialized     DefaultAccountState update (watcher event)
@@ -202,7 +203,8 @@ async function run() {
       const value = Number(arg("value"));
       const inSec = Number(arg("in-seconds", "120"));
       if (!(value > 0)) throw new Error("--value <multiplier> required");
-      const ts = Math.floor(Date.now() / 1000) + inSec;
+      // --at <unix ts> sets the timestamp explicitly (0 = in the past: stored and new both become value).
+      const ts = arg("at") !== undefined ? Number(arg("at")) : Math.floor(Date.now() / 1000) + inSec;
       extra.effective_ts = ts;
       extra.effective_at = iso(ts);
       extra.chain_ui_amount_before = await chainUiAmount(mint);
