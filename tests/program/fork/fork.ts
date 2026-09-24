@@ -293,6 +293,8 @@ async function main() {
       const f = l.match(/^Program (\w+) failed/);
       if (f && failedAt < 0 && amms.includes(f[1])) failedAt = amms.lastIndexOf(f[1]);
     }
+    // Jupiter could not invoke the next hop's program at all (surfpool cannot load it): that hop.
+    if (failedAt < 0 && logs.some((l) => /Unsupported program id/.test(l))) failedAt = amms.length;
     if (failedAt < 0) return undefined;
     return body.routePlan[failedAt]?.swapInfo?.label;
   }
