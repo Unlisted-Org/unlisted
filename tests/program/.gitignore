@@ -1,0 +1,6 @@
+node_modules/
+vectors/out/*.json
+!vectors/out/summary.json
+fixtures/*.so
+fork/.cache/
+scratch/
