@@ -218,7 +218,12 @@ RouterProposed    { router: Pubkey, effective_ts: i64 }
 6009 ListingNoticeTooShort 6010 ConversionNotOpen      6011 OutstandingClaims
 6012 DepositsDisabled      6013 UnexpectedExtensionSet 6014 HookNotNull
 6015 VaultFrozen           6016 MathOverflow           6017 ChunkTooLarge
+6018 InvalidAccount        6019 Unauthorized           6020 NoClaim
+6021 RouteViolation        6022 LegsStillLanded        6023 RouterNotPending
+6024 InvalidArgument
 ```
+
+Errors 6018–6024 were added by Agent A and ratified on 2026-09-25 (`docs/reports/2026-09-25-program-idl-and-fork.md` §2 on `program`).
 
 ## Budgets (from Phase 0 measurements, to be re-proven by A)
 
@@ -230,7 +235,17 @@ RouterProposed    { router: Pubkey, effective_ts: i64 }
   - **Follow-up (Agent B, commit 754be17 on `app`):** v2 `/build` accepts `useSharedAccounts=true` but ignores it: it always returns `route_v2`, never `shared_accounts_route_v2`. Ticket-owned intermediate accounts are therefore needed (1 per single-hop leg, 2 per multi-hop leg). Closing them in `finalize_deposit` makes it **4 transactions** (1,051 / 1,169 / 930 / 738 bytes; 48 / 53 / 36 / 35 accounts).
   - **Plan for 4 transactions per deposit under one wallet approval.**
   - **Resolved by A on the fork (commit 700004c):** `route_v2` **does** need the taker's own output account to exist even when `destinationTokenAccount` is set. Without it Jupiter fails with `0x1789` (6025 InvalidTokenAccount), reproduced on 2 legs. The SDK keeps creating it, and `finalize_deposit` / `abort_deposit` close it.
-  - **Still open:** A's fork run with the real program fits only **2 legs per transaction** (34–45 accounts, 877–1,056 bytes). 3 legs did not fit on the routes seen, because the byte limit binds. B's SDK-only packing fitted 3. A's final report sets the count.
+  - **Final, proven by A on the cloned-mainnet fork (commit 27e0ea9, `tests/program/fork/transcript-final7.json`):** a full USDC deposit with the real program, real PreStocks mints and live Jupiter routes is **4 transactions**, all landing first try:
+
+    | Transaction | Accounts | Bytes | CU |
+    |---|---|---|---|
+    | open + OPENAI (2-hop) | 50 | 1,064 | 306k |
+    | ANTHROPIC + NEURALINK + ANDURIL | 46 | 1,159 | 423k |
+    | POLYMARKET + KALSHI (2-hop) | 45 | 1,124 | 361k |
+    | FIGUREAI + finalize, closing 8 intermediates | 48 | 1,015 | 243k |
+
+  - **The byte limit binds before the 64 locks.** At most 3 legs fit per transaction, and 2 when one is 2-hop or shares the transaction with `open`. Clients pack by serialized size.
+  - **Prop AMMs (unresolved).** On two fresh forks, BisonFi, Flux, Quantum, TesseraV and Hadron failed inside the AMM (BisonFi: surfpool can't load it; the others: custom errors). That looks like fork artifacts, not a PDA-taker limit, but it isn't settled. They were excluded on the fork only. A mainnet `simulateTransaction` with the PDA as taker (`sigVerify:false`) should settle it.
   - **CPI depth is 4 on every leg** (basket → Jupiter → AMM → Token-2022), including 2-hop routes. Proven on the fork.
 - **CPI depth:** basket → router → AMM → Token-2022 is 4 levels, exactly the current limit (`raise_cpi_nesting_limit_to_8` is not active). A must prove this with Jupiter on the cloned-mainnet fork and report any route that exceeds it.
 
