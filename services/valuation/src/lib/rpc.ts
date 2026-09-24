@@ -21,6 +21,16 @@ export class RpcError extends Error {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * JSON.parse that keeps integers above 2^53 exact, as strings (e.g. maximumFee = u64::MAX, which a
+ * plain parse turns into 18446744073709552000). Uses the reviver's source-text access (Node >= 21).
+ */
+export function parseExact(text: string): any {
+  return JSON.parse(text, (_k, v, ctx?: { source?: string }) =>
+    typeof v === "number" && !Number.isSafeInteger(v) && ctx?.source && /^-?\d+$/.test(ctx.source) ? ctx.source : v,
+  );
+}
+
 export class Rpc {
   urls: string[];
   cluster: string;
@@ -48,7 +58,7 @@ export class Rpc {
           await sleep(500 * 2 ** attempt);
           continue;
         }
-        const body: any = await res.json();
+        const body: any = parseExact(await res.text());
         if (body.error) {
           // Deterministic RPC errors are not retried.
           throw new RpcError(`${method}: ${body.error.message}`, body.error.code, body.error.data);

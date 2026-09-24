@@ -5,9 +5,9 @@
 // For each constituent it reads the mainnet mint live, then:
 //  1. create-token with the full PreStocks extension set, at the fee that is in force on mainnet NOW;
 //  2. initialize-metadata (name suffixed "(devnet fixture)"; symbol and uri as mainnet);
-//  3. if mainnet has a pending fee (newerTransferFee.epoch > current epoch), set-transfer-fee to it:
+//  3. if mainnet has a pending fee (newerTransferFee.epoch > current epoch), SetTransferFee (raw) to it:
 //     the fixture gets the same older->newer shape, two devnet epochs out;
-//  4. if mainnet's newMultiplier differs from its stored multiplier, update-ui-amount-multiplier:
+//  4. if mainnet's newMultiplier differs from its stored multiplier, UpdateMultiplier (raw):
 //       - mainnet timestamp already passed -> set with a timestamp ~45 s ahead, then wait for it, so the
 //         fixture ends up exactly like mainnet: stored field unchanged, effective = newMultiplier;
 //       - mainnet timestamp in the future -> set with the same timestamp.
@@ -19,11 +19,15 @@ import { CONSTITUENTS } from "../../services/valuation/src/lib/prestocks.ts";
 import { extensions, feeSchedule, effectiveMultiplier, TOKEN_2022_PROGRAM, TOKEN_PROGRAM, MAINNET_USDC } from "../../services/valuation/src/lib/token2022.ts";
 import { cluster, flag, loadKeypair, ISSUER_KEY, mainnet, registryPath, readJson, rpcFor, writeJson, sleep, nowIso } from "../lib/env.ts";
 import { runStep, splToken, signatureOf, confirmTx } from "../lib/cli.ts";
+import { send } from "../lib/tx.ts";
+import { ixSetTransferFee, ixUpdateMultiplier } from "../lib/issuer.ts";
+import { PublicKey } from "../../services/valuation/src/lib/web3.ts";
 
-const U64_MAX_UI_9 = "18446744073.709551615"; // u64::MAX raw at 9 decimals: PreStocks maximumFee
+const U64_MAX_UI_9 = "18446744073.709551615"; // u64::MAX raw at 9 decimals: PreStocks maximumFee (create-token only takes UI)
 
 const c = cluster();
-const issuer = loadKeypair(ISSUER_KEY).publicKey.toBase58();
+const issuerKp = loadKeypair(ISSUER_KEY);
+const issuer = issuerKp.publicKey.toBase58();
 const rpc = rpcFor(c);
 const main = mainnet();
 const path = registryPath(c);
@@ -88,10 +92,8 @@ async function main_() {
     ]));
 
     if (fee.pending) {
-      const maxUi = fee.pending.maximum_fee === "18446744073709551615" ? U64_MAX_UI_9 : (Number(fee.pending.maximum_fee) / 1e9).toString();
-      leg.signatures.push(await runStep(c, `set-transfer-fee ${fee.now_bps}->${fee.pending.bps} bps (mirrors mainnet pending change, effective mainnet epoch ${fee.pending.effective_epoch})`, [
-        "set-transfer-fee", leg.mint, String(fee.pending.bps), maxUi, "--transfer-fee-authority", ISSUER_KEY,
-      ]));
+      leg.signatures.push(await send(c, `SetTransferFee ${fee.now_bps}->${fee.pending.bps} bps, maximumFee ${fee.pending.maximum_fee} (mirrors mainnet pending change, effective mainnet epoch ${fee.pending.effective_epoch})`,
+        [ixSetTransferFee(new PublicKey(leg.mint), issuerKp.publicKey, fee.pending.bps, BigInt(fee.pending.maximum_fee))], [issuerKp]));
     }
 
     if (Number(mult.new_multiplier) !== Number(mult.stored)) {
@@ -103,9 +105,8 @@ async function main_() {
   }
 
   for (const u of multiplierUpdates) {
-    u.leg.signatures.push(await runStep(c, `update-ui-amount-multiplier ${u.value} at ${u.ts} (mainnet newMultiplier; stored field left as mainnet's)`, [
-      "update-ui-amount-multiplier", u.leg.mint, u.value, String(u.ts), "--ui-multiplier-authority", ISSUER_KEY,
-    ]));
+    u.leg.signatures.push(await send(c, `UpdateMultiplier ${u.value} at ${u.ts} (mainnet newMultiplier; stored field left as mainnet's)`,
+      [ixUpdateMultiplier(new PublicKey(u.leg.mint), issuerKp.publicKey, Number(u.value), u.ts)], [issuerKp]));
     u.leg.complete = true;
     save();
   }

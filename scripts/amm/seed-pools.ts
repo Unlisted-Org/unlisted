@@ -46,6 +46,14 @@ async function run() {
     pools: reg.fixture_amm?.pools ?? [],
   };
 
+  // The hook program used by the hook-switched-on scenario.
+  const hookId = loadKeypair(join(KEY_DIR, "fixture-hook-program.json")).publicKey.toBase58();
+  const hook = await rpc.account(hookId, "base64");
+  let hookSize: number | null = null;
+  try { hookSize = statSync(join(REPO, "fixtures", "target", "deploy", "fixture_hook.so")).size; } catch {}
+  reg.hook_program = { program_id: hookId, deployed: Boolean(hook.value?.executable), so_size_bytes: hookSize, source: "fixtures/hook/src/lib.rs" };
+  reg.fixture_amm.interface = "fixtures/amm/src/lib.rs (header); client encoders and exact quote maths: services/valuation/src/lib/amm.ts";
+
   const prices = await jupiterLastTrade(reg.legs.map((l: any) => l.mirror_of));
   for (const leg of reg.legs) {
     const p = prices[leg.mirror_of];

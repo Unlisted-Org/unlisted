@@ -25,6 +25,24 @@ const amm = reg.fixture_amm;
 const usdcIn = BigInt(Math.round(Number(arg("usdc", "100")) * 1e6));
 const recipient = Keypair.generate().publicKey; // an unrelated owner: output goes to *its* account
 
+async function feeNow(mint: string) {
+  const epoch = (await rpc.epochInfo()).epoch;
+  return { epoch, fee: feeSchedule((await rpc.account(mint)).value.data.parsed.info, epoch)! };
+}
+
+/** Quote, send, and if an epoch boundary changed the fee in between (min_out trips), re-quote once. */
+async function swapOnce(build: () => Promise<{ q: any; ix: any; label: string; watch: string[] }>) {
+  for (let attempt = 0; ; attempt++) {
+    const b = await build();
+    try {
+      return { ...b, tx: await send(c, b.label, [b.ix], [issuer]) };
+    } catch (e: any) {
+      if (attempt === 0 && /custom program error: 0x1\b/.test(String(e?.message ?? e))) { console.log(`${b.label}: fee moved across an epoch boundary; re-quoting`); continue; }
+      throw e;
+    }
+  }
+}
+
 async function amounts(addrs: string[]) {
   const r = await rpc.accounts(addrs);
   return { slot: r.slot, v: r.values.map((x) => (x ? BigInt(x.data.parsed.info.tokenAmount.amount) : 0n)) };
@@ -45,36 +63,44 @@ async function run() {
     const recvLeg = ixCreateAtaIdempotent(issuer.publicKey, recipient, leg.mint, TOKEN_2022_PROGRAM);
     await send(c, "create ATAs", [issuerLeg.ix, recvLeg.ix], [issuer]);
 
-    const epoch = (await rpc.epochInfo()).epoch;
-    const mint = (await rpc.account(leg.mint)).value.data.parsed.info;
-    const fee = feeSchedule(mint, epoch)!;
-
     // 1. Buy: USDC from the issuer, leg delivered to the unrelated recipient's account.
-    let pre = await amounts([a.legVault.toBase58(), a.usdcVault.toBase58(), recvLeg.address.toBase58()]);
-    const qb = quoteSwap({ side: SIDE_BUY, amountIn: usdcIn, legReserve: pre.v[0], usdcReserve: pre.v[1], lpFeeBps: amm.lp_fee_bps, legFeeBps: fee.now_bps });
-    const buy = await send(c, `swap buy ${leg.symbol}`, [ixSwap({ program: amm.program_id, legMint: leg.mint, usdcMint: usdc.mint, taker: issuer.publicKey, source: issuerUsdc, destination: recvLeg.address, amountIn: usdcIn, minOut: qb.delivered, side: SIDE_BUY, usdcTokenProgram: usdc.token_program })], [issuer]);
-    let post = await amounts([a.legVault.toBase58(), a.usdcVault.toBase58(), recvLeg.address.toBase58()]);
+    const watchBuy = [a.legVault.toBase58(), a.usdcVault.toBase58(), recvLeg.address.toBase58()];
+    let pre: any, fee: any, epoch = 0;
+    const buy = await swapOnce(async () => {
+      ({ epoch, fee } = await feeNow(leg.mint));
+      pre = await amounts(watchBuy);
+      const q = quoteSwap({ side: SIDE_BUY, amountIn: usdcIn, legReserve: pre.v[0], usdcReserve: pre.v[1], lpFeeBps: amm.lp_fee_bps, legFeeBps: fee.now_bps });
+      return { q, label: `swap buy ${leg.symbol}`, watch: watchBuy, ix: ixSwap({ program: amm.program_id, legMint: leg.mint, usdcMint: usdc.mint, taker: issuer.publicKey, source: issuerUsdc, destination: recvLeg.address, amountIn: usdcIn, minOut: q.delivered, side: SIDE_BUY, usdcTokenProgram: usdc.token_program }) };
+    });
+    const qb = buy.q;
+    let post = await amounts(watchBuy);
     const buyDelivered = post.v[2] - pre.v[2];
     const buyOk = buyDelivered === qb.delivered && pre.v[0] - post.v[0] === qb.pool_out && post.v[1] - pre.v[1] === usdcIn;
+    const buyFee = fee.now_bps;
 
     // 2. Sell: give the issuer some leg (mint), then sell it for USDC into the issuer's USDC account.
     const legIn = qb.pool_out; // same size as the buy, so the round trip shows both fees
     await send(c, "mint leg to issuer for the sell test", [ixMintToChecked(TOKEN_2022_PROGRAM, leg.mint, issuerLeg.address, issuer.publicKey, legIn, 9)], [issuer]);
-    pre = await amounts([a.legVault.toBase58(), a.usdcVault.toBase58(), issuerUsdc.toBase58()]);
-    const qs = quoteSwap({ side: SIDE_SELL, amountIn: legIn, legReserve: pre.v[0], usdcReserve: pre.v[1], lpFeeBps: amm.lp_fee_bps, legFeeBps: fee.now_bps });
-    const sell = await send(c, `swap sell ${leg.symbol}`, [ixSwap({ program: amm.program_id, legMint: leg.mint, usdcMint: usdc.mint, taker: issuer.publicKey, source: issuerLeg.address, destination: issuerUsdc, amountIn: legIn, minOut: qs.delivered, side: SIDE_SELL, usdcTokenProgram: usdc.token_program })], [issuer]);
-    post = await amounts([a.legVault.toBase58(), a.usdcVault.toBase58(), issuerUsdc.toBase58()]);
+    const watchSell = [a.legVault.toBase58(), a.usdcVault.toBase58(), issuerUsdc.toBase58()];
+    const sell = await swapOnce(async () => {
+      ({ epoch, fee } = await feeNow(leg.mint));
+      pre = await amounts(watchSell);
+      const q = quoteSwap({ side: SIDE_SELL, amountIn: legIn, legReserve: pre.v[0], usdcReserve: pre.v[1], lpFeeBps: amm.lp_fee_bps, legFeeBps: fee.now_bps });
+      return { q, label: `swap sell ${leg.symbol}`, watch: watchSell, ix: ixSwap({ program: amm.program_id, legMint: leg.mint, usdcMint: usdc.mint, taker: issuer.publicKey, source: issuerLeg.address, destination: issuerUsdc, amountIn: legIn, minOut: q.delivered, side: SIDE_SELL, usdcTokenProgram: usdc.token_program }) };
+    });
+    const qs = sell.q;
+    post = await amounts(watchSell);
     const sellDelivered = post.v[2] - pre.v[2];
     const sellOk = sellDelivered === qs.delivered && post.v[0] - pre.v[0] === qs.pool_received && pre.v[1] - post.v[1] === qs.pool_out;
 
     if (!buyOk || !sellOk) failures++;
     const row = {
-      symbol: leg.symbol, fee_bps_in_force: fee.now_bps, epoch,
-      buy: { signature: buy.signature, slot: buy.slot, usdc_in: usdcIn.toString(), quoted_delivered: qb.delivered.toString(), measured_delivered: buyDelivered.toString(), leg_fee_withheld: qb.out_fee.toString(), destination: recvLeg.address.toBase58(), match: buyOk },
-      sell: { signature: sell.signature, slot: sell.slot, leg_in: legIn.toString(), quoted_delivered: qs.delivered.toString(), measured_delivered: sellDelivered.toString(), leg_fee_withheld: qs.in_fee.toString(), match: sellOk },
+      symbol: leg.symbol, epoch,
+      buy: { signature: buy.tx.signature, slot: buy.tx.slot, fee_bps_in_force: buyFee, usdc_in: usdcIn.toString(), quoted_delivered: qb.delivered.toString(), measured_delivered: buyDelivered.toString(), leg_fee_withheld: qb.out_fee.toString(), destination: recvLeg.address.toBase58(), match: buyOk },
+      sell: { signature: sell.tx.signature, slot: sell.tx.slot, fee_bps_in_force: fee.now_bps, leg_in: legIn.toString(), quoted_delivered: qs.delivered.toString(), measured_delivered: sellDelivered.toString(), leg_fee_withheld: qs.in_fee.toString(), match: sellOk },
     };
     out.legs.push(row);
-    console.log(`${leg.symbol} fee ${fee.now_bps}bps: buy quoted ${qb.delivered} measured ${buyDelivered} ${buyOk ? "OK" : "MISMATCH"}; sell quoted ${qs.delivered} measured ${sellDelivered} ${sellOk ? "OK" : "MISMATCH"}`);
+    console.log(`${leg.symbol} fee ${buyFee}/${fee.now_bps}bps: buy quoted ${qb.delivered} measured ${buyDelivered} ${buyOk ? "OK" : "MISMATCH"}; sell quoted ${qs.delivered} measured ${sellDelivered} ${sellOk ? "OK" : "MISMATCH"}`);
   }
   out.finished_at = nowIso();
   out.all_match = failures === 0;
