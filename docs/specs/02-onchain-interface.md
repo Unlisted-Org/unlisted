@@ -193,6 +193,7 @@ Agent B diffed Agent A's IDL (`program@c141837`) against this spec (`docs/report
 - `pending_router` is a struct with the same bytes as the specified tuple.
 - Errors 6018–6024 are added. A lists them in its report; this spec will copy them when it lands.
 - `bootstrap` is **authority-only**. That is stricter than the spec, and accepted.
+- `Basket.reinvest_mask` (additive state field; it tracks which legs have taken their equal reinvest slice after a conversion). Ratified 2026-09-25 from A's final report.
 
 ## Events
 
