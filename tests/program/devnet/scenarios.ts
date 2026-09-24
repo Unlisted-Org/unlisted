@@ -393,6 +393,32 @@ const scenarios: Record<string, () => Promise<void>> = {
     rec.feeEffectiveEpoch = Number(cfg.newerTransferFee.epoch);
   },
 
+  /** Second half of fee-change-mid-position, once the scheduled 300 bps is in effect. Appends to that record. */
+  async "fee-change-after"() {
+    const file = path.join(OUT, "fee-change-mid-position.json");
+    rec = JSON.parse(fs.readFileSync(file, "utf8"));
+    const epoch = (await conn.getEpochInfo("confirmed")).epoch;
+    if (epoch < rec.feeEffectiveEpoch) throw new Error(`epoch ${epoch} < fee effective epoch ${rec.feeEffectiveEpoch}`);
+    const b = new B("fee");
+    let n = 0;
+    const tp = (k: number) => PublicKey.findProgramAddressSync([Buffer.from("redeem"), b.basket.toBuffer(), alice.publicKey.toBuffer(), u64le(k)], PROGRAM_ID)[0];
+    while (await conn.getAccountInfo(tp(n), "confirmed")) n++;
+    b.nonce.set(alice.publicKey.toBase58(), n);
+    const cfg = spl.getTransferFeeConfig(await spl.getMint(conn, MINTS[0], "confirmed", T22))!;
+    check(`epoch ${epoch} ≥ ${rec.feeEffectiveEpoch}: the mint's current fee is 300 bps`, Number(spl.getEpochFee(cfg, BigInt(epoch)).transferFeeBasisPoints) === 300);
+    const s = BigInt((await conn.getTokenAccountBalance(b.shareAta(alice.publicKey))).value.amount) / 2n;
+    const S = BigInt(await b.supply());
+    const gross = await Promise.all(MINTS.map(async (_, i) => (s * (await b.owned(i))) / S));
+    const before = await Promise.all(MINTS.map((m) => tokenAmount(b.ata(alice.publicKey, m))));
+    const n0 = rec.steps.length;
+    await redeemAndCheck(b, alice, s, [], `alice redeems after epoch ${rec.feeEffectiveEpoch}: the new 300 bps applies`);
+    const after = await Promise.all(MINTS.map((m) => tokenAmount(b.ata(alice.publicKey, m))));
+    const legs = MINTS.map((_, i) => ({ leg: LEG_NAMES[i], gross: gross[i], received: after[i] - before[i], at300: gross[i] - fee(gross[i], 300n), at100: gross[i] - fee(gross[i], 100n) }));
+    for (const l of legs) check(`${l.leg}: recipient net ${l.received} = gross ${l.gross} − ceil(gross·300/10⁴) (100 bps would give ${l.at100})`, l.received === l.at300 && l.at300 !== l.at100);
+    const st = rec.steps[n0];
+    rec.afterFeeEffective = { epoch, signature: st.signature, slot: st.slot, legs };
+  },
+
   async "multiplier-change-mid-position"() {
     begin("multiplier-change-mid-position");
     const b = new B("multiplier");
@@ -446,7 +472,7 @@ async function main() {
   console.log(`issuer SOL spent on setup: ${(bal0 - (await conn.getBalance(issuer.publicKey))) / 1e9}`);
   const args = process.argv.slice(2).filter((a) => a !== "setup-only");
   if (process.argv.includes("setup-only")) return;
-  const which = args.length ? args : Object.keys(scenarios);
+  const which = args.length ? args : Object.keys(scenarios).filter((k) => k !== "fee-change-after");
   for (const name of which) {
     console.log(`\n== ${name}`);
     const b0 = await conn.getBalance(issuer.publicKey);
