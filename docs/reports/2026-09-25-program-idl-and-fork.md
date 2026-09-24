@@ -222,3 +222,24 @@ Setup landed 23 more transactions (7 fixture mints, fixture USDC, lookup table, 
   - 2 legs `23stqexp…K57U`;
   - finalize `4tgiPRfH…wamw`: 9,974,697 shares, ticket closed.
 - Each vault's measured delta equals the constant-product output net of the 1 % fee, to the unit.
+
+## 8. Refund path on devnet (canonical basket)
+
+Record: `tests/program/devnet/refund-path.json`, script `refund-path.ts`.
+
+**Flow.**
+1. Open a $3 USDC ticket (`2dJhsRo3…`).
+2. Create a ticket-owned Token-2022 intermediate (as a Jupiter route's taker output would be).
+3. `ticket_swap_leg` ×3 through fixture_amm.
+4. `unwind_leg` ×3: basket-signed sells of exactly each ticket delta back into the escrow.
+5. `abort_deposit` (`4mnuhQAB…mKgc`).
+
+**Broken versions first** (simulated, never sent):
+- (a) An abort with legs still landed is refused: `LegsStillLanded`.
+- (b) An abort that skips the intermediate is *accepted by the program*, which closes only what it is given. The client check that every ticket-owned account is closed by the abort caught it. Devnet's simulated post-state shows the intermediate surviving with 1,620,520 lamports of the owner's rent.
+
+**Results.**
+- Each vault gave back exactly the ticket's amount. The escrow gained exactly the pool output (975,201 / 975,202 / 975,205), and vault balances, `pending_norm` and `accounted` returned to their values before the ticket.
+- Owner USDC went from 9,993,000,000 to 9,992,925,608, which equals before − 3,000,000 + 0 unspent + 2,925,608 unwind proceeds.
+- Owner SOL went down by exactly the 7 transaction fees (35,000 lamports), so every rent lamport was returned.
+- No token account owned by the ticket survives.
