@@ -113,7 +113,7 @@ export function DepositPanel(p: {
           )}
           <p className="muted">
             The USDC is escrowed in a ticket, each leg is bought straight into its vault, and shares are minted when all seven have landed.
-            That takes about four transactions; your wallet approves them once. If a leg can't land before the ticket expires, the rest is unwound and refunded.
+            That takes several transactions (the SDK packs them by size; four on the local run); your wallet approves them all once. If a leg can't land before the ticket expires, the rest is unwound and refunded.
           </p>
           <button disabled={!pos || p.busy || !!refused || !!p.routerReady || !quote} onClick={() => quote && p.onUsdc(parseUnits(usdc, 6), quote)} data-testid="usdc-submit">Deposit USDC</button>
         </div>
