@@ -208,3 +208,17 @@ Setup landed 23 more transactions (7 fixture mints, fixture USDC, lookup table, 
   The post-epoch redemption is not run yet. The effect of the new fee is proven in LiteSVM and on the fork (PreStocks' real epoch-1043 change).
 
 **Cost.** Setup 0.124 SOL; each scenario about 0.027 SOL. The key has 2.76 SOL left.
+
+## 7. Canonical devnet basket (C's fixtures)
+
+`tests/program/devnet/canonical.json` (built by `canonical.ts` and `canonical-ticket.ts`):
+- **Basket** `GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV`, **share mint** `HjpaxrkjftbtcRJuyAEm7oR8scasnWNxKNgnN26p7iqj`, lookup table `9yH9RSWpNhjZuZgvatW5wzq4uKiXP4zj47jeUgv7uyFc`, authority `DBJ6Fdxb…oFgb`.
+- C's 7 fixture mints and fixture USDC (registry `8c50907`). `mirror_of` is the mainnet mints. The router allowlist is `[fixture_amm aznyZehU…qTMdqF]`.
+- `initialize_basket` `3uzYeobJ…5NuU`.
+- `bootstrap` `ZhLs24Lt…yD8U`: equal $100 per leg, priced per raw unit from the mainnet Jupiter price v3 figures C recorded in `registry.fixture_amm.pools[].seed`. It minted `INITIAL_SHARES`.
+- **USDC ticket through fixture_amm:**
+  - open `4jpNeWdk…ySEt`;
+  - 5 legs in one transaction `wQYnTW7o…G7` (1,136 B, 35 accounts, 206k CU, depth 3);
+  - 2 legs `23stqexp…K57U`;
+  - finalize `4tgiPRfH…wamw`: 9,974,697 shares, ticket closed.
+- Each vault's measured delta equals the constant-product output net of the 1 % fee, to the unit.
