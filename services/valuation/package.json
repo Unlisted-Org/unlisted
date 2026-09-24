@@ -1,9 +1,9 @@
 {
-  "name": "stocklana-valuation",
+  "name": "unlisted-valuation",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Valuation API (spec 03) and issuer-change watcher for the stocklana basket",
+  "description": "Valuation API (spec 03) and issuer-change watcher for the Unlisted basket",
   "engines": { "node": ">=24" },
   "scripts": {
     "start": "node src/server.ts",

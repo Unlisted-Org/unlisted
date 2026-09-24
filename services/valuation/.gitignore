@@ -2,3 +2,4 @@
 node_modules/
 test/redeem_vectors.json
 verify/out/*-local-*
+!verify/out/*MUTATION*
