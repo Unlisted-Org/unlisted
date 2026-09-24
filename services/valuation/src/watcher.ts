@@ -266,7 +266,8 @@ export class Watcher {
       const tx = await p.rpc.transaction(s.signature).catch(() => null);
       if (!tx) continue;
       for (const ev of decodeEvents(p.idl, tx.meta?.logMessages ?? [], p.programId)) {
-        this.add({ kind: "program", type: ev.name, cluster: p.cluster, data: ev.data, leg: ev.data.leg, signature: s.signature, slot: tx.slot, block_time: tx.blockTime ?? null, block_time_iso: iso(tx.blockTime ?? null), detected_by: "program-log", source: `${p.cluster} basket program ${p.programId} logs (IDL-decoded)` });
+        const legInfo = typeof ev.data.leg === "number" ? this.targets.find((t) => t.cluster === p.cluster)?.mints.find((m) => m.index === ev.data.leg) : undefined;
+        this.add({ kind: "program", type: ev.name, cluster: p.cluster, data: ev.data, leg: ev.data.leg, symbol: legInfo?.symbol, mint: legInfo?.mint, signature: s.signature, slot: tx.slot, block_time: tx.blockTime ?? null, block_time_iso: iso(tx.blockTime ?? null), detected_by: "program-log", source: `${p.cluster} basket program ${p.programId} logs (IDL-decoded)` });
       }
     }
     if (sigs.length) this.store.cursors[key] = sigs[sigs.length - 1].signature;

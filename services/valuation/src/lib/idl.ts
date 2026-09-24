@@ -109,3 +109,63 @@ export function decodeEvents(idl: Idl, logs: string[], programId: string): { nam
   }
   return out;
 }
+
+// ---------- encoding (instruction arguments) ----------
+
+function encode(idl: Idl, ty: any, v: any, out: Buffer[]): void {
+  const int = (n: number, signed = false) => {
+    let x = BigInt(v);
+    if (signed && x < 0n) x += 1n << BigInt(n * 8);
+    const b = Buffer.alloc(n);
+    for (let i = 0; i < n; i++) { b[i] = Number(x & 0xffn); x >>= 8n; }
+    out.push(b);
+  };
+  if (typeof ty === "string") {
+    switch (ty) {
+      case "bool": out.push(Buffer.from([v ? 1 : 0])); return;
+      case "u8": case "i8": int(1, ty === "i8"); return;
+      case "u16": case "i16": int(2, ty === "i16"); return;
+      case "u32": case "i32": int(4, ty === "i32"); return;
+      case "u64": case "i64": int(8, ty === "i64"); return;
+      case "u128": case "i128": int(16, ty === "i128"); return;
+      case "pubkey": case "publicKey": out.push(new PublicKey(v).toBuffer()); return;
+      case "string": { const s = Buffer.from(v, "utf8"); const l = Buffer.alloc(4); l.writeUInt32LE(s.length); out.push(l, s); return; }
+      case "bytes": { const s = Buffer.from(v); const l = Buffer.alloc(4); l.writeUInt32LE(s.length); out.push(l, s); return; }
+    }
+    throw new Error(`borsh encode: unsupported ${ty}`);
+  }
+  if (ty.array) { const [inner, n] = ty.array; if (v.length !== n) throw new Error("array length"); for (const x of v) encode(idl, inner, x, out); return; }
+  if (ty.vec) { const l = Buffer.alloc(4); l.writeUInt32LE(v.length); out.push(l); for (const x of v) encode(idl, ty.vec, x, out); return; }
+  if (ty.option) { if (v === null || v === undefined) out.push(Buffer.from([0])); else { out.push(Buffer.from([1])); encode(idl, ty.option, v, out); } return; }
+  if (ty.defined) {
+    const t = typeDef(idl, typeof ty.defined === "string" ? ty.defined : ty.defined.name);
+    if (t.kind === "struct") { for (const f of t.fields) encode(idl, f.type, v[f.name], out); return; }
+    if (t.kind === "enum") {
+      const i = t.variants.findIndex((x: any) => x.name === v.kind);
+      if (i < 0) throw new Error(`enum variant ${v.kind}`);
+      out.push(Buffer.from([i]));
+      for (const f of t.variants[i].fields ?? []) encode(idl, f.type, v[f.name], out);
+      return;
+    }
+  }
+  throw new Error(`borsh encode: unsupported ${JSON.stringify(ty)}`);
+}
+
+/** Instruction data: IDL discriminator + borsh-encoded args (in IDL order). */
+export function encodeInstruction(idl: Idl, name: string, args: Record<string, any>): Buffer {
+  const ix = idl.instructions.find((i: any) => i.name === name);
+  if (!ix) throw new Error(`IDL has no instruction ${name}`);
+  const out: Buffer[] = [Buffer.from(ix.discriminator)];
+  for (const a of ix.args) encode(idl, a.type, args[a.name], out);
+  return Buffer.concat(out);
+}
+
+/** Account metas in IDL order from a name -> pubkey map; optional accounts absent -> program id (Anchor). */
+export function instructionAccounts(idl: Idl, name: string, accounts: Record<string, string | undefined>): { pubkey: string; isSigner: boolean; isWritable: boolean }[] {
+  const ix = idl.instructions.find((i: any) => i.name === name);
+  return ix.accounts.map((a: any) => {
+    const k = accounts[a.name] ?? a.address ?? (a.optional ? idl.address : undefined);
+    if (!k) throw new Error(`${name}: missing account ${a.name}`);
+    return { pubkey: k, isSigner: Boolean(a.signer) && Boolean(accounts[a.name]), isWritable: Boolean(a.writable) && k !== idl.address };
+  });
+}

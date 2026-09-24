@@ -147,7 +147,7 @@ export class Valuation {
       const q: any = quotes[k];
       if (amounts[l.index] === 0n) return;
       if (q.error) {
-        unquotable.push({ index: l.index, symbol: l.symbol, reason: q.error });
+        unquotable.push({ index: l.index, symbol: l.symbol, reason: q.error, kind: /HTTP (429|5\d\d)|fetch failed|timeout/i.test(q.error) ? "upstream_error" : "no_route" });
         return;
       }
       const v = Number(q.out_usdc_raw) / 1e6;
@@ -225,7 +225,10 @@ export class Valuation {
     const w: string[] = [];
     if (b.source === "standin") w.push("Basket source is the stand-in basket, not the basket program (see basket_source).");
     for (const l of vals.last_trade.legs) if (l.age_s !== null && l.age_s > LAST_TRADE_WARN_S) w.push(`${l.symbol} last trade is ${Math.round(l.age_s / 60)} min old`);
-    for (const u of vals.sell_now.unquotable_legs) w.push(`${u.symbol} has no sell route; valued at 0 in sell_now`);
+    for (const u of vals.sell_now.unquotable_legs) {
+      const upstream = /HTTP (429|5\d\d)|fetch failed|timeout/i.test(u.reason);
+      w.push(upstream ? `${u.symbol} sell quote unavailable (upstream error: ${u.reason.slice(-40)}); valued at 0 in sell_now, not interpolated` : `${u.symbol} has no sell route; valued at 0 in sell_now`);
+    }
     for (const l of b.legs) {
       if (l.status === "unavailable") w.push(`${l.symbol} is unavailable (${l.unavailable_reason}); redemptions turn it into a claim, deposits are refused`);
       if (l.multiplier.pending) w.push(`${l.symbol} fixture multiplier changes to ${l.multiplier.pending.multiplier} at ${l.multiplier.pending.effective_at}`);
