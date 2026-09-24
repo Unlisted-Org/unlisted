@@ -17,6 +17,38 @@ export const LEG_NAMES = ["OPENAI", "ANTHROPIC", "NEURALINK", "ANDURIL", "POLYMA
 
 export type Unavail = "pause" | "hook" | "freeze";
 
+/**
+ * The two transactions that create a PreStocks-shaped fixture mint (also used on devnet). tx1[0] creates the
+ * account with the fixed-extension size; `len` is the full size including metadata (fund lamports for it).
+ */
+export function legMintIxs(payer: PublicKey, m: PublicKey, a: PublicKey, label: string, feeBps: number, multiplier = 1, lamports = 0) {
+  const name = `${label} PreStock (fixture)`;
+  const symbol = label;
+  const uri = "https://stocklana.invalid/" + label.toLowerCase();
+  const metaLen = 4 + 32 + 32 + 4 + name.length + 4 + symbol.length + 4 + uri.length + 4;
+  const ct = new TransactionInstruction({ programId: T22, keys: [{ pubkey: m, isSigner: false, isWritable: true }],
+    data: Buffer.concat([Buffer.from([27, 0]), a.toBuffer(), Buffer.from([0]), Buffer.alloc(32)]) });
+  const ctFee = new TransactionInstruction({ programId: T22, keys: [{ pubkey: m, isSigner: false, isWritable: true }],
+    data: Buffer.concat([Buffer.from([37, 0]), a.toBuffer(), ELGAMAL]) });
+  const tx1 = [
+    SystemProgram.createAccount({ fromPubkey: payer, newAccountPubkey: m, space: MINT_FIXED_LEN, lamports, programId: T22 }),
+    spl.createInitializeTransferFeeConfigInstruction(m, a, a, feeBps, U64_MAX, T22),
+    ct,
+    spl.createInitializeDefaultAccountStateInstruction(m, spl.AccountState.Initialized, T22),
+    spl.createInitializePermanentDelegateInstruction(m, a, T22),
+    spl.createInitializeTransferHookInstruction(m, a, PublicKey.default, T22),
+  ];
+  const tx2 = [
+    ctFee,
+    spl.createInitializeMetadataPointerInstruction(m, a, m, T22),
+    spl.createInitializeScaledUiAmountConfigInstruction(m, a, multiplier, T22),
+    spl.createInitializePausableConfigInstruction(m, a, T22),
+    spl.createInitializeMintInstruction(m, 9, a, a, T22),
+    initMetadata({ programId: T22, metadata: m, updateAuthority: a, mint: m, mintAuthority: a, name, symbol, uri }),
+  ];
+  return { tx1, tx2, len: MINT_FIXED_LEN + metaLen };
+}
+
 export class Issuer {
   constructor(public env: Svm, public key: Keypair = kp("fixture-issuer")) {
     env.fund(key.publicKey, 1000n * 1_000_000_000n);
@@ -24,40 +56,14 @@ export class Issuer {
 
   /** A Token-2022 mint with the exact PreStocks extension set (spec 02 Fixtures). */
   createLegMint(label: string, feeBps: number, multiplier = 1, mint: Keypair = kp("mint:" + label)): PublicKey {
-    const a = this.key.publicKey;
-    const m = mint.publicKey;
-    const name = `${label} PreStock (fixture)`;
-    const symbol = label;
-    const uri = "https://stocklana.invalid/" + label.toLowerCase();
-    const metaLen = 4 + 32 + 32 + 4 + name.length + 4 + symbol.length + 4 + uri.length + 4;
-    const lamports = this.env.svm.minimumBalanceForRentExemption(BigInt(MINT_FIXED_LEN + metaLen));
-    const ct = new TransactionInstruction({
-      programId: T22, keys: [{ pubkey: m, isSigner: false, isWritable: true }],
-      data: Buffer.concat([Buffer.from([27, 0]), a.toBuffer(), Buffer.from([0]), Buffer.alloc(32)]),
-    });
-    const ctFee = new TransactionInstruction({
-      programId: T22, keys: [{ pubkey: m, isSigner: false, isWritable: true }],
-      data: Buffer.concat([Buffer.from([37, 0]), a.toBuffer(), ELGAMAL]),
-    });
-    const r1 = this.env.send([
-      SystemProgram.createAccount({ fromPubkey: this.env.payer.publicKey, newAccountPubkey: m, space: MINT_FIXED_LEN, lamports: Number(lamports), programId: T22 }),
-      spl.createInitializeTransferFeeConfigInstruction(m, a, a, feeBps, U64_MAX, T22),
-      ct,
-      spl.createInitializeDefaultAccountStateInstruction(m, spl.AccountState.Initialized, T22),
-      spl.createInitializePermanentDelegateInstruction(m, a, T22),
-      spl.createInitializeTransferHookInstruction(m, a, PublicKey.default, T22),
-    ], [mint]);
+    const { tx1, tx2, len } = legMintIxs(this.env.payer.publicKey, mint.publicKey, this.key.publicKey, label, feeBps, multiplier);
+    const lamports = this.env.svm.minimumBalanceForRentExemption(BigInt(len));
+    tx1[0] = SystemProgram.createAccount({ fromPubkey: this.env.payer.publicKey, newAccountPubkey: mint.publicKey, space: MINT_FIXED_LEN, lamports: Number(lamports), programId: T22 });
+    const r1 = this.env.send(tx1, [mint]);
     if (!r1.ok) throw new Error("mint tx1 failed: " + r1.error + r1.logs.join("\n"));
-    const r2 = this.env.send([
-      ctFee,
-      spl.createInitializeMetadataPointerInstruction(m, a, m, T22),
-      spl.createInitializeScaledUiAmountConfigInstruction(m, a, multiplier, T22),
-      spl.createInitializePausableConfigInstruction(m, a, T22),
-      spl.createInitializeMintInstruction(m, 9, a, a, T22),
-      initMetadata({ programId: T22, metadata: m, updateAuthority: a, mint: m, mintAuthority: a, name, symbol, uri }),
-    ], [this.key]);
+    const r2 = this.env.send(tx2, [this.key]);
     if (!r2.ok) throw new Error("mint tx2 failed: " + r2.logs.join("\n"));
-    return m;
+    return mint.publicKey;
   }
 
   /** Byte-for-byte copy of an existing fixture mint at a new address (metadata `mint` field patched). */

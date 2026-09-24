@@ -51,7 +51,7 @@ export class Svm {
     this.svm.addProgramFromFile(T22.toBase58() as any, path.join(fx, "token2022.so"));
     this.svm.addProgramFromFile(TOKEN.toBase58() as any, path.join(fx, "token.so"));
     this.svm.addProgramFromFile(ATA.toBase58() as any, path.join(fx, "ata.so"));
-    this.svm.addProgramFromFile(PROGRAM_ID.toBase58() as any, path.join(ROOT, "target/deploy/basket.so"));
+    this.svm.addProgramFromFile(PROGRAM_ID.toBase58() as any, process.env.BASKET_SO ?? path.join(ROOT, "target/deploy/basket.so"));
     this.svm.addProgramFromFile(ROUTER_ID.toBase58() as any, path.join(ROOT, "target/deploy/mock_router.so"));
     this.payer = kp("payer");
     this.fund(this.payer.publicKey, 1_000_000n * 1_000_000_000n);
