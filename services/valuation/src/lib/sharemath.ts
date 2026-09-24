@@ -2,6 +2,7 @@
 // The API only *quotes*; the program is the source of truth. Tests compare these against the model.
 
 import { transferFee } from "./token2022.ts";
+import { MUTATION } from "./mutation.ts";
 
 export const INDEX_ONE = 10n ** 18n;
 
@@ -36,14 +37,15 @@ export const owned = (l: LegState) => l.balance - pendingActual(l);
 
 /** Exact per-share ratio owned_i / (S + C_i), after observe. */
 export function perShare(l: LegState, supply: bigint): { num: bigint; den: bigint } {
-  const o = observe(l);
+  const o = MUTATION === "skip_observe" ? { ...l, shortfall: 0n, surplus: 0n } : observe(l);
   return { num: owned(o), den: supply + o.claim_units };
 }
 
 /** Raw amount of leg i that `shares` are entitled to right now: floor(s * owned / (S + C)). */
 export function entitlement(l: LegState, supply: bigint, shares: bigint): bigint {
   const { num, den } = perShare(l, supply);
-  return den === 0n ? 0n : (shares * num) / den;
+  if (den === 0n) return 0n;
+  return MUTATION === "round_up" ? (shares * num + den - 1n) / den : (shares * num) / den;
 }
 
 export type RedeemLeg =

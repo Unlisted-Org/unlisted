@@ -34,6 +34,7 @@ function classify(path: string, mainVal: string, fixVal: string, fixtureMint: st
   if (path === "supply") return "supply (fixture mints only what tests need)";
   if (/^extensions\.tokenMetadata\.(name|symbol|uri)$/.test(path)) return "metadata string";
   if (/newMultiplierEffectiveTimestamp$/.test(path)) return "multiplier timestamp (both in the past; effective value equal)";
+  if (/scaledUiAmountConfig\.(multiplier|newMultiplier)$/.test(path)) return "MULTIPLIER FIELD";
   return "UNEXPECTED";
 }
 
@@ -106,7 +107,16 @@ async function run() {
     for (const k of keys) {
       const a = mflat[k] ?? "(absent)", b = fflat[k] ?? "(absent)";
       if (a === b) { same++; continue; }
-      const cls = classify(k, a, b, leg.mint, leg.mirror_of);
+      let cls = classify(k, a, b, leg.mint, leg.mirror_of);
+      if (cls === "MULTIPLIER FIELD") {
+        // A stored/new multiplier field may differ while the effective value (checked above) is equal:
+        // Token-2022 rolls an already-effective newMultiplier into the stored field when a later update
+        // is scheduled (the multiplier-change scenario does this). Named explicitly; unexpected only if
+        // the effective values differ.
+        cls = Number(effectiveMultiplier(fi, now).effective) === Number(effectiveMultiplier(mi, now).effective)
+          ? "**multiplier field differs, effective value equal** (left by the multiplier-change scenario; see fixtures/scenarios/multiplier-change.json)"
+          : "UNEXPECTED";
+      }
       if (cls === "UNEXPECTED") unexpected++;
       rows.push(`| \`${k}\` | \`${a}\` | \`${b}\` | ${cls === "UNEXPECTED" ? "**UNEXPECTED**" : cls} |`);
     }

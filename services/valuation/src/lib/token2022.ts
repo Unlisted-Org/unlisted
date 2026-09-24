@@ -1,6 +1,8 @@
 // Interpretation of Token-2022 mint and account state, from the RPC's jsonParsed form.
 // This file holds the ONLY implementation of the effective-multiplier rule (spec 01, spec 03).
 
+import { MUTATION } from "./mutation.ts";
+
 export const TOKEN_PROGRAM = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 export const TOKEN_2022_PROGRAM = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
 export const ATA_PROGRAM = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
@@ -39,7 +41,7 @@ export function effectiveMultiplier(mintInfo: any, nowUnix: number): MultiplierV
   const next = String(cfg.newMultiplier);
   const ts = Number(cfg.newMultiplierEffectiveTimestamp ?? 0);
   const passed = nowUnix >= ts;
-  const effective = passed ? next : stored;
+  const effective = MUTATION === "stored_multiplier" ? stored : passed ? next : stored;
   const differs = Number(next) !== Number(stored);
   return {
     stored,

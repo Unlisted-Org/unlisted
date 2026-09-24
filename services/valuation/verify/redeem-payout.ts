@@ -130,7 +130,7 @@ for (const q of quote.legs) {
 }
 for (const r of rows) console.log(`${r.symbol}: ${r.action} ${r.action === "claim" ? `units quote ${r.quote_units} ticket ${JSON.stringify(r.ticket_leg)}` : `gross quote ${r.quote_gross_raw} measured ${r.measured_gross_raw}; net quote ${r.quote_net_raw} measured ${r.measured_net_raw}`} ${r.match ? "OK" : "MISMATCH"}`);
 console.log(`redeem ${sig} slot ${t.slot}; quote slot ${quote.as_of_slot}; vaults unchanged across quote: ${stable} -> ${ok ? "ALL MATCH TO THE UNIT" : "FAILED"}`);
-const out = join(import.meta.dirname, "out", `redeem-payout-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+const out = join(import.meta.dirname, "out", `redeem-payout${process.env.VERIFY_LABEL ? "-" + process.env.VERIFY_LABEL : ""}-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, JSON.stringify({ check: "/v1/quote/redeem vs measured redeem payout, per leg, to the unit", cluster: CLUSTER, program: idl.address, basket, share_mint: shareMint, holder: holder.publicKey.toBase58(), shares: shares.toString(), mode, paused_leg: pauseSym ?? null,
   quote_slot: quote.as_of_slot, redeem_signature: sig, redeem_slot: t.slot, vaults_stable_across_quote: stable, legs: rows, claim_settlement: settlement, redeemed_event: redeemed ?? null, events: events.map((e) => e.name), all_match: ok }, (_k, v) => (typeof v === "bigint" ? v.toString() : v), 1));

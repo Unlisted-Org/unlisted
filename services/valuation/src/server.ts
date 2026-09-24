@@ -6,6 +6,7 @@ import { loadConfig } from "./config.ts";
 import { Valuation } from "./valuation.ts";
 import { Watcher } from "./watcher.ts";
 import { basketAddress } from "./lib/basket.ts";
+import { MUTATION } from "./lib/mutation.ts";
 
 const cfg = loadConfig();
 const watcher = new Watcher(cfg.dataPath, cfg.targets);
@@ -41,7 +42,7 @@ const routes: [RegExp, (m: RegExpMatchArray, q: URLSearchParams) => Promise<unkn
   [/^\/v1\/capacity$/, (_m, q) => v.capacity(Number(q.get("max_round_trip_bps") ?? 1000))],
   [/^\/v1\/events$/, async (_m, q) => v.events({ since_slot: Number(q.get("since_slot") ?? 0), since_mainnet_slot: Number(q.get("since_mainnet_slot") ?? 0) })],
   [/^\/v1\/issuer$/, () => v.issuer()],
-  [/^\/health$/, async () => ({ ok: true, cluster: cfg.cluster, basket_source: cfg.basket.source, registry: cfg.registryPath, watcher_last_poll: watcher.lastPoll })],
+  [/^\/health$/, async () => ({ ok: true, mutation: MUTATION || null, cluster: cfg.cluster, basket_source: cfg.basket.source, registry: cfg.registryPath, watcher_last_poll: watcher.lastPoll })],
 ];
 
 const server = createServer(async (req, res) => {
@@ -53,7 +54,8 @@ const server = createServer(async (req, res) => {
     const m = url.pathname.match(re);
     if (!m) continue;
     try {
-      const body = await h(m, url.searchParams);
+      let body: any = await h(m, url.searchParams);
+      if (MUTATION && body && typeof body === "object") body = { MUTATION_ACTIVE: MUTATION, ...body };
       res.statusCode = 200;
       return res.end(json(body));
     } catch (e: any) {
@@ -65,7 +67,7 @@ const server = createServer(async (req, res) => {
   res.end(json({ error: "not found", endpoints: ["/v1/basket", "/v1/position/{owner}", "/v1/quote/redeem?shares=&mode=", "/v1/quote/deposit?usdc=", "/v1/capacity?max_round_trip_bps=", "/v1/events?since_slot=", "/v1/issuer"] }));
 });
 
-server.listen(cfg.port, () => console.log(`valuation API on :${cfg.port} (cluster ${cfg.cluster}, basket source ${cfg.basket.source})`));
+server.listen(cfg.port, () => console.log(`valuation API on :${cfg.port} (cluster ${cfg.cluster}, basket source ${cfg.basket.source})${MUTATION ? ` MUTATION ACTIVE: ${MUTATION}` : ""}`));
 const poll = () => watcher.pollOnce().catch((e) => console.error("watcher", e));
 poll();
 setInterval(poll, cfg.pollS * 1000);

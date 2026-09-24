@@ -56,7 +56,7 @@ scenario(old, 5, "verify/multiplier-display.ts: restore");
 
 const ok = checks.every((c) => c.ok);
 for (const c of checks) console.log(`${c.ok ? "OK  " : "FAIL"} ${c.what}${c.ok ? "" : `: ${c.a} vs ${c.b}`}`);
-const out = join(import.meta.dirname, "out", `multiplier-display-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+const out = join(import.meta.dirname, "out", `multiplier-display${process.env.VERIFY_LABEL ? "-" + process.env.VERIFY_LABEL : ""}-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, JSON.stringify({ check: "fixture multiplier change moves display fields only, after the effective time", cluster: CLUSTER, symbol, old, value, slots: { A: A.as_of_slot, B: B.as_of_slot, C: C.as_of_slot }, effective_at: new Date(eff * 1000).toISOString(), checks, all_ok: ok }, null, 1));
 console.log(`${ok ? "ALL OK" : "FAILED"} -> ${out}`);

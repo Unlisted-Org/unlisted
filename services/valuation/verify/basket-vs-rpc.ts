@@ -152,7 +152,7 @@ const bad = res.checks.filter((c: any) => !c.ok);
 for (const c of res.checks) if (!c.ok) console.log(`MISMATCH ${c.what}: api ${c.api} rpc ${c.rpc}`);
 const ok = res.stable && bad.length === 0;
 console.log(`${CLUSTER} slots ${res.rpc_slots.join("..")} (api ${res.api_slot}), mainnet ${res.mainnet_slots.join("..")}: ${res.checks.length} checks, ${bad.length} mismatches, window stable: ${res.stable} -> ${ok ? "OK" : "FAIL"}`);
-const out = arg("out") ?? join(import.meta.dirname, "out", `basket-vs-rpc-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+const out = arg("out") ?? join(import.meta.dirname, "out", `basket-vs-rpc${process.env.VERIFY_LABEL ? "-" + process.env.VERIFY_LABEL : ""}-${CLUSTER}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, JSON.stringify({ check: "every raw number in /v1/basket vs independent decode of RPC account bytes, bracketed read", cluster: CLUSTER, ...res, all_ok: ok }, null, 1));
 process.exit(ok ? 0 : 1);
