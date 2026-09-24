@@ -267,3 +267,11 @@ export function planCloseRedemption(p: { v: BasketView; owner: PublicKey; ticket
 }
 
 export type { AccountMeta };
+
+/** Permissionless observe on the legs in `mask`: records any shortfall on chain now (spec 01). */
+export function planObserve(p: { v: BasketView; cranker: PublicKey; mask: number; blockhash: string }): VersionedTransaction {
+  const packed = tryCompile(p.cranker, p.blockhash, [...computeBudget(200_000),
+    ix.observeIx({ programId: p.v.config.programId, cranker: p.cranker, basket: p.v.address, legs: p.v.legs.map((l) => ({ mint: l.mint, vault: l.vault })), mask: p.mask }).ix], []);
+  if (!packed) throw new Error("observe does not fit");
+  return packed.tx;
+}

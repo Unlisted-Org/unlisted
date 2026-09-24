@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Connection, PublicKey, SendTransactionError, VersionedTransaction } from "@solana/web3.js";
 import type { Wallet } from "@wallet-standard/base";
 import {
-  BasketClient, BasketView, ERRORS, FixtureAmmRouter, TOKEN_2022_ERRORS, planInKindDeposit, planRedeem, planSettleClaim, planSettleLegUsdc,
+  BasketClient, BasketView, ERRORS, FixtureAmmRouter, TOKEN_2022_ERRORS, planInKindDeposit, planObserve, planRedeem, planSettleClaim, planSettleLegUsdc,
   planUsdcDeposit, sendSequential, math,
 } from "@stocklana/sdk";
 import type { AppConfig } from "./config";
@@ -11,7 +11,7 @@ import { useBasket, useEvents, usePosition } from "./state";
 import { HttpValuation, MockValuation, Valuation } from "./valuation/api";
 import type { BasketResponse, EventsResponse, QuoteDepositResponse } from "./valuation/types";
 import {
-  Banners, BasisStrip, ClaimRow, Guard, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
+  Banners, BasisStrip, ClaimRow, Guard, IssuerActivity, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
 } from "./components/Panels";
 import { DepositPanel, RedeemPanel } from "./components/Actions";
 import * as copy from "./copy";
@@ -57,6 +57,7 @@ export function App({ config }: { config: AppConfig }) {
   const [apiErr, setApiErr] = useState<string | null>(null);
   const [apiEvents, setApiEvents] = useState<EventsResponse | null>(null);
   const [apiPos, setApiPos] = useState<any | null>(null);
+  const lastEvents = useRef(0);
   const [apiPosErr, setApiPosErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [log, setLog] = useState<TxRecord[]>([]);
@@ -65,7 +66,7 @@ export function App({ config }: { config: AppConfig }) {
   useEffect(() => {
     if (!view) return;
     valuation.basket(view).then((b) => { setApi(b); setApiErr(null); }).catch((e) => setApiErr(String(e?.message ?? e)));
-    valuation.events(Math.max(0, view.slot - 500_000)).then(setApiEvents).catch(() => {});
+    if (Date.now() - lastEvents.current > 30_000) { lastEvents.current = Date.now(); valuation.events(0).then(setApiEvents).catch(() => {}); }
   }, [view?.slot, valuation]);
   useEffect(() => {
     if (!wallet || valuation.isMock) { setApiPos(null); return; }
@@ -121,6 +122,8 @@ export function App({ config }: { config: AppConfig }) {
     return [(await planSettleLegUsdc({ v, owner, ticket: new PublicKey(c.ticket), leg: c.leg, sellAmount, router: r, slippageBps: 150, blockhash: bh })).tx];
   });
 
+  const onObserve = (leg: number) => run(`Observe ${view?.legs[leg].symbol}`, async (v, owner, bh) => [planObserve({ v, cranker: owner, mask: 1 << leg, blockhash: bh })]);
+
   const routerReady = config.router.kind === "none"
     ? "USDC deposits need the devnet router (fixture_amm, Agent C), which isn't configured on this cluster yet. In-kind deposits work now."
     : null;
@@ -161,7 +164,7 @@ export function App({ config }: { config: AppConfig }) {
             <Guard name="Position value"><PricePanel api={apiPos} error={apiPosErr} testid="position-price-panel"
               title={`Your ${fmtShares(pos.shares)} shares, valued at your size: three sources`} /></Guard>
           )}
-          <LegsTable v={view} pos={pos} api={api} />
+          <LegsTable v={view} pos={pos} api={api} onObserve={wallet ? onObserve : undefined} busy={busy} />
           <div className="two">
             <DepositPanel v={view} pos={pos} busy={busy} routerReady={routerReady} quoteDeposit={(u) => valuation.quoteDeposit(view, u)} onInKind={onInKind} onUsdc={onUsdc} />
             <RedeemPanel v={view} pos={pos} busy={busy} usdcReady={config.router.kind === "none" ? "USDC redemption settles through the devnet router, not configured on this cluster yet." : null} onRedeem={onRedeem}
@@ -171,6 +174,7 @@ export function App({ config }: { config: AppConfig }) {
           <RedemptionHistory v={view} pos={pos} />
           <TxLog log={log} explorer={config.explorerTx} />
           <EventsPanel v={view} rows={events.rows} />
+          <Guard name="Issuer activity"><IssuerActivity api={apiEvents} isMock={valuation.isMock} /></Guard>
           <Disclosures upgradeAuthority={config.upgradeAuthority} authority={short(view.basket.authority)} />
         </>
       )}

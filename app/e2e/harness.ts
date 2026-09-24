@@ -5,7 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { createAssociatedTokenAccountIdempotentInstruction, createMintToCheckedInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { createAssociatedTokenAccountIdempotentInstruction, createBurnCheckedInstruction, createMintToCheckedInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
 import * as sdk from "@stocklana/sdk";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -37,17 +37,17 @@ export class RunRecord {
   readonly startedAt = new Date().toISOString();
   steps: { step: string; by: "test wallet (browser)" | "fixture issuer (harness)" | "funder (harness)"; signatures: string[]; slot?: number; note?: string; checks?: Record<string, unknown> }[] = [];
   screenshots: string[] = [];
-  constructor(readonly env: E2eEnv, readonly wallet: string) {}
+  constructor(readonly env: E2eEnv, readonly wallet: string, readonly flow = "") {}
   add(s: RunRecord["steps"][number]) { this.steps.push(s); }
   write(outcome: "passed" | "failed", error?: string): string {
     const day = this.startedAt.slice(0, 10);
     const dir = join(HERE, "runs");
     mkdirSync(dir, { recursive: true });
-    const file = join(dir, `${day}-${this.env.cluster}.json`);
+    const file = join(dir, `${day}-${this.env.cluster}${this.flow ? `-${this.flow}` : ""}.json`);
     let prior: any[] = [];
     try { prior = JSON.parse(readFileSync(file, "utf8")).runs ?? []; } catch {}
     const run = {
-      startedAt: this.startedAt, finishedAt: new Date().toISOString(), outcome, error,
+      startedAt: this.startedAt, finishedAt: new Date().toISOString(), outcome, error: error?.replace(/\u001b\[[0-9;]*m/g, ""),
       cluster: this.env.cluster, label: this.env.label,
       verification: this.env.cluster === "devnet" ? "devnet" : "local, not devnet — built, not verified",
       rpc: this.env.rpc, program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
@@ -137,6 +137,22 @@ export function issuerCli(env: E2eEnv, args: string[]): string {
   const sig = j.signature ?? j.transactionData?.signature;
   if (!sig) throw new Error(`no signature from spl-token ${args[0]}: ${out}`);
   return sig;
+}
+
+/**
+ * Issuer seizure: BurnChecked from a basket vault by the permanent delegate.
+ *  - local: built here, signed by the local issuer key;
+ *  - devnet: Agent C's scripts/scenarios/issuer.ts seize (records in fixtures/scenarios/seizure.json).
+ */
+export async function issuerSeize(env: E2eEnv, symbol: string, vault: PublicKey, amount: bigint): Promise<string[]> {
+  if (env.cluster === "devnet") {
+    const { json } = opsScript(["scripts/scenarios/issuer.ts", "seize", "--cluster", "devnet", "--vault", vault.toBase58(), "--amount", amount.toString(), "--actor", "app-e2e"]);
+    return (json.steps as string[]).map((s) => /: (\w{60,}) @/.exec(s)?.[1]).filter(Boolean) as string[];
+  }
+  const mint = new PublicKey(env.legs.find((l) => l.symbol === symbol)!.mint);
+  const issuer = loadKey(env.issuerKey);
+  const ix = createBurnCheckedInstruction(vault, mint, issuer.publicKey, amount, 9, [], sdk.TOKEN_2022_PROGRAM_ID);
+  return [await sendAndConfirmTransaction(conn(env), new Transaction().add(ix), [issuer], { commitment: "confirmed" })];
 }
 
 // ------------------------------------------------ independent chain reads (not the app's code path)

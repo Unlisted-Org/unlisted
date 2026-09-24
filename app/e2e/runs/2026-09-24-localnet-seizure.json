@@ -1,0 +1,99 @@
+{
+  "runs": [
+    {
+      "startedAt": "2026-09-24T20:33:51.104Z",
+      "finishedAt": "2026-09-24T20:33:56.046Z",
+      "outcome": "passed",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "AFJXU4HUo2W3a64R5Kajf3eVswwHDhtPouH57JmPYXzQ",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea (fixtures/amm unchanged through 587d518)",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "9BukBuYeEnDPyFauFLWZDneBWPD9xdzrXkCpTBs4J8u6",
+        "kind": "Stocklana Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "4D5hJwA7coFzhVBhKF7dUuwqiYJE8w9YMtsyRhmdFrHwpzfbU4fqM12znFBYiTRgjrSx5nPeREtPDsGbS8ekQZ9M"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "4cb9gX4G5HSVTkYTaMXPeKEA7cNwQCSvMyNTpbXVZxP2rZT9mcbEFLUgCuAqpjpoio9S1xhZqQy3Lr5c9sEMsbGf",
+            "54avC8UuuREjfbmyMPmzaiCXjjrPqZcLWZt85wzYsMnynfaXNVjRvDjPWYS2fmFPeqjGqJ1rYSyLoA9HBqHP58AA",
+            "4SSoSUiFGH4nPMQfGDCwQ7YLzEHXVMUHzEj1grjb7pBzqV3VTxbp6kTNgp1Eqck5ESaSPDCJWuv2BsY3Hz3BVurP"
+          ]
+        },
+        {
+          "step": "deposit in kind (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "3skBAwWp1DKf4ff8VVaDkucJ4T3Uykgnb39qSqif8KuLNR9RiPjWKynVAJJ8fmogsgdpgWa4ZVbWcQr9prsbgTUF"
+          ],
+          "checks": {
+            "shares": "20000000"
+          }
+        },
+        {
+          "step": "issuer seizes 20196000000 raw (20%) from the NEURALINK vault as permanent delegate",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "66LJMi3UpUsuYHSDgPG692TJr1ZCjk875J1WPZhfm8cMu2VsAS2rY67PRwgmAQ7WMo11Jvf99J6JZxfZAxEno5qz"
+          ]
+        },
+        {
+          "step": "record the drop with the permissionless observe (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "4HzqpHDBvxuQv1kRtQ42P1FexXDG5UXnjmYN5NTsZEQGvGkr2Xp8RpomXmiSpi2hcjBthFFizmVYYjNH8wXU44p9"
+          ],
+          "slot": 52,
+          "checks": {
+            "expected": "100980000000",
+            "actual": "80784000000",
+            "lossIndex": "800000000000000000"
+          }
+        },
+        {
+          "step": "redeem 10000000 raw shares after the seizure (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "51iuiFzSBHJx4T9zPn2VJMUJa8cVj78YvQGLNA7NZFHSFE4XnLvGvG65RYM3y9gEaAixGNSKf4L5ToBv21Ee9bqm"
+          ],
+          "slot": 53,
+          "checks": {
+            "seizedLeg": "NEURALINK",
+            "grossBeforeSeizure": "990000000",
+            "expectedGrossAfter": "792000000",
+            "received": "784080000",
+            "appPredicted": "784080000"
+          }
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-seizure-1-unrecorded.png",
+        "e2e/runs/2026-09-24-localnet-seizure-2-recorded-banner.png",
+        "e2e/runs/2026-09-24-localnet-seizure-3-page.png"
+      ]
+    }
+  ]
+}

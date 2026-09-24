@@ -79,12 +79,6 @@ export function issuerBanners(v: BasketView, rows: EventRow[], api: EventsRespon
       title: `${l?.symbol ?? `Leg ${e.leg}`}: vault dropped by ${pct(e.expected - e.actual, e.expected)} without a program transfer`,
       body: `Expected ${fmtRaw(e.expected)}, found ${fmtRaw(e.actual)} at slot ${e.slot}. Every holder, open claim and open ticket on this leg bears the same ${pct(e.expected - e.actual, e.expected)}. No later depositor makes anyone whole.` });
   }
-  for (const e of api?.events ?? []) {
-    if (e.type !== "issuer") continue;
-    out.push({ key: `api${e.kind}${e.slot}${e.mint}`, level: e.kind === "Paused" || e.kind === "HookSet" ? "alert" : "warn", testid: `banner-api-${e.kind}`,
-      title: `${e.network === "mainnet" ? "Mainnet" : "Devnet"} issuer event: ${e.kind}${e.leg != null ? ` (${v.legs[e.leg]?.symbol})` : ""}`,
-      body: `Before ${JSON.stringify(e.before)}, after ${JSON.stringify(e.after)}, slot ${e.slot}.` });
-  }
   return out;
 }
 
@@ -107,9 +101,45 @@ export function Banners({ banners }: { banners: Banner[] }) {
   );
 }
 
+// ---------------------------------------------------------------- issuer activity (valuation API /v1/events)
+
+/** Normalises the watcher's events: the service tags them {kind: "issuer", type: <event>}. */
+export function issuerEvents(api: EventsResponse | null): any[] {
+  return ((api?.events ?? []) as any[])
+    .filter((e) => e.kind === "issuer" || e.type === "issuer")
+    .map((e) => ({ ...e, name: e.kind === "issuer" ? e.type : e.kind, network: e.cluster ?? e.network }));
+}
+
+export function IssuerActivity({ api, isMock }: { api: EventsResponse | null; isMock: boolean }) {
+  const evs = issuerEvents(api);
+  const groups: [string, any[]][] = [["mainnet", evs.filter((e) => e.network === "mainnet")], ["fixture mints", evs.filter((e) => e.network !== "mainnet")]];
+  return (
+    <section data-testid="issuer-activity">
+      <h2>Issuer activity</h2>
+      <p className="muted">Every change the issuer's authority made, read by the watcher from the real PreStocks mints on mainnet and from the fixture mints, with before and after values.</p>
+      {isMock ? <p className="muted">Needs the valuation API (not connected).</p> : groups.map(([name, list]) => (
+        <div key={name}>
+          <h3>{name === "mainnet" ? "Real PreStocks mints (mainnet)" : "Fixture mints"}</h3>
+          {list.length === 0 ? <p className="muted">No events in the window.</p> : (
+            <ul className="events">
+              {list.slice(0, 20).map((e, i) => (
+                <li key={i} data-testid={`issuer-event-${e.name}`}>
+                  <b>{e.name}</b> {e.symbol ?? ""} <span className="muted">{e.block_time_iso ?? `slot ${e.slot}`}</span>{" "}
+                  <span className="muted">{e.before ? `${JSON.stringify(e.before)} → ` : ""}{JSON.stringify(e.after)}</span>
+                  {e.signature && <span className="mono muted"> {short(e.signature)}</span>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </section>
+  );
+}
+
 // ---------------------------------------------------------------- legs table
 
-export function LegsTable({ v, pos, api }: { v: BasketView; pos: Position | null; api: BasketResponse | null }) {
+export function LegsTable({ v, pos, api, onObserve, busy }: { v: BasketView; pos: Position | null; api: BasketResponse | null; onObserve?: (leg: number) => void; busy?: boolean }) {
   return (
     <section>
       <h2>Seven legs, equal weight at inception</h2>
@@ -133,7 +163,15 @@ export function LegsTable({ v, pos, api }: { v: BasketView; pos: Position | null
                   <td data-testid={`leg-fee-${l.symbol}`}>{l.feeNow ? `${l.feeNow.bps} bps` : "none"}</td>
                   <td>{l.feePending ? `${l.feePending.bps} bps from epoch ${l.feePending.epoch}` : "—"}</td>
                   <td data-testid={`leg-balance-${l.symbol}`} data-raw={l.state.balance.toString()}>{fmtRaw(l.state.balance)}</td>
-                  <td>{fmtRaw(l.state.accounted)}{l.state.balance < l.state.accounted && <span className="pill alert">shortfall not yet observed</span>}</td>
+                  <td>{fmtRaw(l.state.accounted)}
+                    {l.state.balance < l.state.accounted && (
+                      <>
+                        <span className="pill alert" data-testid={`unobserved-shortfall-${l.symbol}`} data-raw={(l.state.accounted - l.state.balance).toString()}>
+                          −{pct(l.state.accounted - l.state.balance, l.state.accounted)} not yet recorded
+                        </span>
+                        {onObserve && <button disabled={busy} onClick={() => onObserve(l.index)} data-testid={`observe-${l.symbol}`} title="Permissionless: records the drop on chain so everyone sees it">Record it (observe)</button>}
+                      </>
+                    )}</td>
                   <td data-testid={`leg-claims-${l.symbol}`} data-raw={l.state.claimUnits.toString()}>{fmtShares(l.state.claimUnits)}</td>
                   <td title={`exact: ${ps.num} / ${ps.den}`}>{fmtRaw(perShare)}</td>
                   <td>{api?.weights.inception.find((w) => w.index === l.index)?.value_share ?? "1/7"}</td>
