@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "vectors": "python3 vectors/gen_vectors.py",
-    "test": "node --import tsx --test --test-concurrency=1 'src/**/*.test.ts'"
+    "test": "node --import tsx --test --test-concurrency=6 'src/**/*.test.ts'",
+    "test:model": "node --import tsx --test --test-concurrency=6 'src/model/*.test.ts'"
   },
   "devDependencies": {
     "@coral-xyz/anchor": "^0.32.1",

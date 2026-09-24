@@ -112,15 +112,26 @@ fn require_available(mint: &AccountInfo, vault: &AccountInfo) -> Result<()> {
     Ok(())
 }
 
-/// A basket-signed router CPI may touch only the one vault and/or the reserve it is meant to,
-/// never another leg's vault or the share mint.
-fn guard_route(b: &Basket, route: &[AccountInfo], vault: Option<usize>, reserve: bool) -> Result<()> {
-    for a in route {
-        for j in 0..b.n_legs as usize {
-            require!(*a.key != b.legs[j].vault || vault == Some(j), E::RouteViolation);
-        }
-        require!(*a.key != b.usdc_reserve || reserve, E::RouteViolation);
+/// A basket-signed router CPI may move only the one vault and/or the reserve it is meant to. Every other
+/// basket token account the route lists (Jupiter's route_v2 lists the taker's own output account even when a
+/// destination is given) is watched: returns (route index, balance before). The share mint may not appear.
+fn watch_route(b: &Basket, route: &[AccountInfo], vault: Option<usize>, reserve: bool) -> Result<Vec<(usize, u64)>> {
+    let mut w = Vec::new();
+    for (k, a) in route.iter().enumerate() {
         require!(*a.key != b.share_mint, E::RouteViolation);
+        let other_vault = (0..b.n_legs as usize).any(|j| *a.key == b.legs[j].vault && vault != Some(j));
+        if other_vault || (*a.key == b.usdc_reserve && !reserve) {
+            w.push((k, tok::amount(a)?));
+        }
+    }
+    Ok(w)
+}
+
+/// After the CPI: every watched account kept its balance and is still the basket's, with no delegate.
+fn check_watch(route: &[AccountInfo], w: &[(usize, u64)], basket: &Pubkey) -> Result<()> {
+    for &(k, before) in w {
+        let t = tok::token_acc(&route[k])?;
+        require!(t.amount == before && t.owner == *basket && t.clean, E::RouteViolation);
     }
     Ok(())
 }
@@ -444,7 +455,7 @@ pub mod basket {
         let i = check_leg(&a.basket, leg, &a.leg_mint, &a.leg_vault)?;
         require!(a.ticket.landed_mask & (1 << i) != 0, E::NoClaim);
         require_available(&a.leg_mint, &a.leg_vault)?;
-        guard_route(&a.basket, ctx.remaining_accounts, Some(i), false)?;
+        let watch = watch_route(&a.basket, ctx.remaining_accounts, Some(i), false)?;
         let before = observe_leg(&mut ctx.accounts.basket, i, &ctx.accounts.leg_vault)?;
         let norm = ctx.accounts.ticket.norm[i];
         let b = &mut ctx.accounts.basket;
@@ -456,6 +467,7 @@ pub mod basket {
         let bump = [a.basket.bump];
         let bseeds: &[&[u8]] = &[b"basket", sm.as_ref(), &bump];
         tok::router_cpi(&a.router_program, ctx.remaining_accounts, route_data, &a.basket.key(), &[bseeds])?;
+        check_watch(ctx.remaining_accounts, &watch, &a.basket.key())?;
         let after = tok::amount(&a.leg_vault)?;
         check_intact(&a.leg_vault, &a.basket.key())?;
         let spent = before.checked_sub(after).ok_or(E::RouteViolation)?;
@@ -616,7 +628,7 @@ pub mod basket {
         let dst = tok::token_acc(&a.owner_usdc)?;
         require!(dst.owner == a.ticket.owner && dst.mint == a.basket.usdc_mint, E::InvalidAccount);
         require_available(&a.leg_mint, &a.leg_vault)?;
-        guard_route(&a.basket, ctx.remaining_accounts, Some(i), false)?;
+        let watch = watch_route(&a.basket, ctx.remaining_accounts, Some(i), false)?;
         let (supply, _) = tok::mint_supply_decimals(&a.share_mint)?;
         let before = observe_leg(&mut ctx.accounts.basket, i, &ctx.accounts.leg_vault)?;
         let b = &mut ctx.accounts.basket;
@@ -626,6 +638,7 @@ pub mod basket {
         let (sm, bump) = (a.basket.share_mint, [a.basket.bump]);
         let bseeds: &[&[u8]] = &[b"basket", sm.as_ref(), &bump];
         tok::router_cpi(&a.router_program, ctx.remaining_accounts, route_data, &a.basket.key(), &[bseeds])?;
+        check_watch(ctx.remaining_accounts, &watch, &a.basket.key())?;
         let after = tok::amount(&a.leg_vault)?;
         check_intact(&a.leg_vault, &a.basket.key())?;
         let spent = before.checked_sub(after).ok_or(E::RouteViolation)?;
@@ -693,7 +706,7 @@ pub mod basket {
         require!(b.legs[i].claim_units == 0, E::OutstandingClaims);
         require!(amount <= b.max_convert_chunk, E::ChunkTooLarge);
         require_available(&a.leg_mint, &a.leg_vault)?;
-        guard_route(b, ctx.remaining_accounts, Some(i), true)?;
+        let watch = watch_route(b, ctx.remaining_accounts, Some(i), true)?;
         let before = observe_leg(&mut ctx.accounts.basket, i, &ctx.accounts.leg_vault)?;
         let a = &ctx.accounts;
         require!(amount as u128 <= owned(&a.basket.legs[i], before)?, E::InvalidArgument);
@@ -702,6 +715,7 @@ pub mod basket {
         let bseeds: &[&[u8]] = &[b"basket", sm.as_ref(), &bump];
         let bk = a.basket.key();
         tok::router_cpi(&a.router_program, ctx.remaining_accounts, route_data, &bk, &[bseeds])?;
+        check_watch(ctx.remaining_accounts, &watch, &bk)?;
         let after = tok::amount(&a.leg_vault)?;
         let r1 = tok::amount(&a.usdc_reserve)?;
         check_intact(&a.leg_vault, &bk)?;
@@ -743,7 +757,7 @@ pub mod basket {
         require_keys_eq!(a.usdc_mint.key(), b.usdc_mint, E::InvalidAccount);
         require!(b.reinvest_mask & (1 << i) != 0 && b.legs[i].status == LegStatus::Active, E::InvalidArgument);
         require_available(&a.leg_mint, &a.leg_vault)?;
-        guard_route(b, ctx.remaining_accounts, Some(i), true)?;
+        let watch = watch_route(b, ctx.remaining_accounts, Some(i), true)?;
         let r0 = tok::amount(&a.usdc_reserve)?;
         let left = b.reinvest_mask.count_ones() as u64;
         let slice = if left == 1 { r0 } else { r0 / left };
@@ -754,6 +768,7 @@ pub mod basket {
         let bseeds: &[&[u8]] = &[b"basket", sm.as_ref(), &bump];
         let bk = a.basket.key();
         tok::router_cpi(&a.router_program, ctx.remaining_accounts, route_data, &bk, &[bseeds])?;
+        check_watch(ctx.remaining_accounts, &watch, &bk)?;
         let after = tok::amount(&a.leg_vault)?;
         let r1 = tok::amount(&a.usdc_reserve)?;
         check_intact(&a.leg_vault, &bk)?;

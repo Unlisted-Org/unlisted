@@ -95,7 +95,7 @@ export class BasketClient {
   fundPools() {
     const ixs = [this.issuer.createAtaIx(this.poolAuth, this.usdc, TOKEN), ...this.mints.map((m) => this.issuer.createAtaIx(this.poolAuth, m))];
     for (let i = 0; i < ixs.length; i += 4) this.must(this.env.send(ixs.slice(i, i + 4)), "pool atas");
-    this.issuer.mintTo(this.usdc, this.pool(this.usdc, TOKEN), 10n ** 18n, TOKEN);
+    this.issuer.mintTo(this.usdc, this.pool(this.usdc, TOKEN), 10n ** 15n, TOKEN);
     for (const m of this.mints) this.issuer.mintTo(m, this.pool(m), 10n ** 18n);
   }
 
