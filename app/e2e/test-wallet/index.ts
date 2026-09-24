@@ -9,7 +9,7 @@ import { Keypair, VersionedTransaction } from "@solana/web3.js";
 
 declare global {
   interface Window {
-    __STOCKLANA_TEST_WALLET_SECRET__?: number[];
+    __UNLISTED_TEST_WALLET_SECRET__?: number[];
     __testWallet?: { address: string; approvals: { at: string; transactions: number; chain: string }[] };
   }
 }
@@ -18,7 +18,7 @@ const ICON = "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w3.org/
 const CHAINS = ["solana:devnet", "solana:localnet"] as const;
 
 function install() {
-  const secret = window.__STOCKLANA_TEST_WALLET_SECRET__;
+  const secret = window.__UNLISTED_TEST_WALLET_SECRET__;
   if (!secret) return;
   const kp = Keypair.fromSecretKey(Uint8Array.from(secret));
   const account: WalletAccount = new ReadonlyWalletAccount({
@@ -29,7 +29,7 @@ function install() {
 
   const wallet: Wallet = {
     version: "1.0.0",
-    name: "Stocklana Test Wallet",
+    name: "Unlisted Test Wallet",
     icon: ICON as `data:image/svg+xml;base64,${string}`,
     chains: CHAINS,
     accounts: [account],

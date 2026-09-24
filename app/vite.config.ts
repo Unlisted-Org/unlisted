@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@stocklana/sdk": here("../sdk/src/index.ts"),
+      "@unlisted/sdk": here("../sdk/src/index.ts"),
       "@solana/web3.js": here("./node_modules/@solana/web3.js"),
       "@solana/spl-token": here("./node_modules/@solana/spl-token"),
       bs58: here("./node_modules/bs58"),

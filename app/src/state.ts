@@ -1,7 +1,7 @@
 // App state: chain reads through the SDK, refreshed on a timer and after every transaction.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Connection, PublicKey } from "@solana/web3.js";
-import { BasketClient, BasketView, RedemptionTicket, DepositTicket, BasketEvent, TOKEN_2022_PROGRAM_ID, ata } from "@stocklana/sdk";
+import { BasketClient, BasketView, RedemptionTicket, DepositTicket, BasketEvent, TOKEN_2022_PROGRAM_ID, ata } from "@unlisted/sdk";
 
 export interface Position {
   owner: PublicKey;

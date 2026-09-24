@@ -98,6 +98,74 @@
         "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/seizure.spec.ts:88:66"
       ],
       "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet-seizure.json"
+    },
+    {
+      "id": "redeem-rounds-up",
+      "what": "SDK redemption payout rounds up one unit (floor(s x owned / (S + C)) + 1)",
+      "file": "sdk/src/math.ts",
+      "spec": "flow",
+      "valuationApi": "http://127.0.0.1:8907",
+      "startedAt": "2026-09-24T22:50:24.191Z",
+      "finishedAt": "2026-09-24T22:52:18.952Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toBe(expected) // Object.is equality",
+        "Expected: 982077049n",
+        "Received: 982077048n",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:187:45"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
+    },
+    {
+      "id": "ignore-pause",
+      "what": "App ignores the mint's pause flag (a paused leg is shown as available)",
+      "file": "sdk/src/token2022.ts",
+      "spec": "flow",
+      "valuationApi": "http://127.0.0.1:8907",
+      "startedAt": "2026-09-24T22:52:19.426Z",
+      "finishedAt": "2026-09-24T22:54:35.697Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(locator).toBeVisible() failed",
+        "Expected: visible",
+        "Error: element(s) not found",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:161:66"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
+    },
+    {
+      "id": "price-panel-not-api",
+      "what": "Price panel's 'if you redeemed now' shows the API's last_trade instead of its sell_now (needs E2E_VALUATION_URL)",
+      "file": "app/src/components/Panels.tsx",
+      "spec": "flow",
+      "valuationApi": "http://127.0.0.1:8907",
+      "startedAt": "2026-09-24T22:54:36.146Z",
+      "finishedAt": "2026-09-24T22:57:47.688Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toBe(expected) // Object.is equality",
+        "Expected: \"match\"",
+        "Received: \"panel [\\\"465499.007466\\\",\\\"465499.007466\\\",\\\"415617.931037\\\"]; 23 API responses received, latest [\\\"228465.727762\\\",\\\"465499.007466\\\",\\\"415617.931037\\\"]\"",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:74:32"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
+    },
+    {
+      "id": "unrecorded-drop-off-by-one",
+      "what": "Legs table under-reports an unrecorded vault drop by one unit",
+      "file": "app/src/components/Panels.tsx",
+      "spec": "seizure",
+      "valuationApi": "http://127.0.0.1:8907",
+      "startedAt": "2026-09-24T22:57:48.123Z",
+      "finishedAt": "2026-09-24T22:58:06.868Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toBe(expected) // Object.is equality",
+        "Expected: 16951821517n",
+        "Received: 16951821516n",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/seizure.spec.ts:88:66"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet-seizure.json"
     }
   ]
 }

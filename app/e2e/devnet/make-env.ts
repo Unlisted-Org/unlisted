@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Connection, PublicKey } from "@solana/web3.js";
-import * as sdk from "@stocklana/sdk";
+import * as sdk from "@unlisted/sdk";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const APP = resolve(HERE, "../..");

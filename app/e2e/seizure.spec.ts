@@ -8,7 +8,7 @@ import { expect, test, Page } from "@playwright/test";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BasketClient, TOKEN_PROGRAM_ID, math, parseEventsFromLogs, transferFee } from "@stocklana/sdk";
+import { BasketClient, TOKEN_PROGRAM_ID, math, parseEventsFromLogs, transferFee } from "@unlisted/sdk";
 import { RunRecord, conn as rpcConn, fundWallet, issuerSeize, loadEnv, tokenAmount, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
@@ -42,10 +42,10 @@ test("seizure: drop recorded on chain and shared pro rata", async ({ page }) => 
   };
   try {
     await fundWallet(env, owner, 5n * 10n ** 9n, rec);
-    await page.addInitScript(`window.__STOCKLANA_TEST_WALLET_SECRET__ = ${JSON.stringify([...wallet.secretKey])};`);
+    await page.addInitScript(`window.__UNLISTED_TEST_WALLET_SECRET__ = ${JSON.stringify([...wallet.secretKey])};`);
     await page.addInitScript({ path: join(HERE, ".build/test-wallet.js") });
     await page.goto("/");
-    await page.getByTestId("connect-Stocklana Test Wallet").click();
+    await page.getByTestId("connect-Unlisted Test Wallet").click();
     await expect(page.getByTestId("wallet-address")).toHaveText(owner.toBase58());
 
     // 1. deposit in kind, 40% of what the wallet's legs can mint
@@ -83,7 +83,7 @@ test("seizure: drop recorded on chain and shared pro rata", async ({ page }) => 
 
     // 3. the app shows the unrecorded drop; the wallet records it on chain
     await page.reload();
-    await page.getByTestId("connect-Stocklana Test Wallet").click();
+    await page.getByTestId("connect-Unlisted Test Wallet").click();
     await expect(page.getByTestId(`unobserved-shortfall-${SEIZE_LEG}`)).toBeVisible();
     expect(await raw(page, `unobserved-shortfall-${SEIZE_LEG}`)).toBe(seizeAmount);
     await shot("1-unrecorded", page.getByTestId("legs-table"));

@@ -19,7 +19,7 @@ export async function sendAndConfirmTransaction(c: Connection, tx: Transaction, 
   return sig;
 }
 import { createAssociatedTokenAccountIdempotentInstruction, createBurnCheckedInstruction, createMintToCheckedInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
-import * as sdk from "@stocklana/sdk";
+import * as sdk from "@unlisted/sdk";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -80,7 +80,7 @@ export class RunRecord {
       verification: this.env.cluster === "devnet" ? "devnet" : "local, not devnet — built, not verified",
       mutation: process.env.E2E_MUTATION ?? null, // set when this run is a deliberate-bug check (expected to fail)
       rpc: this.env.rpc, program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
-      wallet: { address: this.wallet, kind: "Stocklana Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)" },
+      wallet: { address: this.wallet, kind: "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)" },
       valuationApi: (this.env as any).valuationApi ?? null,
       steps: this.steps, screenshots: this.screenshots,
     };

@@ -10,7 +10,7 @@ import { expect, test, Page } from "@playwright/test";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BasketClient, TOKEN_PROGRAM_ID, math, openClaims, parseEventsFromLogs, transferFee } from "@stocklana/sdk";
+import { BasketClient, TOKEN_PROGRAM_ID, math, openClaims, parseEventsFromLogs, transferFee } from "@unlisted/sdk";
 import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, returnSol, mintPausedByRpc, multipliersByRpc, redemptionTickets, tokenAmount, tokenAmounts, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
@@ -48,14 +48,14 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
   try {
     await fundWallet(env, owner, 5n * 10n ** 9n, rec);
 
-    await page.addInitScript(`window.__STOCKLANA_TEST_WALLET_SECRET__ = ${JSON.stringify([...wallet.secretKey])};`);
+    await page.addInitScript(`window.__UNLISTED_TEST_WALLET_SECRET__ = ${JSON.stringify([...wallet.secretKey])};`);
     await page.addInitScript({ path: join(HERE, ".build/test-wallet.js") });
     const apiBaskets: any[] = [];
     page.on("response", async (r) => {
       if (/\/v1\/basket(\?|$)/.test(r.url()) && r.ok()) { try { apiBaskets.push(await r.json()); } catch {} }
     });
     await page.goto("/");
-    await page.getByTestId("connect-Stocklana Test Wallet").click();
+    await page.getByTestId("connect-Unlisted Test Wallet").click();
     await expect(page.getByTestId("wallet-address")).toHaveText(owner.toBase58());
     await expect(page.getByTestId("pricing-basis")).toBeVisible();
     // With the valuation API connected: the three values the app shows are the API's, not the app's.
@@ -157,7 +157,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     expect(await mintPausedByRpc(env, pausedMint)).toBe(true);
     rec.add({ step: `issuer pauses ${PAUSE_LEG}`, by: "fixture issuer (harness)", signatures: pauseSigs });
     await page.reload();
-    await page.getByTestId("connect-Stocklana Test Wallet").click();
+    await page.getByTestId("connect-Unlisted Test Wallet").click();
     await expect(page.getByTestId(`banner-paused-${PAUSE_LEG}`)).toBeVisible();
     await expect(page.getByTestId(`leg-availability-${PAUSE_LEG}`)).not.toHaveText("available");
     for (const l of env.legs) if (l.symbol !== PAUSE_LEG) await expect(page.getByTestId(`leg-availability-${l.symbol}`)).toHaveText("available");
@@ -205,7 +205,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     expect(await mintPausedByRpc(env, pausedMint)).toBe(false);
     rec.add({ step: `issuer resumes ${PAUSE_LEG}`, by: "fixture issuer (harness)", signatures: resumeSigs });
     await page.reload();
-    await page.getByTestId("connect-Stocklana Test Wallet").click();
+    await page.getByTestId("connect-Unlisted Test Wallet").click();
     await expect(page.getByTestId(`leg-availability-${PAUSE_LEG}`)).toHaveText("available");
     await expect(page.getByTestId(`settle-${PAUSE_LEG}`)).toBeEnabled();
     const estimate = await raw(page, `claim-estimate-${PAUSE_LEG}`);

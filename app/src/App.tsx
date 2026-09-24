@@ -5,7 +5,7 @@ import {
   BasketClient, BasketView, ERRORS, FixtureAmmRouter, TOKEN_2022_ERRORS, planInKindDeposit, planObserve, planRedeem, planSettleClaim, planSettleLegUsdc,
   planUsdcDeposit, sendSequential, math,
   politeFetch,
-} from "@stocklana/sdk";
+} from "@unlisted/sdk";
 import type { AppConfig } from "./config";
 import { Connected, connect, onWalletsChanged, signAll, usableWallets } from "./wallet";
 import { useBasket, useEvents, usePosition } from "./state";
@@ -134,7 +134,7 @@ export function App({ config }: { config: AppConfig }) {
     <div className="page">
       <header>
         <div>
-          <h1>Stocklana basket</h1>
+          <h1>Unlisted basket</h1>
           <div className="headline">{copy.HEADLINE}</div>
         </div>
         <div className="wallet">

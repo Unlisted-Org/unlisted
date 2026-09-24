@@ -13,7 +13,7 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@stocklana/sdk": ["../sdk/src/index.ts"],
+      "@unlisted/sdk": ["../sdk/src/index.ts"],
       "@solana/web3.js": ["./node_modules/@solana/web3.js"],
       "@solana/spl-token": ["./node_modules/@solana/spl-token"],
       "@noble/hashes/*": ["./node_modules/@noble/hashes/*"],

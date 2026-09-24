@@ -1,8 +1,8 @@
 // Valuation API client (spec 03). With no API configured, a mock fills the spec 03 shape: raw
 // fields from the same chain reads the app already made, prices as labelled PLACEHOLDERS.
 // Every mocked value carries `mock`, and the UI prints that label beside it.
-import type { BasketView } from "@stocklana/sdk";
-import { math } from "@stocklana/sdk";
+import type { BasketView } from "@unlisted/sdk";
+import { math } from "@unlisted/sdk";
 import type { BasketResponse, EventsResponse, QuoteDepositResponse, QuoteRedeemResponse } from "./types";
 
 export interface Valuation {

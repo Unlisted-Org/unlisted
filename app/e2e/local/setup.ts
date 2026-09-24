@@ -22,7 +22,7 @@ import {
 import {
   createAssociatedTokenAccountIdempotentInstruction, createMintToCheckedInstruction, getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
-import * as sdk from "@stocklana/sdk";
+import * as sdk from "@unlisted/sdk";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const APP = resolve(HERE, "../..");

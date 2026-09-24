@@ -1,5 +1,5 @@
 import { Component, ReactNode, useEffect, useMemo, useState } from "react";
-import { BasketView, CONSTITUENTS, math, openClaims, RedemptionTicket } from "@stocklana/sdk";
+import { BasketView, CONSTITUENTS, math, openClaims, RedemptionTicket } from "@unlisted/sdk";
 import type { BasketResponse, EventsResponse } from "../valuation/types";
 import { fmtAge, fmtBps, fmtRaw, fmtShares, fmtUsd, pct, short } from "../format";
 import type { EventRow, Position } from "../state";
