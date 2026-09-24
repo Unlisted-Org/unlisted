@@ -54,7 +54,7 @@ export type ClaimReason = "Paused" | "Hook" | "Frozen" | "PendingSale";
 export const CLAIM_REASONS: ClaimReason[] = ["Paused", "Hook", "Frozen", "PendingSale"];
 
 export type TicketLeg =
-  | { kind: "Paid"; amount: bigint }
+  | { kind: "Paid"; amount: bigint; received: bigint } // amount = gross from the vault; received = owner's measured net (spec 02 amendment)
   | { kind: "Claim"; units: bigint; reason: ClaimReason }
   | { kind: "None" };
 
@@ -177,7 +177,7 @@ export function encodeDepositTicket(t: DepositTicket): Uint8Array {
 
 function readTicketLeg(r: Reader): TicketLeg {
   const tag = r.u8();
-  if (tag === 0) return { kind: "Paid", amount: r.u64() };
+  if (tag === 0) return { kind: "Paid", amount: r.u64(), received: r.u64() };
   if (tag === 1) {
     const units = r.u64();
     const reasonTag = r.u8();
@@ -189,7 +189,7 @@ function readTicketLeg(r: Reader): TicketLeg {
   throw new Error(`bad TicketLeg tag ${tag}`);
 }
 function writeTicketLeg(w: Writer, l: TicketLeg) {
-  if (l.kind === "Paid") w.u8(0).u64(l.amount);
+  if (l.kind === "Paid") w.u8(0).u64(l.amount).u64(l.received);
   else if (l.kind === "Claim") w.u8(1).u64(l.units).u8(CLAIM_REASONS.indexOf(l.reason));
   else w.u8(2);
 }

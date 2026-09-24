@@ -18,7 +18,9 @@ export const TICKET_MAX_AGE_SLOTS = 1_500;
 export const LEGS_PER_SWAP_TX = 4;
 /** Jupiter routing parameters (spec 02 Programs; spec 03 sell_now). */
 export const JUPITER_MAX_ACCOUNTS = 30;
-export const JUPITER_EXCLUDE_DEXES = "Manifest";
+// Manifest: quotes ignore the transfer fee (manifest#735). 1DEX: needs a system-owned taker, so it
+// fails with the ticket or basket PDA (Agent A, fork run; spec 02 on main).
+export const JUPITER_EXCLUDE_DEXES = "Manifest,1DEX";
 
 export const JUPITER_V6_PROGRAM_ID = new PublicKey("JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4");
 export const TOKEN_PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
@@ -58,6 +60,14 @@ export const ERRORS: Record<number, string> = {
   6015: "VaultFrozen",
   6016: "MathOverflow",
   6017: "ChunkTooLarge",
+  // Added by program@700004c (Agent A):
+  6018: "InvalidAccount",
+  6019: "Unauthorized",
+  6020: "NoClaim",
+  6021: "RouteViolation",
+  6022: "LegsStillLanded",
+  6023: "RouterNotPending",
+  6024: "InvalidArgument",
 };
 
 /** Token-2022 errors the app explains in plain words. */

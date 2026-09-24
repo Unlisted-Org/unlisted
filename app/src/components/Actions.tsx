@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { BasketView, math, planInKindDeposit, TOKEN_2022_PROGRAM_ID, transferFee } from "@stocklana/sdk";
 import type { Position } from "../state";
-import type { QuoteDepositResponse } from "../valuation/types";
-import { fmtBps, fmtRaw, fmtShares, fmtUsdc, parseUnits } from "../format";
+import type { QuoteDepositResponse, QuoteRedeemResponse } from "../valuation/types";
+import { fmtBps, fmtRaw, fmtShares, fmtUsd, fmtUsdc, parseUnits } from "../format";
 import * as copy from "../copy";
 
 function CostBox({ v }: { v: BasketView }) {
@@ -48,12 +48,23 @@ export function DepositPanel(p: {
     } catch (e: any) { return { error: String(e?.message ?? e) } as const; }
   }, [v, pos, shares, slip, tab]);
 
+  // The service's quote can take tens of seconds (live Jupiter quotes), so it is keyed on the input
+  // only and refreshed every 60 s, not on every chain read.
+  const [quoteErr, setQuoteErr] = useState<string | null>(null);
+  const [tick, setTick] = useState(0);
+  useEffect(() => { const id = setInterval(() => setTick((t) => t + 1), 60_000); return () => clearInterval(id); }, []);
   useEffect(() => {
     if (tab !== "usdc") return;
     let live = true;
-    try { const u = parseUnits(usdc, 6); if (u > 0n) p.quoteDeposit(u).then((q) => live && setQuote(q)).catch(() => live && setQuote(null)); } catch { setQuote(null); }
-    return () => { live = false; };
-  }, [tab, usdc, v.slot]);
+    let u = 0n;
+    try { u = parseUnits(usdc, 6); } catch { setQuote(null); return; }
+    if (u <= 0n) return;
+    const t = setTimeout(() => p.quoteDeposit(u).then((q: any) => {
+      if (!live) return;
+      if (q?.error) { setQuoteErr(String(q.error)); setQuote(null); } else { setQuote(q); setQuoteErr(null); }
+    }).catch((e) => live && setQuoteErr(String(e?.message ?? e))), 500);
+    return () => { live = false; clearTimeout(t); };
+  }, [tab, usdc, tick]);
 
   return (
     <section data-testid="deposit">
@@ -92,10 +103,12 @@ export function DepositPanel(p: {
         <div>
           <label>USDC <input value={usdc} onChange={(e) => setUsdc(e.target.value)} data-testid="usdc-amount" /></label>
           {p.routerReady && <div className="banner warn" data-testid="router-unavailable">{p.routerReady}</div>}
+          {!quote && !quoteErr && <p className="muted">Getting the deposit split…</p>}
+          {quoteErr && <div className="warnline" data-testid="usdc-quote-error">Deposit quote unavailable: {quoteErr}</div>}
           {quote && (
             <table data-testid="usdc-quote">
               <thead><tr><th>Leg</th><th>USDC slice</th><th>Route</th></tr></thead>
-              <tbody>{quote.legs.map((l) => <tr key={l.index}><td>{v.legs[l.index]?.symbol}</td><td>{fmtUsdc(BigInt(l.usdc_raw))}</td><td>{l.route}</td></tr>)}</tbody>
+              <tbody>{quote.legs.map((l) => <tr key={l.index}><td>{v.legs[l.index]?.symbol}</td><td>{fmtUsdc(BigInt(l.usdc_raw))}</td><td>{typeof l.route === "string" ? l.route : (l.route as any)?.router ?? "—"}</td></tr>)}</tbody>
             </table>
           )}
           <p className="muted">
@@ -111,7 +124,8 @@ export function DepositPanel(p: {
 
 // ---------------------------------------------------------------- redeem
 
-export function RedeemPanel(p: { v: BasketView; pos: Position | null; busy: boolean; usdcReady: string | null; onRedeem: (shares: bigint, mode: "in_kind" | "usdc") => void }) {
+export function RedeemPanel(p: { v: BasketView; pos: Position | null; busy: boolean; usdcReady: string | null; onRedeem: (shares: bigint, mode: "in_kind" | "usdc") => void;
+  quoteRedeem: ((shares: bigint, mode: "in_kind" | "usdc") => Promise<QuoteRedeemResponse>) | null }) {
   const { v, pos } = p;
   const [amount, setAmount] = useState("0.001");
   const [mode, setMode] = useState<"in_kind" | "usdc">("in_kind");
@@ -122,6 +136,20 @@ export function RedeemPanel(p: { v: BasketView; pos: Position | null; busy: bool
       return { s, out: math.redeemInKind(v.legs.map((l) => l.state), v.shareSupply, s, v.legs.map((l) => l.feeNow)) };
     } catch (e: any) { return { error: String(e?.message ?? e) } as const; }
   }, [v, amount]);
+  // USD per leg from the valuation API (spec 03 /v1/quote/redeem); raw amounts above come from the chain.
+  const [usd, setUsd] = useState<Record<number, string>>({});
+  useEffect(() => {
+    setUsd({});
+    if (!p.quoteRedeem || !preview || "error" in preview) return;
+    let live = true;
+    const t = setTimeout(() => p.quoteRedeem!(preview.s, mode).then((q) => {
+      if (!live) return;
+      const m: Record<number, string> = {};
+      for (const l of q.legs as any[]) if (l.sell_now_usd != null) m[l.index] = String(l.sell_now_usd);
+      setUsd(m);
+    }).catch(() => {}), 600);
+    return () => { live = false; clearTimeout(t); };
+  }, [preview && !("error" in preview) ? preview.s : 0n, mode, v.slot]);
   return (
     <section data-testid="redeem">
       <h2>Redeem</h2>
@@ -136,7 +164,7 @@ export function RedeemPanel(p: { v: BasketView; pos: Position | null; busy: bool
       {preview && "error" in preview && <div className="warnline">{preview.error}</div>}
       {preview && !("error" in preview) && (
         <table data-testid="redeem-preview">
-          <thead><tr><th>Leg</th><th>Now</th><th>Gross from vault</th><th>Issuer fee</th><th>You receive</th></tr></thead>
+          <thead><tr><th>Leg</th><th>Now</th><th>Gross from vault</th><th>Issuer fee</th><th>You receive</th>{p.quoteRedeem && <th>If sold now (API)</th>}</tr></thead>
           <tbody>
             {preview.out.map((o, i) => (
               <tr key={i} data-testid={`redeem-preview-${v.legs[i].symbol}`} className={o.action === "claim" ? "unavail" : ""}>
@@ -144,6 +172,7 @@ export function RedeemPanel(p: { v: BasketView; pos: Position | null; busy: bool
                 {o.action === "pay" && mode === "in_kind" ? (<><td>paid now</td><td>{fmtRaw(o.gross)}</td><td>{fmtRaw(o.fee)}</td><td data-testid={`redeem-net-${v.legs[i].symbol}`} data-raw={o.net.toString()}>{fmtRaw(o.net)}</td></>)
                   : o.action === "claim" ? (<><td data-testid={`redeem-claim-${v.legs[i].symbol}`} data-raw={o.units.toString()}>claim of {fmtShares(o.units)} units</td><td colSpan={3}>{v.legs[i].unavailable.join(", ")}: pays after the leg is available again</td></>)
                   : o.action === "pay" ? (<><td>pending sale</td><td>{fmtRaw(o.gross)}</td><td colSpan={2}>sold for USDC at settlement</td></>) : <td colSpan={4}>retired</td>}
+                {p.quoteRedeem && <td data-testid={`redeem-usd-${v.legs[i].symbol}`}>{usd[i] != null ? fmtUsd(usd[i]) : "—"}</td>}
               </tr>
             ))}
           </tbody>

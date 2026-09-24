@@ -52,7 +52,7 @@ async function startValidator(programs: { id: string; so: string; authority: str
   rmSync(join(LOCAL, "ledger"), { recursive: true, force: true });
   mkdirSync(LOCAL, { recursive: true });
   const args = ["--reset", "--quiet", "--ledger", join(LOCAL, "ledger"), "--rpc-port", "8903", "--faucet-port", "9903", "--gossip-port", "8913",
-    "--dynamic-port-range", "8920-8990", "--bind-address", "127.0.0.1"];
+    "--dynamic-port-range", "8920-8990", "--bind-address", "127.0.0.1", "--limit-ledger-size", "5000000"];
   for (const p of programs) args.push("--upgradeable-program", p.id, p.so, p.authority);
   const log = openSync(join(LOCAL, "validator.log"), "w");
   const child = spawn("solana-test-validator", args, { detached: true, stdio: ["ignore", log, log] });
@@ -130,7 +130,7 @@ async function main() {
   ]).slice(8), [issuer.kp]);
   const shareAta = sdk.ata(deployer.kp.publicKey, shareMintKp.publicKey, TOK);
   const bootIx = sdk.ix.bootstrap({ programId, depositor: deployer.kp.publicKey, basket, shareMint: shareMintKp.publicKey, depositorShareAta: shareAta,
-    legs: legs.map((l, i) => ({ mint: l.mint, vault: legAccts[i].vault, userTokenAccount: dAtas[i] })), gross: legs.map(() => boot), initialShares: sdk.INITIAL_SHARES });
+    legs: legs.map((l, i) => ({ mint: l.mint, vault: legAccts[i].vault, userTokenAccount: dAtas[i] })), gross: legs.map(() => boot) });
   rec("bootstrap", await send(conn, [sdk.computeBudget(1_000_000)[0],
     createAssociatedTokenAccountIdempotentInstruction(deployer.kp.publicKey, shareAta, deployer.kp.publicKey, shareMintKp.publicKey, TOK), bootIx.ix], [deployer.kp]));
 
@@ -173,7 +173,8 @@ async function main() {
     schema: 1, cluster: "local", fixture_issuer: issuer.kp.publicKey.toBase58(), token_2022_program: T22.toBase58(),
     legs: legs.map((l, i) => ({ index: i, symbol: l.symbol, mint: l.mint.toBase58(), mirror_of: l.mirrorOf.toBase58(), decimals: 9, token_program: T22.toBase58(), complete: true })),
     usdc: { mint: usdc.toBase58(), decimals: 6, token_program: TOK.toBase58(), mirror_of: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", mint_authority: issuer.kp.publicKey.toBase58() },
-    fixture_amm: ammId ? { program_id: ammId, pools: legs.map((l, i) => ({ index: i, symbol: l.symbol, pool: pools[i], fee_bps: 30 })) } : null,
+    // pools: [] because C's entries carry seed provenance (mainnet price source) that local pools don't have.
+    fixture_amm: ammId ? { program_id: ammId, lp_fee_bps: 30, pools: [], local_pools: legs.map((l, i) => ({ index: i, symbol: l.symbol, pool: pools[i] })) } : null,
     hook_program: null,
   }, null, 2));
   mkdirSync(join(APP, "public"), { recursive: true });

@@ -38,6 +38,8 @@ export interface BasketResponse {
 export interface QuoteRedeemResponse {
   as_of_slot: number; shares_raw: string; mode: "in_kind" | "usdc";
   legs: ({ index: number; action: "pay"; gross_raw: string; fee_raw: string; net_raw: string; sell_now_usd: string } |
+    // USDC mode (spec 03 as amended): available legs become pending sales.
+    { index: number; action: "pending_sale"; units: string; gross_raw: string; fee_raw: string; sell_now_usd: string } |
     { index: number; action: "claim"; units: string; reason: string; note: string })[];
   totals: { sell_now_usd_paid_now: string; sell_now_usd_claims: string };
   mock?: string;
@@ -46,7 +48,7 @@ export interface QuoteRedeemResponse {
 export interface QuoteDepositResponse {
   as_of_slot: number;
   usdc_raw: string;
-  legs: { index: number; usdc_raw: string; expected_delta_raw: string; min_out_raw: string; route: string }[];
+  legs: { index: number; usdc_raw: string; expected_delta_raw: string; min_out_raw: string; route: string | { router: string; [k: string]: unknown } }[];
   expected_shares_raw: string;
   packing: number[][];
   mock?: string;

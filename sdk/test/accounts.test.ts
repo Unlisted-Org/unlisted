@@ -48,9 +48,9 @@ describe("account codecs", () => {
     const t: RedemptionTicket = {
       basket: pk(), owner: pk(), nonce: 42n, bump: 250, mode: { kind: "Usdc", minUsdcOut: 123n }, sharesBurned: 5n * 10n ** 8n,
       legs: [
-        { kind: "Paid", amount: 99n }, { kind: "Claim", units: 5n * 10n ** 8n, reason: "Paused" }, { kind: "None" },
+        { kind: "Paid", amount: 99n, received: 98n }, { kind: "Claim", units: 5n * 10n ** 8n, reason: "Paused" }, { kind: "None" },
         { kind: "Claim", units: 0n, reason: "Frozen" }, { kind: "Claim", units: 7n, reason: "PendingSale" },
-        { kind: "Paid", amount: 1n }, { kind: "Paid", amount: 2n }, { kind: "None" },
+        { kind: "Paid", amount: 1n, received: 0n }, { kind: "Paid", amount: 2n, received: 1n }, { kind: "None" },
       ],
       usdcOut: 0n,
     };

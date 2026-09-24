@@ -7,11 +7,11 @@
 // the wallet's token balances from the RPC, the mint's paused flag from the node's jsonParsed,
 // the ticket account decoded after the fact. None checks text that also appears in static copy.
 import { expect, test, Page } from "@playwright/test";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { TOKEN_PROGRAM_ID, openClaims, parseEventsFromLogs } from "@stocklana/sdk";
-import { RunRecord, depositTickets, feeBpsByRpc, fundWallet, issuerCli, loadEnv, mintPausedByRpc, redemptionTickets, tokenAmount, txOk } from "./harness";
+import { BasketClient, TOKEN_PROGRAM_ID, math, openClaims, parseEventsFromLogs, transferFee } from "@stocklana/sdk";
+import { RunRecord, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, mintPausedByRpc, redemptionTickets, tokenAmount, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
@@ -71,7 +71,20 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     const sharesBefore = await tokenAmount(env, owner, shareMint, TOKEN_PROGRAM_ID);
     expect(sharesBefore).toBe(0n);
     await page.getByTestId("tab-inkind").click();
-    await page.getByTestId("inkind-shares").fill("0.02");
+    // Size the in-kind deposit to what the funded wallet holds: 40% of the most its legs can mint.
+    const bc = new BasketClient(new Connection(env.rpc, "confirmed"), { programId: new PublicKey(env.programId), shareMint });
+    const bv = await bc.fetchBasket();
+    let maxShares: bigint | null = null;
+    for (const l of bv.legs) {
+      const bal = await tokenAmount(env, owner, l.mint);
+      const net = bal - transferFee(bal, l.feeNow);
+      const own = math.owned(l.state);
+      const m = (net * (bv.shareSupply + l.state.claimUnits)) / own;
+      maxShares = maxShares === null || m < maxShares ? m : maxShares;
+    }
+    const target = (maxShares! * 4n) / 10n;
+    expect(target).toBeGreaterThan(0n);
+    await page.getByTestId("inkind-shares").fill((Number(target) / 1e9).toFixed(9));
     const expectedShares = await raw(page, "inkind-expected-shares");
     expect(expectedShares).toBeGreaterThan(0n);
     await page.getByTestId("inkind-submit").click();
@@ -90,8 +103,8 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     const usdcBefore = await tokenAmount(env, owner, usdcMint, TOKEN_PROGRAM_ID);
     const sharesBeforeTicket = await tokenAmount(env, owner, shareMint, TOKEN_PROGRAM_ID);
     await page.getByTestId("tab-usdc").click();
-    await page.getByTestId("usdc-amount").fill("10");
-    await expect(page.getByTestId("usdc-quote")).toBeVisible();
+    await page.getByTestId("usdc-amount").fill(process.env.E2E_USDC ?? "10");
+    await expect(page.getByTestId("usdc-quote")).toBeVisible({ timeout: 180_000 }); // the service quotes Jupiter live
     await expect(page.getByTestId("usdc-submit")).toBeEnabled();
     await page.getByTestId("usdc-submit").click();
     const tickSigs = await lastTx(page);
@@ -118,9 +131,9 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     const sharesAfterAll = sharesAfterTicket;
 
     // ---------------------------------------------------------------- 2. issuer pauses one leg
-    const pauseSig = issuerCli(env, ["pause", pausedMint.toBase58(), "--pause-authority", env.issuerKey]);
+    const pauseSigs = issuerAction(env, "pause", PAUSE_LEG);
     expect(await mintPausedByRpc(env, pausedMint)).toBe(true);
-    rec.add({ step: `issuer pauses ${PAUSE_LEG}`, by: "fixture issuer (harness)", signatures: [pauseSig] });
+    rec.add({ step: `issuer pauses ${PAUSE_LEG}`, by: "fixture issuer (harness)", signatures: pauseSigs });
     await page.reload();
     await page.getByTestId("connect-Stocklana Test Wallet").click();
     await expect(page.getByTestId(`banner-paused-${PAUSE_LEG}`)).toBeVisible();
@@ -164,9 +177,9 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     await shot("1-claim-open-page");
 
     // ---------------------------------------------------------------- 4. issuer resumes; settle
-    const resumeSig = issuerCli(env, ["resume", pausedMint.toBase58(), "--pause-authority", env.issuerKey]);
+    const resumeSigs = issuerAction(env, "resume", PAUSE_LEG);
     expect(await mintPausedByRpc(env, pausedMint)).toBe(false);
-    rec.add({ step: `issuer resumes ${PAUSE_LEG}`, by: "fixture issuer (harness)", signatures: [resumeSig] });
+    rec.add({ step: `issuer resumes ${PAUSE_LEG}`, by: "fixture issuer (harness)", signatures: resumeSigs });
     await page.reload();
     await page.getByTestId("connect-Stocklana Test Wallet").click();
     await expect(page.getByTestId(`leg-availability-${PAUSE_LEG}`)).toHaveText("available");
@@ -184,10 +197,11 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     // with the fee rate read independently from the node's jsonParsed.
     const bps = BigInt(await feeBpsByRpc(env, pausedMint));
     expect(legAfter - legBefore).toBe(estimateGross - (estimateGross * bps + 9_999n) / 10_000n);
-    // The ClaimSettled event the app lists carries the program's measured receipt.
+    // The ClaimSettled event the app lists: gross = the app's gross estimate, received = the wallet's delta.
     await expect(page.getByTestId(`settled-${PAUSE_LEG}`)).toBeVisible();
-    const settledAmount = await raw(page, `settled-amount-${PAUSE_LEG}`);
+    const settledAmount = await raw(page, `settled-received-${PAUSE_LEG}`);
     expect(settledAmount).toBe(legAfter - legBefore);
+    expect(await raw(page, `settled-gross-${PAUSE_LEG}`)).toBe(estimateGross);
     const after = await redemptionTickets(env, owner);
     const open = after.flatMap((t) => openClaims(t.ticket));
     expect(open).toEqual([]);

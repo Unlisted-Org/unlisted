@@ -9,7 +9,9 @@
     "preview": "vite preview --port 5183 --strictPort",
     "typecheck": "tsc --noEmit",
     "test-wallet": "esbuild e2e/test-wallet/index.ts --bundle --format=iife --platform=browser --outfile=e2e/.build/test-wallet.js --define:global=globalThis",
-    "e2e": "npm run test-wallet && playwright test"
+    "e2e": "npm run test-wallet && playwright test",
+    "local:setup": "tsx e2e/local/setup.ts",
+    "local:stop": "tsx e2e/local/stop.ts"
   },
   "dependencies": {
     "@noble/hashes": "^2.4.0",

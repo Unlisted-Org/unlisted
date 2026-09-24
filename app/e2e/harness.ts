@@ -59,19 +59,43 @@ export class RunRecord {
   }
 }
 
-/** Fund the fresh wallet: SOL, plus `amount` raw of every leg minted by the fixture issuer. */
+/** Agent C's worktree: on devnet its scripts perform every fixture-issuer step (C owns that key). */
+const OPS_WORKTREE = process.env.E2E_OPS_WORKTREE ?? "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/ops";
+
+/** Runs one of C's scripts from C's worktree and returns its final JSON block. Signs with C's key, not ours. */
+function opsScript(args: string[]): any {
+  const out = execFileSync("node", args, { cwd: OPS_WORKTREE, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 600_000 });
+  const start = out.lastIndexOf("\n{");
+  const json = JSON.parse(start >= 0 ? out.slice(start + 1) : out.slice(out.indexOf("{")));
+  return { json, out };
+}
+
+/**
+ * Fund the fresh wallet with SOL, every leg and fixture USDC.
+ *  - local: this harness's own local issuer key (created by e2e/local/setup.ts);
+ *  - devnet: Agent C's scripts/fixtures/fund-wallet.ts, run in C's worktree (C's key signs).
+ */
 export async function fundWallet(env: E2eEnv, wallet: PublicKey, amount: bigint, rec: RunRecord) {
   const c = conn(env);
-  const issuer = loadKey(env.issuerKey);
-  if (env.cluster === "localnet") {
-    const s = await c.requestAirdrop(wallet, 5 * LAMPORTS_PER_SOL);
-    await c.confirmTransaction(s, "confirmed");
-    rec.add({ step: "airdrop 5 SOL to the fresh wallet (local faucet)", by: "funder (harness)", signatures: [s] });
-  } else {
-    const funder = loadKey(env.funderKey!);
-    const s = await sendAndConfirmTransaction(c, new Transaction().add(SystemProgram.transfer({ fromPubkey: funder.publicKey, toPubkey: wallet, lamports: 0.2 * LAMPORTS_PER_SOL })), [funder]);
-    rec.add({ step: "0.2 SOL to the fresh wallet", by: "funder (harness)", signatures: [s] });
+  if (env.cluster === "devnet") {
+    let sol = "0.05";
+    if (env.funderKey) {
+      const funder = loadKey(env.funderKey);
+      if ((await c.getBalance(funder.publicKey)) > 0.2 * LAMPORTS_PER_SOL) {
+        const s = await sendAndConfirmTransaction(c, new Transaction().add(SystemProgram.transfer({ fromPubkey: funder.publicKey, toPubkey: wallet, lamports: 0.1 * LAMPORTS_PER_SOL })), [funder]);
+        rec.add({ step: "0.1 SOL to the fresh wallet from the app key", by: "funder (harness)", signatures: [s] });
+        sol = "0";
+      }
+    }
+    const { json } = opsScript(["scripts/fixtures/fund-wallet.ts", "--cluster", "devnet", "--wallet", wallet.toBase58(), "--usdc", "50", "--leg-usd", "20", "--sol", sol, "--actor", "app-e2e"]);
+    rec.add({ step: `fund the fresh wallet: 50 fixture USDC, ~$20 of each leg${sol !== "0" ? `, ${sol} SOL` : ""} (Agent C's fund-wallet.ts)`, by: "fixture issuer (harness)",
+      signatures: json.signatures, note: `legs: ${(json.legs ?? []).join(", ")}` });
+    return;
   }
+  const issuer = loadKey(env.issuerKey);
+  const s = await c.requestAirdrop(wallet, 5 * LAMPORTS_PER_SOL);
+  await c.confirmTransaction(s, "confirmed");
+  rec.add({ step: "airdrop 5 SOL to the fresh wallet (local faucet)", by: "funder (harness)", signatures: [s] });
   const T22 = sdk.TOKEN_2022_PROGRAM_ID;
   const sigs: string[] = [];
   for (let i = 0; i < env.legs.length; i += 4) {
@@ -92,7 +116,21 @@ export async function fundWallet(env: E2eEnv, wallet: PublicKey, amount: bigint,
   rec.add({ step: `mint ${amount} raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet`, by: "fixture issuer (harness)", signatures: sigs });
 }
 
-/** Issuer action through the spl-token CLI (pause / resume). Returns the signature. */
+/**
+ * Issuer pause / resume of one leg's mint. Returns the signatures.
+ *  - local: spl-token CLI with the local issuer key;
+ *  - devnet: Agent C's scripts/scenarios/issuer.ts in C's worktree (records in fixtures/scenarios/pause-resume.json).
+ */
+export function issuerAction(env: E2eEnv, action: "pause" | "resume", symbol: string): string[] {
+  if (env.cluster === "devnet") {
+    const { json } = opsScript(["scripts/scenarios/issuer.ts", action, "--cluster", "devnet", "--symbol", symbol, "--actor", "app-e2e"]);
+    return (json.steps as string[]).map((s) => /: (\w{60,}) @/.exec(s)?.[1]).filter(Boolean) as string[];
+  }
+  const mint = env.legs.find((l) => l.symbol === symbol)!.mint;
+  return [issuerCli(env, [action, mint, "--pause-authority", env.issuerKey])];
+}
+
+/** Local issuer action through the spl-token CLI. Returns the signature. */
 export function issuerCli(env: E2eEnv, args: string[]): string {
   const out = execFileSync("spl-token", [...args, "-u", env.rpc, "--fee-payer", env.issuerKey, "--output", "json"], { encoding: "utf8" });
   const j = JSON.parse(out);

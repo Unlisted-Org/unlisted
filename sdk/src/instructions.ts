@@ -113,14 +113,11 @@ function tokenPrograms(): Named[] {
 export function bootstrap(p: {
   programId: PublicKey; depositor: PublicKey; basket: PublicKey; shareMint: PublicKey; depositorShareAta: PublicKey;
   legs: LegAccounts[]; gross: bigint[];
-  /** IDL c141837 adds `initial_shares: u64`, not in spec 02 (docs/reports/2026-09-25-app-idl-diff.md #2). Pass INITIAL_SHARES. */
-  initialShares: bigint;
 }): BuiltIx {
   const named = [acc("depositor", p.depositor, true, true), acc("basket", p.basket, true), acc("share_mint", p.shareMint, true),
     acc("depositor_share_ata", p.depositorShareAta, true), ...tokenPrograms()];
   const w = new Writer();
   w.vec(p.gross, (g) => w.u64(g));
-  w.u64(p.initialShares);
   return build(p.programId, "bootstrap", named, w, legsRemaining(p.legs, true));
 }
 

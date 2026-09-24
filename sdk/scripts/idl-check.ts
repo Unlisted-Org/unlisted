@@ -19,7 +19,7 @@ const SPEC_ARGS: Record<string, [string, string][]> = {
   set_deposits_enabled: [["enabled", "bool"]],
   flag_listing: [["leg", "u8"], ["convert_after", "i64"], ["deadline", "i64"]],
   cancel_listing: [["leg", "u8"]],
-  bootstrap: [["gross", "vec<u64>"], ["initial_shares", "u64"]],
+  bootstrap: [["gross", "vec<u64>"]],
   deposit_in_kind: [["gross", "vec<u64>"], ["min_shares", "u64"]],
   open_deposit_ticket: [["nonce", "u64"], ["usdc_in", "u64"], ["expiry_slots", "u64"]],
   ticket_swap_leg: [["leg", "u8"], ["usdc_amount", "u64"], ["min_out", "u64"], ["route_data", "bytes"]],
@@ -58,7 +58,7 @@ const built: Record<string, string[]> = {
   set_deposits_enabled: ix.setDepositsEnabled({ ...P, authority: k(), basket: k(), enabled: true }).named.map((n) => n.name),
   flag_listing: ix.flagListing({ ...P, authority: k(), basket: k(), leg: 0, convertAfter: 0n, deadline: 0n }).named.map((n) => n.name),
   cancel_listing: ix.cancelListing({ ...P, authority: k(), basket: k(), leg: 0 }).named.map((n) => n.name),
-  bootstrap: ix.bootstrap({ ...P, depositor: k(), basket: k(), shareMint: k(), depositorShareAta: k(), legs, gross: [1n], initialShares: 1n }).named.map((n) => n.name),
+  bootstrap: ix.bootstrap({ ...P, depositor: k(), basket: k(), shareMint: k(), depositorShareAta: k(), legs, gross: [1n] }).named.map((n) => n.name),
   deposit_in_kind: ix.depositInKind({ ...P, depositor: k(), basket: k(), shareMint: k(), depositorShareAta: k(), legs, gross: [1n], minShares: 1n }).named.map((n) => n.name),
   open_deposit_ticket: ix.openDepositTicket({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), ownerUsdc: k(), usdcMint: k(), nonce: 1n, usdcIn: 1n, expirySlots: 1n, legs }).named.map((n) => n.name),
   ticket_swap_leg: ix.ticketSwapLeg({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), legMint: k(), legVault: k(), routerProgram: k(), routeAccounts: [], leg: 0, usdcAmount: 1n, minOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
@@ -78,7 +78,7 @@ const built: Record<string, string[]> = {
 function loadIdl(): any {
   const p = process.argv[2];
   if (p) return JSON.parse(readFileSync(p, "utf8"));
-  return JSON.parse(execSync("git -C /Users/jagadeesh/1nonly/grants/stocklana show program:programs/basket/idl/basket.json", { encoding: "utf8" }));
+  return JSON.parse(execSync(`git -C /Users/jagadeesh/1nonly/grants/stocklana show ${process.env.IDL_REF ?? "program"}:programs/basket/idl/basket.json`, { encoding: "utf8" }));
 }
 
 const idl = loadIdl();

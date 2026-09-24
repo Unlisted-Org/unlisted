@@ -11,7 +11,7 @@ import { useBasket, useEvents, usePosition } from "./state";
 import { HttpValuation, MockValuation, Valuation } from "./valuation/api";
 import type { BasketResponse, EventsResponse, QuoteDepositResponse } from "./valuation/types";
 import {
-  Banners, BasisStrip, ClaimRow, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
+  Banners, BasisStrip, ClaimRow, Guard, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
 } from "./components/Panels";
 import { DepositPanel, RedeemPanel } from "./components/Actions";
 import * as copy from "./copy";
@@ -156,15 +156,16 @@ export function App({ config }: { config: AppConfig }) {
             <ul>{copy.WHAT_THIS_BASKET_DOES.map((t) => <li key={t}>{t}</li>)}</ul>
             <p><b>{copy.NOT_PROTECTION}</b></p>
           </section>
-          <PricePanel api={api} error={apiErr} />
+          <Guard name="Price panel"><PricePanel api={api} error={apiErr} /></Guard>
           {wallet && !valuation.isMock && pos && pos.shares > 0n && (
-            <PricePanel api={apiPos} error={apiPosErr} testid="position-price-panel"
-              title={`Your ${fmtShares(pos.shares)} shares, valued at your size: three sources`} />
+            <Guard name="Position value"><PricePanel api={apiPos} error={apiPosErr} testid="position-price-panel"
+              title={`Your ${fmtShares(pos.shares)} shares, valued at your size: three sources`} /></Guard>
           )}
           <LegsTable v={view} pos={pos} api={api} />
           <div className="two">
             <DepositPanel v={view} pos={pos} busy={busy} routerReady={routerReady} quoteDeposit={(u) => valuation.quoteDeposit(view, u)} onInKind={onInKind} onUsdc={onUsdc} />
-            <RedeemPanel v={view} pos={pos} busy={busy} usdcReady={config.router.kind === "none" ? "USDC redemption settles through the devnet router, not configured on this cluster yet." : null} onRedeem={onRedeem} />
+            <RedeemPanel v={view} pos={pos} busy={busy} usdcReady={config.router.kind === "none" ? "USDC redemption settles through the devnet router, not configured on this cluster yet." : null} onRedeem={onRedeem}
+              quoteRedeem={valuation.isMock ? null : (s, m) => valuation.quoteRedeem(view, s, m)} />
           </div>
           <ClaimsList v={view} pos={pos} onSettle={onSettle} busy={busy} usdcRouter={config.router.kind === "fixture_amm"} rows={events.rows} />
           <RedemptionHistory v={view} pos={pos} />

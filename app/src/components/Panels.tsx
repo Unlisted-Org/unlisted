@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Component, ReactNode, useEffect, useMemo, useState } from "react";
 import { BasketView, CONSTITUENTS, math, openClaims, RedemptionTicket } from "@stocklana/sdk";
 import type { BasketResponse, EventsResponse } from "../valuation/types";
 import { fmtAge, fmtBps, fmtRaw, fmtShares, fmtUsd, pct, short } from "../format";
@@ -154,6 +154,8 @@ export function LegsTable({ v, pos, api }: { v: BasketView; pos: Position | null
 export function PricePanel({ api, error, title = "Value of one share: three sources, never one price", testid = "price-panel" }: { api: BasketResponse | null; error: string | null; title?: string; testid?: string }) {
   if (error) return <section data-testid={testid}><h2>{title}</h2><div className="banner warn">Valuation API unavailable: {error}. No value is shown rather than a guessed one.</div></section>;
   if (!api) return <section data-testid={testid}><h2>{title}</h2><p className="muted">Loading…</p></section>;
+  if (!api.values?.sell_now || !api.values?.last_trade || !api.values?.reference)
+    return <section data-testid={testid}><h2>{title}</h2><div className="banner warn">The valuation API returned no values for this view{(api as any).values_error ? `: ${(api as any).values_error}` : ""}. No value is shown rather than a guessed one.</div></section>;
   const v = api.values;
   const ageOf = (iso?: string) => (iso ? (Date.now() - Date.parse(iso)) / 1000 : null);
   const refAge = v.reference.legs.length ? Math.max(...v.reference.legs.map((l) => ageOf(l.fetched_at) ?? 0)) : null;
@@ -272,12 +274,13 @@ export function ClaimsList({ v, pos, onSettle, busy, usdcRouter, rows }: { v: Ba
         <>
           <h3>Settled claims (from ClaimSettled events on chain)</h3>
           <table data-testid="settled-claims">
-            <thead><tr><th>Leg</th><th>Units</th><th>You received (measured by the program)</th><th>Slot</th><th>Signature</th></tr></thead>
+            <thead><tr><th>Leg</th><th>Units</th><th>You received</th><th>Gross from vault</th><th>Slot</th><th>Signature</th></tr></thead>
             <tbody>
               {settled.map(({ r, e }) => (
                 <tr key={`${r.signature}-${e.leg}`} data-testid={`settled-${v.legs[e.leg]?.symbol}`}>
                   <td><b>{v.legs[e.leg]?.symbol}</b></td><td>{fmtShares(e.units)}</td>
-                  <td data-testid={`settled-amount-${v.legs[e.leg]?.symbol}`} data-raw={e.amount.toString()}>{fmtRaw(e.amount)}</td>
+                  <td data-testid={`settled-received-${v.legs[e.leg]?.symbol}`} data-raw={e.received.toString()}>{fmtRaw(e.received)}</td>
+                  <td className="muted" data-testid={`settled-gross-${v.legs[e.leg]?.symbol}`} data-raw={e.amount.toString()}>{fmtRaw(e.amount)}</td>
                   <td>{r.slot}</td><td className="mono">{r.signature}</td>
                 </tr>
               ))}
@@ -306,7 +309,7 @@ function TicketCard({ v, address, t }: { v: BasketView; address: string; t: Rede
       <div className="legchips">
         {t.legs.slice(0, v.legs.length).map((l, i) => (
           <span key={i} className={`chip ${l.kind === "Claim" && l.units > 0n ? "claim" : l.kind === "Paid" ? "paid" : ""}`} data-testid={`redemption-leg-${v.legs[i].symbol}`}>
-            {v.legs[i].symbol}: {l.kind === "Paid" ? `paid ${fmtRaw(l.amount)}` : l.kind === "Claim" ? (l.units > 0n ? `claim ${fmtShares(l.units)} (${REASON_TEXT[l.reason]})` : "claim settled") : "—"}
+            {v.legs[i].symbol}: {l.kind === "Paid" ? `received ${fmtRaw(l.received)} (gross ${fmtRaw(l.amount)})` : l.kind === "Claim" ? (l.units > 0n ? `claim ${fmtShares(l.units)} (${REASON_TEXT[l.reason]})` : "claim settled") : "—"}
           </span>
         ))}
       </div>
@@ -330,7 +333,7 @@ export function EventsPanel({ v, rows }: { v: BasketView; rows: EventRow[] }) {
               {e.name === "ShortfallObserved" && <>{sym(e.leg)}: {fmtRaw(e.expected)} → {fmtRaw(e.actual)} (−{pct(e.expected - e.actual, e.expected)}, shared pro rata)</>}
               {e.name === "SurplusObserved" && <>{sym(e.leg)}: {fmtRaw(e.expected)} → {fmtRaw(e.actual)} (accrues to holders and claims)</>}
               {e.name === "ClaimCreated" && <>{sym(e.leg)}: {fmtShares(e.units)} units, {e.reason}</>}
-              {e.name === "ClaimSettled" && <>{sym(e.leg)}: {fmtShares(e.units)} units paid {fmtRaw(e.amount)}</>}
+              {e.name === "ClaimSettled" && <>{sym(e.leg)}: {fmtShares(e.units)} units, owner received {fmtRaw(e.received)} (gross {fmtRaw(e.amount)} from the vault)</>}
               {e.name === "Minted" && <>{fmtShares(e.shares)} shares ({e.path})</>}
               {e.name === "Redeemed" && <>{fmtShares(e.shares)} shares, claims on {[...Array(8).keys()].filter((i) => (e.claimsMask >> i) & 1).map(sym).join(", ") || "none"}</>}
               {e.name === "LegListing" && <>{sym(e.leg)} listed; conversion after {new Date(Number(e.convertAfter) * 1000).toISOString()}</>}
@@ -394,3 +397,12 @@ export function useNow(ms = 1000) {
 }
 
 export function useMemoStable<T>(f: () => T, deps: unknown[]): T { return useMemo(f, deps); }
+
+/** Keeps one panel's failure (e.g. an unexpected API shape) from blanking the whole app. */
+export class Guard extends Component<{ name: string; children: ReactNode }, { error: string | null }> {
+  state = { error: null as string | null };
+  static getDerivedStateFromError(e: unknown) { return { error: String((e as any)?.message ?? e) }; }
+  render() {
+    return this.state.error ? <section><div className="banner warn" data-testid="panel-error">{this.props.name} could not render: {this.state.error}</div></section> : this.props.children;
+  }
+}

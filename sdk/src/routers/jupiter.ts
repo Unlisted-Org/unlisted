@@ -57,6 +57,7 @@ export class JupiterRouter implements Router {
       const [, ataKey, owner, mint, system, tokenProgram] = s.accounts;
       // The taker's source account (the ticket escrow, or the basket vault on a sale) already exists.
       if (mint.pubkey === req.inputMint.toBase58()) continue;
+      if (req.existingAccounts?.some((k) => k.toBase58() === ataKey.pubkey)) continue;
       // Not referenced by the swap (e.g. the output ATA once destinationTokenAccount replaced it).
       if (!inSwap.has(ataKey.pubkey)) continue;
       if (!req.payer) throw new RouterError("jupiter: route needs an intermediate token account; pass payer");

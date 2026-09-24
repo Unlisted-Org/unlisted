@@ -246,7 +246,8 @@ export async function planSettleLegUsdc(p: {
 }): Promise<{ tx: VersionedTransaction; route: SwapRoute; minUsdcOut: bigint }> {
   const l = p.v.legs[p.leg];
   const ownerUsdc = ata(p.owner, p.v.basket.usdcMint, p.v.usdcMintProgram);
-  const route = await p.router.route({ inputMint: l.mint, outputMint: p.v.basket.usdcMint, amount: p.sellAmount, taker: p.v.address, destination: ownerUsdc, slippageBps: p.slippageBps });
+  const route = await p.router.route({ inputMint: l.mint, outputMint: p.v.basket.usdcMint, amount: p.sellAmount, taker: p.v.address, destination: ownerUsdc, slippageBps: p.slippageBps,
+    payer: p.owner, existingAccounts: [p.v.basket.usdcReserve] });
   const minUsdcOut = applySlippage(route.quotedOut, p.slippageBps);
   const ixs = [
     ...computeBudget(),

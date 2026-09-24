@@ -15,10 +15,10 @@ const req = {
 };
 
 describe("JupiterRouter", () => {
-  it("builds the /build URL with maxAccounts=30 and excludeDexes=Manifest", () => {
+  it("builds the /build URL with maxAccounts=30 and excludeDexes=Manifest,1DEX", () => {
     const u = new URL(new JupiterRouter().buildUrl(req));
     expect(u.searchParams.get("maxAccounts")).toBe("30");
-    expect(u.searchParams.get("excludeDexes")).toBe("Manifest");
+    expect(u.searchParams.get("excludeDexes")).toBe("Manifest,1DEX");
     expect(u.searchParams.get("taker")).toBe(req.taker.toBase58());
     expect(u.searchParams.get("destinationTokenAccount")).toBe(req.destination.toBase58());
   });

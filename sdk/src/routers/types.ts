@@ -37,6 +37,8 @@ export interface SwapRequest {
   slippageBps: number;
   /** Pays for any intermediate token accounts the route needs (the user). */
   payer?: PublicKey;
+  /** Token accounts known to exist (e.g. the basket's usdc_reserve on a sale): never re-created. */
+  existingAccounts?: PublicKey[];
   /** Ask the router for shared intermediate accounts (spec 02). Jupiter v2 /build currently ignores it. */
   useSharedAccounts?: boolean;
 }
