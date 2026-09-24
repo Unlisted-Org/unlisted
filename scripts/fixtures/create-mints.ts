@@ -36,6 +36,19 @@ const reg: any = existsSync(path) && !flag("force")
   ? readJson(path)
   : { schema: 1, cluster: c, fixture_issuer: issuer, token_2022_program: TOKEN_2022_PROGRAM, legs: [], usdc: null, fixture_amm: null, hook_program: null };
 if (reg.fixture_issuer !== issuer) throw new Error(`registry issuer ${reg.fixture_issuer} != key ${issuer}`);
+// Where the fixture-issuer key lives (outside the repo) and who may use it (spec owner, 2026-09-25).
+reg.fixture_issuer_keypair_path = "~/.config/solana/stocklana/fixture-issuer.json";
+reg.fixture_issuer_policy = {
+  owner: "Agent C (ops)",
+  agent_b_may: ["pause/resume a fixture leg", "fund test wallets with fixture USDC and fixture legs"],
+  everything_else: "issuer scenarios are run by Agent C or Agent A only",
+  scripts: {
+    pause: "node scripts/scenarios/issuer.ts pause --cluster devnet --symbol <SYMBOL>",
+    resume: "node scripts/scenarios/issuer.ts resume --cluster devnet --symbol <SYMBOL>",
+    fund_wallet: "node scripts/fixtures/fund-wallet.ts --cluster devnet --wallet <pubkey> [--usdc 200] [--leg-usd 20] [--sol 0.02]",
+    setup: "npm install in services/valuation (the scripts import @solana/web3.js from there)",
+  },
+};
 
 const save = () => writeJson(path, reg);
 

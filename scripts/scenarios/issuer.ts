@@ -2,6 +2,7 @@
 // target vault, with real signed transactions, and records every step.
 //
 //   node scripts/scenarios/issuer.ts <action> --cluster local|devnet --vault <token account> [options]
+//   node scripts/scenarios/issuer.ts <pause|resume|fee|multiplier|hook-on|hook-off|default-state> --cluster devnet --symbol KALSHI
 //
 //   seize          --amount <raw> | --bps <n>     permanent-delegate BurnChecked from the vault
 //   pause | resume                                PausableExtension on the vault's mint
@@ -149,8 +150,21 @@ async function run() {
   if (!SCENARIO[action]) throw new Error(`unknown action ${action}; see the header of this file`);
   if (action === "standin-vaults") return standinVaults();
 
-  const vault = arg("vault");
-  if (!vault) throw new Error("--vault <token account> is required");
+  // Target: --vault <token account> (any action), or --mint <mint> / --symbol <SYM> for mint-level actions
+  // (pause, resume, fee, multiplier, hook-on/off, default-state). With a mint only, the leg's stand-in
+  // vault (if any) is used just for the before/after probes; the record says so.
+  const MINT_LEVEL = new Set(["pause", "resume", "fee", "multiplier", "hook-on", "hook-off", "default-state"]);
+  let vault = arg("vault");
+  let mintOnly = false;
+  if (!vault) {
+    if (!MINT_LEVEL.has(action)) throw new Error(`${action} needs --vault <token account>`);
+    const sym = arg("symbol");
+    const m = arg("mint") ?? reg.legs.find((l: any) => l.symbol === sym)?.mint;
+    if (!m) throw new Error("give --vault <token account>, or --mint <fixture mint> / --symbol <SYMBOL> for a mint-level action");
+    vault = reg.standin_vaults?.vaults?.find((v: any) => v.mint === m)?.vault;
+    if (!vault) throw new Error(`no stand-in vault for ${m} to probe; pass --vault`);
+    mintOnly = true;
+  }
   const va = (await rpc.account(vault)).value;
   if (!va) throw new Error(`vault ${vault} not found on ${c}`);
   const mint: string = va.data.parsed.info.mint;
@@ -241,7 +255,7 @@ async function run() {
   const failedTx = steps.find((s) => s.err);
   record(scenario, {
     action, actor, note: arg("note") ?? null, at: nowIso(),
-    target: { vault, vault_owner: before.vault?.owner, mint, symbol: leg.symbol, mirror_of: leg.mirror_of, standin: before.vault?.owner === standinOwner().toBase58() },
+    target: mintOnly ? { mint, symbol: leg.symbol, mirror_of: leg.mirror_of, vault: null, probe_vault: vault, note: "mint-level action; probes use the leg's stand-in vault" } : { vault, vault_owner: before.vault?.owner, mint, symbol: leg.symbol, mirror_of: leg.mirror_of, standin: before.vault?.owner === standinOwner().toBase58() },
     steps, before, after, probes, ...extra, ok: !failedTx,
   });
   console.log(JSON.stringify({ action, steps: steps.map((s) => `${s.step}: ${s.signature} @${s.slot}`), probe_before: probes[0].err ?? "ok", probe_after: probes[1].err ?? "ok" }, null, 1));

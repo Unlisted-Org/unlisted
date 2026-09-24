@@ -126,7 +126,7 @@ export interface SellQuote {
  * with Manifest excluded (its quotes ignore the transfer fee: Bonasa-Tech/manifest#735).
  * `taker` must hold the input on mainnet if the route is to be simulated.
  */
-export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: string): Promise<SellQuote> {
+export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: string, opts: { includeManifest?: boolean } = {}): Promise<SellQuote> {
   const q = new URLSearchParams({
     inputMint: mint,
     outputMint: MAINNET_USDC,
@@ -136,6 +136,7 @@ export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: s
     maxAccounts: "30",
     taker,
   });
+  if (opts.includeManifest) q.delete("excludeDexes"); // negative control only (verify/sell-sim.ts)
   const b = await getJson(`${JUP_BUILD}?${q}`);
   return {
     mint,
@@ -146,7 +147,7 @@ export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: s
     price_impact_bps: Math.round(Number(b.priceImpactPct ?? 0) * 100),
     build: b,
     quoted_at: nowIso(),
-    source: "jupiter swap/v2 build excludeDexes=Manifest (mainnet)",
+    source: opts.includeManifest ? "jupiter swap/v2 build, Manifest ALLOWED (negative control)" : "jupiter swap/v2 build excludeDexes=Manifest (mainnet)",
     taker,
   };
 }
