@@ -1,7 +1,7 @@
 // Port of spec/model/test_basket_model.py :: RoundingFavoursVault (4 tests), against the real program.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { replay, fracGe, perShare, big } from "./common.ts";
+import { replay, fracGe, perShare, big, variantOf } from "./common.ts";
 import { tokenAmount } from "../fixtures.ts";
 
 const C = "RoundingFavoursVault";
@@ -54,10 +54,10 @@ function dilutionTest(name: string, opName: string) {
 dilutionTest("test_mint_never_dilutes_existing_holders", "mint_in_kind");
 dilutionTest("test_redeem_never_dilutes_remaining_holders", "redeem_in_kind");
 
-test(`${C}.test_redeem_pays_floor`, () => {
-  const { scenarios } = replay(`${C}.test_redeem_pays_floor`, {}, { modes: ["pause"] });
+test(`${C}.test_redeem_pays_floor (INITIAL_SHARES variant)`, () => {
+  const { scenarios } = replay(variantOf(`${C}.test_redeem_pays_floor`), {}, { modes: ["pause"] });
   const s = scenarios[0][0];
   const redeem = s.scn.ops.find((o: any) => o.op === "redeem_in_kind");
-  assert.equal(redeem.chain.paid["0"], 3n); // floor(1 * 10 / 3), not 4
-  assert.equal(tokenAmount(s.env, s.c.vaults[0]), 7n);
+  assert.equal(redeem.chain.paid["0"], 3n); // floor(1 * 3_333_333_334 / 1e9), not 4
+  assert.equal(tokenAmount(s.env, s.c.vaults[0]), 3_333_333_331n);
 });

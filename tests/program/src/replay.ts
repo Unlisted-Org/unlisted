@@ -7,6 +7,8 @@ import { ROOT, Svm, T22, TOKEN, TxResult, kp } from "./env.ts";
 import { Issuer, LEG_NAMES, Unavail, tokenAmount } from "./fixtures.ts";
 import { BasketClient, INDEX_ONE } from "./basket.ts";
 
+export const INITIAL_SHARES = 1_000_000_000n;
+
 export const VECTORS = path.join(ROOT, "tests/program/vectors/out");
 
 export function loadVector(test: string) {
@@ -193,9 +195,12 @@ export class Scenario {
     switch (op.op) {
       case "bootstrap": {
         const o = this.owner(a.owner);
+        if (big(a.initial_shares) !== INITIAL_SHARES) {
+          this.fail(op, `the model bootstraps ${a.initial_shares} shares; the program always mints INITIAL_SHARES = ${INITIAL_SHARES} (spec 02). Replay the __initial_shares_1e9 variant.`);
+        }
         const gross = a.gross.map(big);
         this.premint(o, gross);
-        const res = c.bootstrap(gross, big(a.initial_shares), o);
+        const res = c.bootstrap(gross, o);
         if (this.expectOutcome(op, res)) {
           if (c.shares(o.publicKey) !== big(op.result)) this.fail(op, "bootstrap shares");
           op.chain = c.shares(o.publicKey);
@@ -257,6 +262,7 @@ export class Scenario {
         const o = this.owner(a.owner);
         const inKind = op.op === "redeem_in_kind";
         const bal = c.mints.map((m) => tokenAmount(this.env, c.userAta(o.publicKey, m)));
+        const vb = c.mints.map((_, i) => c.balance(i));
         const usdc0 = tokenAmount(this.env, c.usdcAta(o.publicKey));
         const { res, ticket } = c.redeem(o, big(a.shares), inKind ? "InKind" : { usdc: 0n });
         if (!this.expectOutcome(op, res)) return;
@@ -277,7 +283,8 @@ export class Scenario {
             const got = tokenAmount(this.env, c.userAta(o.publicKey, c.mints[i])) - bal[i];
             if (got !== big(op.result.paid[String(i)])) this.fail(op, `leg ${i} paid: model ${op.result.paid[String(i)]} chain ${got}`);
             op.chain.paid[String(i)] = got;
-            if (!tl.Paid || big(tl.Paid.amount) !== got) this.fail(op, `leg ${i} ticket record ${JSON.stringify(tl)}`);
+            // Paid.amount = gross debited from the vault; Paid.received = the owner's measured net.
+            if (!tl.Paid || big(tl.Paid.received) !== got || big(tl.Paid.amount) !== vb[i] - c.balance(i)) this.fail(op, `leg ${i} ticket record ${JSON.stringify(tl)}`);
           }
         }
         if (inKind && op.result.paid.usdc !== undefined) {
@@ -295,10 +302,15 @@ export class Scenario {
         // Paused/Hook/Frozen claims are settled by a third party (permissionless); PendingSale only by the owner.
         const cranker = pendingSale ? o : this.env.payer;
         const before = tokenAmount(this.env, c.userAta(o.publicKey, c.mints[cl.leg]));
+        const vb = c.balance(cl.leg);
         const res = c.settleClaim(cranker, cl.ticket, o.publicKey, cl.leg);
         if (this.expectOutcome(op, res)) {
           const got = tokenAmount(this.env, c.userAta(o.publicKey, c.mints[cl.leg])) - before;
           if (got !== big(op.result)) this.fail(op, `claim paid: model ${op.result} chain ${got}`);
+          const ev = res.events.find((e) => e.name === "ClaimSettled");
+          const tl = c.redemption(cl.ticket).legs[cl.leg];
+          if (!ev || big(ev.data.received) !== got || big(ev.data.amount) !== vb - c.balance(cl.leg)) this.fail(op, "ClaimSettled amount/received");
+          if (!tl.Paid || big(tl.Paid.received) !== got || big(tl.Paid.amount) !== vb - c.balance(cl.leg)) this.fail(op, "ticket Paid amount/received");
           op.chain = got;
           this.compareEvents(op, res);
         }

@@ -99,7 +99,8 @@ pub enum RedeemMode {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Default, PartialEq, Eq, InitSpace)]
 pub enum TicketLeg {
-    Paid { amount: u64 },
+    /// amount = gross debited from the vault (the model's floor value); received = owner's measured net.
+    Paid { amount: u64, received: u64 },
     Claim { units: u64, reason: ClaimReason },
     #[default]
     None,

@@ -1,7 +1,7 @@
 // Port of IpoRule (3 tests).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { replay, fracGe, perShare, big } from "./common.ts";
+import { replay, fracGe, perShare, big, variantOf } from "./common.ts";
 
 const C = "IpoRule";
 
@@ -45,8 +45,8 @@ test(`${C}.test_conversion_waits_for_open_claims`, () => {
   }
 });
 
-test(`${C}.test_redeem_during_conversion_gets_pro_rata_usdc`, () => {
-  const { scenarios } = replay(`${C}.test_redeem_during_conversion_gets_pro_rata_usdc`, {}, { modes: ["pause"] });
+test(`${C}.test_redeem_during_conversion_gets_pro_rata_usdc (INITIAL_SHARES variant)`, () => {
+  const { scenarios } = replay(variantOf(`${C}.test_redeem_during_conversion_gets_pro_rata_usdc`), {}, { modes: ["pause"] });
   const r = scenarios[0][0].scn.ops.find((o: any) => o.op === "redeem_in_kind").chain;
   assert.equal(r.paid.usdc, (2n * 10n ** 12n * 2n) / 2n);
   assert.equal(r.paid["0"], undefined);

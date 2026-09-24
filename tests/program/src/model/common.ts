@@ -33,6 +33,18 @@ export function replay(test: string, hooks: Hooks = {}, opts: { pairs?: boolean;
 }
 
 export const big = (x: any) => BigInt(x.toString());
+
+/**
+ * Four model tests bootstrap with a share count other than INITIAL_SHARES, which the program (spec 02) cannot do.
+ * Check the original passes in the model and really needs the variant, then the caller replays the variant.
+ */
+export function variantOf(test: string): string {
+  const v = loadVector(test);
+  assert.equal(v.model_passed, true);
+  const boot = v.scenarios[0].ops.find((o: any) => o.op === "bootstrap");
+  assert.notEqual(boot.args.initial_shares, "1000000000", `${test} does not need a variant`);
+  return `${test}__initial_shares_1e9`;
+}
 export const absDiff = (a: bigint, b: bigint) => (a > b ? a - b : b - a);
 /** a/b >= c/d for non-negative rationals (denominators > 0). */
 export const fracGe = (a: bigint, b: bigint, c: bigint, d: bigint) => a * d >= c * b;

@@ -18,7 +18,7 @@ export function world(label: string, opts: { fee?: number; bootstrap?: bigint; a
   for (const u of [seed, alice, bob]) c.setupUser(u);
   const boot = opts.bootstrap ?? 10n ** 12n;
   for (const m of mints) iss.mintTo(m, c.userAta(seed.publicKey, m), boot);
-  c.must(c.bootstrap(mints.map(() => boot), 10n ** 9n), "bootstrap");
+  c.must(c.bootstrap(mints.map(() => boot)), "bootstrap");
   const ag = opts.aliceGross ?? 5n * 10n ** 11n;
   if (ag > 0n) {
     for (const m of mints) iss.mintTo(m, c.userAta(alice.publicKey, m), ag);

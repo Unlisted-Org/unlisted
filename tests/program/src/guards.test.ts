@@ -87,10 +87,11 @@ test("bootstrap: authority only, once; deposits need a bootstrapped basket", () 
   const { client: c } = BasketClient.create(env, iss, mints, usdc, { label: "g5b", authority: seed });
   for (const u of [seed, mallory]) { c.setupUser(u); for (const m of mints) iss.mintTo(m, c.userAta(u.publicKey, m), 10n ** 12n); }
   assert.equal(c.depositInKind(mallory, mints.map(() => 10n ** 9n)).error, "NotBootstrapped");
-  assert.equal(c.bootstrap(mints.map(() => 1n), 10n ** 9n, mallory).error, "Unauthorized");
-  assert.equal(c.bootstrap(mints.map(() => 1n).slice(0, 6), 10n ** 9n).error, "MathOverflow", "Vec length must equal n_legs");
-  assert.ok(c.bootstrap(mints.map(() => 10n ** 9n), 10n ** 9n).ok);
-  assert.equal(c.bootstrap(mints.map(() => 10n ** 9n), 10n ** 9n).error, "AlreadyBootstrapped");
+  assert.equal(c.bootstrap(mints.map(() => 1n), mallory).error, "Unauthorized");
+  assert.equal(c.bootstrap(mints.map(() => 1n).slice(0, 6)).error, "MathOverflow", "Vec length must equal n_legs");
+  assert.ok(c.bootstrap(mints.map(() => 10n ** 9n)).ok);
+  assert.equal(c.shares(seed.publicKey), 1_000_000_000n, "bootstrap mints INITIAL_SHARES");
+  assert.equal(c.bootstrap(mints.map(() => 10n ** 9n)).error, "AlreadyBootstrapped");
 });
 
 test("initialize_basket refuses a mint without the PreStocks extension set, and one with a hook set", () => {

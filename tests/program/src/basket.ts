@@ -161,9 +161,10 @@ export class BasketClient {
     return this.activeLegs().flatMap((i) => [r(this.mints[i]), writable ? w(this.vaults[i]) : r(this.vaults[i])]);
   }
 
-  bootstrap(gross: bigint[], initialShares: bigint, depositor = this.authority) {
+  /** Always mints INITIAL_SHARES (spec 02). */
+  bootstrap(gross: bigint[], depositor = this.authority) {
     return this.send([ix("bootstrap", { depositor: depositor.publicKey, basket: this.basket, share_mint: this.shareMint,
-      depositor_share_ata: this.shareAta(depositor.publicKey) }, { gross: gross.map(bn), initial_shares: bn(initialShares) },
+      depositor_share_ata: this.shareAta(depositor.publicKey) }, { gross: gross.map(bn) },
     this.legsKinded(depositor.publicKey))], [depositor]);
   }
 

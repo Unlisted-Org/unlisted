@@ -2,7 +2,7 @@
 // on-chain payouts are compared with each other, not only with the model.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { replay, absDiff, big, MODES } from "./common.ts";
+import { replay, absDiff, big, MODES, variantOf } from "./common.ts";
 
 const C = "PartialRedemption";
 
@@ -45,9 +45,10 @@ test(`${C}.test_other_holders_unaffected_while_claim_open`, () => {
   assert.ok(checked > 400 * 7);
 });
 
-test(`${C}.test_claim_shares_a_later_seizure_pro_rata`, () => {
+test(`${C}.test_claim_shares_a_later_seizure_pro_rata (INITIAL_SHARES variant)`, () => {
+  const name = variantOf(`${C}.test_claim_shares_a_later_seizure_pro_rata`);
   for (const mode of MODES) {
-    const { scenarios } = replay(`${C}.test_claim_shares_a_later_seizure_pro_rata`, {}, { modes: [mode] });
+    const { scenarios } = replay(name, {}, { modes: [mode] });
     const s = scenarios[0][0];
     assert.equal(s.scn.ops.find((o: any) => o.op === "settle_claim").chain, 5n * 10n ** 11n, `${mode}: claimant takes half the loss`);
     assert.equal(s.holderClaim("seed", 3), 5n * 10n ** 11n);

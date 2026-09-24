@@ -5,7 +5,8 @@ recording subclass. Every top-level operation a test performs on a basket (and e
 leg's `available` / `fee_bps`) is written out with the model's result and full post-state, so the
 on-chain program can replay the same operations and be compared to the unit.
 
-Output: tests/program/vectors/out/<TestClass>.<test_name>.json  (one file per model test)
+Output: tests/program/vectors/out/<TestClass>.<test_name>.json  (one file per model test, plus the four
+        INITIAL_SHARES variants from variants_initial_shares.py, named ...__initial_shares_1e9)
         tests/program/vectors/out/summary.json                   (test -> scenarios, ops, and pass/fail)
 Run:    python3 tests/program/vectors/gen_vectors.py
 """
@@ -184,13 +185,22 @@ for _name in ("bootstrap", "mint_in_kind", "open_ticket", "ticket_leg_lands", "f
 def main():
     os.makedirs(OUT, exist_ok=True)
     tbm.Basket = RecBasket  # the tests construct baskets through this name
+    sys.path.insert(0, HERE)
+    import variants_initial_shares as var
     loader = unittest.TestLoader()
-    suite = loader.loadTestsFromModule(tbm)
+    suite = unittest.TestSuite([loader.loadTestsFromModule(tbm), loader.loadTestsFromModule(var)])
     summary = {}
     global _current
-    for group in suite:
-        for test in group:
-            name = test.id().split(".", 1)[1]
+    def flat(x):
+        if isinstance(x, unittest.TestSuite):
+            for y in x:
+                yield from flat(y)
+        else:
+            yield x
+
+    for test in flat(suite):
+        if True:
+            name = test.id().split(".", 1)[1]  # Class.test_name (variants: ...__initial_shares_1e9)
             _current = []
             res = unittest.TestResult()
             test.run(res)
@@ -205,7 +215,7 @@ def main():
                     print(tb)
     with open(os.path.join(OUT, "summary.json"), "w") as f:
         json.dump(summary, f, indent=1, sort_keys=True)
-    if not all(v["model_passed"] for v in summary.values()) or len(summary) != 17:
+    if not all(v["model_passed"] for v in summary.values()) or len(summary) != 17 + 4:
         sys.exit(1)
 
 

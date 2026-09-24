@@ -54,6 +54,8 @@ test("one leg paused mid-redemption: six legs paid now, the paused leg becomes a
   assert.equal(tokenAmount(w.env, c.userAta(alice.publicKey, c.mints[2])) - before, expectPaid[2]);
   assert.equal(c.legs()[2].claimUnits, 0n);
   assert.equal(st.events[0].name, "ClaimSettled");
+  assert.equal(BigInt(st.events[0].data.amount.toString()), owed, "amount = gross debited from the vault");
+  assert.equal(BigInt(st.events[0].data.received.toString()), expectPaid[2], "received = measured net of the fee");
   assert.equal(c.settleClaim(cranker, ticket, alice.publicKey, 2).error, "NoClaim", "a claim settles once");
   assert.ok(c.closeRedemption(alice, ticket).ok);
 });

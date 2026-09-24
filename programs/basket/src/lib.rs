@@ -287,15 +287,11 @@ pub mod basket {
 
     // ------------------------------------------------------------ mint
 
-    /// Authority-only, once. `initial_shares` is an addition to spec 02 (reported); clients pass INITIAL_SHARES.
-    pub fn bootstrap<'info>(
-        ctx: Context<'_, '_, 'info, 'info, Deposit<'info>>,
-        gross: Vec<u64>,
-        initial_shares: u64,
-    ) -> Result<()> {
+    /// Authority-only, once, into an empty basket: mints exactly INITIAL_SHARES.
+    pub fn bootstrap<'info>(ctx: Context<'_, '_, 'info, 'info, Deposit<'info>>, gross: Vec<u64>) -> Result<()> {
+        let initial_shares = INITIAL_SHARES;
         require_keys_eq!(ctx.accounts.depositor.key(), ctx.accounts.basket.authority, E::Unauthorized);
         require!(!ctx.accounts.basket.bootstrapped, E::AlreadyBootstrapped);
-        require!(initial_shares > 0, E::InvalidArgument);
         let (supply, _) = tok::mint_supply_decimals(&ctx.accounts.share_mint)?;
         require!(supply == 0, E::AlreadyBootstrapped);
         let (deltas, _, mask) = deposit_legs(ctx.accounts, ctx.remaining_accounts, &gross)?;
@@ -532,7 +528,7 @@ pub mod basket {
                 let received = tok::amount(user)?.checked_sub(u0).ok_or(E::MathOverflow)?;
                 b.legs[i].accounted = tok::amount(&s[1])?;
                 paid[i] = received;
-                tlegs[i] = TicketLeg::Paid { amount: received };
+                tlegs[i] = TicketLeg::Paid { amount: out, received };
             } else {
                 let reason = why.unwrap_or(ClaimReason::PendingSale);
                 let l = &mut b.legs[i];
@@ -606,8 +602,8 @@ pub mod basket {
         let after = tok::amount(&a.leg_vault)?;
         let (owner, tk) = (a.ticket.owner, a.ticket.key());
         ctx.accounts.basket.legs[i].accounted = after;
-        ctx.accounts.ticket.legs[i] = TicketLeg::Paid { amount: received };
-        emit!(ClaimSettled { owner, ticket: tk, leg, units, amount: received });
+        ctx.accounts.ticket.legs[i] = TicketLeg::Paid { amount: out, received };
+        emit!(ClaimSettled { owner, ticket: tk, leg, units, amount: out, received });
         Ok(())
     }
 
@@ -648,9 +644,10 @@ pub mod basket {
         let (owner, tk) = (a.ticket.owner, a.ticket.key());
         ctx.accounts.basket.legs[i].accounted = after;
         let t = &mut ctx.accounts.ticket;
-        t.legs[i] = TicketLeg::Paid { amount: spent };
+        // amount = leg units debited from the vault; received = the owner's measured USDC.
+        t.legs[i] = TicketLeg::Paid { amount: spent, received: got };
         t.usdc_out = t.usdc_out.saturating_add(got);
-        emit!(ClaimSettled { owner, ticket: tk, leg, units, amount: spent });
+        emit!(ClaimSettled { owner, ticket: tk, leg, units, amount: spent, received: got });
         Ok(())
     }
 
@@ -840,6 +837,9 @@ fn close_ticket_accounts<'info>(
     }
     tok::close_account(token_program, escrow, owner, &ti, &[seeds])?;
     for acc in extra {
+        if acc.lamports() == 0 {
+            continue; // already closed earlier in this instruction (listed twice)
+        }
         let t = tok::token_acc(acc)?;
         require!(t.owner == ti.key() && t.amount == 0, E::InvalidAccount);
         let tp = if *acc.owner == tok::TOKEN { token_program } else { token_2022_program };

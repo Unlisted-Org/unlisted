@@ -98,7 +98,7 @@
     {
       "name": "bootstrap",
       "docs": [
-        "Authority-only, once. `initial_shares` is an addition to spec 02 (reported); clients pass INITIAL_SHARES."
+        "Authority-only, once, into an empty basket: mints exactly INITIAL_SHARES."
       ],
       "discriminator": [
         101,
@@ -142,10 +142,6 @@
           "type": {
             "vec": "u64"
           }
-        },
-        {
-          "name": "initial_shares",
-          "type": "u64"
         }
       ]
     },
@@ -1664,6 +1660,16 @@
           },
           {
             "name": "amount",
+            "docs": [
+              "Gross debited from the vault: floor(units × owned / (S + C))."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "received",
+            "docs": [
+              "The owner's measured receipt (net of the transfer fee; USDC for settle_leg_usdc)."
+            ],
             "type": "u64"
           }
         ]
@@ -2095,6 +2101,10 @@
             "fields": [
               {
                 "name": "amount",
+                "type": "u64"
+              },
+              {
+                "name": "received",
                 "type": "u64"
               }
             ]

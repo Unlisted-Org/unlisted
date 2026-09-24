@@ -1,7 +1,7 @@
 // Port of Shortfall (3 tests).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { replay, perShare, absDiff, big } from "./common.ts";
+import { replay, perShare, absDiff, big, variantOf } from "./common.ts";
 
 const C = "Shortfall";
 
@@ -53,12 +53,12 @@ test(`${C}.test_later_depositors_do_not_make_holders_whole`, () => {
   assert.equal(checked, 200);
 });
 
-test(`${C}.test_open_ticket_bears_shortfall_pro_rata`, () => {
+test(`${C}.test_open_ticket_bears_shortfall_pro_rata (INITIAL_SHARES variant)`, () => {
   for (const mode of ["pause"] as const) {
-    const { scenarios } = replay(`${C}.test_open_ticket_bears_shortfall_pro_rata`, {}, { modes: [mode] });
+    const { scenarios } = replay(variantOf(`${C}.test_open_ticket_bears_shortfall_pro_rata`), {}, { modes: [mode] });
     const s = scenarios[0][0];
     const fin = s.scn.ops.find((o: any) => o.op === "finalize_ticket");
-    assert.equal(fin.chain, 10n ** 12n);
+    assert.equal(fin.chain, 10n ** 9n); // the ticket's shares are unchanged by the seizure: as many as the seed's
     assert.equal(s.holderClaim("seed", 0), 5n * 10n ** 11n);
     assert.equal(s.holderClaim("u", 0), 5n * 10n ** 11n);
     assert.equal(s.holderClaim("u", 1), 10n ** 12n);

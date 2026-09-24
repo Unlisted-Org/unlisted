@@ -50,7 +50,10 @@ pub struct ClaimSettled {
     pub ticket: Pubkey,
     pub leg: u8,
     pub units: u64,
+    /// Gross debited from the vault: floor(units × owned / (S + C)).
     pub amount: u64,
+    /// The owner's measured receipt (net of the transfer fee; USDC for settle_leg_usdc).
+    pub received: u64,
 }
 
 #[event]
