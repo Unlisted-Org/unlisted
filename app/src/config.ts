@@ -16,6 +16,10 @@ export interface AppConfig {
   router: { kind: "fixture_amm"; programId: PublicKey } | { kind: "none" };
   upgradeAuthority: string | null;
   explorerTx: string | null; // template with {sig}
+  /** Chain re-read period, and minimum spacing between RPC requests (public devnet rate-limits per IP). */
+  refreshMs: number;
+  rpcMinIntervalMs: number;
+  rpcConcurrency: number;
 }
 
 export async function loadConfig(): Promise<AppConfig | { error: string }> {
@@ -41,5 +45,8 @@ export async function loadConfig(): Promise<AppConfig | { error: string }> {
     router: raw.router?.kind === "fixture_amm" ? { kind: "fixture_amm", programId: new PublicKey(raw.router.programId) } : { kind: "none" },
     upgradeAuthority: raw.upgradeAuthority ?? null,
     explorerTx: raw.explorerTx ?? (raw.cluster === "devnet" ? "https://explorer.solana.com/tx/{sig}?cluster=devnet" : null),
+    refreshMs: Number(raw.refreshMs ?? (raw.cluster === "devnet" ? 20_000 : 8_000)),
+    rpcMinIntervalMs: Number(raw.rpcMinIntervalMs ?? (raw.cluster === "devnet" ? 200 : 0)),
+    rpcConcurrency: Number(raw.rpcConcurrency ?? (raw.cluster === "devnet" ? 1 : 4)),
   };
 }

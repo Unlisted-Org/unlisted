@@ -4,7 +4,20 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+
+/** Send and confirm by HTTP polling (no websocket; the public devnet RPC limits connections per IP). */
+export async function sendAndConfirmTransaction(c: Connection, tx: Transaction, signers: Keypair[], _opts?: unknown): Promise<string> {
+  const { blockhash } = await c.getLatestBlockhash("confirmed");
+  tx.recentBlockhash = blockhash;
+  tx.feePayer = tx.feePayer ?? signers[0].publicKey;
+  tx.sign(...signers);
+  const raw = tx.serialize();
+  const sig = await c.sendRawTransaction(raw, { skipPreflight: false, maxRetries: 5 });
+  const st = await sdk.confirmByPolling(c, sig, raw);
+  if (st.err) throw new Error(`transaction ${sig} failed: ${JSON.stringify(st.err)}`);
+  return sig;
+}
 import { createAssociatedTokenAccountIdempotentInstruction, createBurnCheckedInstruction, createMintToCheckedInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
 import * as sdk from "@stocklana/sdk";
 
@@ -29,17 +42,32 @@ export function loadEnv(): E2eEnv {
   return { ...e, label: "devnet", cluster: "devnet" };
 }
 
-export const conn = (env: E2eEnv) => new Connection(env.rpc, "confirmed");
+// One shared, polite connection per RPC URL: the public devnet RPC rate-limits new connections per IP.
+const conns = new Map<string, Connection>();
+export const conn = (env: E2eEnv) => {
+  let c = conns.get(env.rpc);
+  if (!c) {
+    c = new Connection(env.rpc, { commitment: "confirmed", fetch: sdk.politeFetch({ concurrency: 1, minIntervalMs: env.cluster === "devnet" ? 250 : 0, maxRetries: 40,
+      log: (m) => console.log(`[harness] ${m}`) }) as any, disableRetryOnRateLimit: true });
+    conns.set(env.rpc, c);
+  }
+  return c;
+};
 export const loadKey = (p: string) => Keypair.fromSecretKey(Uint8Array.from(JSON.parse(readFileSync(p.replace(/^~/, process.env.HOME!), "utf8"))));
 
 /** Every signature the run produces, in order, with who made it. */
 export class RunRecord {
   readonly startedAt = new Date().toISOString();
-  steps: { step: string; by: "test wallet (browser)" | "fixture issuer (harness)" | "funder (harness)"; signatures: string[]; slot?: number; note?: string; checks?: Record<string, unknown> }[] = [];
+  steps: { step: string; by: "test wallet (browser)" | "test wallet (harness)" | "fixture issuer (harness)" | "funder (harness)"; signatures: string[]; slot?: number; note?: string; checks?: Record<string, unknown> }[] = [];
   screenshots: string[] = [];
+  outcome?: "passed" | "failed";
+  error?: string;
   constructor(readonly env: E2eEnv, readonly wallet: string, readonly flow = "") {}
   add(s: RunRecord["steps"][number]) { this.steps.push(s); }
   write(outcome: "passed" | "failed", error?: string): string {
+    this.outcome = outcome;
+    if (error !== undefined) this.error = error;
+    error = this.error;
     const day = this.startedAt.slice(0, 10);
     const dir = join(HERE, "runs");
     mkdirSync(dir, { recursive: true });
@@ -50,11 +78,14 @@ export class RunRecord {
       startedAt: this.startedAt, finishedAt: new Date().toISOString(), outcome, error: error?.replace(/\u001b\[[0-9;]*m/g, ""),
       cluster: this.env.cluster, label: this.env.label,
       verification: this.env.cluster === "devnet" ? "devnet" : "local, not devnet — built, not verified",
+      mutation: process.env.E2E_MUTATION ?? null, // set when this run is a deliberate-bug check (expected to fail)
       rpc: this.env.rpc, program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
       wallet: { address: this.wallet, kind: "Stocklana Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)" },
+      valuationApi: (this.env as any).valuationApi ?? null,
       steps: this.steps, screenshots: this.screenshots,
     };
-    writeFileSync(file, JSON.stringify({ runs: [...prior, run] }, null, 2));
+    // One entry per run: a later write (e.g. after returning SOL) replaces this run's entry.
+    writeFileSync(file, JSON.stringify({ runs: [...prior.filter((r) => r.startedAt !== this.startedAt), run] }, null, 2));
     return file;
   }
 }
@@ -65,8 +96,10 @@ const OPS_WORKTREE = process.env.E2E_OPS_WORKTREE ?? "/Users/jagadeesh/1nonly/gr
 /** Runs one of C's scripts from C's worktree and returns its final JSON block. Signs with C's key, not ours. */
 function opsScript(args: string[]): any {
   const out = execFileSync("node", args, { cwd: OPS_WORKTREE, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 600_000 });
-  const start = out.lastIndexOf("\n{");
-  const json = JSON.parse(start >= 0 ? out.slice(start + 1) : out.slice(out.indexOf("{")));
+  // The script's result is its last top-level JSON block ("{" ... "}" at column 0); other log lines may follow.
+  const start = out.startsWith("{") && out.lastIndexOf("\n{") < 0 ? 0 : out.lastIndexOf("\n{") + 1;
+  const end = out.indexOf("\n}", start);
+  const json = JSON.parse(out.slice(start, end + 2));
   return { json, out };
 }
 
@@ -81,9 +114,9 @@ export async function fundWallet(env: E2eEnv, wallet: PublicKey, amount: bigint,
     let sol = "0.05";
     if (env.funderKey) {
       const funder = loadKey(env.funderKey);
-      if ((await c.getBalance(funder.publicKey)) > 0.2 * LAMPORTS_PER_SOL) {
-        const s = await sendAndConfirmTransaction(c, new Transaction().add(SystemProgram.transfer({ fromPubkey: funder.publicKey, toPubkey: wallet, lamports: 0.1 * LAMPORTS_PER_SOL })), [funder]);
-        rec.add({ step: "0.1 SOL to the fresh wallet from the app key", by: "funder (harness)", signatures: [s] });
+      if ((await c.getBalance(funder.publicKey)) > 0.1 * LAMPORTS_PER_SOL) {
+        const s = await sendAndConfirmTransaction(c, new Transaction().add(SystemProgram.transfer({ fromPubkey: funder.publicKey, toPubkey: wallet, lamports: 0.08 * LAMPORTS_PER_SOL })), [funder]);
+        rec.add({ step: "0.08 SOL to the fresh wallet from the app key", by: "funder (harness)", signatures: [s] });
         sol = "0";
       }
     }
@@ -155,12 +188,38 @@ export async function issuerSeize(env: E2eEnv, symbol: string, vault: PublicKey,
   return [await sendAndConfirmTransaction(conn(env), new Transaction().add(ix), [issuer], { commitment: "confirmed" })];
 }
 
+/** Devnet: send the fresh wallet's leftover SOL back to the app key, so each run costs only fees and rent. */
+/** Keeps each fresh test wallet's key in e2e/.local/wallets (gitignored) so its leftover SOL can be swept. */
+export function saveTestWallet(w: Keypair) {
+  const dir = join(HERE, ".local/wallets");
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, `${w.publicKey.toBase58()}.json`), JSON.stringify([...w.secretKey]));
+}
+
+export async function returnSol(env: E2eEnv, wallet: Keypair, rec: RunRecord) {
+  if (env.cluster !== "devnet" || !env.funderKey) return;
+  const c = conn(env);
+  const to = loadKey(env.funderKey).publicKey;
+  const bal = await c.getBalance(wallet.publicKey, "confirmed");
+  if (bal <= 10_000) return;
+  const s = await sendAndConfirmTransaction(c, new Transaction().add(SystemProgram.transfer({ fromPubkey: wallet.publicKey, toPubkey: to, lamports: bal - 5_000 })), [wallet], { commitment: "confirmed" });
+  rec.add({ step: `return ${(bal - 5_000) / LAMPORTS_PER_SOL} SOL to the app key`, by: "test wallet (harness)", signatures: [s] });
+  rec.write(rec.outcome ?? "passed");
+}
+
 // ------------------------------------------------ independent chain reads (not the app's code path)
 
 export async function tokenAmount(env: E2eEnv, owner: PublicKey, mint: PublicKey, program = sdk.TOKEN_2022_PROGRAM_ID): Promise<bigint> {
   const a = getAssociatedTokenAddressSync(mint, owner, false, program);
   const r = await conn(env).getTokenAccountBalance(a, "confirmed").catch(() => null);
   return r ? BigInt(r.value.amount) : 0n;
+}
+
+/** Several token balances in ONE request (getMultipleParsedAccounts: amounts decoded by the RPC node). */
+export async function tokenAmounts(env: E2eEnv, owner: PublicKey, mints: PublicKey[], program = sdk.TOKEN_2022_PROGRAM_ID): Promise<bigint[]> {
+  const atas = mints.map((m) => getAssociatedTokenAddressSync(m, owner, false, program));
+  const r = await conn(env).getMultipleParsedAccounts(atas, { commitment: "confirmed" });
+  return r.value.map((a: any) => (a ? BigInt(a.data.parsed.info.tokenAmount.amount) : 0n));
 }
 
 /** Paused flag as decoded by the RPC node's own jsonParsed, not by the SDK. */

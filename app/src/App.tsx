@@ -4,6 +4,7 @@ import type { Wallet } from "@wallet-standard/base";
 import {
   BasketClient, BasketView, ERRORS, FixtureAmmRouter, TOKEN_2022_ERRORS, planInKindDeposit, planObserve, planRedeem, planSettleClaim, planSettleLegUsdc,
   planUsdcDeposit, sendSequential, math,
+  politeFetch,
 } from "@stocklana/sdk";
 import type { AppConfig } from "./config";
 import { Connected, connect, onWalletsChanged, signAll, usableWallets } from "./wallet";
@@ -35,7 +36,8 @@ export function explainError(e: unknown): string {
 }
 
 export function App({ config }: { config: AppConfig }) {
-  const conn = useMemo(() => new Connection(config.rpcUrl, "confirmed"), [config.rpcUrl]);
+  // Public RPCs rate-limit per IP: queue and space requests, back off on 429.
+  const conn = useMemo(() => new Connection(config.rpcUrl, { commitment: "confirmed", fetch: politeFetch({ concurrency: config.rpcConcurrency, minIntervalMs: config.rpcMinIntervalMs, maxRetries: 30 }) as any, disableRetryOnRateLimit: true }), [config.rpcUrl]);
   const client = useMemo(() => new BasketClient(conn, { programId: config.programId, shareMint: config.shareMint, lookupTable: config.lookupTable ?? undefined }), [conn, config]);
   const valuation: Valuation = useMemo(() => {
     if (config.valuationApiUrl) return new HttpValuation(config.valuationApiUrl);
@@ -48,7 +50,7 @@ export function App({ config }: { config: AppConfig }) {
       return q.quotedOut > 0n ? 1_000_000 / Number(q.quotedOut) : 0;
     });
   }, [config, conn]);
-  const { view, error, refresh } = useBasket(client);
+  const { view, error, refresh } = useBasket(client, config.refreshMs ?? 8000);
   const [wallets, setWallets] = useState<Wallet[]>(usableWallets());
   const [wallet, setWallet] = useState<Connected | null>(null);
   const pos = usePosition(conn, client, view, wallet?.publicKey ?? null);

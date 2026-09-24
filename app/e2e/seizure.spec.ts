@@ -9,7 +9,7 @@ import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BasketClient, TOKEN_PROGRAM_ID, math, parseEventsFromLogs, transferFee } from "@stocklana/sdk";
-import { RunRecord, fundWallet, issuerSeize, loadEnv, tokenAmount, txOk } from "./harness";
+import { RunRecord, conn as rpcConn, fundWallet, issuerSeize, loadEnv, tokenAmount, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const SEIZE_LEG = process.env.E2E_SEIZE_LEG ?? "NEURALINK";
@@ -32,7 +32,7 @@ test("seizure: drop recorded on chain and shared pro rata", async ({ page }) => 
   const wallet = Keypair.generate();
   const owner = wallet.publicKey;
   const rec = new RunRecord(env, owner.toBase58(), "seizure");
-  const conn = new Connection(env.rpc, "confirmed");
+  const conn = rpcConn(env);
   const shareMint = new PublicKey(env.shareMint);
   const bc = new BasketClient(conn, { programId: new PublicKey(env.programId), shareMint });
   const shot = async (name: string, locator = page.locator("body")) => {

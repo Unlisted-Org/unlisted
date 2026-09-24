@@ -24,14 +24,14 @@ async function main() {
   if (reg.cluster !== "devnet") throw new Error(`registry cluster is ${reg.cluster}, not devnet`);
   const idl = JSON.parse(execSync(`git -C ${REPO} show program:programs/basket/idl/basket.json`, { encoding: "utf8" }));
   const programId = new PublicKey(arg("program") ?? idl.address);
-  const client = new sdk.BasketClient(new Connection(RPC, "confirmed"), { programId, shareMint: new PublicKey(shareMint) });
+  const conn = new Connection(RPC, { commitment: "confirmed", fetch: sdk.politeFetch({ minIntervalMs: 250, maxRetries: 12 }) as any, disableRetryOnRateLimit: true });
+  const client = new sdk.BasketClient(conn, { programId, shareMint: new PublicKey(shareMint) });
   const v = await client.fetchBasket(); // fails loudly if the basket isn't on devnet
   for (const [i, l] of v.legs.entries()) {
     const r = reg.legs.find((x: any) => x.mint === l.mint.toBase58());
     if (!r) throw new Error(`basket leg ${i} mint ${l.mint.toBase58()} is not in C's registry`);
   }
   // Upgrade authority, read from the program's ProgramData account (disclosed in the app).
-  const conn = new Connection(RPC, "confirmed");
   const prog = await conn.getAccountInfo(programId);
   let upgradeAuthority: string | null = null;
   if (prog && prog.data.length >= 36) {
@@ -43,12 +43,18 @@ async function main() {
     legs: v.legs.map((l) => ({ symbol: l.symbol, mint: l.mint.toBase58() })),
     issuerKey: "(Agent C's; issuer steps run through C's scripts)", funderKey: `${process.env.HOME}/.config/solana/stocklana/app.json`,
     fixtureAmm: reg.fixture_amm?.program_id ?? null, registrySource: arg("registry") ?? `ops:fixtures/registry.json`,
+    programs: {
+      basket: { builtFrom: arg("program-commit") ?? "program branch (see Agent A's tests/program/devnet/canonical.json)", id: programId.toBase58(), upgradeAuthority: upgradeAuthority ?? null },
+      fixtureAmm: { id: reg.fixture_amm?.program_id ?? null, source: "Agent C, ops:fixtures/registry.json" },
+    },
+    valuationApi: arg("valuation-url") ? { url: arg("valuation-url"), commit: arg("valuation-commit") ?? null, pricing: "mainnet-mirror: devnet balances, mainnet prices of the real tokens each fixture mirrors" } : null,
+    lookupTable: arg("lookup-table") ?? null,
     basketReadAtSlot: v.slot, createdAt: new Date().toISOString(),
   };
   mkdirSync(HERE, { recursive: true });
   writeFileSync(join(HERE, "env.json"), JSON.stringify(env, null, 2));
   writeFileSync(join(APP, "public/config.json"), JSON.stringify({
-    cluster: "devnet", clusterLabel: "devnet", rpcUrl: RPC, programId: env.programId, shareMint, lookupTable: null,
+    cluster: "devnet", clusterLabel: "devnet", rpcUrl: RPC, programId: env.programId, shareMint, lookupTable: arg("lookup-table") ?? null,
     valuationApiUrl: arg("valuation-url") ?? null,
     router: env.fixtureAmm ? { kind: "fixture_amm", programId: env.fixtureAmm } : { kind: "none" },
     upgradeAuthority: upgradeAuthority ?? "none (immutable)", explorerTx: "https://explorer.solana.com/tx/{sig}?cluster=devnet",

@@ -1,0 +1,69 @@
+{
+  "what": "Mutation checks: each mutant must make the flow e2e fail",
+  "runs": [
+    {
+      "id": "redeem-rounds-up",
+      "what": "SDK redemption payout rounds up one unit (floor(s x owned / (S + C)) + 1)",
+      "file": "sdk/src/math.ts",
+      "startedAt": "2026-09-24T22:13:25.505Z",
+      "finishedAt": "2026-09-24T22:13:58.766Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toBe(expected) // Object.is equality",
+        "Expected: 987079588n",
+        "Received: 987079587n",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:176:45"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
+    },
+    {
+      "id": "ignore-pause",
+      "what": "App ignores the mint's pause flag (a paused leg is shown as available)",
+      "file": "sdk/src/token2022.ts",
+      "startedAt": "2026-09-24T22:13:58.767Z",
+      "finishedAt": "2026-09-24T22:15:28.575Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(locator).toBeVisible() failed",
+        "Expected: visible",
+        "Error: element(s) not found",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:150:66"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
+    },
+    {
+      "id": "sdk-redeem-rounds-up",
+      "what": "SDK redeem payout +1 unit",
+      "file": "sdk/src/math.ts",
+      "suite": "sdk vitest (shared model vectors)",
+      "at": "2026-09-24T22:16:30.383547Z",
+      "result": "killed",
+      "failure": [
+        "1 failed | 33 passed (34)"
+      ]
+    },
+    {
+      "id": "sdk-loss-index-frozen",
+      "what": "observe does not update the loss index",
+      "file": "sdk/src/math.ts",
+      "suite": "sdk vitest",
+      "at": "2026-09-24T22:16:30.383547Z",
+      "result": "killed",
+      "failure": [
+        "2 failed | 32 passed (34)"
+      ]
+    },
+    {
+      "id": "sdk-pending-ignores-loss-index",
+      "what": "pending_i ignores L_i (open tickets don't bear a seizure)",
+      "file": "sdk/src/math.ts",
+      "suite": "sdk vitest",
+      "at": "2026-09-24T22:16:30.383547Z",
+      "result": "SURVIVED, then killed after adding test 'open deposit tickets bear a seizure pro rata'",
+      "failure": [
+        "before: 34 passed (34)",
+        "after: 1 failed | 34 passed (35)"
+      ]
+    }
+  ]
+}

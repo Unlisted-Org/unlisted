@@ -14,3 +14,4 @@ export * from "./flows.js";
 export * from "./routers/types.js";
 export * from "./routers/jupiter.js";
 export * from "./routers/fixtureAmm.js";
+export * from "./rpc.js";

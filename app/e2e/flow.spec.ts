@@ -11,7 +11,7 @@ import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BasketClient, TOKEN_PROGRAM_ID, math, openClaims, parseEventsFromLogs, transferFee } from "@stocklana/sdk";
-import { RunRecord, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, mintPausedByRpc, redemptionTickets, tokenAmount, txOk } from "./harness";
+import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, returnSol, mintPausedByRpc, redemptionTickets, tokenAmount, tokenAmounts, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
@@ -35,6 +35,7 @@ async function lastTx(page: Page): Promise<string[]> {
 test("deposit, redeem with a paused leg (claim), settle after resume", async ({ page }) => {
   const env = loadEnv();
   const wallet = Keypair.generate(); // fresh for this run
+  saveTestWallet(wallet); // gitignored; lets e2e/devnet/sweep.ts recover leftover SOL if a run dies
   const owner = wallet.publicKey;
   const rec = new RunRecord(env, owner.toBase58());
   const legIdx = env.legs.findIndex((l) => l.symbol === PAUSE_LEG);
@@ -49,6 +50,10 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
 
     await page.addInitScript(`window.__STOCKLANA_TEST_WALLET_SECRET__ = ${JSON.stringify([...wallet.secretKey])};`);
     await page.addInitScript({ path: join(HERE, ".build/test-wallet.js") });
+    const apiBaskets: any[] = [];
+    page.on("response", async (r) => {
+      if (/\/v1\/basket(\?|$)/.test(r.url()) && r.ok()) { try { apiBaskets.push(await r.json()); } catch {} }
+    });
     await page.goto("/");
     await page.getByTestId("connect-Stocklana Test Wallet").click();
     await expect(page.getByTestId("wallet-address")).toHaveText(owner.toBase58());
@@ -58,12 +63,17 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     if (apiUrl) {
       await expect(page.getByTestId("mock-label")).toHaveCount(0);
       const shown = async () => Promise.all(["value-sell-now", "value-last-trade", "value-reference"].map((t) => page.getByTestId(t).locator(".big").getAttribute("data-usd")));
+      // The API recomputes every 30 s, so compare with the response the page itself received (captured below).
+      let match: any = null;
+      // Responses can land out of order, so the panel must match one of the responses the page received.
+      const triple = (b: any) => JSON.stringify([b.values?.sell_now?.usd, b.values?.last_trade?.usd, b.values?.reference?.usd]);
       await expect.poll(async () => {
-        const b = await (await fetch(`${apiUrl}/v1/basket`)).json();
-        const v = b.values;
-        return JSON.stringify(await shown()) === JSON.stringify([v.sell_now.usd, v.last_trade.usd, v.reference.usd]);
-      }, { timeout: 90_000 }).toBe(true);
-      rec.add({ step: "price panel shows the valuation API's three values", by: "test wallet (browser)", signatures: [], checks: { values: await shown() } });
+        const now = JSON.stringify(await shown());
+        match = apiBaskets.filter((b) => b?.values?.sell_now).reverse().find((b) => triple(b) === now) ?? null;
+        return match ? "match" : `panel ${now}; ${apiBaskets.length} API responses received, latest ${apiBaskets.length ? triple(apiBaskets[apiBaskets.length - 1]) : "none"}`;
+      }, { timeout: 180_000 }).toBe("match");
+      rec.add({ step: "price panel shows the valuation API's three values", by: "test wallet (browser)", signatures: [],
+        checks: { values: await shown(), apiGeneratedAt: match.as_of?.generated_at, apiDevnetSlot: match.as_of?.slot, apiMainnetSlot: match.as_of?.mainnet_slot, pricingBasis: match.pricing_basis?.kind } });
     }
 
     // ---------------------------------------------------------------- 1. deposit in kind
@@ -72,11 +82,12 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     expect(sharesBefore).toBe(0n);
     await page.getByTestId("tab-inkind").click();
     // Size the in-kind deposit to what the funded wallet holds: 40% of the most its legs can mint.
-    const bc = new BasketClient(new Connection(env.rpc, "confirmed"), { programId: new PublicKey(env.programId), shareMint });
+    const bc = new BasketClient(conn(env), { programId: new PublicKey(env.programId), shareMint });
     const bv = await bc.fetchBasket();
     let maxShares: bigint | null = null;
-    for (const l of bv.legs) {
-      const bal = await tokenAmount(env, owner, l.mint);
+    const legBals = await tokenAmounts(env, owner, bv.legs.map((l) => l.mint));
+    for (const [i, l] of bv.legs.entries()) {
+      const bal = legBals[i];
       const net = bal - transferFee(bal, l.feeNow);
       const own = math.owned(l.state);
       const m = (net * (bv.shareSupply + l.state.claimUnits)) / own;
@@ -148,8 +159,9 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     expect(await raw(page, `redeem-claim-${PAUSE_LEG}`)).toBe(redeemShares);
     const predictedNet: Record<string, bigint> = {};
     const before: Record<string, bigint> = {};
-    for (const l of env.legs) {
-      before[l.symbol] = await tokenAmount(env, owner, new PublicKey(l.mint));
+    const beforeBals = await tokenAmounts(env, owner, env.legs.map((l) => new PublicKey(l.mint)));
+    for (const [i, l] of env.legs.entries()) {
+      before[l.symbol] = beforeBals[i];
       if (l.symbol !== PAUSE_LEG) predictedNet[l.symbol] = await raw(page, `redeem-net-${l.symbol}`);
     }
     await page.getByTestId("redeem-submit").click();
@@ -157,8 +169,9 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     const approvals2 = await page.evaluate(() => window.__testWallet!.approvals.map((a) => a.transactions)); // log restarted at reload
     expect(approvals2).toEqual([redSigs.length]); // one approval covered every transaction of the redemption
     const redTx = await txOk(env, redSigs[redSigs.length - 1]);
-    for (const l of env.legs) {
-      const after = await tokenAmount(env, owner, new PublicKey(l.mint));
+    const afterBals = await tokenAmounts(env, owner, env.legs.map((l) => new PublicKey(l.mint)));
+    for (const [i, l] of env.legs.entries()) {
+      const after = afterBals[i];
       if (l.symbol === PAUSE_LEG) expect(after - before[l.symbol]).toBe(0n);
       else expect(after - before[l.symbol]).toBe(predictedNet[l.symbol]); // paid now, exactly as the app predicted
     }
@@ -218,7 +231,14 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     console.log(`run file: ${rec.write("passed")}`);
   } catch (e) {
     await shot("failure").catch(() => {});
+    // Never leave a shared fixture mint paused: resume it if this run paused it and failed before resuming.
+    if (await mintPausedByRpc(env, pausedMint).catch(() => false)) {
+      const sigs = issuerAction(env, "resume", PAUSE_LEG);
+      rec.add({ step: `cleanup: issuer resumes ${PAUSE_LEG} after the failure`, by: "fixture issuer (harness)", signatures: sigs });
+    }
     console.log(`run file: ${rec.write("failed", String(e))}`);
     throw e;
+  } finally {
+    await returnSol(env, wallet, rec).catch((err) => console.log(`SOL not returned: ${err}`));
   }
 });

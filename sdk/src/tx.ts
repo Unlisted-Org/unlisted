@@ -51,6 +51,21 @@ export function computeBudget(units = 1_400_000, microLamports = 0): Transaction
   return out;
 }
 
+/**
+ * Confirmation by polling getSignatureStatuses over HTTP (no websocket: public RPCs limit new
+ * connections per IP). Resends the same signed bytes while waiting, until the blockhash expires.
+ */
+export async function confirmByPolling(conn: Connection, sig: string, raw?: Uint8Array, timeoutMs = 120_000): Promise<{ slot: number | null; err: unknown }> {
+  const start = Date.now();
+  for (let n = 0; Date.now() - start < timeoutMs; n++) {
+    const st = (await conn.getSignatureStatuses([sig], { searchTransactionHistory: n > 0 && n % 5 === 0 })).value[0];
+    if (st && (st.confirmationStatus === "confirmed" || st.confirmationStatus === "finalized" || st.err)) return { slot: st.slot, err: st.err };
+    if (raw && n > 0 && n % 4 === 0) await conn.sendRawTransaction(raw, { skipPreflight: true, maxRetries: 0 }).catch(() => {});
+    await new Promise((r) => setTimeout(r, 3_000)); // >= 3 s between status polls (public RPC quota)
+  }
+  throw new Error(`transaction ${sig} not confirmed within ${timeoutMs / 1000} s`);
+}
+
 export interface SentTx { signature: string; slot: number | null; err: unknown }
 
 /**
@@ -60,14 +75,12 @@ export interface SentTx { signature: string; slot: number | null; err: unknown }
 export async function sendSequential(conn: Connection, txs: VersionedTransaction[], onSent?: (i: number, sig: string) => void): Promise<SentTx[]> {
   const out: SentTx[] = [];
   for (let i = 0; i < txs.length; i++) {
-    const sig = await conn.sendRawTransaction(txs[i].serialize(), { skipPreflight: false, maxRetries: 5 });
+    const raw = txs[i].serialize();
+    const sig = await conn.sendRawTransaction(raw, { skipPreflight: false, maxRetries: 5 });
     onSent?.(i, sig);
-    const bh = txs[i].message.recentBlockhash;
-    const { lastValidBlockHeight } = await conn.getLatestBlockhash("confirmed");
-    const res = await conn.confirmTransaction({ signature: sig, blockhash: bh, lastValidBlockHeight }, "confirmed");
-    const st = await conn.getSignatureStatus(sig, { searchTransactionHistory: true });
-    out.push({ signature: sig, slot: st.value?.slot ?? null, err: res.value.err });
-    if (res.value.err) break;
+    const st = await confirmByPolling(conn, sig, raw);
+    out.push({ signature: sig, slot: st.slot, err: st.err });
+    if (st.err) break;
   }
   return out;
 }

@@ -132,6 +132,8 @@ export class BasketClient {
     return res.map((r) => ({ address: r.pubkey, ticket: decode(r.account.data) }));
   }
 
+  private readonly eventCache = new Map<string, BasketEvent[]>();
+
   redemptionTickets(owner: PublicKey | null): Promise<{ address: PublicKey; ticket: RedemptionTicket }[]> {
     return this.ticketsOf(owner, ACCOUNT_DISCRIMINATORS.RedemptionTicket, decodeRedemptionTicket);
   }
@@ -146,8 +148,14 @@ export class BasketClient {
     const out: { signature: string; slot: number; blockTime: number | null; events: BasketEvent[] }[] = [];
     for (const s of sigs) {
       if (s.err) continue;
-      const tx = await this.conn.getTransaction(s.signature, { maxSupportedTransactionVersion: 0, commitment: "confirmed" });
-      const events = parseEventsFromLogs(tx?.meta?.logMessages ?? [], this.config.programId);
+      // A confirmed transaction's logs never change: fetch each signature once.
+      let events = this.eventCache.get(s.signature);
+      if (!events) {
+        const tx = await this.conn.getTransaction(s.signature, { maxSupportedTransactionVersion: 0, commitment: "confirmed" });
+        if (!tx) continue;
+        events = parseEventsFromLogs(tx.meta?.logMessages ?? [], this.config.programId);
+        this.eventCache.set(s.signature, events);
+      }
       if (events.length) out.push({ signature: s.signature, slot: s.slot, blockTime: s.blockTime ?? null, events });
     }
     return out;

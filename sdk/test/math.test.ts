@@ -140,3 +140,20 @@ describe("deposit sizing", () => {
     }
   });
 });
+
+// Found by a mutation check (2026-09-25): no shared vector has an open deposit ticket during a
+// shortfall, so ignoring the loss index in pending_i went unnoticed. Spec 01: pending_i = P_i x L_i,
+// so an open ticket bears the same fraction of a seizure as shares and claims.
+describe("open deposit tickets bear a seizure pro rata", () => {
+  it("pending_i and owned_i both shrink by the vault's loss fraction", async () => {
+    const { owned, pendingActual } = await import("../src/math.js");
+    const { INDEX_ONE } = await import("../src/constants.js");
+    const before: LegState = { balance: 1_000n, accounted: 1_000n, claimUnits: 0n, pendingNorm: ticketNorm(100n, INDEX_ONE), lossIndex: INDEX_ONE, available: true };
+    expect(pendingActual(before)).toBe(100n);
+    expect(owned(before)).toBe(900n);
+    const seized = observe({ ...before, balance: 800n }).leg; // issuer burns 20% of the vault
+    expect(seized.lossIndex).toBe((INDEX_ONE * 8n) / 10n);
+    expect(pendingActual(seized)).toBe(80n);
+    expect(owned(seized)).toBe(720n);
+  });
+});

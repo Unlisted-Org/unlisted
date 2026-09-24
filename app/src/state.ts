@@ -70,7 +70,7 @@ export function useEvents(client: BasketClient | null, viewSlot: number | undefi
     // Re-read at most every 20 s: getTransaction per signature is the expensive part.
     if (Date.now() - last.current < 20_000 && rows.length) return;
     last.current = Date.now();
-    client.recentEvents(40).then(setRows).catch(() => {});
+    client.recentEvents(25).then(setRows).catch(() => {});
   }, [client, viewSlot]);
-  return { rows, reload: () => { last.current = 0; client?.recentEvents(40).then(setRows).catch(() => {}); } };
+  return { rows, reload: () => { last.current = 0; client?.recentEvents(25).then(setRows).catch(() => {}); } };
 }
