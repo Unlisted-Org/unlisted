@@ -19,7 +19,7 @@ import { LEG_NAMES, legMintIxs, U64_MAX } from "../src/fixtures.ts";
 
 const RPC = process.env.DEVNET_RPC ?? "https://api.devnet.solana.com";
 const conn = new Connection(RPC, "confirmed");
-const OUT = path.join(ROOT, "tests/program/devnet");
+const OUT = process.env.DEVNET_OUT ?? path.join(ROOT, "tests/program/devnet");
 const KEYFILE = path.join(process.env.HOME!, ".config/solana/stocklana/program.json");
 const issuer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(KEYFILE, "utf8"))));
 const SEED = process.env.DEVNET_SEED ?? "devnet-v1";
@@ -139,11 +139,12 @@ async function setup() {
   ALT = [(await conn.getAddressLookupTable(key)).value!];
   // Users: the issuer pays fees; users need a little SOL for their redemption-ticket rent. Their token accounts.
   await send("fund alice and bob with 0.03 SOL each (redemption ticket rent)", [alice, bob].map((u) => SystemProgram.transfer({ fromPubkey: issuer.publicKey, toPubkey: u.publicKey, lamports: 30_000_000 })));
-  for (const u of [alice, bob]) {
+  for (const u of [issuer, alice, bob]) {
     const ixs = [...MINTS.map((m) => spl.createAssociatedTokenAccountIdempotentInstruction(issuer.publicKey, spl.getAssociatedTokenAddressSync(m, u.publicKey, false, T22), u.publicKey, m, T22)),
       spl.createAssociatedTokenAccountIdempotentInstruction(issuer.publicKey, spl.getAssociatedTokenAddressSync(USDC, u.publicKey, false, TOKEN), u.publicKey, USDC, TOKEN)];
-    await send(`token accounts for ${u === alice ? "alice" : "bob"} (1/2)`, ixs.slice(0, 4));
-    await send(`token accounts for ${u === alice ? "alice" : "bob"} (2/2)`, ixs.slice(4));
+    const who = u === alice ? "alice" : u === bob ? "bob" : "the authority";
+    await send(`token accounts for ${who} (1/2)`, ixs.slice(0, 4));
+    await send(`token accounts for ${who} (2/2)`, ixs.slice(4));
   }
   Object.assign(rec, { mints: MINTS.map((m) => m.toBase58()), names: LEG_NAMES, usdc: USDC.toBase58(), alt: key.toBase58(), finishedAt: new Date().toISOString() });
   save("setup");
@@ -304,9 +305,9 @@ const scenarios: Record<string, () => Promise<void>> = {
     await act.resume(1);
     await settleAndCheck(b, bob, t1, alice.publicKey, 1, "bob (a third party) settles alice's ANTHROPIC claim after resume");
     // (b) several legs paused; deposits refused
+    await b.mintLegs(bob, 10n ** 9n);
     await act.pause(3);
     await act.pause(5);
-    await b.mintLegs(bob, 10n ** 9n);
     await refused("bob deposit_in_kind while two legs are paused", [b.depositIx(bob, MINTS.map(() => 10n ** 9n))], [bob], "LegUnavailable");
     const t2 = await redeemAndCheck(b, alice, aliceShares / 4n, [3, 5], "alice redeems 1/4 with legs 3 and 5 paused: five paid, two claims");
     // (c) seizure while the claims are open (the issuer resumes to burn, then pauses again)
@@ -392,11 +393,18 @@ const scenarios: Record<string, () => Promise<void>> = {
 async function main() {
   const prog = await conn.getAccountInfo(PROGRAM_ID);
   if (!prog?.executable) throw new Error(`basket program ${PROGRAM_ID.toBase58()} is not deployed on ${RPC}`);
+  const bal0 = await conn.getBalance(issuer.publicKey);
   await setup();
-  const which = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(scenarios);
+  console.log(`issuer SOL spent on setup: ${(bal0 - (await conn.getBalance(issuer.publicKey))) / 1e9}`);
+  const args = process.argv.slice(2).filter((a) => a !== "setup-only");
+  if (process.argv.includes("setup-only")) return;
+  const which = args.length ? args : Object.keys(scenarios);
   for (const name of which) {
     console.log(`\n== ${name}`);
+    const b0 = await conn.getBalance(issuer.publicKey);
     await scenarios[name]();
+    rec.issuerSolSpent = (b0 - (await conn.getBalance(issuer.publicKey))) / 1e9;
+    console.log(`issuer SOL spent on ${name}: ${rec.issuerSolSpent}`);
     rec.finishedAt = new Date().toISOString();
     rec.passed = rec.checks.every((c: any) => c.ok);
     save();

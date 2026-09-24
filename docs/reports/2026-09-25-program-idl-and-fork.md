@@ -123,6 +123,32 @@ One NEURALINK attempt (Meteora DLMM → Whirlpool) failed inside Whirlpool with 
 - `reinvest_reserve` ran into all 6 remaining legs in equal slices (2,592,083–2,592,084 USDC, the last one taking the rest). Output was measured into each vault. The reserve ended at **0** and `reinvest_mask` at **0**.
 - Measured outputs were 2.2–2.6 % below Jupiter's quote, which assumes the 100 bps of mainnet's current epoch. The slippage for these calls was raised to 500 bps.
 
+### Prop AMMs on real mainnet state (simulation, nothing signed)
+
+`tests/program/fork/mainnet-sim.ts` wrote `tests/program/fork/mainnet-prop-amm-sim.json`, simulated at mainnet slots 450,141,263–450,141,456 with `sigVerify:false` and `replaceRecentBlockhash:true`.
+
+**Method.**
+- For each AMM, `/swap/v2/build` was called with `dexes` restricted to that AMM (plus Meteora DLMM for the second hop), buying $10 of a leg it routes.
+- Each route was simulated with three takers:
+  - **wallet:** a system-owned wallet holding USDC (control);
+  - **pda:** an off-curve PDA of the basket program id that doesn't exist on mainnet, so it is system-owned and empty;
+  - **program:** an existing program-owned data account, Symmetry vault `G54nsr…jsmvdf` (owner `BASKT7…`, 30,659 bytes). It stands in for the basket and ticket PDAs, which are data accounts owned by the basket program.
+- The pda and program takers were funded with 10 USDC by a transfer inside the same simulated transaction.
+
+| AMM | Leg (route) | wallet | pda | program-owned |
+|---|---|---|---|---|
+| BisonFi | OPENAI (BisonFi → Meteora DLMM) | OK | OK | OK |
+| Flux | OPENAI (Flux → Meteora DLMM) | OK | OK | OK |
+| Quantum | OPENAI, KALSHI (Quantum → Meteora DLMM) | OK | OK | OK |
+| TesseraV | KALSHI (TesseraV → Meteora DLMM) | OK | OK | OK |
+| Hadron | ANTHROPIC (Hadron) | OK | OK | OK |
+| 1DEX | OPENAI (1DEX → Meteora DLMM) | OK | OK | **FAIL:** `OwnerSystemProgramID` (26000) on account `user` |
+
+**Conclusions.**
+- BisonFi, Flux, Quantum, TesseraV and Hadron accept a program-owned PDA taker on mainnet. Their failures on the fork were fork artifacts, so they don't need to be excluded (C's `sell_now` quotes included).
+- **Only 1DEX rejects the basket or ticket as taker**, and only because they are program-owned. A data-less PDA would pass. Keep 1DEX excluded.
+- These were top-level swaps. The basket signs the same taker through CPI, and the AMMs see the same accounts and signer flag.
+
 ### Answers to open questions
 
 - **`route_v2` needs the taker's own output account** (index 2), even with `destinationTokenAccount`. Without it Jupiter fails with `0x1789` (6025 InvalidTokenAccount): OPENAI and ANTHROPIC, in every run. Ruled on 2026-09-25.
@@ -134,7 +160,7 @@ One NEURALINK attempt (Meteora DLMM → Whirlpool) failed inside Whirlpool with 
   - TesseraV: `0xffff`.
   - Hadron: `0x3c`.
 
-  These look like fork artifacts (stale oracle or keeper state, or an unloadable program), not limits of a PDA taker. They can only be settled on mainnet. The final run pre-excludes them on the fork only.
+  They are fork artifacts: the mainnet simulation above shows all five accept a program-owned PDA taker. The final fork run pre-excludes them on the fork only.
 - **Budget.** The largest single transaction was 422,574 CU (3 legs), well under 1.4 M.
 
 
