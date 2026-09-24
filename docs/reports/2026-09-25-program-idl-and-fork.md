@@ -175,22 +175,36 @@ One NEURALINK attempt (Meteora DLMM → Whirlpool) failed inside Whirlpool with 
 | Paused leg paid instead of turned into a claim | 9 partial-redemption tests (Token-2022 `MintPaused` aborts the whole redemption) |
 | Loss index never moves | 3 shortfall tests (state differs at the observe after a seizure) |
 
-## 6. Devnet: built, rehearsed, not yet run
+## 6. Devnet: deployed, six scenarios run against the real program
 
-- **Deploy binary.** 374,704 bytes (sha256 `80db3bac…7dcc`; the no-idl default, reproducible).
-  - Programdata rent is **1.904 SOL**. `solana program deploy` also needs a buffer of the same size during the deploy, refunded afterwards, so the peak is about **3.81 SOL**.
-  - Loader-v4, which would avoid the buffer, is inactive on devnet (SIMD-0167).
-- **Scenario suite** `tests/program/devnet/scenarios.ts`, in the six spec 02 fixture scenarios:
-  - seizure;
-  - pause-mid-redemption: one leg, several legs, seizure while a claim is open, settle after resume;
-  - fee-change-mid-position;
-  - multiplier-change-mid-position;
-  - hook-switched-on;
-  - frozen-vault.
+**Deploy.**
+- Program `GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv`, upgrade authority `DBJ6Fdxb…oFgb`.
+- Deploy signature `3MGLsSPQtK7nU1pUvrQRRBvKXUuPsUMVSBKzYVZpunwDVhqTYhwiRtyucgjV82QtsZU5PoupQTyHPuAwBqEcpmUB`, slot 503,653,050.
+- `solana program dump` of the deployed program has sha256 `80db3bac…7dcc`, 374,704 bytes: the same binary as LiteSVM, the fork proof and the mutation baseline.
+- Programdata rent is 1.904 SOL, with a peak of about 3.81 SOL while the buffer exists. Loader-v4 is inactive on devnet.
 
-  It records every signature in `tests/program/devnet/<scenario>.json`. Refusals never land, so they are recorded from a simulation of the signed transaction.
-- **Rehearsal.** `devnet/dryrun.sh` ran the suite on a local test validator (mainnet Token-2022 binary, the deploy binary). All six scenarios pass and 89 checks pass.
-- **Measured cost.** Setup is 0.169 SOL (7 fixture mints, fixture USDC, lookup table, user accounts). Each scenario is about 0.037 SOL. The total needed is **≈ 4.2 SOL peak and ≈ 2.3 SOL net**.
-- **Fixture mints.** Agent C's `fixtures/registry.json` does not exist yet, so the suite creates its own seven fixture mints. `~/.config/solana/stocklana/program.json` is their issuer (mint, pause, freeze, fee, hook and multiplier authority, and permanent delegate).
-- **Fee change on devnet.** The 300 bps fee takes effect two epochs (~2 days) later, so on devnet the suite proves the scheduled change and the old fee still applying. The effect itself is proven in LiteSVM and on the fork (the real epoch-1043 change).
-- **Status.** The key has 0 SOL. `solana airdrop` failed at 19:41 and 20:42 UTC (rate limit).
+**Scenarios** (`tests/program/devnet/<scenario>.json`; every signature re-checked `finalized` without error in `devnet/verification.json`):
+
+| Scenario | Basket | Landed txs | Refusals (simulated) | Checks |
+|---|---|---|---|---|
+| seizure | `DVV71KDH…fWND` | 11 | 0 | 11/11 |
+| pause-mid-redemption (one leg; two legs; seizure while a claim is open; settle after resume) | `6U7WP5NZ…DKAK` | 22 | 3 | 24/24 |
+| fee-change-mid-position | `B1VnJMbg…onFhK` | 9 | 0 | 11/11 |
+| multiplier-change-mid-position | `E3dRtrKd…HsqL` | 9 | 0 | 17/17 |
+| hook-switched-on | `WDxTDKXR…Rhek` | 11 | 2 | 13/13 |
+| frozen-vault | `86iuiz1z…8KaL` | 11 | 2 | 13/13 |
+
+Setup landed 23 more transactions (7 fixture mints, fixture USDC, lookup table, user accounts).
+
+**Fixture mints.** These are **this suite's own**: C's `fixtures/registry.json` did not exist yet, and the scenarios need the issuer key to pause, freeze, seize and set hooks. `~/.config/solana/stocklana/program.json` is their issuer (mint, pause, freeze, fee, hook and multiplier authority, and permanent delegate). The mint addresses are in `devnet/setup.json`.
+
+**Two notes.**
+- `hook-switched-on` first ran with basket `HJyLuVug…PaXR` (record `hook-switched-on.attempt1-incomplete.json`). Its final settle landed (`3ikC4mPb…4Vwy`), but the RPC's 429s broke the confirmation. The resend was refused with `NoClaim`, which proves the claim settles only once. The scenario was then rerun cleanly on a fresh basket. The sender now polls signature status and never resends a transaction that landed.
+- `fee-change-mid-position`: the 300 bps fee takes effect at devnet epoch **1167** (the run was at 1165; a devnet epoch is about 2 days). This run proves:
+  - the scheduled change;
+  - the old 100 bps still applying to a redemption;
+  - no fee stored anywhere.
+
+  The post-epoch redemption is not run yet. The effect of the new fee is proven in LiteSVM and on the fork (PreStocks' real epoch-1043 change).
+
+**Cost.** Setup 0.124 SOL; each scenario about 0.027 SOL. The key has 2.76 SOL left.

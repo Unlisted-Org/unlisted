@@ -234,27 +234,27 @@
    "ok": true
   },
   {
-   "what": "bob deposit_in_kind with a hook on POLYMARKET → LegUnavailable",
+   "what": "bob deposit_in_kind with a hook on POLYMARKET \u2192 LegUnavailable",
    "ok": true,
    "got": "LegUnavailable"
   },
   {
-   "what": "OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "what": "OPENAI paid now: gross 247500000000 = floor(s\u00b7owned/(S+C)), received 245025000000",
    "ok": true,
    "expect": "247500000000"
   },
   {
-   "what": "ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "what": "ANTHROPIC paid now: gross 247500000000 = floor(s\u00b7owned/(S+C)), received 245025000000",
    "ok": true,
    "expect": "247500000000"
   },
   {
-   "what": "NEURALINK paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "what": "NEURALINK paid now: gross 247500000000 = floor(s\u00b7owned/(S+C)), received 245025000000",
    "ok": true,
    "expect": "247500000000"
   },
   {
-   "what": "ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "what": "ANDURIL paid now: gross 247500000000 = floor(s\u00b7owned/(S+C)), received 245025000000",
    "ok": true,
    "expect": "247500000000"
   },
@@ -271,12 +271,12 @@
    }
   },
   {
-   "what": "KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "what": "KALSHI paid now: gross 247500000000 = floor(s\u00b7owned/(S+C)), received 245025000000",
    "ok": true,
    "expect": "247500000000"
   },
   {
-   "what": "FIGUREAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "what": "FIGUREAI paid now: gross 247500000000 = floor(s\u00b7owned/(S+C)), received 245025000000",
    "ok": true,
    "expect": "247500000000"
   },
@@ -289,7 +289,7 @@
    "ok": true
   },
   {
-   "what": "settle_claim while the hook is set → LegUnavailable",
+   "what": "settle_claim while the hook is set \u2192 LegUnavailable",
    "ok": true,
    "got": "LegUnavailable"
   }
@@ -304,5 +304,9 @@
   "CErWF7vVw5c7753iMeZv9GHSFbqYG5STe6xVXoQo4WVf",
   "AvLMfA5KtRpWdQTAVw9FtuXdw97AAi5ENgWxxne7WjMM",
   "FdUbc9rVxW9jBqgFEZiLPq6eNH1ZKwzM638yfc9RJbE3"
- ]
+ ],
+ "postscript": {
+  "note": "The final settle_claim landed (confirmation broken by RPC 429s); the resend was refused with NoClaim. Found with getSignaturesForAddress(basket).",
+  "settleSignature": "3ikC4mPbP798mMj8EVqpYKQRjsCwUgqFHBNqJMZCGTzzeXXFFSCe2GaKaw2c2JLn48rsJjE5EuwSQmiMPA8i4Vwy"
+ }
 }
