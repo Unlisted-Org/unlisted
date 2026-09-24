@@ -36,7 +36,19 @@ Reports go in `docs/reports/<date>-<agent>-<topic>.md` on the reporting agent's 
 ## Git
 
 - Identity inside the repo: `user.name = 1nonlypiece`, `user.email = 190412812+1nonlypiece@users.noreply.github.com`. Every agent's worktree inherits the repo config; don't override it.
-- No AI co-author trailers and no "generated with" lines, in commits or PRs.
+- **No AI attribution, anywhere.** Commit messages, PR descriptions and issues must not contain a `Co-Authored-By:` line, a "Generated with …" line, or 🤖. That includes attribution a coding tool adds by default.
+- **Scan before every push, over every branch.** No output means clean:
+  ```sh
+  git log main program app ops --format=%B | grep -n -i -E 'co-authored-by|generated with|🤖'
+  ```
+  After the push, re-read author, committer and message from the GitHub API (command in [CONTRIBUTING.md](../../CONTRIBUTING.md#the-scan-command)), not from local config.
+- **Enforced by hooks.** `core.hooksPath` points every worktree at `.githooks/`:
+  - `commit-msg` refuses a commit with an attribution line;
+  - `pre-push` refuses a push if any commit being pushed has one, or has an author or committer other than 1nonlypiece.
+
+  Never bypass them with `--no-verify`. Both were verified by refused attempts on 2026-09-25 (details in CONTRIBUTING.md).
+- **Stopped at source.** `.claude/settings.json` sets Claude Code's `attribution.commit` and `attribution.pr` to `""` and `sessionUrl` to `false`. The hooks remain the enforcement.
+- **Why this is written down:** on 2026-09-25, three commits on `program` picked up a `Co-Authored-By: Claude` trailer from a tool default and were pushed unscanned. The messages were rewritten with the tree unchanged, force-pushed, and re-verified on GitHub.
 - Merges to `main` go through the spec owner after the agent's proof bar (below) is met.
 
 ## What "proven" means per agent (devnet only; never mainnet)
@@ -49,17 +61,28 @@ Reports go in `docs/reports/<date>-<agent>-<topic>.md` on the reporting agent's 
 
 Before relying on a check, ask what it would do if the thing under test were broken. If the answer is "pass", it isn't a check.
 
-**Standard practice: the broken version comes first** (adopted 2026-09-25). Before relying on any test, write a deliberately broken version of the thing under test and confirm the test **fails** against it. Record the mutation and the failing output next to the test.
+### Required: the broken version comes first
 
-This is not a one-off. It has already caught a real gap: the shared model vectors would have passed an SDK that ignored the loss index for open deposit tickets (Agent B, `app@414372a`). Examples of mutations used so far:
+This is a **requirement** (since 2026-09-25), not a suggestion.
+- **Every test** that counts toward a proof bar **must** first be run against a deliberately broken version of the thing it tests, and **must** be seen to fail.
+- The mutation and the failing output **must** be recorded next to the test, in the test file, its JSON record, or the report that cites it.
+- A test with no recorded failing run **does not count**. A report that cites it as proof is wrong and must be corrected.
+- The spec owner **checks for the recorded failure before merging**.
+
+**Why it's required.** It has caught four real bugs that ordinary tests passed:
+1. **An SDK that ignored the loss index on open deposit tickets.** The shared model vectors passed it (Agent B; fixed in `app@414372a`).
+2. **An abort that skips the ticket's intermediate account.** The program accepts it, stranding about 0.0016 SOL of rent (Agent A, refund path). It's recorded in spec 02 as a known limitation, with `sweep_ticket_account` planned.
+3. **A fixture multiplier update that landed after its own effective timestamp.** Caught by `fixtures/DIFF.md --check` (Agent C).
+4. **NEURALINK's stored multiplier field left at 2 by a scenario.** Caught by the same check. It was reset with `2o1FtXa2…` at devnet slot 503694558 (Agent C, `ops@f0821df`).
+
+Examples of mutations used so far:
 - round a payout up by one unit;
 - let an open ticket escape a shortfall;
 - pay a paused leg instead of creating a claim;
 - ignore the pause flag in the app;
 - ignore the loss index in the SDK;
-- allow Manifest in quotes (a negative control).
-
-A test that has never been seen to fail doesn't count toward any proof bar.
+- allow Manifest in quotes (a negative control);
+- disable the git hooks, then push a trailered commit (a dry run only).
 
 | Agent | Proven when |
 |---|---|

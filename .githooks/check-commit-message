@@ -1,0 +1,5 @@
+#!/bin/sh
+# Exit 1 if the commit message on stdin carries an AI attribution line.
+# Shared by the commit-msg and pre-push hooks. See CONTRIBUTING.md.
+grep -n -i -E 'co-authored-by|generated with|🤖' && exit 1
+exit 0
