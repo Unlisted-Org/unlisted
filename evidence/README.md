@@ -29,7 +29,20 @@ Rejected transactions never land, so they have no signature. The `MintPaused` (0
 
 **None of these can be run on mainnet**, because the keys belong to the issuer (a 2-of-7 Squads multisig). The fixture suite in spec 02 turns each into a signed, repeatable scenario against our own program.
 
-## 3. Share maths: executable spec
+## 3. The issuer has already used the seizure power (mainnet, verified)
+
+On **2025-09-19**, PreStocks' permanent delegate (`WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc`, the vault of a 2-of-7 Squads multisig) moved tokens out of **29 holder-owned token accounts** and emptied every one to zero:
+
+- Tokens moved: XAI 26.86, SPACEX 3.66, ANDURIL 1.75, OPENAI 0.69, ANTHROPIC 0.20.
+- There was no memo, and the reason is unknown.
+- Example transactions:
+  - [`2smHrk8U…QxvkHB`](https://solscan.io/tx/2smHrk8UHqyZgqWS5ozisWGitWFMPv6mmA2VNnVSv45xrEU7uMDXycKMrSbE6YNapp9YF6Xd1ESt4aZwH6QxvkHB) (7 accounts)
+  - [`3Umb9MA4…WaWiY7y`](https://solscan.io/tx/3Umb9MA4U4LzWdpuT24qLDUdAsvn7UXgwSwgPtd39UVEDFHVnZJWY7cTVHew6Q3rhC11zWvBPQvkPEsE1WaWiY7y) (6 accounts)
+- Detail: `docs/risks.md` §2.
+
+**Scheduled now (mainnet, verified):** the fee on all seven basket names goes from 100 to 300 bps at epoch 1043 (≈ 2026-09-26 04:52 UTC). It was set 2026-09-24 between 17:50 and 18:11 UTC, the third change in 16 days (`docs/risks.md` §1).
+
+## 4. Share maths: executable spec
 
 [`spec/model/`](../spec/model/): the reference model and 17 property tests covering rounding, shortfall, partial redemption and the IPO rule.
 
@@ -42,7 +55,7 @@ Three deliberate mutations each make the suite fail:
 - letting an open ticket escape a seizure;
 - paying a paused leg instead of creating a claim.
 
-## 4. Jupiter / Manifest over-quote (reported upstream, not a product)
+## 5. Jupiter / Manifest over-quote (reported upstream, not a product)
 
 Manifest's Jupiter adapter quotes PreStocks output gross of the 1% transfer fee. As a result, swaps at ≤ 50 bps slippage revert, and Jupiter's router prefers Manifest even when other venues deliver more.
 

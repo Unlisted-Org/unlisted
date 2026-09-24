@@ -125,7 +125,7 @@ Numbers come from a line-for-line port of the Token-2022 fee math above, using t
 6. **Rounding direction.** The inverse helper is documented as not an exact inverse: `calculate_fee(x) >= calculate_inverse_fee(x − calculate_fee(x))` (`mod.rs:118-125`). Gross-up can overshoot by 1 raw.
 7. **Fee withholding and revenue.** Withheld fees in the escrow's own vault go to the issuer, not the escrow.
    - The PreStocks authority swept withheld fees **46 times** since 1 May. This is from `withdrawWithheldTokensFromMint` instructions signed by `WV9P…Fti5Wc`, found by `getSignaturesForAddress` plus `getTransaction` over 134 successful transactions.
-   - PreStocks says fees are distributed to holders via RevShare (FAQ and ecosystem page, prestocks.com, per the research sub-agent).
+   - PreStocks' ecosystem page says fees are distributed to holders via RevShare, but its Terms of Service say fees are "applied for our own account", and a sampled on-chain trail shows no holder distribution. See `docs/risks.md` §2 (updated 2026-09-25).
 8. **Quoting (off-chain).** Any quoter that ignores the fee is wrong by the full rate. It happens live on Jupiter's Manifest route (Q2).
 
 ### What genuinely remains unsolved
@@ -258,7 +258,7 @@ DexScreener: `api.dexscreener.com/latest/dex/tokens/<mints>` and `/token-pairs/v
 - 1039: 2026-09-20 21:06
 - 1041: 2026-09-23 13:06
 
-All times UTC. An epoch currently lasts about 2.6 days.
+All times UTC. **Correction (2026-09-25):** an epoch currently lasts about **32 hours** (measured 0.2657 s/slot; epochs 1039 and 1040 took 32.1 h and 31.9 h), not 2.6 days as first written. The notice hours in the table below came from real block times and are unaffected.
 
 ### Where withheld fees go
 
@@ -266,14 +266,14 @@ All times UTC. An epoch currently lasts about 2.6 days.
 2. **Harvest:** anyone can move it to the mint's `withheld_amount` (permissionless).
 3. **Withdraw:** only `withdrawWithheldAuthority` can move it to a destination, from the mint or directly from token accounts.
    - PreStocks has done this **46 times** since 1 May (`withdrawWithheldTokensFromMint` in the authority's transactions).
-   - PreStocks attributes the proceeds to holder revenue sharing via RevShare (prestocks.com, per the research sub-agent; not independently verified).
+   - PreStocks' ecosystem page attributes the proceeds to holder revenue sharing via RevShare; its Terms of Service say fees are "applied for our own account" (see `docs/risks.md` §2).
    - Tessera's docs say the fee is split between referrer and treasury ([transfer fees](https://docs.tessera.pe/features/token-system-and-fees/transfer.md)).
 
 ### Can the issuer change the rate, and with what notice?
 
 - **Yes.** A single key signs `SetTransferFee`.
 - **Minimum notice** is set by the program: the new rate starts at `current_epoch + 2` (`transfer_fee/processor.rs:101`).
-  - Calling at the very end of an epoch gives just over 1 epoch (about 2.6 days). Calling at the start gives about 2 epochs.
+  - Calling at the very end of an epoch gives just over 1 epoch (about 32 hours). Calling at the start gives about 2 epochs (about 64 hours).
   - A pending change can be **overwritten** before it takes effect (`:96-107`).
 - **There is no upper bound on the rate** except `MAX_FEE_BASIS_POINTS` = 10,000 (`:85-87`).
 
@@ -300,7 +300,7 @@ Take the live config, a deposit at epoch 1038 and a release at epoch 1039 (100 b
    - If the program has no re-quote path, settlement is **stuck** until the code is upgraded.
 3. **Correct design:** never persist a fee or gross-up. Compute with `calculate_epoch_fee(Clock::epoch)` at transfer time, use plain `transfer_checked`, and record the balance change.
    - When terms promise a *net* amount, read `newerTransferFee` at deposit and either fund to the worse of the two rates or refuse escrows that straddle `newer.epoch`.
-   - A rate can still be *set* during an escrow and take effect two epochs later, so any escrow lasting more than about 2.6 days is exposed. Terms must say who absorbs the difference.
+   - A rate can still be *set* during an escrow and take effect two epochs later, so any escrow lasting more than about 32 hours is exposed. Terms must say who absorbs the difference.
 
 ---
 
@@ -423,7 +423,7 @@ This is two to four days of work. Whether the *venue* (lending or OTC for PreSto
 
 **Result: 0.** In that window the permanent delegate was never used to move or burn tokens out of holders' accounts, and that includes pool and escrow vaults.
 
-Any use of the permanent delegate must be signed by this key, so the scan is complete for the window. Activity before 2026-03-03 was not scanned.
+Any use of the permanent delegate must be signed by this key, so the scan is complete for the window. Activity before 2026-03-03 was not scanned. **Update 2026-09-25:** that earlier window does contain delegate use. On 2025-09-19 the delegate emptied 29 holder accounts to zero; see `docs/risks.md` §2.
 
 ---
 

@@ -106,7 +106,7 @@ Status: **draft for agreement.** Agent C implements the service (`services/valua
 
 **`last_trade`**
 - `usdPricePrescaled` (USD per raw unit) from Jupiter price v3 for the mirrored mint.
-- `age_s` = (current mainnet slot − `blockId`) × 0.4 s.
+- `age_s` = current time − `getBlockTime(blockId)`. Don't convert slots at an assumed rate: slots currently take ≈ 0.266 s, not the commonly assumed 0.4 s, which overstated ages by 1.5× in Phase 0.
 - `oldest_age_s` drives a warning above 15 minutes.
 
 **`reference`**

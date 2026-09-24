@@ -31,7 +31,7 @@ Share maths is in spec 01 and the reference model; this spec does not repeat it.
 | `MIN_DEADLINE_MARGIN` | 7 days |
 | `ROUTER_ALLOWLIST_MAX` | 4 |
 | `ALLOWLIST_TIMELOCK` | 48 h |
-| `TICKET_MAX_AGE_SLOTS` | 1_500 (≈10 min) |
+| `TICKET_MAX_AGE_SLOTS` | 1_500 (≈ 6.6 min at the measured 0.2657 s/slot) |
 
 ## Accounts
 
@@ -205,7 +205,7 @@ Program upgrade authority is held by the deployer on devnet and disclosed in the
 ## Fixtures (first-class; owned by Agent C)
 
 - **Seven fixture mints**, one per constituent. Each has:
-  - Token-2022, 9 decimals, `TransferFeeConfig` at 100 bps with `maximumFee = u64::MAX`;
+  - Token-2022, 9 decimals, `TransferFeeConfig` mirroring the mainnet mint's **current** schedule at creation (as of 2026-09-25: 100 bps, rising to 300 bps at epoch 1043), with `maximumFee = u64::MAX`;
   - `PermanentDelegate`, `PausableConfig`, `DefaultAccountState(initialized)`, `ScaledUiAmountConfig` mirroring the mainnet multiplier (OpenAI 1.4861347, others 1);
   - `TransferHook` with a null program and a live authority, `ConfidentialTransferMint` and `ConfidentialTransferFeeConfig`, `MetadataPointer` and `TokenMetadata`.
   - Fixture authorities are held by a fixture-issuer key (a devnet stand-in for the 2-of-7 multisig).
@@ -217,7 +217,7 @@ Program upgrade authority is held by the deployer on devnet and disclosed in the
   |---|---|
   | `seizure` | The fixture issuer burns from a basket vault. `observe` emits `ShortfallObserved`. A redemption receives pro-rata less. A later depositor pays the reduced rate. |
   | `pause-mid-redemption` | **Most coverage.** Pause between redemption and payout: available legs paid, claim created. Settlement fails while paused and succeeds after resume. Also covers several legs paused, and a seizure while a claim is open. |
-  | `fee-change-mid-position` | `set-transfer-fee` 100 → 150 bps, wait 2 epochs, redeem: recipient net reflects the new fee; no stored fee anywhere. |
+  | `fee-change-mid-position` | Reproduces the real change PreStocks made on 2026-09-24: `set-transfer-fee` 100 → 300 bps with a position open, wait two epochs (about 64 h), then redeem. The recipient's net reflects the new fee, a ticket straddling the change still finalises, and no fee is stored anywhere. |
   | `multiplier-change-mid-position` | `update-ui-amount-multiplier` with a near-future timestamp: raw balances and shares unchanged; the API's display value changes only after the effective time. |
   | `hook-switched-on` | Attach a hook program: deposits refused with `LegUnavailable`, redemptions turn the leg into a claim. |
   | `frozen-vault` | Freeze one basket vault account: same partial-redemption behaviour. |
