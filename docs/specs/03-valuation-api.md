@@ -138,6 +138,8 @@ This is read from the **mint account's** `scaledUiAmountConfig`: the fixture min
 }
 ```
 
+In `mode=usdc`, every available leg has **`"action": "pending_sale"`** with `units`, and the expected USDC from the leg's quote. This matches spec 02: in USDC mode every leg becomes a `Claim { PendingSale }` settled by a sale. Ratified 2026-09-25 from Agent C's `docs/reports/2026-09-25-ops-api-additions.md` on `ops`, where the other API additions are listed and accepted as additive.
+
 `gross_raw` must equal the program's `floor(s × owned_i / (S + C_i))` at `as_of_slot` exactly. C's test compares it against the reference model and against a devnet `redeem` transaction's measured payout.
 
 ## `GET /v1/quote/deposit?usdc=U`
