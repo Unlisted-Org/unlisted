@@ -47,6 +47,18 @@ Reports go in `docs/reports/<date>-<agent>-<topic>.md` on the reporting agent's 
 
 Before relying on a check, ask what it would do if the thing under test were broken. If the answer is "pass", it isn't a check.
 
+**Standard practice: the broken version comes first** (adopted 2026-09-25). Before relying on any test, write a deliberately broken version of the thing under test and confirm the test **fails** against it. Record the mutation and the failing output next to the test.
+
+This is not a one-off. It has already caught a real gap: the shared model vectors would have passed an SDK that ignored the loss index for open deposit tickets (Agent B, `app@414372a`). Examples of mutations used so far:
+- round a payout up by one unit;
+- let an open ticket escape a shortfall;
+- pay a paused leg instead of creating a claim;
+- ignore the pause flag in the app;
+- ignore the loss index in the SDK;
+- allow Manifest in quotes (a negative control).
+
+A test that has never been seen to fail doesn't count toward any proof bar.
+
 | Agent | Proven when |
 |---|---|
 | **A** | (1) Every issuer scenario in spec 02 (*Fixtures*) runs against the real `basket` program on devnet with the fixture mints, with a confirmed signature for every step recorded in `tests/program/devnet/<scenario>.json`. Pause mid-redemption gets the most coverage: one leg, several legs, seizure while a claim is open, claim settled after resume. (2) The Jupiter CPI path (`ticket_swap_leg`, `settle_leg_usdc`, `convert_listed_leg`) runs on a **cloned-mainnet fork** against real PreStocks mints and live Jupiter routes, proving the account count and CPI depth. (3) The model test vectors reproduce to the unit. |
