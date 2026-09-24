@@ -6,6 +6,14 @@ const JUP_PRICE = process.env.JUP_PRICE_URL ?? "https://lite-api.jup.ag/price/v3
 const JUP_BUILD = process.env.JUP_BUILD_URL ?? "https://api.jup.ag/swap/v2/build";
 const PRESTOCKS = process.env.PRESTOCKS_URL ?? "https://prestocks.com/api/prestocks";
 
+/**
+ * Venues excluded from every quote (spec 02, Router route rules):
+ *  - Manifest: its quotes ignore the transfer fee (Bonasa-Tech/manifest#735);
+ *  - 1DEX: requires a system-owned taker, so it fails when the taker is the basket's PDA (found by A on the fork).
+ * sell_now must stay executable by the program, so the API quotes only routes the program could take.
+ */
+export const EXCLUDE_DEXES = process.env.EXCLUDE_DEXES ?? "Manifest,1DEX";
+
 const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
 /** Jupiter's keyless endpoints rate-limit bursts: at most JUP_CONCURRENCY calls in flight, spaced out. */
@@ -123,7 +131,7 @@ export interface SellQuote {
 
 /**
  * Fee-inclusive sell quote of `amountRaw` of a mainnet mint into USDC through Jupiter swap v2 /build,
- * with Manifest excluded (its quotes ignore the transfer fee: Bonasa-Tech/manifest#735).
+ * with EXCLUDE_DEXES excluded (Manifest, 1DEX; see above).
  * `taker` must hold the input on mainnet if the route is to be simulated.
  */
 export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: string, opts: { includeManifest?: boolean } = {}): Promise<SellQuote> {
@@ -132,11 +140,11 @@ export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: s
     outputMint: MAINNET_USDC,
     amount: amountRaw.toString(),
     slippageBps: "100",
-    excludeDexes: "Manifest",
+    excludeDexes: EXCLUDE_DEXES,
     maxAccounts: "30",
     taker,
   });
-  if (opts.includeManifest) q.delete("excludeDexes"); // negative control only (verify/sell-sim.ts)
+  if (opts.includeManifest) q.set("excludeDexes", "1DEX"); // negative control only (verify/sell-sim.ts): Manifest allowed
   const b = await getJson(`${JUP_BUILD}?${q}`);
   return {
     mint,
@@ -147,7 +155,7 @@ export async function jupiterSellQuote(mint: string, amountRaw: bigint, taker: s
     price_impact_bps: Math.round(Number(b.priceImpactPct ?? 0) * 100),
     build: b,
     quoted_at: nowIso(),
-    source: opts.includeManifest ? "jupiter swap/v2 build, Manifest ALLOWED (negative control)" : "jupiter swap/v2 build excludeDexes=Manifest (mainnet)",
+    source: opts.includeManifest ? "jupiter swap/v2 build, Manifest ALLOWED (negative control)" : `jupiter swap/v2 build excludeDexes=${EXCLUDE_DEXES} (mainnet)`,
     taker,
   };
 }

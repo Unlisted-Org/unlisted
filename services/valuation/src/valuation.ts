@@ -6,7 +6,7 @@ import { readBasket } from "./lib/basket.ts";
 import type { BasketView, LegView } from "./lib/basket.ts";
 import { entitlement, perShare, quoteRedeem, sharesForDeltas, observe, pendingActual } from "./lib/sharemath.ts";
 import { effectiveMultiplier, feeSchedule, issuerControls } from "./lib/token2022.ts";
-import { jupiterLastTrade, prestocksMarks, jupiterSellQuote } from "./lib/sources.ts";
+import { jupiterLastTrade, prestocksMarks, jupiterSellQuote, EXCLUDE_DEXES } from "./lib/sources.ts";
 import type { SellQuote } from "./lib/sources.ts";
 import { poolAccounts, quoteSwap, SIDE_BUY } from "./lib/amm.ts";
 import { decodeMultisig } from "./lib/squads.ts";
@@ -117,9 +117,9 @@ export class Valuation {
     return p;
   }
 
-  async sellQuote(mint: string, amount: bigint): Promise<(SellQuote & { quoted_at_slot: number | null; taker_holds_input: boolean }) | { error: string }> {
+  async sellQuote(mint: string, amount: bigint, fresh = false): Promise<(SellQuote & { quoted_at_slot: number | null; taker_holds_input: boolean }) | { error: string }> {
     if (amount <= 0n) return { error: "zero amount" };
-    return this.cache.get(`sq:${mint}:${amount}`, 20_000, async () => {
+    return this.cache.get(`sq:${mint}:${amount}`, fresh ? 0 : 20_000, async () => {
       try {
         const t = await this.takerFor(mint, amount);
         const q = await jupiterSellQuote(mint, amount, t.taker);
@@ -133,13 +133,13 @@ export class Valuation {
 
   // ---------- the three values for given per-leg raw amounts ----------
 
-  async values(b: BasketView, amounts: bigint[], opts: { claimed?: boolean[] } = {}) {
+  async values(b: BasketView, amounts: bigint[], opts: { claimed?: boolean[]; includeBuilds?: boolean; fresh?: boolean } = {}) {
     const legs = b.legs.filter((l) => l.status !== "retired");
     const mints = legs.map((l) => l.mirror_of);
     const [lt, marks, mm] = await Promise.all([this.lastTrades(mints), this.marks(), this.mainnetMints(mints)]);
     const now = Math.floor(Date.now() / 1000);
 
-    const quotes = await Promise.all(legs.map((l) => this.sellQuote(l.mirror_of, amounts[l.index])));
+    const quotes = await Promise.all(legs.map((l) => this.sellQuote(l.mirror_of, amounts[l.index], opts.fresh)));
     const sellLegs: any[] = [];
     const unquotable: any[] = [];
     let sellUsd = 0, sellPaidNow = 0;
@@ -158,6 +158,7 @@ export class Valuation {
         price_impact_bps: q.price_impact_bps, fee_bps: mm.infos[k] ? feeSchedule(mm.infos[k], mm.epoch)!.now_bps : null,
         quoted_at_slot: q.quoted_at_slot, quoted_at: q.quoted_at, taker: q.taker, taker_holds_input: q.taker_holds_input, source: q.source,
         ...(opts.claimed?.[l.index] ? { claim: true } : {}),
+        ...(opts.includeBuilds ? { build: q.build } : {}),
       });
     });
 
@@ -193,7 +194,7 @@ export class Valuation {
         label: "If you redeemed now",
         usd: usd(sellUsd),
         usd_paid_now: usd(sellPaidNow),
-        method: "sum over legs of live fee-inclusive sell quotes for the raw amount of the mirrored mainnet token, excluding Manifest",
+        method: `sum over legs of live fee-inclusive sell quotes for the raw amount of the mirrored mainnet token, excluding ${EXCLUDE_DEXES} (spec 02 route rules)`,
         legs: sellLegs,
         unquotable_legs: unquotable,
       },
@@ -237,11 +238,12 @@ export class Valuation {
 
   // ---------- endpoints ----------
 
-  async getBasket() {
+  /** includeBuilds: attach each sell_now leg's full Jupiter /build response (for verify/sell-sim.ts). */
+  async getBasket(opts: { includeBuilds?: boolean; fresh?: boolean } = {}) {
     const b = await this.basket();
     const one = 10n ** BigInt(b.share_decimals);
     const amounts = b.legs.map((l) => (l.status === "retired" ? 0n : entitlement(l.state, b.supply, one)));
-    const vals = await this.values(b, amounts, { claimed: b.legs.map((l) => l.status === "unavailable") });
+    const vals = await this.values(b, amounts, { claimed: b.legs.map((l) => l.status === "unavailable"), includeBuilds: opts.includeBuilds, fresh: opts.fresh });
     const blockTime = await this.rpc.blockTime(b.slot).catch(() => null);
     const shortfallEvents = (this.watcher?.events() ?? []).filter((e) => e.kind === "program" && e.type === "ShortfallObserved");
     const ltTotal = Number(vals.last_trade.usd);
@@ -463,7 +465,7 @@ export class Valuation {
       const perLeg = Math.min(...out.map((x) => x.max_usd_per_leg));
       return {
         max_round_trip_bps: maxRoundTripBps, computed_at: nowIso(), pricing_basis: this.pricingBasis(),
-        method: "buy USDC->token then sell the received token->USDC on mainnet (Jupiter swap/v1 quote, excludeDexes=Manifest, fee-inclusive); round trip = 1 - usdc_back / usdc_in; largest ladder step under the threshold",
+        method: `buy USDC->token then sell the received token->USDC on mainnet (Jupiter swap/v1 quote, excludeDexes=${EXCLUDE_DEXES}, fee-inclusive); round trip = 1 - usdc_back / usdc_in; largest ladder step under the threshold`,
         legs: out, per_leg_usd: perLeg, per_basket_usd: perLeg * legs.length,
         note: "per-basket capacity assumes equal value per leg (spec 01); the thinnest leg binds",
       };
@@ -539,7 +541,7 @@ async function roundTrip(mint: string, usdSize: number) {
   const base = process.env.JUP_QUOTE_URL ?? "https://lite-api.jup.ag/swap/v1/quote";
   const usdcIn = BigInt(Math.round(usdSize * 1e6));
   const get = async (i: string, o: string, amt: bigint) => {
-    const r = await fetch(`${base}?inputMint=${i}&outputMint=${o}&amount=${amt}&slippageBps=100&excludeDexes=Manifest`, { signal: AbortSignal.timeout(20_000) });
+    const r = await fetch(`${base}?inputMint=${i}&outputMint=${o}&amount=${amt}&slippageBps=100&excludeDexes=${EXCLUDE_DEXES}`, { signal: AbortSignal.timeout(20_000) });
     const j: any = await r.json();
     if (!r.ok || !j.outAmount) throw new Error(`quote ${r.status}: ${JSON.stringify(j).slice(0, 150)}`);
     return BigInt(j.outAmount);

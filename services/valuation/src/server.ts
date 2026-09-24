@@ -26,7 +26,7 @@ refresh().catch((e) => console.error("basket refresh", e));
 const json = (x: unknown) => JSON.stringify(x, (_k, val) => (typeof val === "bigint" ? val.toString() : val), 1);
 
 const routes: [RegExp, (m: RegExpMatchArray, q: URLSearchParams) => Promise<unknown>][] = [
-  [/^\/v1\/basket$/, (_m, q) => (q.get("fresh") ? v.getBasket() : warmBasket())],
+  [/^\/v1\/basket$/, (_m, q) => (q.get("include_builds") ? v.getBasket({ includeBuilds: true, fresh: true }) : q.get("fresh") ? v.getBasket({ fresh: true }) : warmBasket())],
   [/^\/v1\/position\/([1-9A-HJ-NP-Za-km-z]{32,44})$/, (m) => v.position(m[1])],
   [/^\/v1\/quote\/redeem$/, (_m, q) => {
     const mode = (q.get("mode") ?? "in_kind") as "in_kind" | "usdc";

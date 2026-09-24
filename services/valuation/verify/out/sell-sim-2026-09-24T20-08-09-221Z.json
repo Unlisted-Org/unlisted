@@ -1,0 +1,239 @@
+{
+ "check": "sell_now leg vs mainnet simulateTransaction of the quoted route, tolerance ±0.1%",
+ "api": "http://localhost:8905",
+ "basket_as_of": {
+  "slot": 1246,
+  "block_time": "2026-09-24T20:07:40Z",
+  "epoch": 19,
+  "mainnet_slot": 450132209,
+  "generated_at": "2026-09-24T20:08:07Z"
+ },
+ "tolerance": 0.001,
+ "legs": [
+  {
+   "index": 0,
+   "symbol": "OPENAI",
+   "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+   "amount_raw": "25568017",
+   "api_out_usdc_raw": "50564649",
+   "api_route": "Meteora DLMM + Flux",
+   "api_quoted_at_slot": 450132211,
+   "seconds_after_api": 0,
+   "simulated_route": "Meteora DLMM + Flux",
+   "same_instant_quote_out_usdc_raw": "50564649",
+   "taker": "D8J5wMyQSfnPohtMdYSz7VEYsH8Uk4DXY5Me8jVc1BsW",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132305,
+    "err": null,
+    "units": 106490,
+    "usdc_ata": "J6GQFs44FwNXcLEs1AYfAV4Cr721g7pq2ZAKb2cTnfr5",
+    "pre": "221309929532",
+    "post": "221360448442",
+    "delivered": "50518910",
+    "logs_tail": [
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 696628 compute units",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success"
+    ]
+   },
+   "delivered_vs_api": "-0.0905%",
+   "delivered_vs_same_instant_quote": "-0.0905%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 1,
+   "symbol": "ANTHROPIC",
+   "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+   "amount_raw": "48232861",
+   "api_out_usdc_raw": "50079144",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450132212,
+   "seconds_after_api": 1,
+   "simulated_route": "Meteora DLMM",
+   "same_instant_quote_out_usdc_raw": "50079144",
+   "taker": "HkvpFqa3WngHoQcfLttAX4am7Ng8vezF6EEGRSbMsRj9",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132307,
+    "err": null,
+    "units": 67399,
+    "usdc_ata": "4e4m9Zwi6puaKgX4fYZfkcKMZHVob9GV55FAZBT2TjZR",
+    "pre": "0",
+    "post": "50078578",
+    "delivered": "50078578",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 53832 of 389433 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 ciP8AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "-0.0011%",
+   "delivered_vs_same_instant_quote": "-0.0011%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 2,
+   "symbol": "NEURALINK",
+   "mint": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+   "amount_raw": "115200189",
+   "api_out_usdc_raw": "49706787",
+   "api_route": "Meteora DLMM + Flux",
+   "api_quoted_at_slot": 450132211,
+   "seconds_after_api": 1,
+   "simulated_route": "Meteora DLMM + Flux",
+   "same_instant_quote_out_usdc_raw": "49706787",
+   "taker": "6GJbPKBtovsrMEEMcic5KMi5tswh9qSyT5ZYLMqEwNgt",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132306,
+    "err": null,
+    "units": 105285,
+    "usdc_ata": "7aCEMELUCEddCTXeDtrC1NuhCeqjCJPZWUvdwbubP9vq",
+    "pre": "309180029092",
+    "post": "309229692701",
+    "delivered": "49663609",
+    "logs_tail": [
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 697833 compute units",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success"
+    ]
+   },
+   "delivered_vs_api": "-0.0869%",
+   "delivered_vs_same_instant_quote": "-0.0869%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 3,
+   "symbol": "ANDURIL",
+   "mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+   "amount_raw": "310790198",
+   "api_out_usdc_raw": "49911073",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450132212,
+   "seconds_after_api": 1,
+   "simulated_route": "Meteora DLMM",
+   "same_instant_quote_out_usdc_raw": "49911073",
+   "taker": "4142rbqBz3a3T7xLwLTiY69AVyJZwQPJ1xjp6vBZDXcS",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132308,
+    "err": null,
+    "units": 52107,
+    "usdc_ata": "FMvkVMi3HzVqzYjwXrfW4jk5kUxpihFGpkx676SX3k48",
+    "pre": "18390608338",
+    "post": "18440519411",
+    "delivered": "49911073",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 47619 of 398512 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 IZX5AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "0.0000%",
+   "delivered_vs_same_instant_quote": "0.0000%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 4,
+   "symbol": "POLYMARKET",
+   "mint": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+   "amount_raw": "344151253",
+   "api_out_usdc_raw": "49870024",
+   "api_route": "Meteora DLMM + Flux",
+   "api_quoted_at_slot": 450132212,
+   "seconds_after_api": 1,
+   "simulated_route": "Meteora DLMM + Flux",
+   "same_instant_quote_out_usdc_raw": "49870024",
+   "taker": "2sujbbTjp2r5ugbjfHgUNDSwtdVfYpTiCSKPgT84CvD7",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132309,
+    "err": null,
+    "units": 104039,
+    "usdc_ata": "mxyDfD4Tqbz6i8PMbpS9iwcZyoA54kRqNNPQAfqFxJE",
+    "pre": "5391893173",
+    "post": "5441745985",
+    "delivered": "49852812",
+    "logs_tail": [
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 699079 compute units",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success"
+    ]
+   },
+   "delivered_vs_api": "-0.0345%",
+   "delivered_vs_same_instant_quote": "-0.0345%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 5,
+   "symbol": "KALSHI",
+   "mint": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+   "amount_raw": "57303681",
+   "api_out_usdc_raw": "49581902",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450132303,
+   "seconds_after_api": 1,
+   "simulated_route": "Meteora DLMM",
+   "same_instant_quote_out_usdc_raw": "49581902",
+   "taker": "2sujbbTjp2r5ugbjfHgUNDSwtdVfYpTiCSKPgT84CvD7",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132309,
+    "err": null,
+    "units": 53222,
+    "usdc_ata": "mxyDfD4Tqbz6i8PMbpS9iwcZyoA54kRqNNPQAfqFxJE",
+    "pre": "5391893173",
+    "post": "5441475075",
+    "delivered": "49581902",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 47234 of 397012 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 To/0AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "0.0000%",
+   "delivered_vs_same_instant_quote": "0.0000%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 6,
+   "symbol": "FIGUREAI",
+   "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+   "amount_raw": "285704113",
+   "api_out_usdc_raw": "50057393",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450132305,
+   "seconds_after_api": 1,
+   "simulated_route": "Meteora DLMM",
+   "same_instant_quote_out_usdc_raw": "50057393",
+   "taker": "4GXmM7FwHHHCgQhADfdaMuPJiWtNH5LXeFGxqgvdhuaR",
+   "taker_from_api": true,
+   "simulated_the_apis_own_build": true,
+   "simulation": {
+    "slot": 450132310,
+    "err": null,
+    "units": 51914,
+    "usdc_ata": "9PdiPSoEtKnZcWYWwfJp7Exvy2TqambaKdEvjkrQhKUg",
+    "pre": "0",
+    "post": "50057393",
+    "delivered": "50057393",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 47426 of 398512 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 sdD7AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "0.0000%",
+   "delivered_vs_same_instant_quote": "0.0000%",
+   "within_0_1pct": true
+  }
+ ],
+ "all_ok": true
+}
