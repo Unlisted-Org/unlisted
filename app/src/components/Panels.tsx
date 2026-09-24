@@ -151,38 +151,71 @@ export function LegsTable({ v, pos, api }: { v: BasketView; pos: Position | null
 
 // ---------------------------------------------------------------- price panel
 
-export function PricePanel({ api, error }: { api: BasketResponse | null; error: string | null }) {
-  if (error) return <section><h2>Value of one share</h2><div className="banner warn">Valuation API unavailable: {error}. No value is shown rather than a guessed one.</div></section>;
-  if (!api) return <section><h2>Value of one share</h2><p className="muted">Loading…</p></section>;
+export function PricePanel({ api, error, title = "Value of one share: three sources, never one price", testid = "price-panel" }: { api: BasketResponse | null; error: string | null; title?: string; testid?: string }) {
+  if (error) return <section data-testid={testid}><h2>{title}</h2><div className="banner warn">Valuation API unavailable: {error}. No value is shown rather than a guessed one.</div></section>;
+  if (!api) return <section data-testid={testid}><h2>{title}</h2><p className="muted">Loading…</p></section>;
   const v = api.values;
-  const refAge = v.reference.legs.length ? (Date.now() - Math.min(...v.reference.legs.map((l) => Date.parse(l.fetched_at)))) / 1000 : null;
-  const sellAgeSlots = v.sell_now.legs.length ? api.as_of_slot - Math.min(...v.sell_now.legs.map((l) => l.quoted_at_slot)) : null;
+  const ageOf = (iso?: string) => (iso ? (Date.now() - Date.parse(iso)) / 1000 : null);
+  const refAge = v.reference.legs.length ? Math.max(...v.reference.legs.map((l) => ageOf(l.fetched_at) ?? 0)) : null;
+  const sellTimes = v.sell_now.legs.map((l: any) => l.quoted_at as string | undefined).filter(Boolean) as string[];
+  const sellAge = sellTimes.length ? Math.max(...sellTimes.map((t) => ageOf(t) ?? 0)) : null;
+  const sellSlots = v.sell_now.legs.map((l) => l.quoted_at_slot).filter((x) => typeof x === "number");
+  // unquotable_legs: spec 03's example shows indices; the service returns {index, symbol, reason}.
+  const unq = (v.sell_now.unquotable_legs as any[]).map((u) => (typeof u === "number" ? { index: u, symbol: api.legs[u]?.symbol, reason: "" } : u));
+  const sym = (i: number) => api.legs.find((l) => l.index === i)?.symbol ?? `leg ${i}`;
   return (
-    <section data-testid="price-panel">
-      <h2>Value of one share: three sources, never one price</h2>
+    <section data-testid={testid}>
+      <h2>{title}</h2>
       <div className="cards3">
         <div className="card" data-testid="value-sell-now">
           <div className="label">{v.sell_now.label}</div>
-          <div className="big">{fmtUsd(v.sell_now.usd)}</div>
-          <div className="muted">Live fee-inclusive sell quotes, Manifest excluded. Quoted {sellAgeSlots != null ? `${sellAgeSlots} slots before the read` : ""} at slot {api.as_of_slot}.</div>
-          {v.sell_now.unquotable_legs.length > 0 && <div className="warnline">Valued at 0 (no route): {v.sell_now.unquotable_legs.map((i) => api.legs[i]?.symbol ?? i).join(", ")}</div>}
+          <div className="big" data-usd={v.sell_now.usd}>{fmtUsd(v.sell_now.usd)}</div>
+          <div className="muted">Live fee-inclusive sell quotes of the mirrored mainnet tokens, Manifest excluded. {sellAge != null ? `Oldest quote ${fmtAge(sellAge)}` : sellSlots.length ? `Quoted at mainnet slot ${Math.min(...sellSlots)}` : ""}.</div>
+          {unq.length > 0 && <div className="warnline" data-testid="unquotable">Valued at 0 here (no route): {unq.map((u) => u.symbol ?? sym(u.index)).join(", ")}</div>}
         </div>
         <div className="card" data-testid="value-last-trade">
           <div className="label">{v.last_trade.label}</div>
-          <div className="big">{fmtUsd(v.last_trade.usd)}</div>
+          <div className="big" data-usd={v.last_trade.usd}>{fmtUsd(v.last_trade.usd)}</div>
           <div className="muted">Oldest leg {fmtAge(v.last_trade.oldest_age_s)}.</div>
           {v.last_trade.oldest_age_s > 900 && <div className="warnline">A leg's last trade is over 15 minutes old.</div>}
         </div>
         <div className="card" data-testid="value-reference">
           <div className="label">{v.reference.label}</div>
-          <div className="big">{fmtUsd(v.reference.usd)}</div>
+          <div className="big" data-usd={v.reference.usd}>{fmtUsd(v.reference.usd)}</div>
           <div className="muted">Issuer's off-chain estimate; you can't trade at it. Fetched {fmtAge(refAge)}.</div>
         </div>
       </div>
       <p className="muted">
         Gaps: sell-now vs last trade {v.gaps.sell_now_vs_last_trade_bps} bps; reference vs last trade {v.gaps.reference_vs_last_trade_bps} bps.
-        {api.warnings.map((w) => <span key={w} className="warnline"> {w}.</span>)}
       </p>
+      {(api.warnings ?? []).length > 0 && <ul className="warnline">{api.warnings.map((w) => <li key={w}>{w}</li>)}</ul>}
+      <details>
+        <summary>Per leg, with sources and ages</summary>
+        <div className="scroll">
+          <table data-testid="price-legs">
+            <thead><tr><th>Leg</th><th>If redeemed now</th><th>Route</th><th>Last trade</th><th>Age</th><th>Reference</th><th>Fetched</th></tr></thead>
+            <tbody>
+              {api.legs.map((l) => {
+                const sn: any = v.sell_now.legs.find((x) => x.index === l.index);
+                const lt: any = v.last_trade.legs.find((x) => x.index === l.index);
+                const rf: any = v.reference.legs.find((x) => x.index === l.index);
+                const u = unq.find((x) => x.index === l.index);
+                return (
+                  <tr key={l.index}>
+                    <td>{l.symbol}</td>
+                    <td>{sn ? fmtUsd(sn.usd) : u ? "0 (no route)" : "—"}</td>
+                    <td className="muted">{sn?.route ?? (u?.reason ? String(u.reason).slice(0, 60) : "—")}</td>
+                    <td>{lt?.usd != null ? fmtUsd(lt.usd) : "—"}</td>
+                    <td>{fmtAge(lt?.age_s)}</td>
+                    <td>{rf?.usd != null ? fmtUsd(rf.usd) : "—"}</td>
+                    <td>{fmtAge(ageOf(rf?.fetched_at))}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </section>
   );
 }

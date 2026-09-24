@@ -10,6 +10,8 @@ export interface Valuation {
   quoteRedeem(view: BasketView, shares: bigint, mode: "in_kind" | "usdc"): Promise<QuoteRedeemResponse>;
   quoteDeposit(view: BasketView, usdc: bigint): Promise<QuoteDepositResponse>;
   events(sinceSlot: number): Promise<EventsResponse>;
+  /** Values at the wallet's own size (spec 03 /v1/position). null when mocked. */
+  position(owner: string): Promise<any | null>;
   readonly isMock: boolean;
 }
 
@@ -25,6 +27,7 @@ export class HttpValuation implements Valuation {
   quoteRedeem(_v: BasketView, shares: bigint, mode: "in_kind" | "usdc") { return this.get<QuoteRedeemResponse>(`/v1/quote/redeem?shares=${shares}&mode=${mode}`); }
   quoteDeposit(_v: BasketView, usdc: bigint) { return this.get<QuoteDepositResponse>(`/v1/quote/deposit?usdc=${usdc}`); }
   events(sinceSlot: number) { return this.get<EventsResponse>(`/v1/events?since_slot=${sinceSlot}`); }
+  position(owner: string) { return this.get<any>(`/v1/position/${owner}`); }
 }
 
 const MOCK_LABEL = "MOCK: valuation API (Agent C) not connected. Prices are placeholders in spec 03's shape, not market data.";
@@ -35,7 +38,9 @@ const EXAMPLE_GAPS = { sell_now_vs_last_trade_bps: -330, reference_vs_last_trade
 
 export class MockValuation implements Valuation {
   readonly isMock = true;
-  private usdPerRaw(i: number, mult: number) { return (PLACEHOLDER_USD_PER_UI[i] ?? 10) * mult / 1e9; }
+  // Placeholder price per RAW unit. Deliberately independent of any fixture multiplier: a fixture's
+  // scaled-UI multiplier moves display fields only, never USD values (spec 03, Acceptance 3).
+  private usdPerRaw(i: number, _mult?: number) { return (PLACEHOLDER_USD_PER_UI[i] ?? 10) / 1e9; }
 
   async basket(v: BasketView): Promise<BasketResponse> {
     const S = v.shareSupply;
@@ -69,7 +74,7 @@ export class MockValuation implements Valuation {
         last_trade: { label: "Last trade", usd: sum(ltUsd).toFixed(2), legs: lastTradeLegs, oldest_age_s: 42 },
         reference: {
           label: "PreStocks reference (off-chain estimate, not tradable)", usd: sum(refUsd).toFixed(2),
-          legs: v.legs.map((l, i) => ({ index: i, usd_per_ui: String(PLACEHOLDER_USD_PER_UI[i] * (1 + EXAMPLE_GAPS.reference_vs_last_trade_bps / 10_000)),
+          legs: v.legs.map((l, i) => ({ index: i, usd_per_ui: String(PLACEHOLDER_USD_PER_UI[i] * (1 + EXAMPLE_GAPS.reference_vs_last_trade_bps / 10_000)), // placeholder, per raw×1e9
             effective_multiplier: String(l.multiplier), usd_per_raw: String(this.usdPerRaw(i, l.multiplier)), fetched_at: now, source: MOCK_LABEL })),
         },
         gaps: EXAMPLE_GAPS,
@@ -109,6 +114,8 @@ export class MockValuation implements Valuation {
       legs: split.map((s, i) => ({ index: i, usdc_raw: s.toString(), expected_delta_raw: "…", min_out_raw: "…", route: this.routerPrice ? "fixture_amm (price from pool)" : "mock" })),
       expected_shares_raw: "…", packing: [], mock: MOCK_LABEL + (this.routerPrice ? " Deposit split uses the cluster's fixture_amm pool prices." : "") };
   }
+
+  async position(): Promise<null> { return null; }
 
   async events(): Promise<EventsResponse> {
     return { events: [], mock: MOCK_LABEL };

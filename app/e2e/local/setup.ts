@@ -167,10 +167,19 @@ async function main() {
     },
   };
   writeFileSync(join(LOCAL, "env.json"), JSON.stringify(env, null, 2));
+  // Registry in Agent C's format (fixtures/registry.json schema 1), so C's valuation API can be run
+  // locally against this validator: CLUSTER=local LOCAL_RPC=http://127.0.0.1:8903 REGISTRY=<this file>.
+  writeFileSync(join(LOCAL, "registry.json"), JSON.stringify({
+    schema: 1, cluster: "local", fixture_issuer: issuer.kp.publicKey.toBase58(), token_2022_program: T22.toBase58(),
+    legs: legs.map((l, i) => ({ index: i, symbol: l.symbol, mint: l.mint.toBase58(), mirror_of: l.mirrorOf.toBase58(), decimals: 9, token_program: T22.toBase58(), complete: true })),
+    usdc: { mint: usdc.toBase58(), decimals: 6, token_program: TOK.toBase58(), mirror_of: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", mint_authority: issuer.kp.publicKey.toBase58() },
+    fixture_amm: ammId ? { program_id: ammId, pools: legs.map((l, i) => ({ index: i, symbol: l.symbol, pool: pools[i], fee_bps: 30 })) } : null,
+    hook_program: null,
+  }, null, 2));
   mkdirSync(join(APP, "public"), { recursive: true });
   writeFileSync(join(APP, "public/config.json"), JSON.stringify({
     cluster: "localnet", clusterLabel: "local validator, not devnet", rpcUrl: RPC, programId: env.programId, shareMint: env.shareMint,
-    lookupTable: null, valuationApiUrl: null, router: ammId ? { kind: "fixture_amm", programId: ammId } : { kind: "none" },
+    lookupTable: null, valuationApiUrl: arg("valuation-url") ?? null, router: ammId ? { kind: "fixture_amm", programId: ammId } : { kind: "none" },
     upgradeAuthority: deployer.kp.publicKey.toBase58(), explorerTx: null,
   }, null, 2));
   console.log(`basket ${env.basket} ready on ${RPC}`);

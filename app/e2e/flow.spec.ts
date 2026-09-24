@@ -53,6 +53,18 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     await page.getByTestId("connect-Stocklana Test Wallet").click();
     await expect(page.getByTestId("wallet-address")).toHaveText(owner.toBase58());
     await expect(page.getByTestId("pricing-basis")).toBeVisible();
+    // With the valuation API connected: the three values the app shows are the API's, not the app's.
+    const apiUrl = process.env.E2E_VALUATION_URL;
+    if (apiUrl) {
+      await expect(page.getByTestId("mock-label")).toHaveCount(0);
+      const shown = async () => Promise.all(["value-sell-now", "value-last-trade", "value-reference"].map((t) => page.getByTestId(t).locator(".big").getAttribute("data-usd")));
+      await expect.poll(async () => {
+        const b = await (await fetch(`${apiUrl}/v1/basket`)).json();
+        const v = b.values;
+        return JSON.stringify(await shown()) === JSON.stringify([v.sell_now.usd, v.last_trade.usd, v.reference.usd]);
+      }, { timeout: 90_000 }).toBe(true);
+      rec.add({ step: "price panel shows the valuation API's three values", by: "test wallet (browser)", signatures: [], checks: { values: await shown() } });
+    }
 
     // ---------------------------------------------------------------- 1. deposit in kind
     const shareMint = new PublicKey(env.shareMint);

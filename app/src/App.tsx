@@ -15,7 +15,7 @@ import {
 } from "./components/Panels";
 import { DepositPanel, RedeemPanel } from "./components/Actions";
 import * as copy from "./copy";
-import { short } from "./format";
+import { fmtShares, short } from "./format";
 
 export function explainError(e: unknown): string {
   const msg = String((e as any)?.message ?? e);
@@ -56,6 +56,8 @@ export function App({ config }: { config: AppConfig }) {
   const [api, setApi] = useState<BasketResponse | null>(null);
   const [apiErr, setApiErr] = useState<string | null>(null);
   const [apiEvents, setApiEvents] = useState<EventsResponse | null>(null);
+  const [apiPos, setApiPos] = useState<any | null>(null);
+  const [apiPosErr, setApiPosErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [log, setLog] = useState<TxRecord[]>([]);
 
@@ -65,6 +67,10 @@ export function App({ config }: { config: AppConfig }) {
     valuation.basket(view).then((b) => { setApi(b); setApiErr(null); }).catch((e) => setApiErr(String(e?.message ?? e)));
     valuation.events(Math.max(0, view.slot - 500_000)).then(setApiEvents).catch(() => {});
   }, [view?.slot, valuation]);
+  useEffect(() => {
+    if (!wallet || valuation.isMock) { setApiPos(null); return; }
+    valuation.position(wallet.publicKey.toBase58()).then((p) => { setApiPos(p); setApiPosErr(null); }).catch((e) => setApiPosErr(String(e?.message ?? e)));
+  }, [wallet?.publicKey.toBase58(), pos?.shares, valuation]);
 
   async function run(label: string, build: (v: BasketView, owner: PublicKey, blockhash: string) => Promise<VersionedTransaction[]>) {
     if (!wallet || !view) return;
@@ -151,6 +157,10 @@ export function App({ config }: { config: AppConfig }) {
             <p><b>{copy.NOT_PROTECTION}</b></p>
           </section>
           <PricePanel api={api} error={apiErr} />
+          {wallet && !valuation.isMock && pos && pos.shares > 0n && (
+            <PricePanel api={apiPos} error={apiPosErr} testid="position-price-panel"
+              title={`Your ${fmtShares(pos.shares)} shares, valued at your size: three sources`} />
+          )}
           <LegsTable v={view} pos={pos} api={api} />
           <div className="two">
             <DepositPanel v={view} pos={pos} busy={busy} routerReady={routerReady} quoteDeposit={(u) => valuation.quoteDeposit(view, u)} onInKind={onInKind} onUsdc={onUsdc} />
