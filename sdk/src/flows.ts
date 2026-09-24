@@ -6,8 +6,8 @@ import { createAssociatedTokenAccountIdempotentInstruction } from "@solana/spl-t
 import { BasketView, legStates } from "./client.js";
 import { BPS, LEGS_PER_SWAP_TX, TICKET_MAX_AGE_SLOTS, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "./constants.js";
 import * as ix from "./instructions.js";
-import { RedeemMode } from "./accounts.js";
-import { mintInKind, netDeltasForShares, observe, redeemInKind, RedeemLegOutcome, sharesForDeltas } from "./math.js";
+import { DepositTicket, RedeemMode } from "./accounts.js";
+import { mintInKind, netDeltasForShares, observe, pendingActual, redeemInKind, RedeemLegOutcome, sharesForDeltas } from "./math.js";
 import { ata, depositTicketPda, freshNonce, redemptionTicketPda, ticketEscrow } from "./pda.js";
 import { grossForNet, transferFee } from "./token2022.js";
 import { Router, SwapRoute } from "./routers/types.js";
@@ -274,4 +274,47 @@ export function planObserve(p: { v: BasketView; cranker: PublicKey; mask: number
     ix.observeIx({ programId: p.v.config.programId, cranker: p.cranker, basket: p.v.address, legs: p.v.legs.map((l) => ({ mint: l.mint, vault: l.vault })), mask: p.mask }).ix], []);
   if (!packed) throw new Error("observe does not fit");
   return packed.tx;
+}
+
+
+export interface AbortPlan { txs: VersionedTransaction[]; unwound: { leg: number; amount: bigint; quotedUsdc: bigint; minUsdcOut: bigint }[]; closes: PublicKey[] }
+
+/**
+ * Abort an open deposit ticket: unwind every landed leg (sell the ticket's landed amount from the
+ * vault back into the escrow; the basket PDA is the taker), then abort_deposit, which refunds the
+ * escrow and closes the ticket. `ticketOwned` must be every token account the ticket PDA owns
+ * (BasketClient.ticketOwnedTokenAccounts): the program closes only those it is given.
+ */
+export async function planAbortDeposit(p: {
+  v: BasketView; owner: PublicKey; ticket: PublicKey; t: DepositTicket; ticketOwned: PublicKey[]; router: Router | null; slippageBps: number; blockhash: string;
+}): Promise<AbortPlan> {
+  const { v, owner, t } = p;
+  const programId = v.config.programId;
+  const ownerUsdc = ata(owner, v.basket.usdcMint, v.usdcMintProgram);
+  const txs: VersionedTransaction[] = [];
+  const unwound: AbortPlan["unwound"] = [];
+  for (const l of v.legs) {
+    if (!(t.landedMask & (1 << l.index))) continue;
+    if (!p.router) throw new Error(`${l.symbol} landed: unwinding it needs a router`);
+    const leg = observe(l.state).leg; // the program observes before computing the amount
+    const amount = pendingActual({ ...leg, pendingNorm: t.norm[l.index] });
+    const route = await p.router.route({ inputMint: l.mint, outputMint: v.basket.usdcMint, amount, taker: v.address, destination: t.escrow,
+      slippageBps: p.slippageBps, payer: owner, existingAccounts: [v.basket.usdcReserve] });
+    const minUsdcOut = applySlippage(route.quotedOut, p.slippageBps);
+    const packed = tryCompile(owner, p.blockhash, [...computeBudget(), ...route.preInstructions, ix.unwindLeg({
+      programId, owner, basket: v.address, ticket: p.ticket, escrow: t.escrow, legMint: l.mint, legVault: l.vault,
+      routerProgram: route.routerProgram, routeAccounts: route.routeAccounts, leg: l.index, minUsdcOut, routeData: route.routeData,
+    }).ix], route.lookupTables);
+    if (!packed) throw new Error(`unwind_leg ${l.symbol} does not fit`);
+    txs.push(packed.tx);
+    unwound.push({ leg: l.index, amount, quotedUsdc: route.quotedOut, minUsdcOut });
+  }
+  // The escrow is a named account; every other ticket-owned account goes in the remaining list.
+  const closes = p.ticketOwned.filter((k) => !k.equals(t.escrow));
+  const packed = tryCompile(owner, p.blockhash, [...computeBudget(),
+    createAssociatedTokenAccountIdempotentInstruction(owner, ownerUsdc, owner, v.basket.usdcMint, v.usdcMintProgram),
+    ix.abortDeposit({ programId, owner, basket: v.address, ticket: p.ticket, escrow: t.escrow, ownerUsdc, intermediates: closes }).ix], []);
+  if (!packed) throw new Error("abort_deposit does not fit");
+  txs.push(packed.tx);
+  return { txs, unwound, closes };
 }

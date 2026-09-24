@@ -1,0 +1,187 @@
+{
+  "runs": [
+    {
+      "startedAt": "2026-09-24T23:01:12.174Z",
+      "finishedAt": "2026-09-24T23:01:35.067Z",
+      "outcome": "passed",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "mutation": null,
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "Dfxb9XgKYkorhmh5YmbxKDMZcRYpFU73mBBLT4Mrq8i5",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c (program logic unchanged through 399b7b0)",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "CPswFyQWNfCaCTRB2DZvqeCDBdq7ggQpoSVyKjeXVoPz",
+        "kind": "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": null,
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "5gA7ANNXpMH37BFB9SxpgaAnCWyosEBhsKYVsPvEqF9thqX8WuSkhwmYiRkgnUE6Hbvz27J4iBw6ab4rc3oq5fwQ"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "3iJrNyyvCVyiLrxGhGcPc953SZfJs8poRt9cMEXaEwBqDsE7dW8N68RupaZPns7MAuwjvCnJrkFdFbCy3kxasyr8",
+            "5PbTC3ZskdYpsQdkqYa122o3KAsE27QQ1nc2SBcdxqmK7cFEojEUQ4ie9eVJJbyA9A8G68FTQGpv9T9TXujitMeD",
+            "LBQw8ESAT4qp659vc3icoAgoYXLzeQKHcHpttDC99GXB97QB9nQgRG1i37wGLBqjjxQ7CLofcGY6976GqiaVLSe"
+          ]
+        },
+        {
+          "step": "open a deposit ticket for 7000000 raw USDC and land only legs OPENAI (SDK, harness)",
+          "by": "test wallet (harness)",
+          "signatures": [
+            "5zTgkErLfnhzgLWdFeuba67cJvEcvfGnhQE9niK4RZB6PFKgwCgKzTDDvz1QxGwAc3hSigJ5QPvEMEXVb1cRz1tr"
+          ],
+          "checks": {
+            "ticket": "CH2gCLTWbufHByuY2YE5GiPXibfckeRsMR3iB7Wf3FyV",
+            "escrowBefore": "6000000"
+          }
+        },
+        {
+          "step": "open one extra ticket-owned Token-2022 account, as a route intermediate would be",
+          "by": "test wallet (harness)",
+          "signatures": [
+            "542p51C48L6EdH5eATudQQsyEdhZS8RMQdGssvNoFd6Bk94HZDwLaEPY1kBLhAsb3c58UfqxNcBXU9hYGoCCkbga"
+          ],
+          "checks": {
+            "account": "21keinV6JjYSKzSCksRBCNB29VthJK1mosaKPHo4At9f",
+            "ticketOwnedBefore": {
+              "token": [
+                "9Lxvw2vjehiaq3L2oUrTrXcYY2mNvv8xvG7eTSWMJeGV"
+              ],
+              "token2022": [
+                "21keinV6JjYSKzSCksRBCNB29VthJK1mosaKPHo4At9f"
+              ]
+            }
+          }
+        },
+        {
+          "step": "abort the unfinished deposit in the app: unwind 1 leg(s), then abort_deposit",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "4FbcrCvZbTzv529eaqSXGjbcc7fbjKnLiG18juMciANJQ9CNrAMDvfGiu4cHB2izp2zoxLBqmdVCZ5tNWyEeZhVb",
+            "4rYnkGEQVJtzsnjrDbm2LtA2CZB5KTunDLHKHyHGDjP7Xr5UgbvpnUc8DLLnKErV4DiSxRMuPMBB6KExPtWPqKpR"
+          ],
+          "checks": {
+            "walletApprovals": [
+              2
+            ],
+            "ticketClosed": true,
+            "ticketOwnedAfterAbort": {
+              "token": [],
+              "token2022": []
+            },
+            "refundedUsdc": "6974228",
+            "escrowBefore": "6000000",
+            "usdcCostOfRoundTrip": "25772",
+            "pendingNormRestored": true
+          }
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-abort-1-unfinished.png",
+        "e2e/runs/2026-09-24-localnet-abort-2-page.png"
+      ]
+    },
+    {
+      "startedAt": "2026-09-24T23:03:20.726Z",
+      "finishedAt": "2026-09-24T23:03:43.575Z",
+      "outcome": "failed",
+      "error": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n  Object {\n    \"token\": Array [],\n-   \"token2022\": Array [],\n+   \"token2022\": Array [\n+     \"EqGKE5U3ZRyETgi9P915qesywuxAyaFccdDY4xmVrbzQ\",\n+   ],\n  }",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "mutation": "abort-drops-intermediate",
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "Dfxb9XgKYkorhmh5YmbxKDMZcRYpFU73mBBLT4Mrq8i5",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c (program logic unchanged through 399b7b0)",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "9Fxjnw599ZdzsGkrJK6TSuWXTpfdmiQXm56FdcEZMaB4",
+        "kind": "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": null,
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "2WyeGPNZ15GNQd5AFLm1TdVyFc5mCKdiz9mtLqci8riVecX91Ls65PjMBsYBijanbL2iyC3HYYkE5TLpwsvPu7zm"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "5jBpLiQ9R2nnAn2FnhPz5ZWWHqKwe7WnEzeXAveL6jes7feutWPKGPXxY5vDzYponsAim2oxUxDKpgXYNkKm77Xw",
+            "4p4jNRAtqDWdcNvywa7pFqFbHzikPASrBZ3HGy72cKuRjVqVpAEmykxp5XqvT3HCf1p3azBGoAfLT4WGcvPuXHs5",
+            "jQKjJt4axB3veDmNP9nktXxTX2rghf6XgFdQLiWGrgmxmgCMSYv92KC5VQznbHitvDW2D6WabjTA3M3hhopSGdp"
+          ]
+        },
+        {
+          "step": "open a deposit ticket for 7000000 raw USDC and land only legs OPENAI (SDK, harness)",
+          "by": "test wallet (harness)",
+          "signatures": [
+            "44RoaPfyDCRUE4Ytzw8pX3zJa6fzXXFJtzSL9kPHhA6tSFbTKENrnVWzLymBxBs88hjADVrRJUzYjpj714AKw9E8"
+          ],
+          "checks": {
+            "ticket": "D6tch8VPrSys8H7LRGxJBsMd1mX2PAdFW3rDumP4h3Uh",
+            "escrowBefore": "6000000"
+          }
+        },
+        {
+          "step": "open one extra ticket-owned Token-2022 account, as a route intermediate would be",
+          "by": "test wallet (harness)",
+          "signatures": [
+            "kDBjGoreYJxkvR82EXn6fzQCpW4yRJnGNkLCrfuZmPaX5xtow2szFgsfoFxaYJjjV5KdQtM4PceM3EZWfvN9RE1"
+          ],
+          "checks": {
+            "account": "EqGKE5U3ZRyETgi9P915qesywuxAyaFccdDY4xmVrbzQ",
+            "ticketOwnedBefore": {
+              "token": [
+                "2LLfgxFTMu3xBy3K98EPMuTMTEREtGy7QtPphy3t1poX"
+              ],
+              "token2022": [
+                "EqGKE5U3ZRyETgi9P915qesywuxAyaFccdDY4xmVrbzQ"
+              ]
+            }
+          }
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-abort-1-unfinished.png",
+        "e2e/runs/2026-09-24-localnet-abort-failure.png"
+      ]
+    }
+  ]
+}

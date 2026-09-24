@@ -166,6 +166,57 @@
         "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/seizure.spec.ts:88:66"
       ],
       "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet-seizure.json"
+    },
+    {
+      "id": "abort-drops-intermediate",
+      "what": "SDK abort passes one fewer ticket-owned account than exists (the program accepts it and strands the rent)",
+      "file": "sdk/src/flows.ts",
+      "spec": "abort",
+      "valuationApi": null,
+      "startedAt": "2026-09-24T23:03:18.819Z",
+      "finishedAt": "2026-09-24T23:03:43.792Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toEqual(expected) // deep equality",
+        "- Expected  - 1",
+        "+ Received  + 3",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/abort.spec.ts:93:18"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet-abort.json"
+    },
+    {
+      "id": "router-omits-intermediate",
+      "what": "Router creates a ticket-owned output account on buys but doesn't list it for finalize to close",
+      "file": "sdk/src/routers/fixtureAmm.ts",
+      "spec": "flow",
+      "valuationApi": null,
+      "startedAt": "2026-09-24T23:03:44.183Z",
+      "finishedAt": "2026-09-24T23:04:37.409Z",
+      "result": "killed",
+      "failure": [
+        "Error: transaction failed in the app: Deposit USDC (ticket): failed \u00b7 0 transaction(s), 1 wallet approval(s)",
+        "at lastTx (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:31:30)",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:132:22"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json",
+      "note": "Discarded as evidence: the mutant made the deposit transaction itself fail (ConstraintMut 2000), so it never reached the leftover-accounts check. Replaced by finalize-omits-intermediate, which fails AT that check."
+    },
+    {
+      "id": "finalize-omits-intermediate",
+      "what": "A ticket-owned token account exists at finalize (as a route's output account would) but the SDK doesn't pass it to finalize_deposit",
+      "file": "sdk/src/flows.ts",
+      "spec": "flow",
+      "valuationApi": null,
+      "startedAt": "2026-09-24T23:05:04.534Z",
+      "finishedAt": "2026-09-24T23:06:10.323Z",
+      "result": "killed",
+      "failure": [
+        "Error: expect(received).toEqual(expected) // deep equality",
+        "- Expected  - 1",
+        "+ Received  + 3",
+        "at /Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/flow.spec.ts:141:31"
+      ],
+      "runFile": "/Users/jagadeesh/1nonly/grants/stocklana-worktrees/app/app/e2e/runs/2026-09-24-localnet.json"
     }
   ]
 }

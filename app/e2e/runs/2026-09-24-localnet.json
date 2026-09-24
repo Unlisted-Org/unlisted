@@ -1948,6 +1948,472 @@
       "screenshots": [
         "e2e/runs/2026-09-24-localnet-failure.png"
       ]
+    },
+    {
+      "startedAt": "2026-09-24T23:01:42.131Z",
+      "finishedAt": "2026-09-24T23:02:57.695Z",
+      "outcome": "passed",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "mutation": null,
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "Dfxb9XgKYkorhmh5YmbxKDMZcRYpFU73mBBLT4Mrq8i5",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c (program logic unchanged through 399b7b0)",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "9UCA86deTumMsGDW9A1nxWxVn7Yde3VxjmaEdsiiFkpR",
+        "kind": "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": null,
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "542bXLK9xj9iwmTovJM5oAJZhaGD1RG637DUaNj7cMrZgvADzgVEHWvDmVRaMthC44sFWyyngj9W7o6vwkk2S4mC"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "5vtLdYVtpLb4zg1uWwQY1rcS6srYUAGfD5wbQc2aS1VVwsFvbNCr2cNncEVzze7ioHD4BQHsf5DKTgsxeRbunzXr",
+            "2Mm7au75vdponsGf4TLQY6keeJknxV4ZS6G1Cjrzk4kVZfdSyDib76DiH6z2kBLVS4KAKCvtoiekCAsmCfWXJGnG",
+            "3ffcg2spYfwmpyWLx5YVugdqZ7cXDDoPrnPPrSzQGYSQeToxhgixtMpWoDdEqbf4gKq9QBnTDXyZT9gyseFLLwdX"
+          ]
+        },
+        {
+          "step": "price panel shows the valuation API's three values",
+          "by": "test wallet (browser)",
+          "signatures": [],
+          "checks": {
+            "values": [
+              "238015.180244",
+              "462937.443391",
+              "410287.138618"
+            ],
+            "apiGeneratedAt": "2026-09-24T23:01:45Z",
+            "apiDevnetSlot": 1769,
+            "apiMainnetSlot": 450171202,
+            "pricingBasis": "mainnet_mirror"
+          }
+        },
+        {
+          "step": "legs table shows each mint's effective display multiplier (RPC jsonParsed)",
+          "by": "test wallet (browser)",
+          "signatures": [],
+          "checks": {
+            "multipliers": {
+              "OPENAI": {
+                "stored": 1,
+                "next": 1.4861347,
+                "at": 1790290041,
+                "effective": 1.4861347
+              },
+              "ANTHROPIC": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "NEURALINK": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "ANDURIL": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "POLYMARKET": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "KALSHI": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "FIGUREAI": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              }
+            }
+          }
+        },
+        {
+          "step": "deposit in kind (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "RxQgCHpGHudztgcvvPqfm6526QkMAHBXwomnJg4YScbPREbaXxQZQjMeFAvPEuS3sZf42ZPGaPkcWoksasKDsoQ"
+          ],
+          "slot": 1805,
+          "checks": {
+            "sharesMinted": "19976330",
+            "appPredicted": "19976330",
+            "walletApprovals": [
+              1
+            ]
+          }
+        },
+        {
+          "step": "deposit 10 USDC through a deposit ticket (app; fixture_amm router)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "2jnoJxm9LtKybkByFXF3NoukvXu1CNQJTey9eZU9BuiPZ4a6F4jd7v8NfLUGufzgYdLtXFcW9PQuVh4LQrXcHbEX",
+            "3Bf3UAQDwn1nULyU2Xhik8mmxKrNXYu2kV7kHN6uR5asv2Sm4JGTjR5ruJu2SiJtZcubQhmP2gCTYWGvecYSgb9b",
+            "3oQdwCGhus8axfjymtEayk8faeZDCbYWFaeRhUAU9GfE9WwizYA2S8CKrceQfaew8gGWQ5m3LCHb2gefsM45d8FY",
+            "kTNcbs3vPWEsjhsRWDvyMYagiL9qW7VQmvWbSJLnANcEWWRAkY67ToKzhRP13ymJLnGZbnLviABG8g5cSkPvgw6"
+          ],
+          "slot": 1915,
+          "checks": {
+            "ticket": "CxDiH55npieMkHUNsNcDmPPtiWFdC2DhzfdZQ63aNv1h",
+            "ticketOwnedAfterFinalize": {
+              "token": [],
+              "token2022": []
+            },
+            "transactions": 4,
+            "walletApprovals": [
+              1,
+              4
+            ],
+            "sharesMinted": "31439",
+            "usdcSpent": "9999997"
+          }
+        },
+        {
+          "step": "issuer pauses ANTHROPIC",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "32F2wticE3tKbyxuwqrRMPvpLyBUfV6WzrKZmjQ383oTixj8fDJEM6Y2Eai2w5Fdq52K3F9YQMrZxRzARchCFkBK"
+          ]
+        },
+        {
+          "step": "redeem 10003884 raw shares while ANTHROPIC is paused (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "2vPhjcfygh8cv2wuJArwjzWMBZQ5Ht1pQgjKUcaBRmmpSpG2vw6gKcjJrZg7i5zTsUtqCPcyhKUdxkmxTSB64aPW"
+          ],
+          "slot": 1923,
+          "checks": {
+            "walletApprovals": [
+              1
+            ],
+            "paidNow": {
+              "OPENAI": "981999543",
+              "NEURALINK": "627641756",
+              "ANDURIL": "980492204",
+              "POLYMARKET": "980480672",
+              "KALSHI": "980950736",
+              "FIGUREAI": "980488346"
+            },
+            "claim": {
+              "leg": "ANTHROPIC",
+              "units": "10003884",
+              "reason": "Paused"
+            },
+            "ticket": "CJ2QPrRabtvhmHLELYctc8toGBZ6h53PNEB2EnBah3bq"
+          }
+        },
+        {
+          "step": "issuer resumes ANTHROPIC",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "q7zMZkUGRSZD1Yssy7tfWBZunUbQgEqukvnz5B4xFV4f8JiMTbvQacbXGqtPou6spxJjeLvDF1rhpb9Ff3saKsb"
+          ]
+        },
+        {
+          "step": "settle the ANTHROPIC claim after resume (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "Wj88Yyy76kQPMQ8KtZG5GFY5fu2ZgUMRFYaBC6wFpocpMdcDLh6thuthvdvn57bbeDYdznKeqW5F7zfi6BmyPsM"
+          ],
+          "slot": 1933,
+          "checks": {
+            "received": "981203848",
+            "appEstimate": "981203848",
+            "appEstimateGross": "991114998",
+            "claimSettledAmount": "981203848",
+            "feeBps": 100
+          }
+        },
+        {
+          "step": "wallet approvals (test wallet log)",
+          "by": "test wallet (browser)",
+          "signatures": [],
+          "checks": {
+            "approvals": [
+              {
+                "at": "2026-09-24T23:02:53.963Z",
+                "transactions": 1,
+                "chain": "solana:localnet"
+              }
+            ]
+          }
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-1-claim-open.png",
+        "e2e/runs/2026-09-24-localnet-1-redemption-ticket.png",
+        "e2e/runs/2026-09-24-localnet-1-claim-open-page.png",
+        "e2e/runs/2026-09-24-localnet-2-claim-settled.png",
+        "e2e/runs/2026-09-24-localnet-2-redemption-ticket.png",
+        "e2e/runs/2026-09-24-localnet-2-settled-page.png"
+      ]
+    },
+    {
+      "startedAt": "2026-09-24T23:03:45.835Z",
+      "finishedAt": "2026-09-24T23:04:36.773Z",
+      "outcome": "failed",
+      "error": "Error: transaction failed in the app: Deposit USDC (ticket): failed · 0 transaction(s), 1 wallet approval(s)\nConstraintMut (2000): A mut constraint was violated",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "mutation": "router-omits-intermediate",
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "Dfxb9XgKYkorhmh5YmbxKDMZcRYpFU73mBBLT4Mrq8i5",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c (program logic unchanged through 399b7b0)",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "4aV65GGiCzeXkaHZJQvy5oKvk7qm8UACZWkn5p4pst7s",
+        "kind": "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": null,
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "4UK2rtr7c1DHgEJ2mcMeLyxayKacaYzkVqkVqCje4k2MGrXm4J65fQZdoDsFhgBzPFzFBwWxKWXirVCW6SeHuTQf"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "3AhnU1hhJ3hDfuRhmVvH2gcswVqpkKuJrZjCYAqvxYED4E9kQx1ktasdVh61A4dc9iGAfdL1Rjdi1R8PDU7dZ2zw",
+            "4HP8CDfDNCFq4zy5mBzd467qjttH16WYyMRodbmibKRry2eHizN4AM6JTim9o6HxFTnSh228wQjuwWQ8ShUYGzVB",
+            "63KEoMg1G6R4oYwS5H179FGYquG5VKam9AHBTpqX8t9wWe3ipocs7c9WV4q3LUYY7SRZ8RybAyj3rnLyuqcuDQHf"
+          ]
+        },
+        {
+          "step": "legs table shows each mint's effective display multiplier (RPC jsonParsed)",
+          "by": "test wallet (browser)",
+          "signatures": [],
+          "checks": {
+            "multipliers": {
+              "OPENAI": {
+                "stored": 1,
+                "next": 1.4861347,
+                "at": 1790290041,
+                "effective": 1.4861347
+              },
+              "ANTHROPIC": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "NEURALINK": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "ANDURIL": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "POLYMARKET": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "KALSHI": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "FIGUREAI": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              }
+            }
+          }
+        },
+        {
+          "step": "deposit in kind (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "b3EFHzecYzQ1CFVy2mX6PEBuQPWm9VdEYcViBHTyDcEUx8TPTYzCVJNg6mvhVJ2SXR9LxGqb1byt8rUaPtF5U4r"
+          ],
+          "slot": 2062,
+          "checks": {
+            "sharesMinted": "19969065",
+            "appPredicted": "19969065",
+            "walletApprovals": [
+              1
+            ]
+          }
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-failure.png"
+      ]
+    },
+    {
+      "startedAt": "2026-09-24T23:05:06.450Z",
+      "finishedAt": "2026-09-24T23:06:09.623Z",
+      "outcome": "failed",
+      "error": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n  Object {\n    \"token\": Array [],\n-   \"token2022\": Array [],\n+   \"token2022\": Array [\n+     \"3jpyWiz7M3a1XvDw2xFQi51sDctqorFkQ6vsj46nBzGP\",\n+   ],\n  }",
+      "cluster": "localnet",
+      "label": "local validator, not devnet",
+      "verification": "local, not devnet — built, not verified",
+      "mutation": "finalize-omits-intermediate",
+      "rpc": "http://127.0.0.1:8903",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "Dfxb9XgKYkorhmh5YmbxKDMZcRYpFU73mBBLT4Mrq8i5",
+      "programs": {
+        "basket": {
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "builtFrom": "program@700004c (program logic unchanged through 399b7b0)",
+          "sha256": "985edeb8427476c89e46b10d0f727bcdf45416faf71d0fda9295345e5d3849c6"
+        },
+        "fixtureAmm": {
+          "id": "AfGd6XmnsL168W8zfwCRkisugcGNM8E4Sq2Cd8BwDZgZ",
+          "builtFrom": "ops@5b5fbea",
+          "sha256": "35a5839e5cb8435b3c3d1a590a227f662ddee32de68bfdb41ab422dbd4d927e5"
+        }
+      },
+      "wallet": {
+        "address": "wK46zY1TuySJSK1AcWQTvZYeTSgFrEnHc6TTCFrd4dM",
+        "kind": "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": null,
+      "steps": [
+        {
+          "step": "airdrop 5 SOL to the fresh wallet (local faucet)",
+          "by": "funder (harness)",
+          "signatures": [
+            "3uvzRUb4sY3Bi7qfrnq4AoeeZ277DzbkkmdKw3bdzF3iBitBW2oug31mCBDAfcAtfSfGuKGsVgTqeiVaj2BmR1qb"
+          ]
+        },
+        {
+          "step": "mint 5000000000 raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "5ErczBUXaQbp18W7f8kiRMWWb9sEcinUzAdxYCkZj21ZX6M7YVT9dmRLigtn2TAErmaeCoScpR9BqKHnCHQzXr18",
+            "2RWWCZAfvHVWSKLos1qPZEgMfsD6mgc5cnsJrkG8AiUxydUHWd3NaDXA3KLHjBXjSnGXeKBRFUBzTbYSVqPTBGE4",
+            "4uGsCRT7qGUN3Du5fPE9ncXmrKimC7FQVZBD2FeP3KJScTHpBncndfT6PGvHrPjmzAnapF1d7hWh1sJ3ug2SBNCV"
+          ]
+        },
+        {
+          "step": "legs table shows each mint's effective display multiplier (RPC jsonParsed)",
+          "by": "test wallet (browser)",
+          "signatures": [],
+          "checks": {
+            "multipliers": {
+              "OPENAI": {
+                "stored": 1,
+                "next": 1.4861347,
+                "at": 1790290041,
+                "effective": 1.4861347
+              },
+              "ANTHROPIC": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "NEURALINK": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "ANDURIL": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "POLYMARKET": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "KALSHI": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              },
+              "FIGUREAI": {
+                "stored": 1,
+                "next": 1,
+                "at": 0,
+                "effective": 1
+              }
+            }
+          }
+        },
+        {
+          "step": "deposit in kind (app)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "MoPx5JeE1oGxzBXyit43ouXcZxEb9qE8HtyW81EQGQrDtyg9Hwi6V8xThDRQUvneWt65Nh7MovWQJjM19YprGzC"
+          ],
+          "slot": 2229,
+          "checks": {
+            "sharesMinted": "19969065",
+            "appPredicted": "19969065",
+            "walletApprovals": [
+              1
+            ]
+          }
+        }
+      ],
+      "screenshots": [
+        "e2e/runs/2026-09-24-localnet-failure.png"
+      ]
     }
   ]
 }

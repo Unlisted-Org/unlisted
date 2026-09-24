@@ -11,7 +11,7 @@ import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BasketClient, TOKEN_PROGRAM_ID, math, openClaims, parseEventsFromLogs, transferFee } from "@unlisted/sdk";
-import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, returnSol, mintPausedByRpc, multipliersByRpc, redemptionTickets, tokenAmount, tokenAmounts, txOk } from "./harness";
+import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWallet, issuerAction, loadEnv, returnSol, mintPausedByRpc, multipliersByRpc, redemptionTickets, ticketOpenedBy, ticketOwnedByRpc, tokenAmount, tokenAmounts, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
@@ -134,6 +134,12 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     const approvalsT = await page.evaluate(() => window.__testWallet!.approvals.map((a) => a.transactions));
     expect(approvalsT).toEqual([depSigs.length, tickSigs.length]); // the whole ticket: ONE approval
     const program = new PublicKey(env.programId);
+    // After finalize, the ticket PDA owns no token account on either token program: finalize closed
+    // the escrow and every intermediate (spec 02 Known limitation: it closes only those it is given).
+    const depTicket = await ticketOpenedBy(env, tickSigs[0]);
+    const leftAfterFinalize = await ticketOwnedByRpc(env, depTicket);
+    expect(leftAfterFinalize).toEqual({ token: [], token2022: [] });
+    expect(await conn(env).getAccountInfo(depTicket, "confirmed")).toBeNull();
     let tickMinted = 0n;
     let lastSlot = 0;
     for (const sig of tickSigs) {
@@ -149,7 +155,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     expect(usdcBefore - usdcAfter).toBeLessThanOrEqual(10_000_000n);
     expect(await depositTickets(env, owner)).toHaveLength(0); // finalize closed the ticket
     rec.add({ step: "deposit 10 USDC through a deposit ticket (app; fixture_amm router)", by: "test wallet (browser)", signatures: tickSigs, slot: lastSlot,
-      checks: { transactions: tickSigs.length, walletApprovals: approvalsT, sharesMinted: String(tickMinted), usdcSpent: String(usdcBefore - usdcAfter) } });
+      checks: { ticket: depTicket.toBase58(), ticketOwnedAfterFinalize: leftAfterFinalize, transactions: tickSigs.length, walletApprovals: approvalsT, sharesMinted: String(tickMinted), usdcSpent: String(usdcBefore - usdcAfter) } });
     const sharesAfterAll = sharesAfterTicket;
 
     // ---------------------------------------------------------------- 2. issuer pauses one leg

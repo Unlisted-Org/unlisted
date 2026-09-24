@@ -270,6 +270,24 @@ export async function txOk(env: E2eEnv, sig: string): Promise<{ slot: number; lo
   return { slot: t.slot, logs: t.meta?.logMessages ?? [] };
 }
 
+/** The deposit ticket a transaction opened: the third account of its first instruction to the program. */
+export async function ticketOpenedBy(env: E2eEnv, sig: string): Promise<PublicKey> {
+  const t = await conn(env).getTransaction(sig, { maxSupportedTransactionVersion: 0, commitment: "confirmed" });
+  if (!t) throw new Error(`transaction ${sig} not found`);
+  const keys = t.transaction.message.getAccountKeys({ accountKeysFromLookups: t.meta?.loadedAddresses });
+  const program = new PublicKey(env.programId);
+  const first = t.transaction.message.compiledInstructions.find((i) => keys.get(i.programIdIndex)!.equals(program));
+  if (!first) throw new Error(`no basket instruction in ${sig}`);
+  return keys.get(first.accountKeyIndexes[2])!;
+}
+
+/** Token accounts a ticket PDA still owns, per token program, as the RPC node reports them (not the SDK). */
+export async function ticketOwnedByRpc(env: E2eEnv, ticket: PublicKey): Promise<{ token: string[]; token2022: string[] }> {
+  const c = conn(env);
+  const [a, b] = await Promise.all([sdk.TOKEN_PROGRAM_ID, sdk.TOKEN_2022_PROGRAM_ID].map((programId) => c.getTokenAccountsByOwner(ticket, { programId }, "confirmed")));
+  return { token: a.value.map((x) => x.pubkey.toBase58()), token2022: b.value.map((x) => x.pubkey.toBase58()) };
+}
+
 export function toRaw(ui: string, decimals = 9): bigint {
   const t = ui.replace(/,/g, "").trim();
   const [i, f = ""] = t.split(".");

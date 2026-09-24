@@ -275,6 +275,38 @@ export function claimsOf(pos: Position | null): ClaimRow[] {
     openClaims(ticket).map((c) => ({ ticket: address.toBase58(), nonce: ticket.nonce, leg: c.leg, units: c.units, reason: c.reason })));
 }
 
+// ---------------------------------------------------------------- open deposit tickets
+
+/** A USDC deposit that didn't finish: landed legs are unwound back to USDC, then the escrow is refunded. */
+export function OpenDepositTickets({ v, pos, onAbort, busy }: { v: BasketView; pos: Position | null; onAbort: (ticket: string) => void; busy: boolean }) {
+  const list = pos?.deposits ?? [];
+  if (!list.length) return null;
+  return (
+    <section data-testid="open-deposit-tickets">
+      <h2>Unfinished USDC deposits</h2>
+      <p className="muted">A deposit ticket holds your USDC until all seven legs land. If it can't finish, abort it: each landed leg is sold back to USDC into the escrow, then the escrow is refunded to you and every account the ticket opened is closed (rent back to you).</p>
+      <table>
+        <thead><tr><th>Ticket</th><th>USDC in</th><th>Landed legs</th><th>Expires</th><th></th></tr></thead>
+        <tbody>
+          {list.map(({ address, ticket: t }) => {
+            const landed = v.legs.filter((l) => t.landedMask & (1 << l.index)).map((l) => l.symbol);
+            const expired = BigInt(v.slot) > t.expirySlot;
+            return (
+              <tr key={address.toBase58()} data-testid={`deposit-ticket-${address.toBase58()}`}>
+                <td className="mono">{short(address.toBase58())}</td>
+                <td>{(Number(t.usdcIn) / 1e6).toFixed(6)}</td>
+                <td data-testid="deposit-ticket-landed">{landed.length ? landed.join(", ") : "none"}</td>
+                <td>{expired ? "expired" : `slot ${t.expirySlot}`}</td>
+                <td><button disabled={busy} data-testid={`abort-${address.toBase58()}`} onClick={() => onAbort(address.toBase58())}>Abort and refund</button></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </section>
+  );
+}
+
 export function ClaimsList({ v, pos, onSettle, busy, usdcRouter, rows }: { v: BasketView; pos: Position | null; onSettle: (c: ClaimRow, usdc?: boolean) => void; busy: boolean; usdcRouter: boolean; rows: EventRow[] }) {
   const claims = claimsOf(pos);
   const settled = pos ? rows.flatMap((r) => r.events.filter((e) => e.name === "ClaimSettled" && e.owner.equals(pos.owner)).map((e) => ({ r, e: e as Extract<typeof e, { name: "ClaimSettled" }> }))) : [];

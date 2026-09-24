@@ -138,6 +138,23 @@ export class BasketClient {
     return this.ticketsOf(owner, ACCOUNT_DISCRIMINATORS.RedemptionTicket, decodeRedemptionTicket);
   }
 
+  /**
+   * Every token account owned by a deposit ticket PDA, on both token programs, read from chain.
+   * abort/finalize close only the intermediates they're given (spec 02, Known limitation), so the SDK
+   * lists what actually exists rather than what it expects.
+   */
+  async ticketOwnedTokenAccounts(ticket: PublicKey): Promise<{ address: PublicKey; program: PublicKey; mint: PublicKey; amount: bigint }[]> {
+    const out: { address: PublicKey; program: PublicKey; mint: PublicKey; amount: bigint }[] = [];
+    for (const programId of [TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID]) {
+      const r = await this.conn.getTokenAccountsByOwner(ticket, { programId }, "confirmed");
+      for (const a of r.value) {
+        const d = a.account.data;
+        out.push({ address: a.pubkey, program: programId, mint: new PublicKey(d.subarray(0, 32)), amount: new DataView(d.buffer, d.byteOffset + 64, 8).getBigUint64(0, true) });
+      }
+    }
+    return out;
+  }
+
   depositTickets(owner: PublicKey | null): Promise<{ address: PublicKey; ticket: DepositTicket }[]> {
     return this.ticketsOf(owner, ACCOUNT_DISCRIMINATORS.DepositTicket, decodeDepositTicket);
   }

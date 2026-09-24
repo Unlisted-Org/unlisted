@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Connection, PublicKey, SendTransactionError, VersionedTransaction } from "@solana/web3.js";
 import type { Wallet } from "@wallet-standard/base";
 import {
-  BasketClient, BasketView, ERRORS, FixtureAmmRouter, TOKEN_2022_ERRORS, planInKindDeposit, planObserve, planRedeem, planSettleClaim, planSettleLegUsdc,
+  BasketClient, BasketView, ERRORS, FixtureAmmRouter, TOKEN_2022_ERRORS, planAbortDeposit, planInKindDeposit, planObserve, planRedeem, planSettleClaim, planSettleLegUsdc,
   planUsdcDeposit, sendSequential, math,
   politeFetch,
 } from "@unlisted/sdk";
@@ -12,7 +12,7 @@ import { useBasket, useEvents, usePosition } from "./state";
 import { HttpValuation, MockValuation, Valuation } from "./valuation/api";
 import type { BasketResponse, EventsResponse, QuoteDepositResponse } from "./valuation/types";
 import {
-  Banners, BasisStrip, ClaimRow, Guard, IssuerActivity, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
+  Banners, BasisStrip, ClaimRow, Guard, IssuerActivity, OpenDepositTickets, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
 } from "./components/Panels";
 import { DepositPanel, RedeemPanel } from "./components/Actions";
 import * as copy from "./copy";
@@ -124,6 +124,15 @@ export function App({ config }: { config: AppConfig }) {
     return [(await planSettleLegUsdc({ v, owner, ticket: new PublicKey(c.ticket), leg: c.leg, sellAmount, router: r, slippageBps: 150, blockhash: bh })).tx];
   });
 
+  const onAbort = (ticketAddr: string) => run("Abort deposit and refund", async (v, owner, bh) => {
+    const ticket = new PublicKey(ticketAddr);
+    const t = (await client!.depositTickets(owner)).find((x) => x.address.equals(ticket));
+    if (!t) throw new Error("deposit ticket not found (already closed?)");
+    // Every token account the ticket owns, read from chain: the program closes only those it's given.
+    const owned = (await client!.ticketOwnedTokenAccounts(ticket)).map((a) => a.address);
+    return (await planAbortDeposit({ v, owner, ticket, t: t.ticket, ticketOwned: owned, router: router(v), slippageBps: 150, blockhash: bh })).txs;
+  });
+
   const onObserve = (leg: number) => run(`Observe ${view?.legs[leg].symbol}`, async (v, owner, bh) => [planObserve({ v, cranker: owner, mask: 1 << leg, blockhash: bh })]);
 
   const routerReady = config.router.kind === "none"
@@ -172,6 +181,7 @@ export function App({ config }: { config: AppConfig }) {
             <RedeemPanel v={view} pos={pos} busy={busy} usdcReady={config.router.kind === "none" ? "USDC redemption settles through the devnet router, not configured on this cluster yet." : null} onRedeem={onRedeem}
               quoteRedeem={valuation.isMock ? null : (s, m) => valuation.quoteRedeem(view, s, m)} />
           </div>
+          <OpenDepositTickets v={view} pos={pos} onAbort={onAbort} busy={busy} />
           <ClaimsList v={view} pos={pos} onSettle={onSettle} busy={busy} usdcRouter={config.router.kind === "fixture_amm"} rows={events.rows} />
           <RedemptionHistory v={view} pos={pos} />
           <TxLog log={log} explorer={config.explorerTx} />

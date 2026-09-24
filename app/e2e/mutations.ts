@@ -49,7 +49,22 @@ const MUTANTS = [
     from: "  return BigInt(Math.floor(nowUnix)) >= s.newMultiplierEffectiveTimestamp ? s.newMultiplier : s.multiplier;",
     to: "  return s.multiplier;",
   },
-] as { id: string; what: string; file: string; from: string; to: string; spec?: string; needsApi?: boolean }[];
+  {
+    id: "abort-drops-intermediate",
+    what: "SDK abort passes one fewer ticket-owned account than exists (the program accepts it and strands the rent)",
+    file: "sdk/src/flows.ts",
+    from: "  const closes = p.ticketOwned.filter((k) => !k.equals(t.escrow));",
+    to: "  const closes = p.ticketOwned.filter((k) => !k.equals(t.escrow)).slice(1);",
+    spec: "abort",
+  },
+  {
+    id: "finalize-omits-intermediate",
+    what: "A ticket-owned token account exists at finalize (as a route's output account would) but the SDK doesn't pass it to finalize_deposit",
+    file: "sdk/src/flows.ts",
+    from: "  const finalizeIxs = [\n    createAssociatedTokenAccountIdempotentInstruction(owner, shareAta, owner, v.basket.shareMint, TOKEN_PROGRAM_ID),",
+    to: "  const finalizeIxs = [\n    createAssociatedTokenAccountIdempotentInstruction(owner, ata(ticket, v.legs[0].mint, TOKEN_2022_PROGRAM_ID), ticket, v.legs[0].mint, TOKEN_2022_PROGRAM_ID),\n    createAssociatedTokenAccountIdempotentInstruction(owner, shareAta, owner, v.basket.shareMint, TOKEN_PROGRAM_ID),",
+  },
+] as { id: string; what: string; file: string; from: string; to: string; spec?: string; needsApi?: boolean; also?: { file: string; from: string; to: string }[] }[];
 
 const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1] : null;
 const cluster = (process.env.E2E_ENV ?? "local") === "devnet" ? "devnet" : "localnet";
@@ -58,10 +73,16 @@ for (const m of MUTANTS.filter((x) => (!only || x.id === only) && (!x.needsApi |
   const path = join(ROOT, m.file);
   const original = readFileSync(path, "utf8");
   if (!original.includes(m.from)) throw new Error(`${m.id}: target text not found in ${m.file}`);
+  let mutated = original.replace(m.from, m.to);
+  for (const x of m.also ?? []) {
+    if (x.file !== m.file) throw new Error("also: same file only");
+    if (!mutated.includes(x.from)) throw new Error(`${m.id}: also-target not found`);
+    mutated = mutated.replace(x.from, x.to);
+  }
   const startedAt = new Date().toISOString();
   let out = "";
   let passed = false;
-  writeFileSync(path, original.replace(m.from, m.to));
+  writeFileSync(path, mutated);
   try {
     out = execFileSync("npx", ["playwright", "test", m.spec ?? "flow", "--timeout", "1500000"], {
       cwd: resolve(HERE, ".."), encoding: "utf8", env: { ...process.env, E2E_MUTATION: m.id }, stdio: ["ignore", "pipe", "pipe"], maxBuffer: 64 << 20,
