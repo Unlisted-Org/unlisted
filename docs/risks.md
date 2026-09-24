@@ -1,123 +1,132 @@
-# Risks we answer before anyone asks
+# The issuer, the fee, and the SPV dispute
 
-Written 2026-09-25. Each claim is labelled **verified** (read live or checked against the primary text by the spec owner) or **reported** (from a research sub-agent, with its source).
+Updated 2026-09-25. Each claim is labelled **verified** (read live, or checked against the primary text by the spec owner) or **reported** (from a research sub-agent, with its source).
 
----
-
-## 1. PreStocks is raising the fee to 300 bps on all seven names
-
-**Verified, live.**
-
-- **What the chain shows.** `transferFeeConfig.newerTransferFee = 300 bps from epoch 1043` on every basket mint, read at mainnet slot 450110424.
-- **Set-fee transactions,** all from the issuer multisig's vault `WV9P…Fti5Wc` on 2026-09-24:
-
-  | Mint | Time (UTC) | Signature |
-  |---|---|---|
-  | FIGUREAI | 17:50 | `3kPL56XVmfLSPFv9hbKwcLTBCnHqChm8vANdZ3adV9Q5gaSoWvoPiSDSKGRkoNWb5hyWNEceCDDkLJ62MwtonUgP` |
-  | NEURALINK | 17:54 | `38NvKxQ8askR7FqrZLj4doFDLK8Tatfpgaqu1Y9tsuKnhc9sZ366zkqGPwDNxj1nq43gMfuVw76injsHzbJMbEqY` |
-  | KALSHI | 17:56 | `2kCnFhFK7zJL2mejcNU21SyVGGWbT4ggrsV7KFirGKYgkBjp5tiQtbhKxTNX2ghDipHUGXEvC3Kxvnz9Wgc1C6Vc` |
-  | ANDURIL | 17:57 | `2FyJC4aNayfKdH2SzTBG6GK9s3AWEHxHNpf1HiPMdzVhRQCS4DCFX9cjofbL7vjDbx9bpEtozmSAregaYf619nUq` |
-  | POLYMARKET | 18:06 | `43EW7SJspmdsvn56M2yRpCzYVKvEKdtCfkuARTrLPk1vcEtqyKNgHN6woA5XXcfbPckC4PbrDwQdyasCTZB6saTe` |
-  | ANTHROPIC | 18:10 | `kZFHsxbxPBh2xSssiCjR7e5PPFhyCBhi8ou8bSoyjACAvk3nk2ZZCXn45r7zsMctcdL5qWzpAnRrc4niKMpn2wu` |
-  | OPENAI | 18:11 | `2FxzQ66J7U1TUnrDpBRtay71uw5BKsA5EWWsTmGkL8s6R2daNcKSHrkw3YdsB9WVXkuoqcgtTvnEgs22iUM9H3mD` |
-
-  The same batch set xAI to 0 bps (`VmoagJZj…`). SpaceX, which is not in the basket, stays at 100 bps.
-- **Takes effect at epoch 1043, ≈ 2026-09-26 04:52 UTC.** That is about 35 hours after it was set. The estimate uses the measured 0.2657 s per slot over epoch 1041.
-- **No public announcement found** (reported).
-- **Third change in 16 days:** 0 → 50 bps (Sep 8), 50 → 100 bps (Sep 19), 100 → 300 bps (Sep 24).
-
-**What it does to the product:**
-
-- **Round-trip fees roughly triple.** At 300 bps, fees alone on a buy-then-sell round trip are `1 − 0.97 × 0.97` = **5.91%**, against 1.99% at 100 bps.
-  - Adding the spread component measured on Sep 24 gives an estimated **≈ 6.5% at $10, ≈ 7.2% at $1k, ≈ 7.9% at $10k**.
-  - That is arithmetic on measured spreads, not a new measurement. It must be re-measured after epoch 1043.
-- **The accounting design is unaffected.** No fee is stored anywhere: every inflow is credited at its measured delta, and every payout's fee is borne by the recipient. This is the *fee change mid-position* scenario from spec 02, and it is about to happen on mainnet. Our fixture suite reproduces the same 100 → 300 bps change on devnet.
-- **The honest pitch moves further from "cheap".** Minting and redeeming now costs about 6% in fees alone. The basket token's own secondary market, which is fee-free, becomes the only affordable way in and out for small holders. **That is exactly the part that routes around PreStocks' fee (section 2).**
+These aren't risks we hope nobody asks about. They are the reason the product exists. PreStocks tokens come with an issuer that can pause them, seize them from any account, and change what it costs to move them, at short notice and without announcement. The sections below show that it has done each of these. A basket over these tokens has to keep paying out when the issuer acts. Ours is built to; the live alternative is shown failing in `evidence/symmetry-fork/`.
 
 ---
 
-## 2. Issuer stance: "Doesn't this route around PreStocks' fee income, and can't they pause or seize your vault?"
+## 1. The fee: three changes in sixteen days
 
-### The facts
+**Verified on-chain.** All changes were signed by the issuer multisig's vault `WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc`. Epoch start times come from `getBlockTime`; the epoch-1043 time is projected at the measured 0.2657 s/slot.
 
-- **Who controls the mints: a Squads v4 multisig, 2 of 7, time lock 0 (verified).** Multisig `53Ab3Rqx1a5uiV7qmsX4qbdbrqstVDpnH4LoJGfsZsU8`, decoded from its account (`docs/phase0.md`). Its vault holds mint, freeze, permanent-delegate, pause, fee, withdraw-withheld, hook, multiplier and metadata authority on every mint.
-- **What their Terms of Service reserve.** Verified against the ToS text at `prestocks.notion.site/terms-of-service`:
-  - **Wrapping and pooling happen without them:** tokens "may be listed, quoted, wrapped, bridged, pooled, lent against, used as collateral, or otherwise made available by any person on any venue at any time, without our involvement, knowledge, consent, or approval. We do not endorse … any such listing, venue, pool, wrapper, derivative, or integration."
-  - **Fees apply to wrapping:** fees "may apply automatically to any and every transaction in a token — including each transfer, trade, deposit, withdrawal, wrap, unwrap, stake, unstake, bridge, mint, burn, or redemption — wherever and however that transaction occurs, including on third-party … liquidity pools, aggregators".
-  - **Where fees go:** fees "may be harvested, swept, withdrawn, or claimed by us or our designees at any time and applied for our own account unless we expressly state otherwise in writing."
-  - **Enforcement:** they may "restrict, suspend, disable, deprecate, delist, pause, wind down, compulsorily redeem, or permanently discontinue any token, feature, functionality, market, pool, integration, or Service". They may also "freeze … recover, claw back, or compulsorily transfer or re-assign any token; … burn".
-- **What they invite:**
-  - **The bounty:** "new ways to trade or use them through derivatives or DeFi integrations … lending/collateral, structured products" ([Stocklana](https://hackathons.solana.com/hackathons/stocklana), verified in Phase 0).
-  - **The FAQ:** holders can "use them to build new structured products" ([prestocks.com/faq](https://prestocks.com/faq), reported).
-  - **The ecosystem page** lists an **Index** category with three entries (Indexify, Glider, Avo), plus leverage and liquidity venues (reported, from `prestocks.com/_next/static/chunks/985-f609a54b5bab08a7.js`).
-- **Track record: the permanent delegate has been used to empty holders' accounts (verified).**
-  - On **2025-09-19**, the multisig vault `WV9P…`, which is the permanent delegate, signed `transferChecked` out of **29 token accounts owned by other wallets**, across seven transactions. **Every one was emptied to exactly zero.**
-  - Tokens moved: XAI 26.86, SPACEX 3.66, ANDURIL 1.75, OPENAI 0.69, ANTHROPIC 0.20. They went mostly to one account owned by `CTSxn7dte66zxZT61XDHMYM6stypJySBbQF5tpnjgvBz`.
-  - No memo explains why. It may have been a compliance sweep or launch-period cleanup, but **the reason is unknown and we don't guess it**.
-  - Example transactions: `2smHrk8UHqyZgqWS5ozisWGitWFMPv6mmA2VNnVSv45xrEU7uMDXycKMrSbE6YNapp9YF6Xd1ESt4aZwH6QxvkHB` (7 accounts) and `3Umb9MA4U4LzWdpuT24qLDUdAsvn7UXgwSwgPtd39UVEDFHVnZJWY7cTVHew6Q3rhC11zWvBPQvkPEsE1WaWiY7y` (6 accounts).
-  - How this was found: authority and source owner were read from each transaction's parsed instructions and `preTokenBalances`.
-  - Since then, no delegate use against holders was found in the 963 transactions from March to September 2026 (Phase 0).
-  - In roughly 714 of the multisig's last 1,000 transactions there are **no Pause and no FreezeAccount instructions** (reported, partial scan).
-- **Fee revenue.** A PreStocks post on Sep 8 says fee revenue goes "towards more support for PreStocks builders, more liquidity, and more supply" ([x.com/PreStocks/status/2097379481975759256](https://x.com/PreStocks/status/2097379481975759256), reported). The ecosystem page says RevShare distributes fees to holders. The ToS says fees are applied "for our own account".
-  - A sampled on-chain trail (reported, inference) shows withheld fees swept to a multisig-controlled vault and then a trading wallet, with **no pro-rata holder distribution seen**.
-  - **We assume the vault receives no fee income.** The earlier statement in `docs/phase0.md` that fees go to holders via RevShare is superseded by this.
+| # | Change (basket names) | Set on-chain (UTC) | Takes effect (UTC) | Notice | Announcement |
+|---|---|---|---|---|---|
+| 1 | 0 → **50 bps** | 2026-09-08 16:24–16:39 | epoch 1032, 2026-09-10 07:12 | ≈ 38.5 h | A PreStocks post at 2026-09-08 **17:40**, an hour *after* the on-chain change, says they are "experimenting with non-zero transfer…" ([x.com/PreStocks/status/2097379481975759256](https://x.com/PreStocks/status/2097379481975759256)). The rest of the post was truncated in the copy we could read. The prior rate of 0 is inferred from that post, not from chain history. |
+| 2 | 50 → **100 bps** | 2026-09-19 07:25–07:43 | epoch 1039, 2026-09-20 21:06 | ≈ 37.4 h | **None found** |
+| 3 | 100 → **300 bps** | 2026-09-24 17:50–18:11 | epoch 1043, ≈ 2026-09-26 04:52 | ≈ 35 h | **None found** |
 
-### Our answer
+**Change 3 signatures:**
 
-**Yes to both, and the design assumes it.**
+| Mint | Signature |
+|---|---|
+| FIGUREAI | `3kPL56XVmfLSPFv9hbKwcLTBCnHqChm8vANdZ3adV9Q5gaSoWvoPiSDSKGRkoNWb5hyWNEceCDDkLJ62MwtonUgP` |
+| NEURALINK | `38NvKxQ8askR7FqrZLj4doFDLK8Tatfpgaqu1Y9tsuKnhc9sZ366zkqGPwDNxj1nq43gMfuVw76injsHzbJMbEqY` |
+| KALSHI | `2kCnFhFK7zJL2mejcNU21SyVGGWbT4ggrsV7KFirGKYgkBjp5tiQtbhKxTNX2ghDipHUGXEvC3Kxvnz9Wgc1C6Vc` |
+| ANDURIL | `2FyJC4aNayfKdH2SzTBG6GK9s3AWEHxHNpf1HiPMdzVhRQCS4DCFX9cjofbL7vjDbx9bpEtozmSAregaYf619nUq` |
+| POLYMARKET | `43EW7SJspmdsvn56M2yRpCzYVKvEKdtCfkuARTrLPk1vcEtqyKNgHN6woA5XXcfbPckC4PbrDwQdyasCTZB6saTe` |
+| ANTHROPIC | `kZFHsxbxPBh2xSssiCjR7e5PPFhyCBhi8ou8bSoyjACAvk3nk2ZZCXn45r7zsMctcdL5qWzpAnRrc4niKMpn2wu` |
+| OPENAI | `2FxzQ66J7U1TUnrDpBRtay71uw5BKsA5EWWsTmGkL8s6R2daNcKSHrkw3YdsB9WVXkuoqcgtTvnEgs22iUM9H3mD` |
 
-1. **The fee.** Every deposit into and redemption out of the basket pays PreStocks' fee on every leg, now 300 bps. Their ToS explicitly covers wraps. What skips the fee is trading the basket token itself. That is a real diversion of fee income, and we don't pretend otherwise. Two reasons it is still a reasonable thing to build:
-   - It is the product category their own bounty invites ("structured products", "DeFi integrations").
-   - It routes demand *into* PreStocks, because every new basket unit buys seven PreStocks tokens and pays their fee.
-2. **Pause and seizure.** Yes: a 2-of-7 multisig with no time lock can pause any leg or take tokens out of our vault. That is the reason this basket exists.
-   - Symmetry, the incumbent, stops paying out *entirely* when one leg is paused or seized. Proven in `evidence/symmetry-fork/`.
-   - The seizure power isn't hypothetical: it emptied 29 holder accounts on 2025-09-19 (above).
-   - Our basket keeps paying every leg the issuer didn't touch. It turns the touched leg into a claim, and it shares any seizure pro rata among holders, visibly.
-   - **We don't claim protection from the issuer. We claim that the basket degrades per name instead of failing whole.**
+The same batch set xAI to 0 bps. Change 2's signatures are in `docs/phase0-fee-escrow.md` Q4.
 
-**Options that need your decision (not adopted):**
-- Ask PreStocks for a written acknowledgement. Their ToS allows written exceptions ("unless we expressly state otherwise in writing").
-- Add a basket-level fee on mint and redeem routed to PreStocks' fee wallet or a builder share.
-- Geofence US persons and PreStocks' prohibited jurisdictions in the app.
+**The minimum notice isn't PreStocks' choice.** Token-2022 forces a new rate to wait until the epoch after next, which today means 32–64 hours. The ≈35–38 h of notice each time is close to that floor.
 
-**Adopted in the specs:**
-- The fee is read live and never assumed.
-- Per-leg availability checks and claims.
-- Balance-as-truth accounting.
-- Disclosure of every issuer power on every value screen (spec 03 `/v1/issuer`).
+### What it costs to use the basket, stated plainly
+
+**Fees.** Every deposit and every redemption moves each leg through the vault and pays the issuer's fee on each transfer.
+
+| Fee rate | Round-trip cost from fees alone |
+|---|---|
+| 100 bps | 1.99% |
+| 300 bps | `1 − 0.97²` = **5.91%** |
+
+**Spread.** On top of the fees, market spread measured on 2026-09-24 adds about 0.5% at $10, 1.3% at $1k and 2.0% at $10k. Estimated round trips at 300 bps are therefore **≈ 6.5%, 7.2% and 7.9%**. This is arithmetic on measured spreads, to be re-measured after epoch 1043.
+
+**Minting or redeeming through the basket is never cheaper than buying the seven tokens directly.** At best it costs the same. The basket's convenience (one transferable token, one account instead of seven) is real but secondary. Trading the basket token itself pays no PreStocks fee; see §2 for what that means.
+
+**The accounting is unaffected by any of this.** No fee is stored. Every inflow is credited at its measured delta, and each payout's fee falls on its recipient. The *fee change mid-position* fixture scenario reproduces change 3 on devnet.
+
+---
+
+## 2. Pause and seizure: what the issuer can do, and has done
+
+### Who controls the mints (verified)
+
+A Squads v4 multisig, `53Ab3Rqx1a5uiV7qmsX4qbdbrqstVDpnH4LoJGfsZsU8`, controls every mint. Its threshold is **2 of 7** with a **time lock of 0**. Its vault holds these powers on every basket mint: mint, freeze, permanent delegate, pause, fee, withdraw-withheld, hook, multiplier and metadata.
+
+### The seizure power has been used on holders (verified)
+
+- **When and what.** On 2025-09-19, the permanent delegate (the multisig vault) signed `transferChecked` out of **29 token accounts owned by other wallets**, across seven transactions, **emptying every one to zero**.
+- **Tokens moved:** XAI 26.86, SPACEX 3.66, ANDURIL 1.75, OPENAI 0.69, ANTHROPIC 0.20. They went mostly to an account owned by `CTSxn7dte66zxZT61XDHMYM6stypJySBbQF5tpnjgvBz`.
+- **Examples:**
+  - `2smHrk8UHqyZgqWS5ozisWGitWFMPv6mmA2VNnVSv45xrEU7uMDXycKMrSbE6YNapp9YF6Xd1ESt4aZwH6QxvkHB` (7 accounts)
+  - `3Umb9MA4U4LzWdpuT24qLDUdAsvn7UXgwSwgPtd39UVEDFHVnZJWY7cTVHew6Q3rhC11zWvBPQvkPEsE1WaWiY7y` (6 accounts)
+- **Why: unknown.** No memo explains it. It may have been a compliance sweep or launch-period cleanup, and we don't guess.
+- **Method.** Authority and source owner were read from each transaction's parsed instructions and `preTokenBalances`.
+- **Since then.** No further use against holders was found in the 963 transactions from March to September 2026. In roughly 714 of the multisig's last 1,000 transactions there are no Pause or FreezeAccount instructions (reported, partial scan).
+
+### What their Terms reserve (verified against the ToS text, `prestocks.notion.site/terms-of-service`)
+
+- **Enforcement.** They may "restrict, suspend, disable, deprecate, delist, pause, wind down, compulsorily redeem, or permanently discontinue any token, feature, functionality, market, pool, integration, or Service". They may also "freeze … recover, claw back, or compulsorily transfer or re-assign any token; … burn".
+- **Wrapping and pooling.** Tokens "may be listed, quoted, wrapped, bridged, pooled, lent against, used as collateral, or otherwise made available by any person on any venue at any time, without our involvement, knowledge, consent, or approval. We do not endorse … any such listing, venue, pool, wrapper, derivative, or integration."
+- **Fees on wrapping.** Fees apply to "any and every transaction in a token — including each transfer, trade, deposit, withdrawal, wrap, unwrap …, including on third-party … liquidity pools, aggregators".
+- **Where fees go.** Fees may be "applied for our own account unless we expressly state otherwise in writing." We therefore assume the vault receives no fee income. The ecosystem page's RevShare claim that fees go to holders is not borne out by a sampled on-chain trail (reported).
+
+### What happens to a basket when the issuer acts
+
+- **Symmetry**, the live basket protocol anyone could use for this, run with its own program on a mainnet fork (`evidence/symmetry-fork/`):
+  - **Pause:** with one leg paused mid-redemption, the shares are already burned and the user receives none of the other constituents until the issuer unpauses.
+  - **Seizure:** Symmetry keeps recording the seized tokens, accepts sells against them, and every redemption then fails and pays nothing.
+  - **Fees:** Symmetry handles the transfer fee correctly. We say so, because the other two points are the ones that matter.
+- **Ours** (spec 01; 17 property tests in `spec/model/`; fixture scenarios in progress):
+  - **Pause:** the redemption pays every leg the issuer didn't touch and turns the paused leg into a claim that pays out after resume.
+  - **Seizure:** the vault's actual balance is the truth. A seizure is observed, shared pro rata among all holders, and shown. No one is made whole by later depositors.
+  - **No oracle** anywhere.
+
+**We don't claim protection from the issuer. We claim the basket degrades per name instead of failing whole.**
+
+### Issuer stance (decided)
+
+| Question | Decision |
+|---|---|
+| Written OK from PreStocks? | **Yes: ask in writing, don't block on it, record the reply.** The Terms allow written exceptions and name `legal@prestocks.com` as the only address for notices. The request is drafted in [`docs/outreach/2026-09-25-prestocks-request.md`](outreach/2026-09-25-prestocks-request.md). It has to be sent from the team's own email, because this environment can't send mail. |
+| Route a fee to PreStocks? | **No.** It complicates the product and concedes a point nobody has made. Every basket deposit and redemption already pays their fee on every leg. What skips it is secondary trading of the basket token, the product category their own bounty invites ("structured products", "DeFi integrations"). |
+| Geoblock? | **No; plain disclosure instead.** This is devnet, with fixture tokens that mirror PreStocks and no real PreStocks tokens held by anyone through us. See the note below. |
+
+**Where the legal exposure would differ** (flagged, not legal advice):
+- **The devnet product holds no PreStocks tokens**, so their Terms, which bind anyone "acquiring, holding, transferring" tokens, don't reach the devnet basket.
+- **It changes at mainnet.** A mainnet version would hold real PreStocks tokens for users, and the Terms prohibit US persons and a long list of jurisdictions. Geofencing would then be needed, along with a securities view on offering a pooled token over them.
+- **Using the PreStocks name.** The app and pitch name PreStocks and show their prices and marks. They must not imply endorsement; the Terms say an integration's existence "implies no relationship with, or approval by, us".
 
 ---
 
 ## 3. The SPV dispute: OpenAI and Anthropic say the underlying transfers are void
 
+### Decision: all seven legs stay at equal weight, and the dispute is disclosed plainly
+
+Down-weighting OpenAI and Anthropic would mean taking a position on a dispute we can't adjudicate, and the basket would stop being equal weight.
+
 ### The facts
 
-- **Anthropic (verified, primary and press).** "We do not permit special purpose vehicles to acquire Anthropic stock and any transfer of shares to an SPV are void under our transfer restrictions."
-  - It says third parties selling via "direct sales, forward contracts, tokenized securities, or other mechanisms" are "likely either engaged in fraud or offering an investment that may have no value due to our transfer restrictions".
-  - Sources: [CoinDesk, 13 May 2026](https://www.coindesk.com/markets/2026/05/13/anthropic-openai-tokens-plunge-nearly-40-as-ai-firms-warn-spv-transfers-are-invalid); Anthropic's support article ([support.claude.com](https://support.claude.com/en/articles/13704655-unauthorized-anthropic-stock-sales-and-investment-scams), reported, which names several platforms but not PreStocks).
-- **OpenAI (reported).** Equity cannot be "directly or indirectly transferred" without OpenAI's written consent, and an unauthorized sale "will not be recognized and carry no economic value". Sources: [OpenAI policy page](https://openai.com/policies/unauthorized-openai-equity-transactions/), which returned 403 to the agent, and CoinDesk and [The Block](https://www.theblock.co/post/401088/anthropic-openai-tokenized-prestocks-plunge).
-- **Market reaction.** The ANTHROPIC PreStock fell 34% and OPENAI 39% over seven days (CoinDesk, verified).
-- **PreStocks' response: none found.** CoinDesk, The Block and crypto.news report no comment (reported). CoinDesk also reports that PreStocks had promised attestation reports and had not published them (verified).
-- **What a PreStock legally is.** Verified against the ToS: "bearer digital tokens that reference economic exposure to designated pre-IPO companies".
-  - The risk factors list "refused consent" among events that may reduce the exposure available for a token.
-  - The API description says "backed 1:1 by SPV exposure that tracks the price of the underlying private company" (verified, `prestocks.com/api/prestocks`).
-- **Since then:**
-  - No lawsuit or delisting was found; both tokens are live.
-  - Prices have recovered. ANTHROPIC is at $1,042 against a mark of $1,037. OPENAI is at $1,316, **28.5% above** its mark of $1,024 (reported, API at 2026-09-24 18:12 UTC; consistent with the +29–31% premium measured in Phase 0).
-  - Anthropic and OpenAI reportedly filed confidential S-1s in June 2026 (reported via a PreStocksIntern post; **no primary source**).
+**Anthropic, primary source, verified verbatim** ([support.claude.com article 13704655](https://support.claude.com/en/articles/13704655-unauthorized-anthropic-stock-sales-and-investment-scams); updated 2026-06-29, first published 2026-02-11):
 
-### What it means for a basket holder, stated plainly
+> "We do not permit special purpose vehicles (SPVs) to acquire Anthropic stock and any transfer of shares to an SPV are void under our transfer restrictions."
 
-- **Two of the seven names are legally contested at the source.** OpenAI and Anthropic say transfers into SPVs are void. If that holds, those two legs' value rests entirely on PreStocks' undisclosed hedges and discretion. It could be written down to near zero, and holders have no claim against the companies, the SPVs or PreStocks.
-- **OpenAI's leg carries a separate premium risk.** It trades about 28–31% above PreStocks' own reference value, so a collapse of that premium alone would cost the leg about a quarter of its value.
-- **The basket limits this to those legs.** At equal weight, the two names are about 2/7 (≈ 29%) of inception value. A write-down of both to zero costs the basket that share, and the other five legs keep paying out.
-- **The basket doesn't cure it.** No accounting design fixes a legally void underlying.
+> "Any third party claiming to sell Anthropic shares to the general public—whether through direct sales, 'forward contracts,' tokenized securities, or other mechanisms—is likely offering an investment that may have no value due to our transfer restrictions."
 
-**Disclosure text for the app and the pitch** (to be agreed):
+> "Any sale or transfer of Anthropic stock, or any interest in Anthropic stock, that has not been approved by our Board of Directors is void and will not be recognized on our books and records."
 
-> Two constituents, OpenAI and Anthropic, have publicly stated that transfers of their shares to SPVs are void and that tokenized exposure "may have no value". PreStocks tokens give no claim on any company, SPV or PreStocks itself. Their value depends on PreStocks' undisclosed arrangements, which PreStocks' own terms say may be reduced or eliminated. This basket holds these tokens as they are and cannot change that.
+**OpenAI (reported).** Equity cannot be "directly or indirectly transferred" without OpenAI's written consent, and an unauthorized sale "will not be recognized and carry no economic value". Sources: [openai.com/policies/unauthorized-openai-equity-transactions](https://openai.com/policies/unauthorized-openai-equity-transactions/), which returned 403 to us, and press coverage.
 
-**Options that need your decision:**
-- Reduce the weights of the two contested names at inception.
-- Keep equal weight with the disclosure (current spec).
-- Show each leg's premium to mark prominently (already in spec 03 `values.gaps`).
+**Market reaction and aftermath:**
+- ANTHROPIC fell 34% and OPENAI 39% over the seven days after the warnings were publicised on 2026-05-13 ([CoinDesk](https://www.coindesk.com/markets/2026/05/13/anthropic-openai-tokens-plunge-nearly-40-as-ai-firms-warn-spv-transfers-are-invalid), verified).
+- CoinDesk also reports that PreStocks had promised attestation reports and had not published them. No PreStocks response was found.
+- No lawsuit or delisting was found, and both tokens are live.
+- On 2026-09-24, OPENAI traded ≈ 28–31% above PreStocks' own reference value, and ANTHROPIC close to it (verified in Phase 0; reported at 18:12 UTC).
+
+**What a PreStock is (verified against the Terms).** "Bearer digital tokens that reference economic exposure to designated pre-IPO companies". The risk factors list "refused consent" among the events that may reduce the exposure behind a token.
+
+### Disclosure text (app and pitch)
+
+> Two of the seven companies in this basket, OpenAI and Anthropic, have said publicly that transfers of their shares to special purpose vehicles are void. Anthropic says third parties selling its shares through tokenized securities are "likely offering an investment that may have no value". PreStocks tokens give no claim on any company, SPV or PreStocks itself. Their value depends on PreStocks' own undisclosed arrangements, which PreStocks' terms say may be reduced or eliminated. This basket holds these tokens as they are, at equal weight with the other five, and cannot change that. At inception these two names are about 2/7 (≈ 29%) of the basket's value.

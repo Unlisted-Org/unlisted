@@ -1,0 +1,44 @@
+# stocklana
+
+**A basket of tokenized pre-IPO companies that still pays you out when the issuer acts.**
+
+PreStocks, the tokens this basket holds, are controlled by a 2-of-7 multisig with no time lock. It can pause them, seize them from any account, and change what it costs to move them. It has done all three:
+
+- **Seized:** it emptied 29 holders' accounts to zero on 2025-09-19, with no memo.
+- **Changed the fee three times in sixteen days:** 0 → 50 → 100 → 300 bps. The last two came with no announcement we could find.
+
+Basket protocols break when that happens. Symmetry, run with its own program on a mainnet fork, burns the user's shares and then pays nothing while one leg is paused, and fails every redemption after a seizure. It does handle transfer fees correctly; fees aren't the problem.
+
+This basket is built so that:
+- a paused name becomes a claim while the other legs pay out;
+- a seizure is detected and shared pro rata;
+- no oracle is involved.
+
+**What it costs, plainly.** Minting or redeeming through the basket is never cheaper than buying the seven tokens directly. Every leg pays the issuer's transfer fee in and out, which at 300 bps is about 5.9% for a round trip before spread. The convenience of one transferable token and one account is a secondary benefit.
+
+**Disclosed.** OpenAI and Anthropic say share transfers to SPVs are void. Both stay in the basket at equal weight, and the exposure is stated in the app ([risks](docs/risks.md#3-the-spv-dispute-openai-and-anthropic-say-the-underlying-transfers-are-void)). PreStocks has not endorsed this project.
+
+## Status
+
+- **Devnet only, by design.** The failure cases are issuer actions, which only the issuer's keys can trigger on mainnet. Fixture mints mirror PreStocks extension for extension, so every issuer action can be run against the program, with signatures.
+- **Specs approved** (`docs/specs/`). The share maths is an executable model with 17 property tests (`spec/model/`).
+- **In progress** on separate branches: the program (`program`), the SDK and app (`app`), and the fixtures, valuation API and issuer-event watcher (`ops`). Nothing is deployed yet. This README is updated only when something is proven.
+
+## Read
+
+| What | Where |
+|---|---|
+| The pitch and the evidence behind each claim | [docs/pitch.md](docs/pitch.md) |
+| Evidence: Symmetry fork runs, devnet issuer actions, mainnet seizure record | [evidence/](evidence/README.md) |
+| The issuer, the fee history, the SPV dispute | [docs/risks.md](docs/risks.md) |
+| Specs: agent split, share maths, on-chain interface, valuation API | [docs/specs/](docs/specs/) |
+| Investigation reports | [docs/phase0.md](docs/phase0.md), [docs/phase0-fee-escrow.md](docs/phase0-fee-escrow.md) |
+
+## Reproduce
+
+```sh
+python3 -m unittest discover -s spec/model -v   # share-maths model: 17 property tests
+cd evidence/symmetry-fork
+./run.sh                                         # Symmetry on three fresh mainnet forks (needs surfpool)
+node mainnet-recon.js                            # live mainnet record-vs-balance read
+```

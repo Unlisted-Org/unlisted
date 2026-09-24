@@ -40,6 +40,11 @@ Labels used below:
 7. **Update, 2026-09-25: the fee goes to 300 bps on all seven names** at epoch 1043 (≈ 2026-09-26 04:52 UTC), set by the issuer multisig on 2026-09-24 between 17:50 and 18:11 UTC. This is the third fee change in 16 days. The Q2 round-trip costs below were measured at 100 bps; at 300 bps, fees alone on a round trip are 5.91%. Issuer stance, the SPV dispute and this change are answered in [`docs/risks.md`](risks.md).
 8. **Correction, 2026-09-25:** epochs last about 32 hours (measured 0.2657 s/slot), not 2.6 days. The Q5 price ages were recomputed at the measured rate.
 
+9. **Phase 1 decisions (2026-09-25):**
+   - **Pitch:** the pitch leads on surviving the issuer; convenience is secondary; the cost is stated plainly ([pitch](pitch.md)).
+   - **Weights:** all seven legs at equal weight, with the SPV dispute disclosed from Anthropic's primary source.
+   - **Issuer stance:** ask PreStocks in writing ([request](outreach/2026-09-25-prestocks-request.md)); no fee routed to them; disclosure rather than geoblocking on devnet ([risks §2](risks.md)).
+
 Sections below that still mention SPACEX (the Q2 and Q5 tables) are the original eight-mint measurements, kept as evidence. Seven-name figures will be recomputed in the spec.
 
 ---
