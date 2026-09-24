@@ -1,0 +1,227 @@
+{
+ "scenario": "fee-change-mid-position",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:10:51.894Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create share mint (authority = basket PDA)",
+   "signature": "45epe7ALMyYD57yvCy6KLb7rGFZBQjESmMVyYfky2ZYayFAqL9TkHfJXbLsQEBwvYJLWYQT6NoQEg1MgPL43bpBU",
+   "slot": 503656061,
+   "ok": true,
+   "cu": 42437,
+   "size": 654,
+   "events": []
+  },
+  {
+   "label": "initialize_basket",
+   "signature": "2A1MLrr5fJHqaZzNSNj6VbeUudjcxNtZEyHRxaEvi1x4SrQS317yQMgae7nQpiMbz7THYkAXKoMXjMX7HXgM1TUc",
+   "slot": 503656073,
+   "ok": true,
+   "cu": 234558,
+   "size": 851,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000000 raw of each leg to the authority",
+   "signature": "5pDLgKjRwVbV37HRR1FfNQbREC4oR5HfML37ZenWoeRPjT2XV3pJYVni8piPdQ144mKWm8AciW1nZZb7uoqDgunk",
+   "slot": 503656120,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bootstrap (INITIAL_SHARES, in kind)",
+   "signature": "4WEHXTpJGdbHERemqfoZwAckd7mSa8VivSLHYuaF2CPFvMhFxk6HCng4m4nG8D4jPbf4s24nrYFEALfHGFQ7rbDc",
+   "slot": 503656126,
+   "ok": true,
+   "cu": 92259,
+   "size": 893,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 500000000000 raw of each leg to alice",
+   "signature": "2UCi9tq2HhnrP2e9CBgBvvngcy2USKmpVWC3oapqqQKThjXB8jBTGdRUfzphea6d4a4zai6NAfwG3h8f7RMUVLHm",
+   "slot": 503656131,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "alice deposit_in_kind",
+   "signature": "5k6ogWf6cLDhwsmRtajij3kEjtUFva6EMf7CSP6tY5EHXSQTGz7guSzj1VAbFCUcPeLUGz9V24Z6wFW5h4E8GUsy",
+   "slot": 503656138,
+   "ok": true,
+   "cu": 105593,
+   "size": 997,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "shares": "1dcd6500",
+      "deltas": [
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER set-transfer-fee 100 → 300 bps (legs 0..3)",
+   "signature": "2BE63mgq8yjVNFX5UbfotHEWE72n5UHyX4pFZknALGGVA5vtL25Ks6Tnrbu9vY7n7GSSgEWpVyPjKUi7K5DD1Ax8",
+   "slot": 503656152,
+   "ok": true,
+   "cu": 7254,
+   "size": 314,
+   "events": []
+  },
+  {
+   "label": "ISSUER set-transfer-fee 100 → 300 bps (legs 4..6)",
+   "signature": "2voP2LB2YukpD3EXrEcCNr6k6Tf5rUqNtyENbQbmaDbsuWv9GZ6XpVfKkf1mgYmvKbkF8cdJ3mFZZw8whzEg3uaW",
+   "slot": 503656165,
+   "ok": true,
+   "cu": 5478,
+   "size": 296,
+   "events": []
+  },
+  {
+   "label": "alice redeems with the new fee scheduled: the current (older) 100 bps applies",
+   "signature": "378eagk8KGEUxxyMV7Xa3qmyHTL8QrHHoy4dL3ghBZ4yd1GF5fJAW4p3pQYE8UfYcSFsPmmjmJe2YNfKyBJG5swL",
+   "slot": 503656517,
+   "ok": true,
+   "cu": 121439,
+   "size": 983,
+   "events": [
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "5mRGeaxxPRjadKBfDjssyk5dppE8Vcgi3sTsvp29xe5U",
+      "shares": "09ef21aa",
+      "paid": [
+       "26086b2ef2",
+       "26086b2ef2",
+       "26086b2ef2",
+       "26086b2ef2",
+       "26086b2ef2",
+       "26086b2ef2",
+       "26086b2ef2",
+       "00"
+      ],
+      "claims_mask": 0
+     }
+    }
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "what": "bootstrap minted INITIAL_SHARES",
+   "ok": true
+  },
+  {
+   "what": "newer fee 300 bps effective at epoch 1167 (= current 1165 + 2)",
+   "ok": true
+  },
+  {
+   "what": "OPENAI paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "NEURALINK paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "ANDURIL paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "POLYMARKET paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "KALSHI paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "FIGUREAI paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346",
+   "ok": true,
+   "expect": "164999999340"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "recipient net = gross − ceil(gross·100/10⁴) (164999999340 → 163349999346); the program stores no fee",
+   "ok": true
+  }
+ ],
+ "basket": "B1VnJMbgGZwDDuNkHAiyGmj8oc4gmzUHN6DYtHhonFhK",
+ "shareMint": "5ah5qrjuXxwr1LjpERtPbPjToUsfa1FynqPJDRWcqk4a",
+ "vaults": [
+  "A11hW2bst8JSRR9cDtdYYjEX59xM6JHSBSnunT9dXao9",
+  "C92Hbwnvy5qrRE8KoiXevTzQmSE2UXLcbbzqFsanyeF1",
+  "9y2bFVYWqeH6FqZSUziWwFCqJiejEC7QrUikxtAfvAGn",
+  "2N9Vx6fVJ2SNQRosX3Ey6AMn4wJUkuD3hnd7nRNu7Wqf",
+  "5dxfYwHg8hc7ERhFkaAxBYuL1J3FENteeDdQg37gzpiE",
+  "2LpWue8HE7aajLhhfeQtwmy4gma4BrahrfgmCfhoGaS4",
+  "By6PwfNkExFkWbH35UYbFhbrGnyXBHs6xqRgvBMEKAV3"
+ ],
+ "pending": "The 300 bps fee takes effect at epoch 1167 (~2 days on devnet). A redemption after that epoch is the second half of this scenario; see tests/program/devnet/fee-change-mid-position-after.json if present. The effect itself is proven in LiteSVM (guards.test.ts, fee change mid-ticket) and on the cloned-mainnet fork, where time travel crossed PreStocks' real epoch-1043 change (300 bps charged on convert_listed_leg).",
+ "feeEffectiveEpoch": 1167,
+ "issuerSolSpent": 0.02727864,
+ "finishedAt": "2026-09-24T21:12:19.310Z",
+ "passed": true
+}

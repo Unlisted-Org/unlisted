@@ -1,0 +1,282 @@
+{
+ "scenario": "multiplier-change-mid-position",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:12:19.459Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create share mint (authority = basket PDA)",
+   "signature": "cEj1qURCbhryjrN1JzutAoUqag1PaqPgrkmJiQgM7j2vh4vDVcyzyWscbySUuE1oSMjrXvEqY2P4t5XwsmMNMjt",
+   "slot": 503656586,
+   "ok": true,
+   "cu": 42437,
+   "size": 654,
+   "events": []
+  },
+  {
+   "label": "initialize_basket",
+   "signature": "5DPDasxsy7Z7LNnf4GhBSc2dRabyLpmJtifkuf45EtnSUhipR8F5Vx3Y1XeC8VdVNAA3MqmiXJkmWyfNELKFfC6G",
+   "slot": 503656598,
+   "ok": true,
+   "cu": 237558,
+   "size": 851,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000000 raw of each leg to the authority",
+   "signature": "XbN9aJGgE42johhGzQCa5Zw72cYp91WgXHQGodDJzm1tKTefhELMtVgakixLxK9zKPa5iw7ZHmwXZ5VA1XuGANg",
+   "slot": 503656611,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bootstrap (INITIAL_SHARES, in kind)",
+   "signature": "56ePkjjuA95vYijnS7aqVj15oqvtJA9y4xbvf5bSkVyn6bkk51hM14BET3mn8U5FpLk3Z5zzdHb2FRuTjeLe1kGg",
+   "slot": 503656665,
+   "ok": true,
+   "cu": 92259,
+   "size": 893,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 500000000000 raw of each leg to alice",
+   "signature": "4PrK29mA14QKpZZ2Qb6dZkzSpQRSfHYUyeo1oQexe1WF2efGW9UwHrtb7ZBLSt9pVrwCW32vhArjse64aB8V73av",
+   "slot": 503656900,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "alice deposit_in_kind",
+   "signature": "3ZSTqScdh4r1wqdAm1s3YiFXZ5Qm9nMeZka2wmRfLi9yEUhsKZwx8dsTQ63RBDtBeLCv1kVR1JexBwrPJRBw7yYL",
+   "slot": 503656932,
+   "ok": true,
+   "cu": 105593,
+   "size": 997,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "shares": "1dcd6500",
+      "deltas": [
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER update-ui-amount-multiplier OPENAI 1.4861347 → 2.0, effective in 60 s",
+   "signature": "29fHTPJLdsGFempCbQAv2PJfV3wf2VdxfvGzWZgoQWFu2tPCb6ZX8tcjEd7dBK51tGR5KT6cMaPG17jt4JTCK3hk",
+   "slot": 503656959,
+   "ok": true,
+   "cu": 2333,
+   "size": 266,
+   "events": []
+  },
+  {
+   "label": "redeem before the multiplier takes effect: raw amounts by the share formula",
+   "signature": "gxHKyHGAuPxogwGiBZywmG2ScQqDjjwe8Una8GBL27MLkGtRNjgVCPq6RqQCxSpFRSEddM3kHwy6npRXLSpuiX4",
+   "slot": 503657192,
+   "ok": true,
+   "cu": 119939,
+   "size": 983,
+   "events": [
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "EbyXb82YdtZRN4U9PTZUJJqfchJD7D7uGuzwuzzUHMSo",
+      "shares": "07735940",
+      "paid": [
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "00"
+      ],
+      "claims_mask": 0
+     }
+    }
+   ]
+  },
+  {
+   "label": "redeem after the multiplier took effect: raw amounts still by the same formula (the program never reads it)",
+   "signature": "5oP2cxobVcj3ub3PKjHmNXzwtpJdxeLeZjpb5dAucjn6yfU1UJvUfuRAoVqczmnAF6nJv1fzfRo49Ki1TayVL9T6",
+   "slot": 503658048,
+   "ok": true,
+   "cu": 121439,
+   "size": 983,
+   "events": [
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "BK4grVFqkYSkUu8a7ipnuERvZcg7tNJS3HUVtDhBMzEG",
+      "shares": "07735940",
+      "paid": [
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "00"
+      ],
+      "claims_mask": 0
+     }
+    }
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "what": "bootstrap minted INITIAL_SHARES",
+   "ok": true
+  },
+  {
+   "what": "OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANDURIL paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "KALSHI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANDURIL paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "KALSHI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  }
+ ],
+ "basket": "E3dRtrKdznpNZMiCGUm7rvpP4amJSUqHyB1AEY19HsqL",
+ "shareMint": "GVxWKfoWim8SPhS8gYA4p1Lw884TpC4LYiGT5XYnbcCR",
+ "vaults": [
+  "EsVCoJJ8EJWXbsSDatjHbQv7S7M2iUBcgWFfqk1QMFGr",
+  "65eJ9sL4D5X3qANdGUtMYNJxEFSZmsUkwvXXD1oq5tZ2",
+  "5eH2jSK3oD1W1LMsPxyuVQVYRFncDrQX4pR5LtnM699b",
+  "7DtChCqjiVfpK9ZSoRsB2Pk5bMFqkzyAqJZUNQfAhQ6r",
+  "CzFETK5qa8XtbrTti9aZvcAZoAjThRAW5WMGPD8Swi1c",
+  "Gz8BrnJ1eGypC9aGYoS5bJFpraGqFSKNCMjC37HufkGC",
+  "BhrAhTs7NAZUbW4LRtQPRTnZhgRhS5xDAqqCcvhZZRnD"
+ ],
+ "multiplier": {
+  "authority": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "multiplier": 1.4861347,
+  "newMultiplierEffectiveTimestamp": "1790284463",
+  "newMultiplier": 2
+ },
+ "issuerSolSpent": 0.02728364,
+ "finishedAt": "2026-09-24T21:17:28.343Z",
+ "passed": true
+}

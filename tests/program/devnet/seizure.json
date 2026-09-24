@@ -1,0 +1,283 @@
+{
+ "scenario": "seizure",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:04:48.300Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create share mint (authority = basket PDA)",
+   "signature": "3DcTgWLaYSih6zm1EEXWcERHPDcYt77HFXz6PBToe4pNq9LBLZeNfXHBswN51aRzpbbyUY6Bo6F6qkQqPSBB5khn",
+   "slot": 503653872,
+   "ok": true,
+   "cu": 43937,
+   "size": 654,
+   "events": []
+  },
+  {
+   "label": "initialize_basket",
+   "signature": "hmdSDDFcdzmjVVcfkBconEW8HD2cr6efKGvEGETKmPDy8GxDEz5YQXhQ2sXwmNqsFiET6ckMLPrPTSBcJk1qsNZ",
+   "slot": 503653879,
+   "ok": true,
+   "cu": 242058,
+   "size": 851,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000000 raw of each leg to the authority",
+   "signature": "5y3xuH53CNgAVCjrSLxcMq4eEx72UAXHhm2GgrmwYgdeN5dKhVkctaXH6M4kGcfdNtgLZT8uWyfWuUxu9YtMm39j",
+   "slot": 503653996,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bootstrap (INITIAL_SHARES, in kind)",
+   "signature": "3RPPJgTt9PD2gXVH1Y3hR8k5m22VkFVefoiYKVMBaMZDk28ZaK7Jm28zSpX6T1CuH7c5i5LsBMo3eyuYPXWzxdEx",
+   "slot": 503654017,
+   "ok": true,
+   "cu": 92259,
+   "size": 893,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 500000000000 raw of each leg to alice",
+   "signature": "5ztNDH8WmJiUm1FwLyFCG36Evsuqk4hpv7pZ6QtuoaRjhdyTNmRu7kmcpHjQHTbhfZ8ExzbPzi538sCGLj1JXkrf",
+   "slot": 503654022,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "alice deposit_in_kind",
+   "signature": "4kc49c8w7MuGkTZ65WUirG6BRvH6XfYTaunudNS5u28koUNJ3J1TXkvo9YvV9QUH6Z33wNwu73TCFseFXqLZNDrH",
+   "slot": 503654073,
+   "ok": true,
+   "cu": 105593,
+   "size": 997,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "shares": "1dcd6500",
+      "deltas": [
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER seizes 371250000000 raw NEURALINK from the vault (permanent-delegate burn; the vault does not sign)",
+   "signature": "RdiTG5MnYvPmLiHkKPjrhPbhKmMaRhWaoLcMSHXCtDUaayE5CDUiiyVe1v9oLDxNfygk4b9Z1G3W8Q2VEp83GCL",
+   "slot": 503654088,
+   "ok": true,
+   "cu": 4112,
+   "size": 291,
+   "events": []
+  },
+  {
+   "label": "observe (permissionless) emits ShortfallObserved",
+   "signature": "4NHSajqyThX7Ai4B3Ye8R88GZLwYHjYgm9CLok4wCnyz7HJN6Zq9ZjbewJHJ8a7igcd1tCbuKvAJPLo6FbJmnZos",
+   "slot": 503654111,
+   "ok": true,
+   "cu": 18845,
+   "size": 323,
+   "events": [
+    {
+     "name": "ShortfallObserved",
+     "data": {
+      "leg": 2,
+      "expected": "0159c0e5c200",
+      "actual": "010350ac5180",
+      "loss_index": "0a688906bd8b0000",
+      "slot": "1e0526df"
+     }
+    }
+   ]
+  },
+  {
+   "label": "alice redeems half in kind: leg 2 pays pro-rata less",
+   "signature": "3GyqdBmrRr8cq8x1cwUmXcKFppE5K4yXtj13Be3m64tUaBPJ26smyBy3jRLPd2N6gQvTNS8qd3oRdvkaqBjv7Z7k",
+   "slot": 503654345,
+   "ok": true,
+   "cu": 119939,
+   "size": 983,
+   "events": [
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "4NkF5WbYZY5LTZvwstqVnsLXRGo3mbtcf7isKf6y8G6k",
+      "shares": "0ee6b280",
+      "paid": [
+       "390ca0ca40",
+       "390ca0ca40",
+       "2ac97897b0",
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "00"
+      ],
+      "claims_mask": 0
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 125000000001 raw of each leg to bob",
+   "signature": "3iwUC45bYnLoP32MSfo4BvmaZt2iWe3Q3FmzBS9TPKnBqUZxF8dMfjic9fBnHfYq1dSGaMAHcBcVfAZwL32CNvE3",
+   "slot": 503654496,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bob deposits in kind at the reduced composition",
+   "signature": "4Da6fji7UkogJnHrokSiAdnZsT68w57tY4SphLzGDzNh37Kfu8s7jBKDL7EPNuPxMRp7HxDVj1ord4Tae9vHLg56",
+   "slot": 503654602,
+   "ok": true,
+   "cu": 105593,
+   "size": 997,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26",
+      "shares": "07735940",
+      "deltas": [
+       "1cd0132580",
+       "1cd0132580",
+       "159c0e5c20",
+       "1cd0132580",
+       "1cd0132580",
+       "1cd0132580",
+       "1cd0132580",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "what": "bootstrap minted INITIAL_SHARES",
+   "ok": true
+  },
+  {
+   "what": "ShortfallObserved { expected: A, actual: B }",
+   "ok": true,
+   "event": {
+    "leg": 2,
+    "expected": "0159c0e5c200",
+    "actual": "010350ac5180",
+    "loss_index": "0a688906bd8b0000",
+    "slot": "1e0526df"
+   }
+  },
+  {
+   "what": "OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "NEURALINK paid now: gross 185625000000 = floor(s·owned/(S+C)), received 183768750000",
+   "ok": true,
+   "expect": "185625000000"
+  },
+  {
+   "what": "ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "POLYMARKET paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "FIGUREAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "bob minted 125000000 shares = min_i floor(Δ_i(S+C_i)/owned_i) = 125000000; ≈ S/10 (no top-up of the seized leg)",
+   "ok": true,
+   "S": "1250000000"
+  }
+ ],
+ "basket": "DVV71KDH3KJMQQtjyUUF2YyoLnxTRpoopyhnQ4c1fWND",
+ "shareMint": "7TkVCG9KvCcDcfmDZgKLZuuaAcgih1cjaEGoUAND6Rh",
+ "vaults": [
+  "3dDeGjY5yfibnTCsPTqJunmpgoAHs7L5XWkknjB9tFgN",
+  "3q9YQwbG7fryyifxLicYyu4UK1XWk9ZunwquZV9L3waJ",
+  "7yjyiXvfpLeHiAPZmj9MeazSpwu37Fn35eYakWVudc3M",
+  "56pt1KC1bsnQA46FxqTGurcth2VYNndkqqLK7sSexorF",
+  "9HimwL5VM9ro5Yq1vLiSfRZfaizDGryS9mThxqqoMAgc",
+  "5JbvjUkrom9FnddFSxzfp6s737CdRwfBhiEvuDduoEqi",
+  "2xmDTQsd6Y6fCvFGkRhU1UZxYATJ3m68TGAvdtbFtxkt"
+ ],
+ "issuerSolSpent": 0.02729364,
+ "finishedAt": "2026-09-24T21:06:55.481Z",
+ "passed": true
+}

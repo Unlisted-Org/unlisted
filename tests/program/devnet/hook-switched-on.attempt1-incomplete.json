@@ -1,0 +1,308 @@
+{
+ "scenario": "hook-switched-on",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:17:28.494Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create share mint (authority = basket PDA)",
+   "signature": "5uXCkwk1QDny7MNZLKLLj1ZynX7eFU6SX7Ph9STKxToKAvjj5qL6dssUZ15ejcKybGmFRnYgq73tP5S28jbgAxYi",
+   "slot": 503658440,
+   "ok": true,
+   "cu": 45437,
+   "size": 654,
+   "events": []
+  },
+  {
+   "label": "initialize_basket",
+   "signature": "4H4dQgfwRSqYaiXbzs4VZSdMvjWZFuob3NdS4iVSQgQC1GHzXohbpjx8D9hMrh13ETYGoJW1Rs2huoTYWduCipiA",
+   "slot": 503658445,
+   "ok": true,
+   "cu": 243558,
+   "size": 851,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000000 raw of each leg to the authority",
+   "signature": "3okvTGtoDgByX8gKW25Y23Q84fxPLG6r281V3b1nq3r7uoa3hQMXNvAAWnmZxSCzWq85bWhJwDTgy2VEm8MCrDSG",
+   "slot": 503658450,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bootstrap (INITIAL_SHARES, in kind)",
+   "signature": "3X6ZgWHGwAXxQmx46FiqEGneTkDTUxNmvamxMYu3SHVqKs5Qstfi9MdssjzxNGJY1qeg7SSkY4bY8a4MzEit1PBW",
+   "slot": 503658462,
+   "ok": true,
+   "cu": 92259,
+   "size": 893,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 500000000000 raw of each leg to alice",
+   "signature": "2YE48tLbhr6amoQZtuUojuTnS3GFMiSUJH295v4GpxhztrZriXkHdpsgdZG2ooHswse3Z7VQd9YAAdBquRwfcLfd",
+   "slot": 503658468,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "alice deposit_in_kind",
+   "signature": "2TtQNMNpNr3seWo2uJKtm6BQyX12U47k8zrdG7U7Ri5qXDX7BPoMZXADRQhR8rGNfHhXnvHZW5e2GrpzKLnaDByT",
+   "slot": 503658473,
+   "ok": true,
+   "cu": 105593,
+   "size": 997,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "shares": "1dcd6500",
+      "deltas": [
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER sets POLYMARKET transfer hook to MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+   "signature": "4NMGaN9eNwQX87SFogXSvcdqj6kUBCc8d1LewzKE9kXnD8Npb5YcAgqjU3kC3ioVG6Z2mc6fvVrfscYBsQdBtgpJ",
+   "slot": 503658479,
+   "ok": true,
+   "cu": 1890,
+   "size": 282,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000 raw of each leg to bob",
+   "signature": "4D4t2vCR65XcjLz2SFthNaTi17s52srbTmrj4q2uYdy8NyPEQWLtXB7f2VwNDo39Hcy4sM2AhN7qDs821tDwFpad",
+   "slot": 503658520,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bob deposit_in_kind with a hook on POLYMARKET",
+   "refused": true,
+   "simulatedAtSlot": 503658827,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: DepositInKind",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "alice redeems: POLYMARKET (hook set) becomes a claim, the rest pay",
+   "signature": "43WaupXPpKEjguiTDzrA5btYcmkAKdNwrpWtHve5YmSw3nwaHYPjUyJDQDArFXuvVMoW3P7pY1govbkws7LxvCF",
+   "slot": 503658925,
+   "ok": true,
+   "cu": 111077,
+   "size": 983,
+   "events": [
+    {
+     "name": "ClaimCreated",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "FPtThPQ5hfRj9vqxixLXEXzz55xtVuDYwTRanXb3mLoh",
+      "leg": 4,
+      "units": "0ee6b280",
+      "reason": {
+       "Hook": {}
+      }
+     }
+    },
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "FPtThPQ5hfRj9vqxixLXEXzz55xtVuDYwTRanXb3mLoh",
+      "shares": "0ee6b280",
+      "paid": [
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "00",
+       "390ca0ca40",
+       "390ca0ca40",
+       "00"
+      ],
+      "claims_mask": 16
+     }
+    }
+   ]
+  },
+  {
+   "label": "settle_claim while the hook is set",
+   "refused": true,
+   "simulatedAtSlot": 503659131,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: SettleClaim",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "ISSUER sets POLYMARKET transfer hook to null",
+   "signature": "3jCbvDmKArx5JUiTAyLNiqcN7t2iTevmbBtsgmwVpcDM8xnAnrb9SK8mNcqZ5djgcy4cY1ivuxXAxb5bGstnpz5E",
+   "slot": 503659136,
+   "ok": true,
+   "cu": 1887,
+   "size": 282,
+   "events": []
+  },
+  {
+   "label": "hook removed: the claim settles",
+   "ok": false,
+   "error": "Simulation failed. \nMessage: Transaction simulation failed: Error processing Instruction 1: custom program error: 0x1784. \nLogs: \n[\n  \"Program ComputeBudget111111111111111111111111111111 invoke [1]\",\n  \"Program ComputeBudget111111111111111111111111111111 success\",\n  \"Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv invoke [1]\",\n  \"Program log: Instruction: SettleClaim\",\n  \"Program log: AnchorError thrown in programs/basket/src/lib.rs:580. Error Code: NoClaim. Error Number: 6020. Error Messag",
+   "logs": [
+    "Program ComputeBudget111111111111111111111111111111 invoke [1]",
+    "Program ComputeBudget111111111111111111111111111111 success",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv invoke [1]",
+    "Program log: Instruction: SettleClaim",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:580. Error Code: NoClaim. Error Number: 6020. Error Message: No claim on this leg.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv consumed 17557 of 599850 compute units",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1784"
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "what": "bootstrap minted INITIAL_SHARES",
+   "ok": true
+  },
+  {
+   "what": "bob deposit_in_kind with a hook on POLYMARKET → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  },
+  {
+   "what": "OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "NEURALINK paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "POLYMARKET became a claim of 250000000 units",
+   "ok": true,
+   "ticketLeg": {
+    "Claim": {
+     "units": "0ee6b280",
+     "reason": {
+      "Hook": {}
+     }
+    }
+   }
+  },
+  {
+   "what": "KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "FIGUREAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "claim reason Hook",
+   "ok": true
+  },
+  {
+   "what": "settle_claim while the hook is set → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  }
+ ],
+ "basket": "HJyLuVugKEFpTi8r3Tf6Q3H741gMDZHWLd5mSTsgPaXR",
+ "shareMint": "BUd4jYzxJZZPX7UoX8JxAgwq18Spo3FPSK1GwvqfwSaB",
+ "vaults": [
+  "HCCgm2SpbPSdNStipXXXikuFTCXwxHrQHs15CexUCTD8",
+  "GztRbKcfnnvsknA8Pb2Pb4eYARTi9addTiRBuA2897hg",
+  "2io4ax6WVCvyZiK1SMgVxj7biebgNNnG7dZWkB5hVfrV",
+  "5UbPVHAs7SvDAM9vZHrnooYcJECKGLpGSYSrLenXn9rU",
+  "CErWF7vVw5c7753iMeZv9GHSFbqYG5STe6xVXoQo4WVf",
+  "AvLMfA5KtRpWdQTAVw9FtuXdw97AAi5ENgWxxne7WjMM",
+  "FdUbc9rVxW9jBqgFEZiLPq6eNH1ZKwzM638yfc9RJbE3"
+ ]
+}

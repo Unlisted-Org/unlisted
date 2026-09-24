@@ -1,0 +1,311 @@
+{
+ "scenario": "frozen-vault",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:22:44.269Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create share mint (authority = basket PDA)",
+   "signature": "2Mg14KpnaKV1ZVL4jwS9q37DaDkvonxg2a2eH1Ru188x2T7fXGS2uPPt7XPTMs7go829p1CVFwAABuHoxFNqGNxa",
+   "slot": 503660358,
+   "ok": true,
+   "cu": 48437,
+   "events": []
+  },
+  {
+   "label": "initialize_basket",
+   "signature": "2Q2ecXFHhxfvjToP48S8datPpuRYLQAmWrqVwpWHNP9bdWRjsWByfF8Endhn83hKcaKbDwycXAzL6Tk6dhoGst78",
+   "slot": 503660387,
+   "ok": true,
+   "cu": 242058,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000000 raw of each leg to the authority",
+   "signature": "2Xj8CatiJ7hTVXfZrsFmjXweZrMU5VLv6utP4QkszaX81eUz4dDKAprB2GimqB4aV8YoQpaJvyy6rAv5WkygfdFt",
+   "slot": 503660401,
+   "ok": true,
+   "cu": 23817,
+   "events": []
+  },
+  {
+   "label": "bootstrap (INITIAL_SHARES, in kind)",
+   "signature": "8pZccZcfE96BjKrHctEjRcoXtKJu3iYCWdSRBkyFwt2djCDpPxhChK3dTR84TGBWm2WVsM22yLZFh1gy5G3xCe7",
+   "slot": 503660415,
+   "ok": true,
+   "cu": 92259,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 500000000000 raw of each leg to alice",
+   "signature": "VCvfU3MjgqNWjyP5hCWo9LL7uQS9EUyK9JJB1HNRRx1pKzanxdGqr5dqLbdnvArn4u5HMeboGS1m7W4t8aLz2Dr",
+   "slot": 503660428,
+   "ok": true,
+   "cu": 23817,
+   "events": []
+  },
+  {
+   "label": "alice deposit_in_kind",
+   "signature": "5shsHbnW1eCN7xg1xjRWHo597U5ebuvUKZXh5b32SMVzNCXJaXMxdvmnNLsoZgBWm13vd3bdKJZWfsQZjBrHw64Q",
+   "slot": 503660442,
+   "ok": true,
+   "cu": 105593,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "shares": "1dcd6500",
+      "deltas": [
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER freezes the basket's FIGUREAI vault",
+   "signature": "4rmpzqjTtvEE6dnRrhdmGG28dndBH655qtdrLBkCvXVKh7c73ipigbLMmSm3pgKQKZyvpZCKLKiAp9gqqh3BsSXE",
+   "slot": 503660456,
+   "ok": true,
+   "cu": 1814,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000 raw of each leg to bob",
+   "signature": "4ZAN9QbzH1M21fwdSkKoLysnxsXFzFxontxsKLa1kb6yojfUvWocTh3eMf8oNQJ9J43sMmbpWQzF8rJ1b9YFT2t1",
+   "slot": 503660471,
+   "ok": true,
+   "cu": 23817,
+   "events": []
+  },
+  {
+   "label": "bob deposit_in_kind with the FIGUREAI vault frozen",
+   "refused": true,
+   "simulatedAtSlot": 503660481,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: DepositInKind",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "alice redeems: the frozen FIGUREAI vault becomes a claim, the rest pay",
+   "signature": "5bb3tt6tBtskqRMd5ixAZnm4CQDcPoweHqNXLNZ7GsNRzrKmdxGjQjxbj5fL42DYvjPaJtoKeo9FPbQQWv9DvqGL",
+   "slot": 503660553,
+   "ok": true,
+   "cu": 111248,
+   "events": [
+    {
+     "name": "ClaimCreated",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "7yLdinwutp9L5yzZvJ7EZSkKWsUxwwUa9Mox388Yfmw5",
+      "leg": 6,
+      "units": "0ee6b280",
+      "reason": {
+       "Frozen": {}
+      }
+     }
+    },
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "7yLdinwutp9L5yzZvJ7EZSkKWsUxwwUa9Mox388Yfmw5",
+      "shares": "0ee6b280",
+      "paid": [
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "390ca0ca40",
+       "00",
+       "00"
+      ],
+      "claims_mask": 64
+     }
+    }
+   ]
+  },
+  {
+   "label": "settle_claim while the vault is frozen",
+   "refused": true,
+   "simulatedAtSlot": 503660575,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: SettleClaim",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "ISSUER thaws the basket's FIGUREAI vault",
+   "signature": "5x4N3oEYbLHJhj7yRXRvcjQxVoqvZfqLHBzSx8TMq6trPHsnBPRjnJkkFNezEgboWFFZcsNmFSj8WhjMZpyrUe94",
+   "slot": 503660588,
+   "ok": true,
+   "cu": 1814,
+   "events": []
+  },
+  {
+   "label": "vault thawed: the claim settles",
+   "signature": "3DjmwAdYYbnKwPunSjEPaARmBXELrpZBXw1NReTW1mxtQAmJuWPMMzzw9eCyDMzBCtFcgEwS8sDeN5BbBD4gstjy",
+   "slot": 503660621,
+   "ok": true,
+   "cu": 35113,
+   "events": [
+    {
+     "name": "ClaimSettled",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "7yLdinwutp9L5yzZvJ7EZSkKWsUxwwUa9Mox388Yfmw5",
+      "leg": 6,
+      "units": "0ee6b280",
+      "amount": "39a0264b00",
+      "received": "390ca0ca40"
+     }
+    }
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "what": "bootstrap minted INITIAL_SHARES",
+   "ok": true
+  },
+  {
+   "what": "bob deposit_in_kind with the FIGUREAI vault frozen → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  },
+  {
+   "what": "OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "NEURALINK paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "POLYMARKET paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000",
+   "ok": true,
+   "expect": "247500000000"
+  },
+  {
+   "what": "FIGUREAI became a claim of 250000000 units",
+   "ok": true,
+   "ticketLeg": {
+    "Claim": {
+     "units": "0ee6b280",
+     "reason": {
+      "Frozen": {}
+     }
+    }
+   }
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "claim reason Frozen",
+   "ok": true
+  },
+  {
+   "what": "settle_claim while the vault is frozen → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  },
+  {
+   "what": "FIGUREAI claim settled: amount 247500000000 = floor(units·owned/(S+C)) at settlement, received 245025000000",
+   "ok": true
+  }
+ ],
+ "basket": "86iuiz1zFoAfC8g61mBADfVhaBiFBkbL91k4w7sMKLaL",
+ "shareMint": "Edo7y3n96Cicx3ouiuRUebRZwaiC8M19Qn7FiEV34bs8",
+ "vaults": [
+  "BGVPNE9gfXtTBt48UGNayuoMqyJdgAq55crFGyqiRKmX",
+  "982pGt9VPeFM8Hb375aXku4WTcXTRiy5N56RdXcRhje5",
+  "9FtZ9Evb3ei9WSAFygGKLheiSGzKpTW6yz3vqbmsjX14",
+  "97xiYmob6Drdbmkq3AvYQ2vPcT535v1GLpG9yKunWscT",
+  "Coh3otXYLVkFHfS5UoynqYM4moDxZi3tV9jK6aWrMEFa",
+  "8nwgSfdhXw94UrmHmt6itSHdy52Lj1fqoMdVp9CFJXRb",
+  "DDnG47qUMHNztJaY3diSdpZkRJtykPARt2cGrERqLrZE"
+ ],
+ "issuerSolSpent": 0.02729364,
+ "finishedAt": "2026-09-24T21:23:32.214Z",
+ "passed": true
+}

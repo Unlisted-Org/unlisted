@@ -18,7 +18,23 @@ import { PROGRAM_ID, ROOT, T22, TOKEN, coder, kp, parseEvents, u64le } from "../
 import { LEG_NAMES, legMintIxs, U64_MAX } from "../src/fixtures.ts";
 
 const RPC = process.env.DEVNET_RPC ?? "https://api.devnet.solana.com";
-const conn = new Connection(RPC, "confirmed");
+// The public devnet RPC rate-limits hard (429): throttle every call and back off on 429 without giving up.
+let lastCall = 0;
+async function politeFetch(input: any, init?: any): Promise<Response> {
+  for (let k = 0; ; k++) {
+    const wait = lastCall + 150 - Date.now();
+    if (wait > 0) await new Promise((ok) => setTimeout(ok, wait));
+    lastCall = Date.now();
+    try {
+      const res = await fetch(input, init);
+      if (res.status !== 429 || k >= 30) return res;
+    } catch (e) {
+      if (k >= 30) throw e;
+    }
+    await new Promise((ok) => setTimeout(ok, Math.min(30_000, 1_000 * 2 ** Math.min(k, 5))));
+  }
+}
+const conn = new Connection(RPC, { commitment: "confirmed", fetch: politeFetch as any, disableRetryOnRateLimit: true });
 const OUT = process.env.DEVNET_OUT ?? path.join(ROOT, "tests/program/devnet");
 const KEYFILE = path.join(process.env.HOME!, ".config/solana/stocklana/program.json");
 const issuer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(KEYFILE, "utf8"))));
@@ -59,28 +75,49 @@ async function build(ixs: TransactionInstruction[], signers: Keypair[], alts: Ad
 
 let ALT: AddressLookupTableAccount[] = [];
 async function send(label: string, ixs: TransactionInstruction[], signers: Keypair[] = []) {
+  // Confirmation by polling (the public RPC's websocket 429s). Before any resend, check whether the previous
+  // attempt landed, so a transaction is never sent twice.
+  let prev: string | undefined;
   for (let attempt = 0; ; attempt++) {
-    const { tx, blockhash, lastValidBlockHeight } = await build(ixs, signers, ALT);
+    if (prev) {
+      const st = (await conn.getSignatureStatuses([prev], { searchTransactionHistory: true })).value[0];
+      if (st && !st.err && (st.confirmationStatus === "confirmed" || st.confirmationStatus === "finalized")) return await record(label, prev);
+    }
+    const { tx, lastValidBlockHeight } = await build(ixs, signers, ALT);
     try {
-      const sig = await conn.sendRawTransaction(tx.serialize(), { skipPreflight: false, preflightCommitment: "confirmed" });
-      await conn.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, "confirmed");
-      const t = await conn.getTransaction(sig, { maxSupportedTransactionVersion: 0, commitment: "confirmed" });
-      const logs = t?.meta?.logMessages ?? [];
-      const step = { label, signature: sig, slot: t?.slot, ok: !t?.meta?.err, cu: t?.meta?.computeUnitsConsumed, size: tx.serialize().length,
-        events: parseEvents(logs).map((e) => ({ name: e.name, data: e.data })) };
-      rec.steps.push(step);
-      save();
-      console.log(`${label}: ${sig}`);
-      if (!step.ok) throw new Error(`${label} landed with an error`);
-      return step;
+      const sig = await conn.sendRawTransaction(tx.serialize(), { skipPreflight: false, preflightCommitment: "confirmed", maxRetries: 5 });
+      prev = sig;
+      for (;;) {
+        const st = (await conn.getSignatureStatuses([sig])).value[0];
+        if (st?.err) throw Object.assign(new Error(`${label} landed with error ${JSON.stringify(st.err)}`), { landed: true });
+        if (st && (st.confirmationStatus === "confirmed" || st.confirmationStatus === "finalized")) return await record(label, sig);
+        if ((await conn.getBlockHeight("confirmed")) > lastValidBlockHeight) throw new Error("block height exceeded");
+        await new Promise((ok) => setTimeout(ok, 1500));
+      }
     } catch (e: any) {
       const msg = String(e.message ?? e);
-      if (attempt < 3 && /blockhash|timeout|429|block height exceeded|fetch failed/i.test(msg)) { await new Promise((ok) => setTimeout(ok, 3000)); continue; }
+      if (!e.landed && attempt < 5 && /blockhash|timeout|429|block height exceeded|fetch failed|Blockhash not found/i.test(msg)) { await new Promise((ok) => setTimeout(ok, 3000)); continue; }
       rec.steps.push({ label, ok: false, error: msg.slice(0, 500), logs: e.logs });
       save();
       throw e;
     }
   }
+}
+
+async function record(label: string, sig: string) {
+  let t = null;
+  for (let k = 0; k < 20 && !t; k++) {
+    t = await conn.getTransaction(sig, { maxSupportedTransactionVersion: 0, commitment: "confirmed" });
+    if (!t) await new Promise((ok) => setTimeout(ok, 1500));
+  }
+  const logs = t?.meta?.logMessages ?? [];
+  const step = { label, signature: sig, slot: t?.slot, ok: !t?.meta?.err, cu: t?.meta?.computeUnitsConsumed,
+    events: parseEvents(logs).map((e) => ({ name: e.name, data: e.data })) };
+  rec.steps.push(step);
+  save();
+  console.log(`${label}: ${sig}`);
+  if (!step.ok) throw new Error(`${label} landed with an error`);
+  return step;
 }
 
 /** A refusal: simulate the signed transaction (it would never land) and record the program error and logs. */
@@ -107,6 +144,7 @@ async function tokenAmount(acc: PublicKey) {
 
 async function setup() {
   begin("setup");
+  if (fx.steps && !fx.mints) Object.assign(rec, { steps: fx.steps, checks: fx.checks ?? [], resumed: true, alt: fx.alt });
   if (fx.mints) {
     MINTS = fx.mints.map((m: string) => new PublicKey(m));
     USDC = new PublicKey(fx.usdc);
@@ -116,29 +154,39 @@ async function setup() {
   }
   const mints = LEG_NAMES.map((n) => kp(`${SEED}:mint:${n}`));
   for (const [i, m] of mints.entries()) {
+    const existing = await conn.getAccountInfo(m.publicKey, "confirmed");
+    if (existing && existing.data.length > 165 && existing.data[45] === 1) continue; // created by an earlier, interrupted run
     const { len } = legMintIxs(issuer.publicKey, m.publicKey, issuer.publicKey, LEG_NAMES[i], 100);
     const { tx1, tx2 } = legMintIxs(issuer.publicKey, m.publicKey, issuer.publicKey, LEG_NAMES[i], 100, i === 0 ? 1.4861347 : 1,
       await conn.getMinimumBalanceForRentExemption(len));
-    await send(`create fixture mint ${LEG_NAMES[i]} (extensions)`, tx1, [m]);
+    if (!existing) await send(`create fixture mint ${LEG_NAMES[i]} (extensions)`, tx1, [m]);
     await send(`init fixture mint ${LEG_NAMES[i]} (mint + metadata)`, tx2, []);
   }
   const usdc = kp(`${SEED}:usdc`);
-  await send("create fixture USDC (classic SPL, 6 decimals)", [
+  if (!(await conn.getAccountInfo(usdc.publicKey, "confirmed"))) await send("create fixture USDC (classic SPL, 6 decimals)", [
     SystemProgram.createAccount({ fromPubkey: issuer.publicKey, newAccountPubkey: usdc.publicKey, space: 82, lamports: await conn.getMinimumBalanceForRentExemption(82), programId: TOKEN }),
     spl.createInitializeMint2Instruction(usdc.publicKey, 6, issuer.publicKey, null, TOKEN),
   ], [usdc]);
   MINTS = mints.map((m) => m.publicKey);
   USDC = usdc.publicKey;
   // Lookup table of shared addresses (programs, mints, USDC) so 7-leg instructions fit a transaction.
-  const slot = await conn.getSlot("confirmed");
-  const [create, key] = AddressLookupTableProgram.createLookupTable({ authority: issuer.publicKey, payer: issuer.publicKey, recentSlot: slot - 1 });
-  await send("create lookup table", [create]);
-  await send("extend lookup table", [AddressLookupTableProgram.extendLookupTable({ lookupTable: key, authority: issuer.publicKey, payer: issuer.publicKey,
-    addresses: [PROGRAM_ID, T22, TOKEN, spl.ASSOCIATED_TOKEN_PROGRAM_ID, SystemProgram.programId, USDC, ...MINTS] })]);
-  await new Promise((ok) => setTimeout(ok, 2000));
+  let key: PublicKey;
+  const prevAlt = rec.alt ? (await conn.getAddressLookupTable(new PublicKey(rec.alt))).value : null;
+  if (prevAlt && prevAlt.state.addresses.length >= 13) key = prevAlt.key;
+  else {
+    const slot = await conn.getSlot("confirmed");
+    const [create, k] = AddressLookupTableProgram.createLookupTable({ authority: issuer.publicKey, payer: issuer.publicKey, recentSlot: slot - 1 });
+    key = k;
+    await send("create lookup table", [create]);
+    rec.alt = key.toBase58();
+    save("setup");
+    await send("extend lookup table", [AddressLookupTableProgram.extendLookupTable({ lookupTable: key, authority: issuer.publicKey, payer: issuer.publicKey,
+      addresses: [PROGRAM_ID, T22, TOKEN, spl.ASSOCIATED_TOKEN_PROGRAM_ID, SystemProgram.programId, USDC, ...MINTS] })]);
+    await new Promise((ok) => setTimeout(ok, 2000));
+  }
   ALT = [(await conn.getAddressLookupTable(key)).value!];
   // Users: the issuer pays fees; users need a little SOL for their redemption-ticket rent. Their token accounts.
-  await send("fund alice and bob with 0.03 SOL each (redemption ticket rent)", [alice, bob].map((u) => SystemProgram.transfer({ fromPubkey: issuer.publicKey, toPubkey: u.publicKey, lamports: 30_000_000 })));
+  if ((await conn.getBalance(alice.publicKey)) < 20_000_000) await send("fund alice and bob with 0.03 SOL each (redemption ticket rent)", [alice, bob].map((u) => SystemProgram.transfer({ fromPubkey: issuer.publicKey, toPubkey: u.publicKey, lamports: 30_000_000 })));
   for (const u of [issuer, alice, bob]) {
     const ixs = [...MINTS.map((m) => spl.createAssociatedTokenAccountIdempotentInstruction(issuer.publicKey, spl.getAssociatedTokenAddressSync(m, u.publicKey, false, T22), u.publicKey, m, T22)),
       spl.createAssociatedTokenAccountIdempotentInstruction(issuer.publicKey, spl.getAssociatedTokenAddressSync(USDC, u.publicKey, false, TOKEN), u.publicKey, USDC, TOKEN)];
@@ -154,7 +202,7 @@ async function setup() {
 class B {
   shareMint: Keypair; basket: PublicKey; vaults: PublicKey[]; reserve: PublicKey; nonce = new Map<string, number>();
   constructor(label: string) {
-    this.shareMint = kp(`${SEED}:share:${label}`);
+    this.shareMint = kp(`${SEED}:share:${label}${process.env.RUN_SUFFIX ?? ""}`);
     [this.basket] = PublicKey.findProgramAddressSync([Buffer.from("basket"), this.shareMint.publicKey.toBuffer()], PROGRAM_ID);
     this.vaults = MINTS.map((m) => spl.getAssociatedTokenAddressSync(m, this.basket, true, T22));
     this.reserve = spl.getAssociatedTokenAddressSync(USDC, this.basket, true, TOKEN);

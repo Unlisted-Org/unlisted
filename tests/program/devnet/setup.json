@@ -1,0 +1,245 @@
+{
+ "scenario": "setup",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:03:51.969Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create fixture mint OPENAI (extensions)",
+   "signature": "5LKnUkrMQhNysxxQxz6xzpe89zg3Xw93eAJCVVGjHiwfFY8yCd6Rukcf1f7KSQR877H1AJ8PAESdC2EMHLe9H2qi",
+   "slot": 503653210,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "init fixture mint OPENAI (mint + metadata)",
+   "signature": "3fpZtkxokru5wv66NXxHfveADzqRKQTE5JtUviorfmPuBXmVeb6BHDVJDcHoN8NnyLDabBVf3watrTf6uPZ33Wux",
+   "slot": 503653214,
+   "ok": true,
+   "cu": 17767,
+   "size": 658,
+   "events": []
+  },
+  {
+   "label": "create fixture mint ANTHROPIC (extensions)",
+   "signature": "3pscVVrmmyRKHs5ZRtivKZMhyD2CRwBUBP1D39DJ1pHxLHodGYB3w2zGuJnTTvCyEVUhujhzz6aQgW2U4znjuXEy",
+   "slot": 503653219,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "init fixture mint ANTHROPIC (mint + metadata)",
+   "signature": "RQ3eST1AzHsjiR2a1AfBXnVBUr5DER3fHwYcPXNPXdDMEo6dLSozKf2nFL37Y2MQZfdipvJUUvRCq1wHzapzDf7",
+   "slot": 503653223,
+   "ok": true,
+   "cu": 17703,
+   "size": 667,
+   "events": []
+  },
+  {
+   "label": "create fixture mint NEURALINK (extensions)",
+   "signature": "4kek5qyTAiiHG8gSVZf3TcMLXES88T2ELe55hrEiMUmuxmtJfshDNY7ibjWnDsq9PKt8q873P7prqcUjxCqi2bnM",
+   "slot": 503653229,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "create fixture mint ANDURIL (extensions)",
+   "signature": "22JdDdhmDLFxPRNW9FzGk3uYdAWsigtHZQFCrehWBVQ5oVMQaMnJG79q48PFhjh5Aw4JN6tgVsUsTDUHTskVivmM",
+   "slot": 503653529,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "init fixture mint ANDURIL (mint + metadata)",
+   "signature": "5Vpuo9NYGBRTQuvHwmyGPRL2C5k7BowTrNBJh81pmWZLUgUfgM3mDtaG3rE5JDp7bYZuwJjKxAcPTncCHeiiV2zq",
+   "slot": 503653535,
+   "ok": true,
+   "cu": 17750,
+   "size": 661,
+   "events": []
+  },
+  {
+   "label": "create fixture mint POLYMARKET (extensions)",
+   "signature": "BYbA4Y8TJG5zT4Hn9WY1QuvyjhhZ78HVbNE7zzLaSE88ELmcxQb9nCbmD38Mty3Y2vmpBYnv4rdQ24Bhok9CfK4",
+   "slot": 503653542,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "init fixture mint POLYMARKET (mint + metadata)",
+   "signature": "2caT18yzquB9UhQKrgKYgBJpbYzFmNJuCkv2WVjRiQTGyPXX9mJkosd2ZZiDQBxTjCNMSzzEU8UirQEuiaXgmLaP",
+   "slot": 503653547,
+   "ok": true,
+   "cu": 17763,
+   "size": 670,
+   "events": []
+  },
+  {
+   "label": "create fixture mint KALSHI (extensions)",
+   "signature": "AQ958dQU962t7s4FGsHqtSocVxWGkbu6ZyXzhtZgyuMbZSYBAMtigB5fNGHbi9Y7NnvmSNQnccmVs399W7xK2fA",
+   "slot": 503653597,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "init fixture mint KALSHI (mint + metadata)",
+   "signature": "2pYqJe3HqH62BwQAH7pR9X1FXzT2rabjGupE3XVNJk3roNQYcNtvtd8TMbeV2mvTtEqifHuSxmL3qMQ7DxQJpJPa",
+   "slot": 503653602,
+   "ok": true,
+   "cu": 17767,
+   "size": 658,
+   "events": []
+  },
+  {
+   "label": "create fixture mint FIGUREAI (extensions)",
+   "signature": "5brEnSGMjfAXPeY1eFJTkMt2ChGv2sJtFFnmxdmAmQQTduWPTmUC6AY5oy1qiud7HSZB6pFqDixzHk16HvGZikJQ",
+   "slot": 503653609,
+   "ok": true,
+   "cu": 7713,
+   "size": 660,
+   "events": []
+  },
+  {
+   "label": "init fixture mint FIGUREAI (mint + metadata)",
+   "signature": "2xAGEAEmw6huEmjJkPdH24cmJDbJvFnratbkmhFgQVDJjbXXuK1ov5GvtMdkDkK8Zc7Pr5LLQp3Cn2QtsXpxp4Xd",
+   "slot": 503653614,
+   "ok": true,
+   "cu": 17810,
+   "size": 664,
+   "events": []
+  },
+  {
+   "label": "create fixture USDC (classic SPL, 6 decimals)",
+   "signature": "4Um7BohxxyKCqVJ4VSzavY9ixtTBxDziH8qgHcWP8PKyWP3a1a5jGCyJ3ZhgUeobHPUkG5RWNqjjkLeeGQ4WVDcR",
+   "slot": 503653634,
+   "ok": true,
+   "cu": 502,
+   "size": 432,
+   "events": []
+  },
+  {
+   "label": "create lookup table",
+   "signature": "nf7EsuhQHkwAJLDxqjiPg9Pw94fX2mXJjWRWnmYuMqChSg8FrpTpuY97x5Um9qWta2Wk82LrpN6nRJ396M8oxbv",
+   "slot": 503653731,
+   "ok": true,
+   "cu": 10619,
+   "size": 292,
+   "events": []
+  },
+  {
+   "label": "extend lookup table",
+   "signature": "3r4v5ju1Lgm9CbqJNDKdrcFEmYnKB2uVm1w3ssiRgF5Ehi2nDrNYeGby1g6BBryVoQVEsySRm1d8GwdU9DcZ18d7",
+   "slot": 503653736,
+   "ok": true,
+   "cu": 9748,
+   "size": 708,
+   "events": []
+  },
+  {
+   "label": "fund alice and bob with 0.03 SOL each (redemption ticket rent)",
+   "signature": "3f7cB9EoycaUUjJ421Pp8nygLEGEH1Xu5HVQjJq6Sf3qj5dnxH48WGdVqEv8E2VbS3qaMn1ticDdFSAhgkcY2VgA",
+   "slot": 503653754,
+   "ok": true,
+   "cu": 450,
+   "size": 306,
+   "events": []
+  },
+  {
+   "label": "token accounts for the authority (1/2)",
+   "signature": "38JcfbRV2kLqZiRbLm6MJ2TdMTAytUzoV4VA4YpJkgf3nTkDLrGXdmcysq2VRdUt76FFnjsP6waXNmGwsH2bfngn",
+   "slot": 503653774,
+   "ok": true,
+   "cu": 89106,
+   "size": 416,
+   "events": []
+  },
+  {
+   "label": "token accounts for the authority (2/2)",
+   "signature": "CQfAKbbsmpJf6fT3hCScDSbrt3eL7KT8wLEKnZLu7ZrJKUxEAJgajS32pHy5JLUZYYHjhgyixvA8JrZZZbxKAUg",
+   "slot": 503653779,
+   "ok": true,
+   "cu": 81409,
+   "size": 417,
+   "events": []
+  },
+  {
+   "label": "token accounts for alice (1/2)",
+   "signature": "NxJkb5P4UdUwCtyrKs2Mt695qGh1EzFWqjeHyJ1Qe8BUTmy61tNSCU4hrsCjAMt2MYLbN5ybUb4PPhGwwPryNXv",
+   "slot": 503653784,
+   "ok": true,
+   "cu": 89510,
+   "size": 448,
+   "events": []
+  },
+  {
+   "label": "token accounts for alice (2/2)",
+   "signature": "2DefX79uv2GK6gqL4NK1coMHZLCAf137hDGCAwSABBa6m4Rqy5Mzd7aK8SStVZfEEHZVLaqfwjCedmuK7HtdUJZK",
+   "slot": 503653796,
+   "ok": true,
+   "cu": 83313,
+   "size": 449,
+   "events": []
+  },
+  {
+   "label": "token accounts for bob (1/2)",
+   "signature": "xsVkie1k1UrvFjBiTeKZCBq8EnfFGL5f4TgPisLSs9sszJFUBBbXmSzEkcGFJMUvNGXYBLPp5rRnsV43zauVPiZ",
+   "slot": 503653816,
+   "ok": true,
+   "cu": 91010,
+   "size": 448,
+   "events": []
+  },
+  {
+   "label": "token accounts for bob (2/2)",
+   "signature": "4kDu8VHngtRLh3gMmmxD8Du1PueVNMXDctB7pNk77h5jqYqjzLVFxSGHKNf7YQHwaef1rMyS6QmQoqDA4oApBkNM",
+   "slot": 503653830,
+   "ok": true,
+   "cu": 86313,
+   "size": 449,
+   "events": []
+  }
+ ],
+ "checks": [],
+ "resumed": true,
+ "alt": "DSgeDYbEcxvryat4KmWjzvQDrZFcuM2CPrHkKSS799Qm",
+ "mints": [
+  "6wzgvj6FyCK8HqxuquStUoVnxBrYTz2SP3sgogs83V2c",
+  "9J1KveqjUYZccK6So6g9DC46aGVCQ836TpFtCfL8GEZj",
+  "4vTJaC9nkrSPsRzZoNv3zmnfuxxkVXEvYDjFkyrJuzhb",
+  "4tdsPsTq4w1NzCqRBEome4xupixPBkkym9q5Pj8jjej6",
+  "GkDkucVtqsGKmTTMrZhegPP7ah42S5hXzdszpmyo8CRL",
+  "2geE1oBHRxHZ9J1BepKcBuSe7CSWZBdAMqMs71csRAmB",
+  "HkHdKuLgMf7JVCZLu7QdahZkGs4R3c2Pk42LiX3mctWa"
+ ],
+ "names": [
+  "OPENAI",
+  "ANTHROPIC",
+  "NEURALINK",
+  "ANDURIL",
+  "POLYMARKET",
+  "KALSHI",
+  "FIGUREAI"
+ ],
+ "usdc": "2zDcHfYr6bgPdBDeJyEsfSThKCkktbJ9k2qdC1ut4UQq",
+ "finishedAt": "2026-09-24T21:04:44.480Z"
+}
