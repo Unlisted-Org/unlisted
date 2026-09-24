@@ -1,0 +1,344 @@
+import { useEffect, useMemo, useState } from "react";
+import { BasketView, CONSTITUENTS, math, openClaims, RedemptionTicket } from "@stocklana/sdk";
+import type { BasketResponse, EventsResponse } from "../valuation/types";
+import { fmtAge, fmtBps, fmtRaw, fmtShares, fmtUsd, pct, short } from "../format";
+import type { EventRow, Position } from "../state";
+import * as copy from "../copy";
+
+const REASON_TEXT: Record<string, string> = {
+  paused: "Paused by the issuer",
+  hook: "Transfer hook switched on",
+  frozen: "Basket vault frozen by the issuer",
+  vault_missing: "Vault account missing",
+  Paused: "leg paused",
+  Hook: "transfer hook set",
+  Frozen: "vault frozen",
+  PendingSale: "pending USDC sale",
+};
+
+// ---------------------------------------------------------------- basis strip
+
+export function BasisStrip({ clusterLabel, basis, mock, slot }: { clusterLabel: string; basis: string | null; mock: string | null; slot: number | null }) {
+  return (
+    <div className="basis" data-testid="pricing-basis">
+      <span className="pill">{clusterLabel}</span>
+      <span>
+        <b>Pricing basis:</b> {basis ?? "Balances are the devnet basket's. Prices are mainnet market data for the real PreStocks token each fixture mirrors."}
+      </span>
+      {slot != null && <span className="muted">chain read at slot <span data-testid="view-slot">{slot}</span></span>}
+      {mock && <span className="pill warn" data-testid="mock-label">{mock}</span>}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------- issuer banners
+
+interface Banner { key: string; level: "alert" | "warn" | "info"; title: string; body: string; testid: string }
+
+export function issuerBanners(v: BasketView, rows: EventRow[], api: EventsResponse | null): Banner[] {
+  const out: Banner[] = [];
+  for (const l of v.legs) {
+    if (l.unavailable.includes("paused"))
+      out.push({ key: `p${l.index}`, level: "alert", testid: `banner-paused-${l.symbol}`, title: `${l.symbol} is paused by the issuer`,
+        body: `Deposits are refused while any leg is unavailable. Redemptions still pay the other ${v.legs.length - 1} legs now; ${l.symbol} becomes a claim that pays after the issuer resumes it.` });
+    if (l.unavailable.includes("hook"))
+      out.push({ key: `h${l.index}`, level: "alert", testid: `banner-hook-${l.symbol}`, title: `${l.symbol}: transfer hook set (${short(l.mintInfo.hookProgram!)})`,
+        body: `The basket refuses to forward accounts to a hook it hasn't reviewed, so ${l.symbol} is treated as unavailable. ${copy.HOOK_GOVERNANCE}` });
+    if (l.unavailable.includes("frozen"))
+      out.push({ key: `f${l.index}`, level: "alert", testid: `banner-frozen-${l.symbol}`, title: `The basket's ${l.symbol} vault is frozen`,
+        body: `The issuer's freeze authority froze the vault account. Redemptions turn ${l.symbol} into a claim; deposits are refused.` });
+  }
+  // Fee changes, grouped when identical across legs.
+  const pend = v.legs.filter((l) => l.feePending);
+  if (pend.length) {
+    const groups = new Map<string, string[]>();
+    for (const l of pend) {
+      const k = `${l.feeNow?.bps ?? 0}→${l.feePending!.bps}@${l.feePending!.epoch}`;
+      groups.set(k, [...(groups.get(k) ?? []), l.symbol]);
+    }
+    for (const [k, syms] of groups) {
+      const [rates, epoch] = k.split("@");
+      const [from, to] = rates.split("→").map(Number);
+      out.push({ key: `fee${k}`, level: "warn", testid: "banner-fee-change", title: `Transfer fee change scheduled: ${fmtBps(from)} → ${fmtBps(to)} at epoch ${epoch}`,
+        body: `${syms.length === v.legs.length ? "All seven legs" : syms.join(", ")}. Current epoch ${v.epoch}. Every deposit and redemption pays this fee on every leg, each way; at ${to} bps the fees alone on a round trip are ${roundTrip(to)}.` });
+    }
+  }
+  for (const l of v.legs) {
+    const s = l.mintInfo.scaledUi;
+    if (s && BigInt(v.unixTime) < s.newMultiplierEffectiveTimestamp && s.newMultiplier !== s.multiplier)
+      out.push({ key: `m${l.index}`, level: "info", testid: `banner-multiplier-${l.symbol}`, title: `${l.symbol}: display multiplier changes to ${s.newMultiplier}`,
+        body: `Effective ${new Date(Number(s.newMultiplierEffectiveTimestamp) * 1000).toISOString()}. Raw balances and shares don't change; only displayed amounts do.` });
+  }
+  if (!v.basket.depositsEnabled)
+    out.push({ key: "dep", level: "warn", testid: "banner-deposits-disabled", title: "New deposits stopped by the basket authority", body: "Redemptions and claims are unaffected; the authority has no power over them." });
+  // Shortfalls observed on chain (seizures or anything else the program didn't do).
+  for (const r of rows) for (const e of r.events) {
+    if (e.name !== "ShortfallObserved") continue;
+    const l = v.legs[e.leg];
+    out.push({ key: `s${r.signature}${e.leg}`, level: "alert", testid: `banner-shortfall-${l?.symbol ?? e.leg}`,
+      title: `${l?.symbol ?? `Leg ${e.leg}`}: vault dropped by ${pct(e.expected - e.actual, e.expected)} without a program transfer`,
+      body: `Expected ${fmtRaw(e.expected)}, found ${fmtRaw(e.actual)} at slot ${e.slot}. Every holder, open claim and open ticket on this leg bears the same ${pct(e.expected - e.actual, e.expected)}. No later depositor makes anyone whole.` });
+  }
+  for (const e of api?.events ?? []) {
+    if (e.type !== "issuer") continue;
+    out.push({ key: `api${e.kind}${e.slot}${e.mint}`, level: e.kind === "Paused" || e.kind === "HookSet" ? "alert" : "warn", testid: `banner-api-${e.kind}`,
+      title: `${e.network === "mainnet" ? "Mainnet" : "Devnet"} issuer event: ${e.kind}${e.leg != null ? ` (${v.legs[e.leg]?.symbol})` : ""}`,
+      body: `Before ${JSON.stringify(e.before)}, after ${JSON.stringify(e.after)}, slot ${e.slot}.` });
+  }
+  return out;
+}
+
+function roundTrip(bps: number): string {
+  const k = 1 - bps / 10_000;
+  return `${((1 - k * k) * 100).toFixed(2)}%`;
+}
+
+export function Banners({ banners }: { banners: Banner[] }) {
+  if (!banners.length) return <div className="banner info" data-testid="no-issuer-events">No issuer action in effect on any leg at this slot.</div>;
+  return (
+    <div className="banners">
+      {banners.map((b) => (
+        <div key={b.key} className={`banner ${b.level}`} data-testid={b.testid}>
+          <b>{b.title}</b>
+          <div>{b.body}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------- legs table
+
+export function LegsTable({ v, pos, api }: { v: BasketView; pos: Position | null; api: BasketResponse | null }) {
+  return (
+    <section>
+      <h2>Seven legs, equal weight at inception</h2>
+      <p className="muted">Availability is read from each mint's pause and hook settings and the vault's account state at slot {v.slot}. Amounts are raw fixture tokens (9 decimals).</p>
+      <div className="scroll">
+        <table data-testid="legs-table">
+          <thead>
+            <tr>
+              <th>Leg</th><th>Available?</th><th>Transfer fee now</th><th>Scheduled</th><th>Vault balance</th><th>Accounted</th><th>Claim units</th>
+              <th>Per share</th><th>Weight at inception</th>{pos && <th>You hold (entitlement)</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {v.legs.map((l) => {
+              const ps = math.perShare(l.state, v.shareSupply);
+              const perShare = ps.den === 0n ? 0n : (ps.num * 1_000_000_000n) / ps.den;
+              return (
+                <tr key={l.index} data-testid={`leg-row-${l.symbol}`} className={l.unavailable.length ? "unavail" : ""}>
+                  <td><b>{l.symbol}</b>{CONSTITUENTS.find((c) => c.symbol === l.symbol)?.spvContested && <span className="pill warn" title="SPV dispute; see disclosures">SPV disputed</span>}</td>
+                  <td data-testid={`leg-availability-${l.symbol}`}>{l.unavailable.length ? l.unavailable.map((r) => REASON_TEXT[r] ?? r).join(", ") : "available"}</td>
+                  <td data-testid={`leg-fee-${l.symbol}`}>{l.feeNow ? `${l.feeNow.bps} bps` : "none"}</td>
+                  <td>{l.feePending ? `${l.feePending.bps} bps from epoch ${l.feePending.epoch}` : "—"}</td>
+                  <td data-testid={`leg-balance-${l.symbol}`} data-raw={l.state.balance.toString()}>{fmtRaw(l.state.balance)}</td>
+                  <td>{fmtRaw(l.state.accounted)}{l.state.balance < l.state.accounted && <span className="pill alert">shortfall not yet observed</span>}</td>
+                  <td data-testid={`leg-claims-${l.symbol}`} data-raw={l.state.claimUnits.toString()}>{fmtShares(l.state.claimUnits)}</td>
+                  <td title={`exact: ${ps.num} / ${ps.den}`}>{fmtRaw(perShare)}</td>
+                  <td>{api?.weights.inception.find((w) => w.index === l.index)?.value_share ?? "1/7"}</td>
+                  {pos && <td>{fmtRaw(math.holderAmount(l.state, v.shareSupply, pos.shares))}</td>}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="muted">Share supply {fmtShares(v.shareSupply)}. Per-share amount = owned / (supply + claim units), kept as an exact ratio (hover a cell).</p>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- price panel
+
+export function PricePanel({ api, error }: { api: BasketResponse | null; error: string | null }) {
+  if (error) return <section><h2>Value of one share</h2><div className="banner warn">Valuation API unavailable: {error}. No value is shown rather than a guessed one.</div></section>;
+  if (!api) return <section><h2>Value of one share</h2><p className="muted">Loading…</p></section>;
+  const v = api.values;
+  const refAge = v.reference.legs.length ? (Date.now() - Math.min(...v.reference.legs.map((l) => Date.parse(l.fetched_at)))) / 1000 : null;
+  const sellAgeSlots = v.sell_now.legs.length ? api.as_of_slot - Math.min(...v.sell_now.legs.map((l) => l.quoted_at_slot)) : null;
+  return (
+    <section data-testid="price-panel">
+      <h2>Value of one share: three sources, never one price</h2>
+      <div className="cards3">
+        <div className="card" data-testid="value-sell-now">
+          <div className="label">{v.sell_now.label}</div>
+          <div className="big">{fmtUsd(v.sell_now.usd)}</div>
+          <div className="muted">Live fee-inclusive sell quotes, Manifest excluded. Quoted {sellAgeSlots != null ? `${sellAgeSlots} slots before the read` : ""} at slot {api.as_of_slot}.</div>
+          {v.sell_now.unquotable_legs.length > 0 && <div className="warnline">Valued at 0 (no route): {v.sell_now.unquotable_legs.map((i) => api.legs[i]?.symbol ?? i).join(", ")}</div>}
+        </div>
+        <div className="card" data-testid="value-last-trade">
+          <div className="label">{v.last_trade.label}</div>
+          <div className="big">{fmtUsd(v.last_trade.usd)}</div>
+          <div className="muted">Oldest leg {fmtAge(v.last_trade.oldest_age_s)}.</div>
+          {v.last_trade.oldest_age_s > 900 && <div className="warnline">A leg's last trade is over 15 minutes old.</div>}
+        </div>
+        <div className="card" data-testid="value-reference">
+          <div className="label">{v.reference.label}</div>
+          <div className="big">{fmtUsd(v.reference.usd)}</div>
+          <div className="muted">Issuer's off-chain estimate; you can't trade at it. Fetched {fmtAge(refAge)}.</div>
+        </div>
+      </div>
+      <p className="muted">
+        Gaps: sell-now vs last trade {v.gaps.sell_now_vs_last_trade_bps} bps; reference vs last trade {v.gaps.reference_vs_last_trade_bps} bps.
+        {api.warnings.map((w) => <span key={w} className="warnline"> {w}.</span>)}
+      </p>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- claims
+
+export interface ClaimRow { ticket: string; nonce: bigint; leg: number; units: bigint; reason: string }
+
+export function claimsOf(pos: Position | null): ClaimRow[] {
+  if (!pos) return [];
+  return pos.redemptions.flatMap(({ address, ticket }) =>
+    openClaims(ticket).map((c) => ({ ticket: address.toBase58(), nonce: ticket.nonce, leg: c.leg, units: c.units, reason: c.reason })));
+}
+
+export function ClaimsList({ v, pos, onSettle, busy, usdcRouter }: { v: BasketView; pos: Position | null; onSettle: (c: ClaimRow, usdc?: boolean) => void; busy: boolean; usdcRouter: boolean }) {
+  const claims = claimsOf(pos);
+  return (
+    <section data-testid="claims">
+      <h2>Your claims</h2>
+      <p className="muted">{copy.CLAIM_NOTE}</p>
+      {!pos ? <p className="muted">Connect a wallet to see claims.</p> : claims.length === 0 ? <p data-testid="no-claims">No open claims.</p> : (
+        <table>
+          <thead><tr><th>Leg</th><th>Units (burned shares)</th><th>Reason</th><th>Leg now</th><th>Would pay now</th><th></th></tr></thead>
+          <tbody>
+            {claims.map((c) => {
+              const l = v.legs[c.leg];
+              let est = "—";
+              let estRaw = "";
+              try { const s = math.settleClaim(l.state, v.shareSupply, c.units, l.feeNow); est = `${fmtRaw(s.net)} net (${fmtRaw(s.gross)} gross)`; estRaw = s.net.toString(); } catch { est = "waits for the leg"; }
+              return (
+                <tr key={`${c.ticket}-${c.leg}`} data-testid={`claim-${l.symbol}`}>
+                  <td><b>{l.symbol}</b></td>
+                  <td data-testid={`claim-units-${l.symbol}`} data-raw={c.units.toString()}>{fmtShares(c.units)}</td>
+                  <td data-testid={`claim-reason-${l.symbol}`}>{REASON_TEXT[c.reason] ?? c.reason}</td>
+                  <td data-testid={`claim-leg-state-${l.symbol}`}>{l.unavailable.length ? l.unavailable.map((r) => REASON_TEXT[r] ?? r).join(", ") : "available"}</td>
+                  <td data-testid={`claim-estimate-${l.symbol}`} data-raw={estRaw}>{est}</td>
+                  <td>
+                    <button disabled={busy || l.unavailable.length > 0 || (c.reason === "PendingSale" && !usdcRouter)} onClick={() => onSettle(c, c.reason === "PendingSale")} data-testid={`settle-${l.symbol}`}>
+                      {l.unavailable.length ? "Waiting for resume" : c.reason === "PendingSale" ? "Sell for USDC" : "Settle in kind"}
+                    </button>
+                    {c.reason === "PendingSale" && !l.unavailable.length && (
+                      <button disabled={busy} onClick={() => onSettle(c, false)} title="Fallback when no route works" data-testid={`settle-inkind-${l.symbol}`}>In kind instead</button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}
+
+export function RedemptionHistory({ v, pos }: { v: BasketView; pos: Position | null }) {
+  if (!pos || pos.redemptions.length === 0) return null;
+  return (
+    <section data-testid="redemptions">
+      <h2>Your redemptions</h2>
+      {pos.redemptions.map(({ address, ticket }) => <TicketCard key={address.toBase58()} v={v} address={address.toBase58()} t={ticket} />)}
+    </section>
+  );
+}
+
+function TicketCard({ v, address, t }: { v: BasketView; address: string; t: RedemptionTicket }) {
+  return (
+    <div className="card" data-testid={`redemption-${address}`}>
+      <div><b>{fmtShares(t.sharesBurned)} shares burned</b> · {t.mode.kind === "InKind" ? "in kind" : "USDC"} · ticket {short(address)}</div>
+      <div className="legchips">
+        {t.legs.slice(0, v.legs.length).map((l, i) => (
+          <span key={i} className={`chip ${l.kind === "Claim" && l.units > 0n ? "claim" : l.kind === "Paid" ? "paid" : ""}`} data-testid={`redemption-leg-${v.legs[i].symbol}`}>
+            {v.legs[i].symbol}: {l.kind === "Paid" ? `paid ${fmtRaw(l.amount)}` : l.kind === "Claim" ? (l.units > 0n ? `claim ${fmtShares(l.units)} (${REASON_TEXT[l.reason]})` : "claim settled") : "—"}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------- events
+
+export function EventsPanel({ v, rows }: { v: BasketView; rows: EventRow[] }) {
+  const sym = (i: number) => v.legs[i]?.symbol ?? `leg ${i}`;
+  const lines = rows.flatMap((r) => r.events.map((e, k) => ({ r, e, k })));
+  return (
+    <section data-testid="events">
+      <h2>On-chain events</h2>
+      {lines.length === 0 ? <p className="muted">No basket events in the recent transactions.</p> : (
+        <ul className="events">
+          {lines.map(({ r, e, k }) => (
+            <li key={`${r.signature}-${k}`} data-testid={`event-${e.name}`}>
+              <span className="muted">slot {r.slot}</span> <b>{e.name}</b>{" "}
+              {e.name === "ShortfallObserved" && <>{sym(e.leg)}: {fmtRaw(e.expected)} → {fmtRaw(e.actual)} (−{pct(e.expected - e.actual, e.expected)}, shared pro rata)</>}
+              {e.name === "SurplusObserved" && <>{sym(e.leg)}: {fmtRaw(e.expected)} → {fmtRaw(e.actual)} (accrues to holders and claims)</>}
+              {e.name === "ClaimCreated" && <>{sym(e.leg)}: {fmtShares(e.units)} units, {e.reason}</>}
+              {e.name === "ClaimSettled" && <>{sym(e.leg)}: {fmtShares(e.units)} units paid {fmtRaw(e.amount)}</>}
+              {e.name === "Minted" && <>{fmtShares(e.shares)} shares ({e.path})</>}
+              {e.name === "Redeemed" && <>{fmtShares(e.shares)} shares, claims on {[...Array(8).keys()].filter((i) => (e.claimsMask >> i) & 1).map(sym).join(", ") || "none"}</>}
+              {e.name === "LegListing" && <>{sym(e.leg)} listed; conversion after {new Date(Number(e.convertAfter) * 1000).toISOString()}</>}
+              {" "}<span className="mono muted">{short(r.signature)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- disclosures
+
+export function Disclosures({ upgradeAuthority, authority }: { upgradeAuthority: string | null; authority: string }) {
+  return (
+    <section className="disclosures" data-testid="disclosures">
+      <h2>Disclosures</h2>
+      <h3>OpenAI and Anthropic: the SPV dispute</h3>
+      <p data-testid="spv-disclosure">{copy.SPV_DISCLOSURE}</p>
+      <h3>The issuer</h3>
+      <p>{copy.ISSUER_POWERS}</p>
+      <p><b>{copy.NOT_PROTECTION}</b></p>
+      <h3>Cost</h3>
+      <p>{copy.COST_PLAIN}</p>
+      <h3>The basket's own authority</h3>
+      <p>{copy.AUTHORITY_LIMITS} Basket authority: <span className="mono">{authority}</span>. Program upgrade authority: <span className="mono">{upgradeAuthority ?? "not stated in config"}</span> (held by the deployer on devnet).</p>
+      <p className="muted">{copy.TEST_NETWORK} {copy.NOT_ENDORSED}</p>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- tx log
+
+export interface TxRecord { label: string; signatures: string[]; status: "ok" | "failed" | "pending"; error?: string; approvals: number; at: string }
+
+export function TxLog({ log, explorer }: { log: TxRecord[]; explorer: string | null }) {
+  if (!log.length) return null;
+  return (
+    <section data-testid="tx-log">
+      <h2>This session's transactions</h2>
+      <ul className="events">
+        {log.map((t, i) => (
+          <li key={i} data-testid={`tx-${i}`} data-status={t.status}>
+            <b>{t.label}</b>: <span data-testid={`tx-status-${i}`}>{t.status}</span> · {t.signatures.length} transaction(s), {t.approvals} wallet approval(s)
+            {t.error && <div className="warnline">{t.error}</div>}
+            {t.signatures.map((s) => (
+              <div key={s} className="mono" data-testid="tx-signature">{explorer ? <a href={explorer.replace("{sig}", s)} target="_blank" rel="noreferrer">{s}</a> : s}</div>
+            ))}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export function useNow(ms = 1000) {
+  const [n, setN] = useState(Date.now());
+  useEffect(() => { const id = setInterval(() => setN(Date.now()), ms); return () => clearInterval(id); }, [ms]);
+  return n;
+}
+
+export function useMemoStable<T>(f: () => T, deps: unknown[]): T { return useMemo(f, deps); }

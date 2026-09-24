@@ -1,0 +1,7 @@
+node_modules/
+dist/
+e2e/.build/
+e2e/.local/
+test-results/
+playwright-report/
+public/config.json

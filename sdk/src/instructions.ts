@@ -65,6 +65,8 @@ export function initializeBasket(p: {
   programId: PublicKey; payer: PublicKey; authority: PublicKey; basket: PublicKey; shareMint: PublicKey;
   usdcMint: PublicKey; usdcReserve: PublicKey; legs: { mint: PublicKey; vault: PublicKey }[];
   mirrorOf: PublicKey[]; maxConvertChunk: bigint;
+  /** Not in spec 02: Agent A's IDL adds `routers: Vec<Pubkey>` (reported). Encoded only when given. */
+  routers?: PublicKey[];
 }): BuiltIx {
   const named = [
     acc("payer", p.payer, true, true), acc("authority", p.authority, false, true), acc("basket", p.basket, true),
@@ -76,6 +78,7 @@ export function initializeBasket(p: {
   ];
   const w = new Writer().u8(p.legs.length);
   w.vec(p.mirrorOf, (k) => w.pubkey(k)).u64(p.maxConvertChunk);
+  if (p.routers) w.vec(p.routers, (k) => w.pubkey(k));
   return build(p.programId, "initialize_basket", [...named, ...tail], w, legsRemaining(p.legs, false));
 }
 
@@ -105,11 +108,14 @@ function tokenPrograms(): Named[] {
 export function bootstrap(p: {
   programId: PublicKey; depositor: PublicKey; basket: PublicKey; shareMint: PublicKey; depositorShareAta: PublicKey;
   legs: LegAccounts[]; gross: bigint[];
+  /** Not in spec 02: Agent A's IDL adds `initial_shares: u64` (reported). Encoded only when given. */
+  initialShares?: bigint;
 }): BuiltIx {
   const named = [acc("depositor", p.depositor, true, true), acc("basket", p.basket, true), acc("share_mint", p.shareMint, true),
     acc("depositor_share_ata", p.depositorShareAta, true), ...tokenPrograms()];
   const w = new Writer();
   w.vec(p.gross, (g) => w.u64(g));
+  if (p.initialShares !== undefined) w.u64(p.initialShares);
   return build(p.programId, "bootstrap", named, w, legsRemaining(p.legs, true));
 }
 

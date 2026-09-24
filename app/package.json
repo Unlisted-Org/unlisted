@@ -1,0 +1,39 @@
+{
+  "name": "@stocklana/app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5183 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 5183 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test-wallet": "esbuild e2e/test-wallet/index.ts --bundle --format=iife --platform=browser --outfile=e2e/.build/test-wallet.js --define:global=globalThis",
+    "e2e": "npm run test-wallet && playwright test"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.4.0",
+    "@solana/spl-token": "^0.4.15",
+    "@solana/wallet-standard-features": "^1.5.0",
+    "@solana/web3.js": "^1.99.0",
+    "@wallet-standard/app": "^1.1.1",
+    "@wallet-standard/base": "^1.1.1",
+    "@wallet-standard/features": "^1.1.1",
+    "bs58": "^6.0.0",
+    "buffer": "^6.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@wallet-standard/wallet": "^1.1.1",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1"
+  }
+}

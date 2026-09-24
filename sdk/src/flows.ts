@@ -7,7 +7,7 @@ import { BasketView, legStates } from "./client.js";
 import { BPS, LEGS_PER_SWAP_TX, TICKET_MAX_AGE_SLOTS, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "./constants.js";
 import * as ix from "./instructions.js";
 import { RedeemMode } from "./accounts.js";
-import { mintInKind, netDeltasForShares, redeemInKind, RedeemLegOutcome } from "./math.js";
+import { mintInKind, netDeltasForShares, observe, redeemInKind, RedeemLegOutcome, sharesForDeltas } from "./math.js";
 import { ata, depositTicketPda, freshNonce, redemptionTicketPda, ticketEscrow } from "./pda.js";
 import { grossForNet, transferFee } from "./token2022.js";
 import { Router, SwapRoute } from "./routers/types.js";
@@ -66,6 +66,8 @@ export interface UsdcDepositPlan {
   txs: VersionedTransaction[];
   packing: { legs: number[]; bytes: number; accounts: number; hasOpen: boolean; hasFinalize: boolean }[];
   minShares: bigint;
+  /** Shares the quoted outputs would mint at the state read (before slippage). */
+  expectedShares: bigint;
 }
 
 /**
@@ -74,11 +76,11 @@ export interface UsdcDepositPlan {
  * transaction, each checked against the 1,232-byte and 64-account limits.
  *
  * `split[i]` is the USDC for leg i (from /v1/quote/deposit, proportional to one share's per-leg
- * sell_now value). `minSharesFn` is applied by the caller from the quote; the program checks it.
+ * sell_now value). min_shares defaults to the mint formula on each leg's min_out.
  */
 export async function planUsdcDeposit(p: {
   v: BasketView; owner: PublicKey; usdcIn: bigint; split: bigint[]; router: Router; slippageBps: number; blockhash: string;
-  minShares: bigint; nonce?: bigint; expirySlots?: number; legsPerTx?: number;
+  minShares?: bigint; nonce?: bigint; expirySlots?: number; legsPerTx?: number;
 }): Promise<UsdcDepositPlan> {
   const { v, owner } = p;
   if (v.legs.some((l) => l.unavailable.length)) throw new Error("LegUnavailable: deposits are refused while any leg is unavailable");
@@ -101,6 +103,11 @@ export async function planUsdcDeposit(p: {
     legs.push({ leg: l.index, usdc, route, minOut: applySlippage(route.quotedOut, p.slippageBps) });
   }
 
+  // Shares: the mint formula on the deltas. Expected uses the quotes; the floor uses each leg's
+  // min_out, which the program enforces per leg, so min_shares can't bind before a min_out does.
+  const observed = legStates(v).map((l) => observe(l).leg);
+  const expectedShares = sharesForDeltas(observed, v.shareSupply, legs.map((t) => t.route.quotedOut));
+  const minShares = p.minShares ?? sharesForDeltas(observed, v.shareSupply, legs.map((t) => t.minOut));
   const openIx = ix.openDepositTicket({
     programId, owner, basket: v.address, ticket, escrow, ownerUsdc, usdcMint: v.basket.usdcMint, nonce, usdcIn: p.usdcIn,
     expirySlots: BigInt(p.expirySlots ?? TICKET_MAX_AGE_SLOTS),
@@ -114,14 +121,14 @@ export async function planUsdcDeposit(p: {
     createAssociatedTokenAccountIdempotentInstruction(owner, shareAta, owner, v.basket.shareMint, TOKEN_PROGRAM_ID),
     ix.finalizeDeposit({
       programId, owner, basket: v.address, ticket, escrow, ownerUsdc, shareMint: v.basket.shareMint, ownerShareAta: shareAta,
-      legs: v.legs.map((l) => ({ mint: l.mint, vault: l.vault })), minShares: p.minShares,
+      legs: v.legs.map((l) => ({ mint: l.mint, vault: l.vault })), minShares,
       intermediates: legs.flatMap((t) => t.route.intermediateAccounts),
     }).ix,
   ];
   const luts = [...basketLut(v), ...legs.flatMap((t) => t.route.lookupTables)];
   const packed = packTicket(owner, p.blockhash, openIx, swapIxs, finalizeIxs, luts, p.legsPerTx ?? LEGS_PER_SWAP_TX);
   return {
-    nonce, ticket, escrow, usdcIn: p.usdcIn, legs, minShares: p.minShares,
+    nonce, ticket, escrow, usdcIn: p.usdcIn, legs, minShares, expectedShares,
     txs: packed.map((x) => x.packed.tx),
     packing: packed.map((x) => ({ legs: x.legs, bytes: x.packed.bytes, accounts: x.packed.accounts, hasOpen: x.hasOpen, hasFinalize: x.hasFinalize })),
   };
