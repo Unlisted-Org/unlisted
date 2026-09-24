@@ -195,6 +195,20 @@ Agent B diffed Agent A's IDL (`program@c141837`) against this spec (`docs/report
 - `bootstrap` is **authority-only**. That is stricter than the spec, and accepted.
 - `Basket.reinvest_mask` (additive state field; it tracks which legs have taken their equal reinvest slice after a conversion). Ratified 2026-09-25 from A's final report.
 
+### Known limitation: a ticket-owned account left out of `abort_deposit` / `finalize_deposit` (2026-09-25)
+
+**Found by** Agent A's broken version (b) on devnet: an abort that omits a ticket-owned intermediate token account is **accepted** by the program. The intermediate survives, holding the owner's rent (≈ 0.0016 SOL). Once the ticket is closed, nothing can close it.
+
+**Why the program can't refuse it:** it can't enumerate the token accounts a PDA owns, and intermediates are created by the client, not the program.
+
+**Mitigations now:**
+- The SDK always passes every ticket-owned account it created.
+- A's devnet check and B's e2e both assert `getTokenAccountsByOwner(ticket)` is empty on both token programs after finalize or abort. Each has a recorded failing version.
+
+**Scheduled after the hackathon:** a permissionless `sweep_ticket_account(owner, nonce, token_account)` that re-derives the closed ticket PDA from its seeds and closes a stranded account, with rent to the owner.
+
+**Scope:** only rent, only the owner's, and only through a client that omits accounts. No user funds are at risk.
+
 ## Events
 
 ```rust
