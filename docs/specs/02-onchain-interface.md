@@ -245,7 +245,9 @@ Errors 6018–6024 were added by Agent A and ratified on 2026-09-25 (`docs/repor
     | FIGUREAI + finalize, closing 8 intermediates | 48 | 1,015 | 243k |
 
   - **The byte limit binds before the 64 locks.** At most 3 legs fit per transaction, and 2 when one is 2-hop or shares the transaction with `open`. Clients pack by serialized size.
-  - **Prop AMMs (unresolved).** On two fresh forks, BisonFi, Flux, Quantum, TesseraV and Hadron failed inside the AMM (BisonFi: surfpool can't load it; the others: custom errors). That looks like fork artifacts, not a PDA-taker limit, but it isn't settled. They were excluded on the fork only. A mainnet `simulateTransaction` with the PDA as taker (`sigVerify:false`) should settle it.
+  - **Prop AMMs: settled on real mainnet state** by A (commit 90c5ff3, `tests/program/fork/mainnet-prop-amm-sim.json`; `simulateTransaction` with `sigVerify:false`, slots 450,141,263–450,141,456). Three takers were tried: a system wallet, an empty PDA, and a program-owned data account.
+    - **BisonFi, Flux, Quantum, TesseraV and Hadron accept all three.** Their fork failures were artifacts, and they stay allowed.
+    - **1DEX rejects the program-owned taker** (`OwnerSystemProgramID`, 26000), and stays excluded.
   - **CPI depth is 4 on every leg** (basket → Jupiter → AMM → Token-2022), including 2-hop routes. Proven on the fork.
 - **CPI depth:** basket → router → AMM → Token-2022 is 4 levels, exactly the current limit (`raise_cpi_nesting_limit_to_8` is not active). A must prove this with Jupiter on the cloned-mainnet fork and report any route that exceeds it.
 
