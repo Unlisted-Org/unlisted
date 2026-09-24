@@ -12,6 +12,7 @@
 //  - optionally fixture_amm pools (Agent C's program, built from branch `ops`).
 // Writes public/config.json for the app and e2e/.local/env.json for the test.
 import { execFileSync, spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync, openSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -160,6 +161,10 @@ async function main() {
     rpc: RPC, programId: programId.toBase58(), shareMint: shareMintKp.publicKey.toBase58(), basket: basket.toBase58(), usdc: usdc.toBase58(),
     legs: legs.map((l) => ({ symbol: l.symbol, mint: l.mint.toBase58() })), issuerKey: issuer.path, deployerKey: deployer.path,
     fixtureAmm: ammId, pools, setupSignatures: sigs, createdAt: new Date().toISOString(),
+    programs: {
+      basket: { id: basketId, builtFrom: arg("basket-commit") ?? "unknown", sha256: createHash("sha256").update(readFileSync(basketSo)).digest("hex") },
+      fixtureAmm: ammSo ? { id: ammId, builtFrom: arg("amm-commit") ?? "unknown", sha256: createHash("sha256").update(readFileSync(ammSo)).digest("hex") } : null,
+    },
   };
   writeFileSync(join(LOCAL, "env.json"), JSON.stringify(env, null, 2));
   mkdirSync(join(APP, "public"), { recursive: true });

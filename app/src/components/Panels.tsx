@@ -197,8 +197,9 @@ export function claimsOf(pos: Position | null): ClaimRow[] {
     openClaims(ticket).map((c) => ({ ticket: address.toBase58(), nonce: ticket.nonce, leg: c.leg, units: c.units, reason: c.reason })));
 }
 
-export function ClaimsList({ v, pos, onSettle, busy, usdcRouter }: { v: BasketView; pos: Position | null; onSettle: (c: ClaimRow, usdc?: boolean) => void; busy: boolean; usdcRouter: boolean }) {
+export function ClaimsList({ v, pos, onSettle, busy, usdcRouter, rows }: { v: BasketView; pos: Position | null; onSettle: (c: ClaimRow, usdc?: boolean) => void; busy: boolean; usdcRouter: boolean; rows: EventRow[] }) {
   const claims = claimsOf(pos);
+  const settled = pos ? rows.flatMap((r) => r.events.filter((e) => e.name === "ClaimSettled" && e.owner.equals(pos.owner)).map((e) => ({ r, e: e as Extract<typeof e, { name: "ClaimSettled" }> }))) : [];
   return (
     <section data-testid="claims">
       <h2>Your claims</h2>
@@ -211,14 +212,15 @@ export function ClaimsList({ v, pos, onSettle, busy, usdcRouter }: { v: BasketVi
               const l = v.legs[c.leg];
               let est = "—";
               let estRaw = "";
-              try { const s = math.settleClaim(l.state, v.shareSupply, c.units, l.feeNow); est = `${fmtRaw(s.net)} net (${fmtRaw(s.gross)} gross)`; estRaw = s.net.toString(); } catch { est = "waits for the leg"; }
+              let estGross = "";
+              try { const s = math.settleClaim(l.state, v.shareSupply, c.units, l.feeNow); est = `${fmtRaw(s.net)} net (${fmtRaw(s.gross)} gross)`; estRaw = s.net.toString(); estGross = s.gross.toString(); } catch { est = "waits for the leg"; }
               return (
                 <tr key={`${c.ticket}-${c.leg}`} data-testid={`claim-${l.symbol}`}>
                   <td><b>{l.symbol}</b></td>
                   <td data-testid={`claim-units-${l.symbol}`} data-raw={c.units.toString()}>{fmtShares(c.units)}</td>
                   <td data-testid={`claim-reason-${l.symbol}`}>{REASON_TEXT[c.reason] ?? c.reason}</td>
                   <td data-testid={`claim-leg-state-${l.symbol}`}>{l.unavailable.length ? l.unavailable.map((r) => REASON_TEXT[r] ?? r).join(", ") : "available"}</td>
-                  <td data-testid={`claim-estimate-${l.symbol}`} data-raw={estRaw}>{est}</td>
+                  <td data-testid={`claim-estimate-${l.symbol}`} data-raw={estRaw} data-gross={estGross}>{est}</td>
                   <td>
                     <button disabled={busy || l.unavailable.length > 0 || (c.reason === "PendingSale" && !usdcRouter)} onClick={() => onSettle(c, c.reason === "PendingSale")} data-testid={`settle-${l.symbol}`}>
                       {l.unavailable.length ? "Waiting for resume" : c.reason === "PendingSale" ? "Sell for USDC" : "Settle in kind"}
@@ -232,6 +234,23 @@ export function ClaimsList({ v, pos, onSettle, busy, usdcRouter }: { v: BasketVi
             })}
           </tbody>
         </table>
+      )}
+      {settled.length > 0 && (
+        <>
+          <h3>Settled claims (from ClaimSettled events on chain)</h3>
+          <table data-testid="settled-claims">
+            <thead><tr><th>Leg</th><th>Units</th><th>You received (measured by the program)</th><th>Slot</th><th>Signature</th></tr></thead>
+            <tbody>
+              {settled.map(({ r, e }) => (
+                <tr key={`${r.signature}-${e.leg}`} data-testid={`settled-${v.legs[e.leg]?.symbol}`}>
+                  <td><b>{v.legs[e.leg]?.symbol}</b></td><td>{fmtShares(e.units)}</td>
+                  <td data-testid={`settled-amount-${v.legs[e.leg]?.symbol}`} data-raw={e.amount.toString()}>{fmtRaw(e.amount)}</td>
+                  <td>{r.slot}</td><td className="mono">{r.signature}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       )}
     </section>
   );
@@ -313,7 +332,7 @@ export function Disclosures({ upgradeAuthority, authority }: { upgradeAuthority:
 
 // ---------------------------------------------------------------- tx log
 
-export interface TxRecord { label: string; signatures: string[]; status: "ok" | "failed" | "pending"; error?: string; approvals: number; at: string }
+export interface TxRecord { id: string; label: string; signatures: string[]; status: "ok" | "failed" | "pending"; error?: string; approvals: number; at: string }
 
 export function TxLog({ log, explorer }: { log: TxRecord[]; explorer: string | null }) {
   if (!log.length) return null;
@@ -322,7 +341,7 @@ export function TxLog({ log, explorer }: { log: TxRecord[]; explorer: string | n
       <h2>This session's transactions</h2>
       <ul className="events">
         {log.map((t, i) => (
-          <li key={i} data-testid={`tx-${i}`} data-status={t.status}>
+          <li key={t.id} data-testid={`tx-${i}`} data-status={t.status}>
             <b>{t.label}</b>: <span data-testid={`tx-status-${i}`}>{t.status}</span> · {t.signatures.length} transaction(s), {t.approvals} wallet approval(s)
             {t.error && <div className="warnline">{t.error}</div>}
             {t.signatures.map((s) => (

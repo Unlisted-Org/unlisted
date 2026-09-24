@@ -28,13 +28,26 @@ export function explainError(e: unknown): string {
     if (TOKEN_2022_ERRORS[code]) return `Token-2022 ${TOKEN_2022_ERRORS[code]} (0x${m[1]}): ${msg.split("\n")[0]}`;
   }
   if (/User rejected|rejected the request/i.test(all)) return "You declined in the wallet.";
-  return msg.split("\n")[0];
+  const anchor = /Error Code: (\w+)\. Error Number: (\d+)\. Error Message: ([^\n."]+)/.exec(all);
+  if (anchor) return `${anchor[1]} (${anchor[2]}): ${anchor[3]}`;
+  const programLine = all.split("\n").find((l) => /Program log: (Error|AnchorError)|failed:/.test(l));
+  return programLine ? `${msg.split("\n")[0]} ${programLine.trim()}` : msg.split("\n")[0];
 }
 
 export function App({ config }: { config: AppConfig }) {
   const conn = useMemo(() => new Connection(config.rpcUrl, "confirmed"), [config.rpcUrl]);
   const client = useMemo(() => new BasketClient(conn, { programId: config.programId, shareMint: config.shareMint, lookupTable: config.lookupTable ?? undefined }), [conn, config]);
-  const valuation: Valuation = useMemo(() => (config.valuationApiUrl ? new HttpValuation(config.valuationApiUrl) : new MockValuation()), [config]);
+  const valuation: Valuation = useMemo(() => {
+    if (config.valuationApiUrl) return new HttpValuation(config.valuationApiUrl);
+    if (config.router.kind !== "fixture_amm") return new MockValuation();
+    const ammId = config.router.programId;
+    // USDC per raw leg unit from the pool's own quote for a 1-USDC buy.
+    return new MockValuation(async (v, i) => {
+      const r = FixtureAmmRouter.live(conn, ammId, v.basket.usdcMint);
+      const q = await r.route({ inputMint: v.basket.usdcMint, outputMint: v.legs[i].mint, amount: 1_000_000n, taker: v.address, destination: v.legs[i].vault, slippageBps: 0 });
+      return q.quotedOut > 0n ? 1_000_000 / Number(q.quotedOut) : 0;
+    });
+  }, [config, conn]);
   const { view, error, refresh } = useBasket(client);
   const [wallets, setWallets] = useState<Wallet[]>(usableWallets());
   const [wallet, setWallet] = useState<Connected | null>(null);
@@ -56,9 +69,10 @@ export function App({ config }: { config: AppConfig }) {
   async function run(label: string, build: (v: BasketView, owner: PublicKey, blockhash: string) => Promise<VersionedTransaction[]>) {
     if (!wallet || !view) return;
     setBusy(true);
-    const rec: TxRecord = { label, signatures: [], status: "pending", approvals: 0, at: new Date().toISOString() };
-    setLog((l) => [rec, ...l]);
-    const update = () => setLog((l) => l.map((x) => (x === rec ? { ...rec } : x)));
+    const id = `${Date.now()}-${Math.random()}`;
+    const rec: TxRecord = { id, label, signatures: [], status: "pending", approvals: 0, at: new Date().toISOString() };
+    setLog((l) => [{ ...rec }, ...l]);
+    const update = () => setLog((l) => l.map((x) => (x.id === id ? { ...rec, signatures: [...rec.signatures] } : x)));
     try {
       const fresh = await client.fetchBasket(); // plan against the latest state, not the rendered one
       const { blockhash } = await conn.getLatestBlockhash("confirmed");
@@ -142,7 +156,7 @@ export function App({ config }: { config: AppConfig }) {
             <DepositPanel v={view} pos={pos} busy={busy} routerReady={routerReady} quoteDeposit={(u) => valuation.quoteDeposit(view, u)} onInKind={onInKind} onUsdc={onUsdc} />
             <RedeemPanel v={view} pos={pos} busy={busy} usdcReady={config.router.kind === "none" ? "USDC redemption settles through the devnet router, not configured on this cluster yet." : null} onRedeem={onRedeem} />
           </div>
-          <ClaimsList v={view} pos={pos} onSettle={onSettle} busy={busy} usdcRouter={config.router.kind === "fixture_amm"} />
+          <ClaimsList v={view} pos={pos} onSettle={onSettle} busy={busy} usdcRouter={config.router.kind === "fixture_amm"} rows={events.rows} />
           <RedemptionHistory v={view} pos={pos} />
           <TxLog log={log} explorer={config.explorerTx} />
           <EventsPanel v={view} rows={events.rows} />

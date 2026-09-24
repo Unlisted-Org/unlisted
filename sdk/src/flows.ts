@@ -110,7 +110,7 @@ export async function planUsdcDeposit(p: {
   const minShares = p.minShares ?? sharesForDeltas(observed, v.shareSupply, legs.map((t) => t.minOut));
   const openIx = ix.openDepositTicket({
     programId, owner, basket: v.address, ticket, escrow, ownerUsdc, usdcMint: v.basket.usdcMint, nonce, usdcIn: p.usdcIn,
-    expirySlots: BigInt(p.expirySlots ?? TICKET_MAX_AGE_SLOTS),
+    expirySlots: BigInt(p.expirySlots ?? TICKET_MAX_AGE_SLOTS), legs: v.legs.map((l) => ({ mint: l.mint, vault: l.vault })),
   }).ix;
   const swapIxs = legs.map((t) => [...t.route.preInstructions, ix.ticketSwapLeg({
     programId, owner, basket: v.address, ticket, escrow, legMint: v.legs[t.leg].mint, legVault: v.legs[t.leg].vault,
@@ -215,6 +215,7 @@ export async function planRedeem(p: {
   const redeemIx = ix.redeem({
     programId, owner, basket: v.address, shareMint: v.basket.shareMint, ownerShareAta: ata(owner, v.basket.shareMint, TOKEN_PROGRAM_ID),
     ticket, usdcReserve: v.basket.accountedUsdcReserve > 0n ? v.basket.usdcReserve : null,
+    ownerUsdc: v.basket.accountedUsdcReserve > 0n ? ata(owner, v.basket.usdcMint, v.usdcMintProgram) : null,
     legs: v.legs.map((l, i) => ({ mint: l.mint, vault: l.vault, userTokenAccount: legAtas[i] })),
     nonce, shares: p.shares, mode: p.mode,
   }).ix;
@@ -232,7 +233,7 @@ export function planSettleClaim(p: { v: BasketView; cranker: PublicKey; ticket: 
     ...computeBudget(300_000),
     createAssociatedTokenAccountIdempotentInstruction(p.cranker, ownerAta, p.owner, l.mint, TOKEN_2022_PROGRAM_ID),
     ix.settleClaim({ programId: p.v.config.programId, cranker: p.cranker, basket: p.v.address, ticket: p.ticket, legMint: l.mint, legVault: l.vault,
-      ownerTokenAccount: ownerAta, leg: p.leg }).ix,
+      ownerTokenAccount: ownerAta, leg: p.leg, shareMint: p.v.basket.shareMint }).ix,
   ];
   const packed = tryCompile(p.cranker, p.blockhash, ixs, []);
   if (!packed) throw new Error("settle_claim does not fit");
@@ -251,7 +252,8 @@ export async function planSettleLegUsdc(p: {
     ...computeBudget(),
     createAssociatedTokenAccountIdempotentInstruction(p.owner, ownerUsdc, p.owner, p.v.basket.usdcMint, p.v.usdcMintProgram),
     ix.settleLegUsdc({ programId: p.v.config.programId, owner: p.owner, basket: p.v.address, ticket: p.ticket, legMint: l.mint, legVault: l.vault,
-      ownerUsdc, routerProgram: route.routerProgram, routeAccounts: route.routeAccounts, leg: p.leg, minUsdcOut, routeData: route.routeData }).ix,
+      ownerUsdc, routerProgram: route.routerProgram, routeAccounts: route.routeAccounts, leg: p.leg, minUsdcOut, routeData: route.routeData,
+      shareMint: p.v.basket.shareMint }).ix,
   ];
   const packed = tryCompile(p.owner, p.blockhash, ixs, route.lookupTables);
   if (!packed) throw new Error("settle_leg_usdc does not fit");

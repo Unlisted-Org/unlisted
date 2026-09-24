@@ -96,10 +96,10 @@ describe("events", () => {
 describe("instruction builders", () => {
   const programId = pk();
   it("discriminators are Anchor's sha256('global:<name>')", () => {
-    const b = ix.settleClaim({ programId, cranker: pk(), basket: pk(), ticket: pk(), legMint: pk(), legVault: pk(), ownerTokenAccount: pk(), leg: 3 });
+    const b = ix.settleClaim({ programId, cranker: pk(), basket: pk(), ticket: pk(), legMint: pk(), legVault: pk(), ownerTokenAccount: pk(), leg: 3, shareMint: pk() });
     expect(Buffer.from(b.ix.data.subarray(0, 8))).toEqual(Buffer.from(discriminator("global", "settle_claim")));
     expect(b.ix.data[8]).toBe(3);
-    expect(b.ix.keys.map((k) => k.isSigner)).toEqual([true, false, false, false, false, false, false]);
+    expect(b.ix.keys.map((k) => k.isSigner)).toEqual([true, false, false, false, false, false, false, false]);
   });
 
   it("redeem: named accounts first, then (mint, vault, user ata) per leg; args nonce, shares, mode", () => {
@@ -109,10 +109,10 @@ describe("instruction builders", () => {
     const [ticket] = redemptionTicketPda(programId, basket, owner, 7n);
     const legs = Array.from({ length: 7 }, () => ({ mint: pk(), vault: pk(), userTokenAccount: pk() }));
     const b = ix.redeem({ programId, owner, basket, shareMint, ownerShareAta: pk(), ticket, usdcReserve: null, legs, nonce: 7n, shares: 5n, mode: { kind: "InKind" } });
-    expect(b.named.map((n) => n.name)).toEqual(["owner", "basket", "share_mint", "owner_share_ata", "ticket", "usdc_reserve", "token_program", "token_2022_program", "system_program"]);
-    expect(b.ix.keys).toHaveLength(9 + 21);
-    expect(b.ix.keys[9].pubkey.equals(legs[0].mint)).toBe(true);
-    expect(b.ix.keys[10].isWritable).toBe(true);
+    expect(b.named.map((n) => n.name)).toEqual(["owner", "basket", "share_mint", "owner_share_ata", "ticket", "usdc_reserve", "owner_usdc", "token_program", "token_2022_program", "system_program"]);
+    expect(b.ix.keys).toHaveLength(10 + 21);
+    expect(b.ix.keys[10].pubkey.equals(legs[0].mint)).toBe(true);
+    expect(b.ix.keys[11].isWritable).toBe(true);
     expect(b.ix.data.length).toBe(8 + 8 + 8 + 1);
     expect(b.ix.data.readBigUInt64LE(8)).toBe(7n);
     expect(b.ix.data.readBigUInt64LE(16)).toBe(5n);

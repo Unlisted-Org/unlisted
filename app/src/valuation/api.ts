@@ -44,7 +44,8 @@ export class MockValuation implements Valuation {
     const oneShareRaw = perShare.map((p) => (p.den === 0n ? 0n : (p.num * 1_000_000_000n) / p.den));
     const lastTradeLegs = v.legs.map((l, i) => ({ index: i, usd_per_raw: String(this.usdPerRaw(i, l.multiplier)), age_s: 42, block: v.slot, source: MOCK_LABEL }));
     const ltUsd = v.legs.map((l, i) => Number(oneShareRaw[i]) * this.usdPerRaw(i, l.multiplier));
-    const sellUsd = v.legs.map((l, i) => (l.unavailable.length ? 0 : ltUsd[i] * (1 + EXAMPLE_GAPS.sell_now_vs_last_trade_bps / 10_000)));
+    // Quotes are for the mirrored MAINNET mint, so a devnet pause doesn't make a leg unquotable.
+    const sellUsd = v.legs.map((_, i) => ltUsd[i] * (1 + EXAMPLE_GAPS.sell_now_vs_last_trade_bps / 10_000));
     const refUsd = ltUsd.map((x) => x * (1 + EXAMPLE_GAPS.reference_vs_last_trade_bps / 10_000));
     const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
     return {
@@ -63,7 +64,7 @@ export class MockValuation implements Valuation {
         sell_now: {
           label: "If you redeemed now", usd: sum(sellUsd).toFixed(2), method: MOCK_LABEL,
           legs: v.legs.map((l, i) => ({ index: i, usd: sellUsd[i].toFixed(2), route: "mock", price_impact_bps: 0, fee_bps: l.feeNow?.bps ?? 0, quoted_at_slot: v.slot, source: MOCK_LABEL })),
-          unquotable_legs: v.legs.filter((l) => l.unavailable.length).map((l) => l.index),
+          unquotable_legs: [],
         },
         last_trade: { label: "Last trade", usd: sum(ltUsd).toFixed(2), legs: lastTradeLegs, oldest_age_s: 42 },
         reference: {
@@ -91,14 +92,22 @@ export class MockValuation implements Valuation {
     };
   }
 
+  /**
+   * Optional: USDC per raw unit of each leg from the cluster's router (fixture_amm pools), so the
+   * mock split lands in the vault's composition the way spec 03's /v1/quote/deposit would.
+   */
+  constructor(private readonly routerPrice?: (v: BasketView, leg: number) => Promise<number>) {}
+
   async quoteDeposit(v: BasketView, usdc: bigint): Promise<QuoteDepositResponse> {
-    // Split proportional to one share's per-leg value (spec 03), with the placeholder prices.
-    const b = await this.basket(v);
-    const w = b.values.last_trade.legs.map((_, i) => Number(b.values.sell_now.legs[i].usd) || 0);
+    // Split proportional to one share's per-leg value (spec 03): per-share raw amount × price.
+    const perShare = v.legs.map((l) => { const p = math.perShare(l.state, v.shareSupply); return p.den === 0n ? 0 : Number(p.num) / Number(p.den); });
+    const prices = await Promise.all(v.legs.map((l, i) => (this.routerPrice ? this.routerPrice(v, i) : Promise.resolve(this.usdPerRaw(i, l.multiplier)))));
+    const w = perShare.map((n, i) => n * prices[i]);
     const tot = w.reduce((a, c) => a + c, 0) || 1;
-    const split = w.map((x) => (usdc * BigInt(Math.floor((x / tot) * 1e6))) / 1_000_000n);
-    return { as_of_slot: v.slot, usdc_raw: usdc.toString(), legs: split.map((s, i) => ({ index: i, usdc_raw: s.toString(), expected_delta_raw: "…", min_out_raw: "…", route: "mock" })),
-      expected_shares_raw: "…", packing: [], mock: MOCK_LABEL };
+    const split = w.map((x) => (usdc * BigInt(Math.floor((x / tot) * 1e9))) / 1_000_000_000n);
+    return { as_of_slot: v.slot, usdc_raw: usdc.toString(),
+      legs: split.map((s, i) => ({ index: i, usdc_raw: s.toString(), expected_delta_raw: "…", min_out_raw: "…", route: this.routerPrice ? "fixture_amm (price from pool)" : "mock" })),
+      expected_shares_raw: "…", packing: [], mock: MOCK_LABEL + (this.routerPrice ? " Deposit split uses the cluster's fixture_amm pool prices." : "") };
   }
 
   async events(): Promise<EventsResponse> {

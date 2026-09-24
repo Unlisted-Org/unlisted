@@ -10,8 +10,8 @@ import { expect, test, Page } from "@playwright/test";
 import { Keypair, PublicKey } from "@solana/web3.js";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { TOKEN_PROGRAM_ID, openClaims } from "@stocklana/sdk";
-import { RunRecord, fundWallet, issuerCli, loadEnv, mintPausedByRpc, redemptionTickets, tokenAmount, txOk } from "./harness";
+import { TOKEN_PROGRAM_ID, openClaims, parseEventsFromLogs } from "@stocklana/sdk";
+import { RunRecord, depositTickets, feeBpsByRpc, fundWallet, issuerCli, loadEnv, mintPausedByRpc, redemptionTickets, tokenAmount, txOk } from "./harness";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
@@ -73,6 +73,38 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     rec.add({ step: "deposit in kind (app)", by: "test wallet (browser)", signatures: depSigs, slot: depTx.slot,
       checks: { sharesMinted: String(sharesAfter - sharesBefore), appPredicted: String(expectedShares), walletApprovals: approvals1 } });
 
+    // ---------------------------------------------------------------- 1b. deposit USDC through a ticket
+    const usdcMint = new PublicKey(env.usdc);
+    const usdcBefore = await tokenAmount(env, owner, usdcMint, TOKEN_PROGRAM_ID);
+    const sharesBeforeTicket = await tokenAmount(env, owner, shareMint, TOKEN_PROGRAM_ID);
+    await page.getByTestId("tab-usdc").click();
+    await page.getByTestId("usdc-amount").fill("10");
+    await expect(page.getByTestId("usdc-quote")).toBeVisible();
+    await expect(page.getByTestId("usdc-submit")).toBeEnabled();
+    await page.getByTestId("usdc-submit").click();
+    const tickSigs = await lastTx(page);
+    expect(tickSigs.length).toBeGreaterThanOrEqual(2); // open + swaps + finalize can't fit one transaction
+    const approvalsT = await page.evaluate(() => window.__testWallet!.approvals.map((a) => a.transactions));
+    expect(approvalsT).toEqual([depSigs.length, tickSigs.length]); // the whole ticket: ONE approval
+    const program = new PublicKey(env.programId);
+    let tickMinted = 0n;
+    let lastSlot = 0;
+    for (const sig of tickSigs) {
+      const t = await txOk(env, sig);
+      lastSlot = t.slot;
+      for (const e of parseEventsFromLogs(t.logs, program)) if (e.name === "Minted" && e.path === "Ticket" && e.owner.equals(owner)) tickMinted += e.shares;
+    }
+    const sharesAfterTicket = await tokenAmount(env, owner, shareMint, TOKEN_PROGRAM_ID);
+    expect(tickMinted).toBeGreaterThan(0n);
+    expect(sharesAfterTicket - sharesBeforeTicket).toBe(tickMinted);
+    const usdcAfter = await tokenAmount(env, owner, usdcMint, TOKEN_PROGRAM_ID);
+    expect(usdcBefore - usdcAfter).toBeGreaterThan(0n);
+    expect(usdcBefore - usdcAfter).toBeLessThanOrEqual(10_000_000n);
+    expect(await depositTickets(env, owner)).toHaveLength(0); // finalize closed the ticket
+    rec.add({ step: "deposit 10 USDC through a deposit ticket (app; fixture_amm router)", by: "test wallet (browser)", signatures: tickSigs, slot: lastSlot,
+      checks: { transactions: tickSigs.length, walletApprovals: approvalsT, sharesMinted: String(tickMinted), usdcSpent: String(usdcBefore - usdcAfter) } });
+    const sharesAfterAll = sharesAfterTicket;
+
     // ---------------------------------------------------------------- 2. issuer pauses one leg
     const pauseSig = issuerCli(env, ["pause", pausedMint.toBase58(), "--pause-authority", env.issuerKey]);
     expect(await mintPausedByRpc(env, pausedMint)).toBe(true);
@@ -85,7 +117,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     await expect(page.getByTestId("deposit-refused")).toBeVisible();
 
     // ---------------------------------------------------------------- 3. redeem while paused
-    const redeemShares = sharesAfter / 2n;
+    const redeemShares = sharesAfterAll / 2n;
     await page.getByTestId("redeem-shares").fill((Number(redeemShares) / 1e9).toFixed(9));
     await expect(page.getByTestId(`redeem-claim-${PAUSE_LEG}`)).toBeVisible();
     expect(await raw(page, `redeem-claim-${PAUSE_LEG}`)).toBe(redeemShares);
@@ -97,7 +129,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     }
     await page.getByTestId("redeem-submit").click();
     const redSigs = await lastTx(page);
-    const approvals2 = await page.evaluate(() => window.__testWallet!.approvals.map((a) => a.transactions));
+    const approvals2 = await page.evaluate(() => window.__testWallet!.approvals.map((a) => a.transactions)); // log restarted at reload
     expect(approvals2).toEqual([redSigs.length]); // one approval covered every transaction of the redemption
     const redTx = await txOk(env, redSigs[redSigs.length - 1]);
     for (const l of env.legs) {
@@ -116,6 +148,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
       checks: { walletApprovals: approvals2, paidNow: Object.fromEntries(Object.entries(predictedNet).map(([k, v]) => [k, String(v)])), claim: { leg: PAUSE_LEG, units: String(claims[0].units), reason: claims[0].reason }, ticket: tickets[0].address.toBase58() } });
     await page.getByTestId("claims").scrollIntoViewIfNeeded();
     await shot("1-claim-open", page.getByTestId("claims"));
+    await shot("1-redemption-ticket", page.getByTestId("redemptions"));
     await shot("1-claim-open-page");
 
     // ---------------------------------------------------------------- 4. issuer resumes; settle
@@ -127,6 +160,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     await expect(page.getByTestId(`leg-availability-${PAUSE_LEG}`)).toHaveText("available");
     await expect(page.getByTestId(`settle-${PAUSE_LEG}`)).toBeEnabled();
     const estimate = await raw(page, `claim-estimate-${PAUSE_LEG}`);
+    const estimateGross = BigInt((await page.getByTestId(`claim-estimate-${PAUSE_LEG}`).getAttribute("data-gross"))!);
     const legBefore = await tokenAmount(env, owner, pausedMint);
     await page.getByTestId(`settle-${PAUSE_LEG}`).click();
     const setSigs = await lastTx(page);
@@ -134,12 +168,20 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     const legAfter = await tokenAmount(env, owner, pausedMint);
     expect(legAfter - legBefore).toBe(estimate);
     expect(estimate).toBeGreaterThan(0n);
+    // The vault paid the app's gross figure; the wallet netted it minus the issuer's transfer fee,
+    // with the fee rate read independently from the node's jsonParsed.
+    const bps = BigInt(await feeBpsByRpc(env, pausedMint));
+    expect(legAfter - legBefore).toBe(estimateGross - (estimateGross * bps + 9_999n) / 10_000n);
+    // The ClaimSettled event the app lists carries the program's measured receipt.
+    await expect(page.getByTestId(`settled-${PAUSE_LEG}`)).toBeVisible();
+    const settledAmount = await raw(page, `settled-amount-${PAUSE_LEG}`);
+    expect(settledAmount).toBe(legAfter - legBefore);
     const after = await redemptionTickets(env, owner);
     const open = after.flatMap((t) => openClaims(t.ticket));
     expect(open).toEqual([]);
     await expect(page.getByTestId("no-claims")).toBeVisible();
     rec.add({ step: `settle the ${PAUSE_LEG} claim after resume (app)`, by: "test wallet (browser)", signatures: setSigs, slot: setTx.slot,
-      checks: { received: String(legAfter - legBefore), appEstimate: String(estimate) } });
+      checks: { received: String(legAfter - legBefore), appEstimate: String(estimate), appEstimateGross: String(estimateGross), claimSettledAmount: String(settledAmount), feeBps: Number(bps) } });
     await page.getByTestId("claims").scrollIntoViewIfNeeded();
     await shot("2-claim-settled", page.getByTestId("claims"));
     const redemptions = page.getByTestId("redemptions");

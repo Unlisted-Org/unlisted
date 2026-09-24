@@ -50,7 +50,7 @@ export class RunRecord {
       startedAt: this.startedAt, finishedAt: new Date().toISOString(), outcome, error,
       cluster: this.env.cluster, label: this.env.label,
       verification: this.env.cluster === "devnet" ? "devnet" : "local, not devnet — built, not verified",
-      rpc: this.env.rpc, program: this.env.programId, basket: this.env.basket,
+      rpc: this.env.rpc, program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
       wallet: { address: this.wallet, kind: "Stocklana Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)" },
       steps: this.steps, screenshots: this.screenshots,
     };
@@ -84,7 +84,12 @@ export async function fundWallet(env: E2eEnv, wallet: PublicKey, amount: bigint,
     }
     sigs.push(await sendAndConfirmTransaction(c, tx, [issuer], { commitment: "confirmed" }));
   }
-  rec.add({ step: `mint ${amount} raw of each of the seven fixture legs to the fresh wallet`, by: "fixture issuer (harness)", signatures: sigs });
+  const usdc = new PublicKey(env.usdc);
+  const ua = getAssociatedTokenAddressSync(usdc, wallet, false, sdk.TOKEN_PROGRAM_ID);
+  sigs.push(await sendAndConfirmTransaction(c, new Transaction().add(
+    createAssociatedTokenAccountIdempotentInstruction(issuer.publicKey, ua, wallet, usdc, sdk.TOKEN_PROGRAM_ID),
+    createMintToCheckedInstruction(usdc, ua, issuer.publicKey, 100_000_000n, 6, [], sdk.TOKEN_PROGRAM_ID)), [issuer], { commitment: "confirmed" }));
+  rec.add({ step: `mint ${amount} raw of each of the seven fixture legs and 100 fixture USDC to the fresh wallet`, by: "fixture issuer (harness)", signatures: sigs });
 }
 
 /** Issuer action through the spl-token CLI (pause / resume). Returns the signature. */
@@ -109,6 +114,19 @@ export async function mintPausedByRpc(env: E2eEnv, mint: PublicKey): Promise<boo
   const r: any = await conn(env).getParsedAccountInfo(mint, "confirmed");
   const ext = r.value.data.parsed.info.extensions.find((e: any) => e.extension === "pausableConfig");
   return !!ext.state.paused;
+}
+
+/** Transfer fee bps in force now, as decoded by the RPC node's jsonParsed. */
+export async function feeBpsByRpc(env: E2eEnv, mint: PublicKey): Promise<number> {
+  const c = conn(env);
+  const [r, epoch]: any = await Promise.all([c.getParsedAccountInfo(mint, "confirmed"), c.getEpochInfo("confirmed")]);
+  const tf = r.value.data.parsed.info.extensions.find((e: any) => e.extension === "transferFeeConfig").state;
+  return epoch.epoch >= tf.newerTransferFee.epoch ? tf.newerTransferFee.transferFeeBasisPoints : tf.olderTransferFee.transferFeeBasisPoints;
+}
+
+export async function depositTickets(env: E2eEnv, owner: PublicKey) {
+  const c = new sdk.BasketClient(conn(env), { programId: new PublicKey(env.programId), shareMint: new PublicKey(env.shareMint) });
+  return c.depositTickets(owner);
 }
 
 export async function redemptionTickets(env: E2eEnv, owner: PublicKey) {

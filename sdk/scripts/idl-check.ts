@@ -12,13 +12,14 @@ import { EVENT_NAMES } from "../src/events.js";
 import { ERRORS } from "../src/constants.js";
 
 const SPEC_ARGS: Record<string, [string, string][]> = {
-  initialize_basket: [["n_legs", "u8"], ["mirror_of", "vec<pubkey>"], ["max_convert_chunk", "u64"]],
+  initialize_basket: [["n_legs", "u8"], ["mirror_of", "vec<pubkey>"], ["max_convert_chunk", "u64"], ["routers", "vec<pubkey>"]],
   propose_router: [["router", "pubkey"]],
+  remove_router: [["router", "pubkey"]],
   activate_router: [["router", "pubkey"]],
   set_deposits_enabled: [["enabled", "bool"]],
   flag_listing: [["leg", "u8"], ["convert_after", "i64"], ["deadline", "i64"]],
   cancel_listing: [["leg", "u8"]],
-  bootstrap: [["gross", "vec<u64>"]],
+  bootstrap: [["gross", "vec<u64>"], ["initial_shares", "u64"]],
   deposit_in_kind: [["gross", "vec<u64>"], ["min_shares", "u64"]],
   open_deposit_ticket: [["nonce", "u64"], ["usdc_in", "u64"], ["expiry_slots", "u64"]],
   ticket_swap_leg: [["leg", "u8"], ["usdc_amount", "u64"], ["min_out", "u64"], ["route_data", "bytes"]],
@@ -50,22 +51,23 @@ const k = () => Keypair.generate().publicKey;
 const legs = Array.from({ length: 7 }, () => ({ mint: k(), vault: k(), userTokenAccount: k() }));
 const P = { programId: k() };
 const built: Record<string, string[]> = {
-  initialize_basket: ix.initializeBasket({ ...P, payer: k(), authority: k(), basket: k(), shareMint: k(), usdcMint: k(), usdcReserve: k(), legs, mirrorOf: legs.map(k), maxConvertChunk: 1n }).named.map((n) => n.name),
+  initialize_basket: ix.initializeBasket({ ...P, payer: k(), authority: k(), basket: k(), shareMint: k(), usdcMint: k(), usdcReserve: k(), legs, mirrorOf: legs.map(k), maxConvertChunk: 1n, routers: [] }).named.map((n) => n.name),
   propose_router: ix.proposeRouter({ ...P, authority: k(), basket: k(), router: k() }).named.map((n) => n.name),
+  remove_router: ix.removeRouter({ ...P, authority: k(), basket: k(), router: k() }).named.map((n) => n.name),
   activate_router: ix.activateRouter({ ...P, authority: k(), basket: k(), router: k() }).named.map((n) => n.name),
   set_deposits_enabled: ix.setDepositsEnabled({ ...P, authority: k(), basket: k(), enabled: true }).named.map((n) => n.name),
   flag_listing: ix.flagListing({ ...P, authority: k(), basket: k(), leg: 0, convertAfter: 0n, deadline: 0n }).named.map((n) => n.name),
   cancel_listing: ix.cancelListing({ ...P, authority: k(), basket: k(), leg: 0 }).named.map((n) => n.name),
-  bootstrap: ix.bootstrap({ ...P, depositor: k(), basket: k(), shareMint: k(), depositorShareAta: k(), legs, gross: [1n] }).named.map((n) => n.name),
+  bootstrap: ix.bootstrap({ ...P, depositor: k(), basket: k(), shareMint: k(), depositorShareAta: k(), legs, gross: [1n], initialShares: 1n }).named.map((n) => n.name),
   deposit_in_kind: ix.depositInKind({ ...P, depositor: k(), basket: k(), shareMint: k(), depositorShareAta: k(), legs, gross: [1n], minShares: 1n }).named.map((n) => n.name),
-  open_deposit_ticket: ix.openDepositTicket({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), ownerUsdc: k(), usdcMint: k(), nonce: 1n, usdcIn: 1n, expirySlots: 1n }).named.map((n) => n.name),
+  open_deposit_ticket: ix.openDepositTicket({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), ownerUsdc: k(), usdcMint: k(), nonce: 1n, usdcIn: 1n, expirySlots: 1n, legs }).named.map((n) => n.name),
   ticket_swap_leg: ix.ticketSwapLeg({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), legMint: k(), legVault: k(), routerProgram: k(), routeAccounts: [], leg: 0, usdcAmount: 1n, minOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
   finalize_deposit: ix.finalizeDeposit({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), ownerUsdc: k(), shareMint: k(), ownerShareAta: k(), legs, minShares: 1n }).named.map((n) => n.name),
   unwind_leg: ix.unwindLeg({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), legMint: k(), legVault: k(), routerProgram: k(), routeAccounts: [], leg: 0, minUsdcOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
   abort_deposit: ix.abortDeposit({ ...P, owner: k(), basket: k(), ticket: k(), escrow: k(), ownerUsdc: k() }).named.map((n) => n.name),
   redeem: ix.redeem({ ...P, owner: k(), basket: k(), shareMint: k(), ownerShareAta: k(), ticket: k(), usdcReserve: null, legs, nonce: 1n, shares: 1n, mode: { kind: "InKind" } }).named.map((n) => n.name),
-  settle_claim: ix.settleClaim({ ...P, cranker: k(), basket: k(), ticket: k(), legMint: k(), legVault: k(), ownerTokenAccount: k(), leg: 0 }).named.map((n) => n.name),
-  settle_leg_usdc: ix.settleLegUsdc({ ...P, owner: k(), basket: k(), ticket: k(), legMint: k(), legVault: k(), ownerUsdc: k(), routerProgram: k(), routeAccounts: [], leg: 0, minUsdcOut: 1n, routeData: new Uint8Array() }).named.map((n) => n.name),
+  settle_claim: ix.settleClaim({ ...P, cranker: k(), basket: k(), ticket: k(), legMint: k(), legVault: k(), ownerTokenAccount: k(), leg: 0, shareMint: k() }).named.map((n) => n.name),
+  settle_leg_usdc: ix.settleLegUsdc({ ...P, owner: k(), basket: k(), ticket: k(), legMint: k(), legVault: k(), ownerUsdc: k(), routerProgram: k(), routeAccounts: [], leg: 0, minUsdcOut: 1n, routeData: new Uint8Array(), shareMint: k() }).named.map((n) => n.name),
   close_redemption: ix.closeRedemption({ ...P, owner: k(), ticket: k() }).named.map((n) => n.name),
   observe: ix.observeIx({ ...P, cranker: k(), basket: k(), legs, mask: 1 }).named.map((n) => n.name),
   harvest: ix.harvest({ ...P, cranker: k(), basket: k(), legMint: k(), legVault: k(), leg: 0 }).named.map((n) => n.name),
@@ -83,7 +85,7 @@ const idl = loadIdl();
 const diffs: string[] = [];
 const hex = (b: Uint8Array | number[]) => Buffer.from(b).toString("hex");
 const idlIx = new Map<string, any>((idl.instructions ?? []).map((i: any) => [snake(i.name), i]));
-for (const name of ix.SPEC_INSTRUCTIONS) {
+for (const name of [...ix.SPEC_INSTRUCTIONS, "remove_router"]) {
   const i = idlIx.get(name);
   if (!i) { diffs.push(`instruction ${name}: missing from IDL`); continue; }
   if (i.discriminator && hex(i.discriminator) !== hex(discriminator("global", name))) diffs.push(`instruction ${name}: discriminator ${hex(i.discriminator)} != sha256(global:${name})`);
@@ -92,7 +94,7 @@ for (const name of ix.SPEC_INSTRUCTIONS) {
   const idlArgs = (i.args ?? []).map((a: any) => [snake(a.name), typeStr(a.type)]);
   if (JSON.stringify(idlArgs) !== JSON.stringify(SPEC_ARGS[name])) diffs.push(`instruction ${name}: args\n    IDL: ${JSON.stringify(idlArgs)}\n    SDK: ${JSON.stringify(SPEC_ARGS[name])}`);
 }
-for (const extra of idlIx.keys()) if (!(ix.SPEC_INSTRUCTIONS as readonly string[]).includes(extra)) diffs.push(`instruction ${extra}: in IDL, not in spec 02`);
+for (const extra of idlIx.keys()) if (![...ix.SPEC_INSTRUCTIONS, "remove_router"].includes(extra as any)) diffs.push(`instruction ${extra}: in IDL, not in spec 02`);
 for (const [n, d] of Object.entries(ACCOUNT_DISCRIMINATORS)) {
   const a = (idl.accounts ?? []).find((x: any) => x.name === n);
   if (!a) diffs.push(`account ${n}: missing from IDL`);

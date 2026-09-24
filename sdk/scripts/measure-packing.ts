@@ -43,7 +43,7 @@ async function main() {
     }
     await new Promise((res) => setTimeout(res, 2500));
   }
-  const open = ix.openDepositTicket({ programId, owner, basket, ticket, escrow, ownerUsdc, usdcMint: MAINNET_USDC, nonce, usdcIn: usdcPerLeg * 7n, expirySlots: 1500n }).ix;
+  const open = ix.openDepositTicket({ programId, owner, basket, ticket, escrow, ownerUsdc, usdcMint: MAINNET_USDC, nonce, usdcIn: usdcPerLeg * 7n, expirySlots: 1500n, legs: routes.map((x) => ({ mint: x.mint, vault: x.vault })) }).ix;
   const swaps = routes.map((x, i) => [...x.r.preInstructions, ix.ticketSwapLeg({ programId, owner, basket, ticket, escrow, legMint: x.mint, legVault: x.vault,
     routerProgram: x.r.routerProgram, routeAccounts: x.r.routeAccounts, leg: i, usdcAmount: usdcPerLeg, minOut: x.r.quotedOut, routeData: x.r.routeData }).ix]);
   const shareAta = ata(owner, shareMint, TOKEN_PROGRAM_ID);

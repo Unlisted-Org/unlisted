@@ -65,8 +65,8 @@ export function initializeBasket(p: {
   programId: PublicKey; payer: PublicKey; authority: PublicKey; basket: PublicKey; shareMint: PublicKey;
   usdcMint: PublicKey; usdcReserve: PublicKey; legs: { mint: PublicKey; vault: PublicKey }[];
   mirrorOf: PublicKey[]; maxConvertChunk: bigint;
-  /** Not in spec 02: Agent A's IDL adds `routers: Vec<Pubkey>` (reported). Encoded only when given. */
-  routers?: PublicKey[];
+  /** IDL c141837 adds `routers: Vec<Pubkey>`, not in spec 02 (docs/reports/2026-09-25-app-idl-diff.md #1). */
+  routers: PublicKey[];
 }): BuiltIx {
   const named = [
     acc("payer", p.payer, true, true), acc("authority", p.authority, false, true), acc("basket", p.basket, true),
@@ -78,7 +78,7 @@ export function initializeBasket(p: {
   ];
   const w = new Writer().u8(p.legs.length);
   w.vec(p.mirrorOf, (k) => w.pubkey(k)).u64(p.maxConvertChunk);
-  if (p.routers) w.vec(p.routers, (k) => w.pubkey(k));
+  w.vec(p.routers, (k) => w.pubkey(k));
   return build(p.programId, "initialize_basket", [...named, ...tail], w, legsRemaining(p.legs, false));
 }
 
@@ -88,6 +88,11 @@ export function proposeRouter(p: { programId: PublicKey; authority: PublicKey; b
 export function activateRouter(p: { programId: PublicKey; authority: PublicKey; basket: PublicKey; router: PublicKey }): BuiltIx {
   return build(p.programId, "activate_router", [acc("authority", p.authority, false, true), acc("basket", p.basket, true)], new Writer().pubkey(p.router));
 }
+/** IDL c141837 only; not in spec 02 (docs/reports/2026-09-25-app-idl-diff.md #7). */
+export function removeRouter(p: { programId: PublicKey; authority: PublicKey; basket: PublicKey; router: PublicKey }): BuiltIx {
+  return build(p.programId, "remove_router", [acc("authority", p.authority, false, true), acc("basket", p.basket, true)], new Writer().pubkey(p.router));
+}
+
 export function setDepositsEnabled(p: { programId: PublicKey; authority: PublicKey; basket: PublicKey; enabled: boolean }): BuiltIx {
   return build(p.programId, "set_deposits_enabled", [acc("authority", p.authority, false, true), acc("basket", p.basket, true)], new Writer().bool(p.enabled));
 }
@@ -108,14 +113,14 @@ function tokenPrograms(): Named[] {
 export function bootstrap(p: {
   programId: PublicKey; depositor: PublicKey; basket: PublicKey; shareMint: PublicKey; depositorShareAta: PublicKey;
   legs: LegAccounts[]; gross: bigint[];
-  /** Not in spec 02: Agent A's IDL adds `initial_shares: u64` (reported). Encoded only when given. */
-  initialShares?: bigint;
+  /** IDL c141837 adds `initial_shares: u64`, not in spec 02 (docs/reports/2026-09-25-app-idl-diff.md #2). Pass INITIAL_SHARES. */
+  initialShares: bigint;
 }): BuiltIx {
   const named = [acc("depositor", p.depositor, true, true), acc("basket", p.basket, true), acc("share_mint", p.shareMint, true),
     acc("depositor_share_ata", p.depositorShareAta, true), ...tokenPrograms()];
   const w = new Writer();
   w.vec(p.gross, (g) => w.u64(g));
-  if (p.initialShares !== undefined) w.u64(p.initialShares);
+  w.u64(p.initialShares);
   return build(p.programId, "bootstrap", named, w, legsRemaining(p.legs, true));
 }
 
@@ -133,11 +138,13 @@ export function depositInKind(p: {
 export function openDepositTicket(p: {
   programId: PublicKey; owner: PublicKey; basket: PublicKey; ticket: PublicKey; escrow: PublicKey; ownerUsdc: PublicKey;
   usdcMint: PublicKey; nonce: bigint; usdcIn: bigint; expirySlots: bigint;
+  /** Program c141837 reads (mint, vault)×n as remaining accounts for the availability check (docs/reports/2026-09-25-app-idl-diff.md #8). */
+  legs: { mint: PublicKey; vault: PublicKey }[];
 }): BuiltIx {
   const named = [acc("owner", p.owner, true, true), acc("basket", p.basket), acc("ticket", p.ticket, true), acc("escrow", p.escrow, true),
     acc("owner_usdc", p.ownerUsdc, true), acc("usdc_mint", p.usdcMint), acc("token_program", TOKEN_PROGRAM_ID),
     acc("associated_token_program", ASSOCIATED_TOKEN_PROGRAM_ID), acc("system_program", SYSTEM_PROGRAM_ID)];
-  return build(p.programId, "open_deposit_ticket", named, new Writer().u64(p.nonce).u64(p.usdcIn).u64(p.expirySlots));
+  return build(p.programId, "open_deposit_ticket", named, new Writer().u64(p.nonce).u64(p.usdcIn).u64(p.expirySlots), legsRemaining(p.legs, false));
 }
 
 export function ticketSwapLeg(p: {
@@ -174,10 +181,9 @@ export function unwindLeg(p: {
 export function abortDeposit(p: {
   programId: PublicKey; owner: PublicKey; basket: PublicKey; ticket: PublicKey; escrow: PublicKey; ownerUsdc: PublicKey; intermediates?: PublicKey[];
 }): BuiltIx {
-  // Spec 02 lists owner, basket, ticket, escrow, owner_usdc. The token program is needed for the
-  // refund; intermediates follow as remaining accounts. To confirm against the IDL.
+  // Spec 02 lists owner, basket, ticket, escrow, owner_usdc; IDL c141837 adds both token programs (docs/reports/2026-09-25-app-idl-diff.md #3).
   const named = [acc("owner", p.owner, true, true), acc("basket", p.basket), acc("ticket", p.ticket, true), acc("escrow", p.escrow, true),
-    acc("owner_usdc", p.ownerUsdc, true), acc("token_program", TOKEN_PROGRAM_ID)];
+    acc("owner_usdc", p.ownerUsdc, true), ...tokenPrograms()];
   return build(p.programId, "abort_deposit", named, new Writer(), intermediatesRemaining(p.intermediates));
 }
 
@@ -186,10 +192,13 @@ export function abortDeposit(p: {
 export function redeem(p: {
   programId: PublicKey; owner: PublicKey; basket: PublicKey; shareMint: PublicKey; ownerShareAta: PublicKey; ticket: PublicKey;
   usdcReserve: PublicKey | null; legs: LegAccounts[]; nonce: bigint; shares: bigint; mode: RedeemMode;
+  /** IDL c141837 adds optional `owner_usdc` after usdc_reserve (docs/reports/2026-09-25-app-idl-diff.md #4). */
+  ownerUsdc?: PublicKey | null;
 }): BuiltIx {
   const named = [acc("owner", p.owner, true, true), acc("basket", p.basket, true), acc("share_mint", p.shareMint, true),
     acc("owner_share_ata", p.ownerShareAta, true), acc("ticket", p.ticket, true),
     p.usdcReserve ? acc("usdc_reserve", p.usdcReserve, true) : acc("usdc_reserve", p.programId),
+    p.ownerUsdc ? acc("owner_usdc", p.ownerUsdc, true) : acc("owner_usdc", p.programId),
     ...tokenPrograms(), acc("system_program", SYSTEM_PROGRAM_ID)];
   const w = new Writer().u64(p.nonce).u64(p.shares);
   writeRedeemMode(w, p.mode);
@@ -199,19 +208,24 @@ export function redeem(p: {
 export function settleClaim(p: {
   programId: PublicKey; cranker: PublicKey; basket: PublicKey; ticket: PublicKey; legMint: PublicKey; legVault: PublicKey;
   ownerTokenAccount: PublicKey; leg: number;
+  /** IDL c141837 adds `share_mint` last (docs/reports/2026-09-25-app-idl-diff.md #5). */
+  shareMint: PublicKey;
 }): BuiltIx {
   const named = [acc("cranker", p.cranker, true, true), acc("basket", p.basket, true), acc("ticket", p.ticket, true),
     acc("leg_mint", p.legMint), acc("leg_vault", p.legVault, true), acc("owner_token_account", p.ownerTokenAccount, true),
-    acc("token_2022_program", TOKEN_2022_PROGRAM_ID)];
+    acc("token_2022_program", TOKEN_2022_PROGRAM_ID), acc("share_mint", p.shareMint)];
   return build(p.programId, "settle_claim", named, new Writer().u8(p.leg));
 }
 
 export function settleLegUsdc(p: {
   programId: PublicKey; owner: PublicKey; basket: PublicKey; ticket: PublicKey; legMint: PublicKey; legVault: PublicKey;
   ownerUsdc: PublicKey; routerProgram: PublicKey; routeAccounts: AccountMeta[]; leg: number; minUsdcOut: bigint; routeData: Uint8Array;
+  /** IDL c141837 adds `share_mint` last (docs/reports/2026-09-25-app-idl-diff.md #6). */
+  shareMint: PublicKey;
 }): BuiltIx {
   const named = [acc("owner", p.owner, false, true), acc("basket", p.basket, true), acc("ticket", p.ticket, true),
-    acc("leg_mint", p.legMint), acc("leg_vault", p.legVault, true), acc("owner_usdc", p.ownerUsdc, true), acc("router_program", p.routerProgram)];
+    acc("leg_mint", p.legMint), acc("leg_vault", p.legVault, true), acc("owner_usdc", p.ownerUsdc, true), acc("router_program", p.routerProgram),
+    acc("share_mint", p.shareMint)];
   return build(p.programId, "settle_leg_usdc", named, new Writer().u8(p.leg).u64(p.minUsdcOut).bytesVec(p.routeData), routeRemaining(p.routeAccounts));
 }
 
