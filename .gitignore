@@ -1,0 +1,9 @@
+node_modules/
+target/
+.anchor/
+*.so
+.surfpool/
+.DS_Store
+**/*.keypair.json
+.env
+__pycache__/

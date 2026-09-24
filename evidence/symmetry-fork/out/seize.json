@@ -1,0 +1,272 @@
+{
+  "scenario": "seize",
+  "fork_rpc": "http://localhost:8899",
+  "symmetry_program": "BASKT7aKd8n7ibpUbwLP3Wiyxyi3yoiXsxBk4Hpumate",
+  "vault": "G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf",
+  "wallet": "3jsDYSBeysFJAqcZN4wwaPPUW3NnQ4h8o2baR8d5eXEX",
+  "steps": [
+    {
+      "step": "seize: vault AAPLx balance set to 0 (simulated permanent-delegate burn)"
+    },
+    {
+      "step": "sellVaultTx (burns shares, creates withdraw intent)",
+      "ok": true,
+      "signature": "48D3rEpDeBx2Uqkp1DPAqFJE9PsW5KUrznwJV6u1T1iUUGgPTKQ8VLNqj9gqM6Du8QbCpwgDFRywrEwsQ2ys6NsH"
+    },
+    {
+      "step": "redeemTokensTx",
+      "ok": false,
+      "error": "Simulation failed. ",
+      "program_logs": [
+        "Program log: Error: insufficient funds",
+        "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x1",
+        "Program BASKT7aKd8n7ibpUbwLP3Wiyxyi3yoiXsxBk4Hpumate failed: custom program error: 0x1"
+      ]
+    }
+  ],
+  "vault_before": {
+    "slot": 450108125,
+    "supply_outstanding": "728749",
+    "legs": [
+      {
+        "mint": "1FWZtdWN7y38BSXGzbs8D6Shk88oL9atDNgbVz9ondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "So11111111111111111111111111111111111111112",
+        "recorded": "2427094",
+        "actual": "2427094"
+      },
+      {
+        "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+        "recorded": "36099",
+        "actual": "36099"
+      },
+      {
+        "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+        "recorded": "35467",
+        "actual": "35467"
+      },
+      {
+        "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+        "recorded": "27183",
+        "actual": "27183"
+      },
+      {
+        "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+        "recorded": "76366",
+        "actual": "76366"
+      },
+      {
+        "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+        "recorded": "17177",
+        "actual": "17177"
+      },
+      {
+        "mint": "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "recorded": "0",
+        "actual": "0"
+      }
+    ]
+  },
+  "vault_after_seizure": {
+    "slot": 450108125,
+    "supply_outstanding": "728749",
+    "legs": [
+      {
+        "mint": "1FWZtdWN7y38BSXGzbs8D6Shk88oL9atDNgbVz9ondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "So11111111111111111111111111111111111111112",
+        "recorded": "2427094",
+        "actual": "2427094"
+      },
+      {
+        "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+        "recorded": "36099",
+        "actual": "36099"
+      },
+      {
+        "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+        "recorded": "35467",
+        "actual": "35467"
+      },
+      {
+        "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+        "recorded": "27183",
+        "actual": "0"
+      },
+      {
+        "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+        "recorded": "76366",
+        "actual": "76366"
+      },
+      {
+        "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+        "recorded": "17177",
+        "actual": "17177"
+      },
+      {
+        "mint": "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "recorded": "0",
+        "actual": "0"
+      }
+    ]
+  },
+  "wallet_shares_after_sell": "50000",
+  "wallet_after_sell": {
+    "1FWZtdWN7y38BSXGzbs8D6Shk88oL9atDNgbVz9ondo": "0",
+    "So11111111111111111111111111111111111111112": "375000",
+    "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg": "0",
+    "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN": "0",
+    "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB": "0",
+    "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu": "0",
+    "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp": "0",
+    "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh": "0",
+    "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4": "0",
+    "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX": "0",
+    "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo": "0",
+    "fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo": "0",
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "0"
+  },
+  "rebalance_intent": "34nBcyHoohzDbjkvegcEyqWuARvjQFToud1TTXsebmKB",
+  "wallet_received": {
+    "1FWZtdWN7y38BSXGzbs8D6Shk88oL9atDNgbVz9ondo": "0",
+    "So11111111111111111111111111111111111111112": "375000",
+    "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg": "0",
+    "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN": "0",
+    "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB": "0",
+    "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu": "0",
+    "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp": "0",
+    "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh": "0",
+    "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4": "0",
+    "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX": "0",
+    "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo": "0",
+    "fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo": "0",
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "0"
+  },
+  "vault_after": {
+    "slot": 450108292,
+    "supply_outstanding": "678999",
+    "legs": [
+      {
+        "mint": "1FWZtdWN7y38BSXGzbs8D6Shk88oL9atDNgbVz9ondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "So11111111111111111111111111111111111111112",
+        "recorded": "2261402",
+        "actual": "2427094"
+      },
+      {
+        "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+        "recorded": "33635",
+        "actual": "36099"
+      },
+      {
+        "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+        "recorded": "33046",
+        "actual": "35467"
+      },
+      {
+        "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+        "recorded": "25328",
+        "actual": "0"
+      },
+      {
+        "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+        "recorded": "71153",
+        "actual": "76366"
+      },
+      {
+        "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+        "recorded": "16005",
+        "actual": "17177"
+      },
+      {
+        "mint": "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo",
+        "recorded": "0",
+        "actual": "0"
+      },
+      {
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "recorded": "0",
+        "actual": "0"
+      }
+    ]
+  }
+}
