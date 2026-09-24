@@ -1,4 +1,4 @@
-# Phase 0: PreStocks basket token
+# Phase 0: Unlisted (a PreStocks basket token)
 
 Investigation only: no program code, no frontend, no scaffolding, no git. Written 2026-09-24.
 

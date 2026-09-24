@@ -4,7 +4,7 @@ Audience: Colosseum Crypto World's Fair judges. Every claim below links to evide
 
 ## Headline
 
-**A basket of tokenized pre-IPO companies that still pays you out when the issuer acts.**
+**Unlisted: a basket of tokenized pre-IPO companies that still pays you out when the issuer acts.**
 
 ## The problem, as it actually happened
 
@@ -24,7 +24,7 @@ Tokenized real-world assets come with an issuer that can pause the tokens, seize
 
 ## What we built
 
-A vault-backed token over seven PreStocks, equal weight: OpenAI, Anthropic, Neuralink, Anduril, Polymarket, Kalshi and FigureAI. Three rules make it survive the issuer ([spec 01](specs/01-shares-and-pricing.md)):
+**Unlisted** is a vault-backed token over seven PreStocks, equal weight: OpenAI, Anthropic, Neuralink, Anduril, Polymarket, Kalshi and FigureAI. Three rules make it survive the issuer ([spec 01](specs/01-shares-and-pricing.md)):
 
 1. **A pause in one name doesn't lock the basket.** Redemption pays every leg the issuer didn't touch, immediately. The paused leg becomes a claim that pays out after resume and shares that leg's gains and losses in the meantime.
 2. **A seizure is detected and shared, not hidden.** The vault's actual balance is the truth, not a recorded number. A seizure is observed on-chain, reduces every holder's claim on that leg pro rata, and is shown in the app. No one is made whole by later depositors.
@@ -41,12 +41,12 @@ The failure cases are issuer actions (pause, seize, fee change, multiplier chang
 - **Minting or redeeming through the basket is never cheaper than buying the seven tokens directly.** Every leg pays the issuer's fee on the way in and on the way out.
   - At 100 bps that is about 2% in fees for a round trip; at 300 bps, about 5.9%.
   - With market spread, the estimate is **about 6.5–8% for a round trip at 300 bps**, depending on size. ([risks §1](risks.md#what-it-costs-to-use-the-basket-stated-plainly))
-- **Secondary benefits:** one transferable token instead of seven, and one account instead of seven. Transfers of the basket token itself pay no PreStocks fee.
+- **Secondary benefits:** one transferable token instead of seven, and one account instead of seven. Transfers of the Unlisted token itself pay no PreStocks fee.
 
 ## What we disclose
 
 - **The SPV dispute.** OpenAI and Anthropic say share transfers to SPVs are void. Anthropic, verbatim: third parties selling its shares through tokenized securities are "likely offering an investment that may have no value". Both stay at equal weight: we don't adjudicate the dispute, and we state the exposure (about 29% of the basket at inception). ([risks §3](risks.md#3-the-spv-dispute-openai-and-anthropic-say-the-underlying-transfers-are-void))
-- **No endorsement.** PreStocks hasn't endorsed this project. We have asked them in writing. ([request](outreach/2026-09-25-prestocks-request.md))
+- **No endorsement.** PreStocks hasn't endorsed this project. We have asked them in writing ([request](outreach/2026-09-25-prestocks-request.md)); their Terms appear to permit wrapping and pooling without their consent, so we proceed on that basis.
 - **No protection claimed.** We don't claim protection from the issuer, only that the basket degrades per name instead of failing whole.
 
 ## Video outline (2–3 minutes)

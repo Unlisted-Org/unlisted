@@ -1,22 +1,24 @@
-# stocklana
+# Unlisted
 
 **A basket of tokenized pre-IPO companies that still pays you out when the issuer acts.**
 
-PreStocks, the tokens this basket holds, are controlled by a 2-of-7 multisig with no time lock. It can pause them, seize them from any account, and change what it costs to move them. It has done all three:
+PreStocks, the tokens Unlisted holds, are controlled by a 2-of-7 multisig with no time lock. It can pause them, seize them from any account, and change what it costs to move them. It has done all three:
 
 - **Seized:** it emptied 29 holders' accounts to zero on 2025-09-19, with no memo.
 - **Changed the fee three times in sixteen days:** 0 → 50 → 100 → 300 bps. The last two came with no announcement we could find.
 
 Basket protocols break when that happens. Symmetry, run with its own program on a mainnet fork, burns the user's shares and then pays nothing while one leg is paused, and fails every redemption after a seizure. It does handle transfer fees correctly; fees aren't the problem.
 
-This basket is built so that:
+Unlisted is built so that:
 - a paused name becomes a claim while the other legs pay out;
 - a seizure is detected and shared pro rata;
 - no oracle is involved.
 
-**What it costs, plainly.** Minting or redeeming through the basket is never cheaper than buying the seven tokens directly. Every leg pays the issuer's transfer fee in and out, which at 300 bps is about 5.9% for a round trip before spread. The convenience of one transferable token and one account is a secondary benefit.
+**What it costs, plainly.** Minting or redeeming Unlisted is never cheaper than buying the seven tokens directly. Every leg pays the issuer's transfer fee in and out, which at 300 bps is about 5.9% for a round trip before spread. The convenience of one transferable token and one account is a secondary benefit.
 
-**Disclosed.** OpenAI and Anthropic say share transfers to SPVs are void. Both stay in the basket at equal weight, and the exposure is stated in the app ([risks](docs/risks.md#3-the-spv-dispute-openai-and-anthropic-say-the-underlying-transfers-are-void)). PreStocks has not endorsed this project.
+**Disclosed.** OpenAI and Anthropic say share transfers to SPVs are void. Both stay in the basket at equal weight, and the exposure is stated in the app ([risks](docs/risks.md#3-the-spv-dispute-openai-and-anthropic-say-the-underlying-transfers-are-void)). PreStocks has not endorsed this project. We have asked them in writing; their Terms appear to permit wrapping and pooling without their consent ([risks §2](docs/risks.md#issuer-stance-decided)).
+
+**Repository:** [github.com/Unlisted-Org/unlisted](https://github.com/Unlisted-Org/unlisted). The on-chain program keeps `basket` as its technical name (crate, accounts, PDA seeds, instructions).
 
 ## Status
 

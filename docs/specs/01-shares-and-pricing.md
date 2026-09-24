@@ -3,7 +3,7 @@
 Status: **draft for agreement.**
 Executable form: [`spec/model/basket_model.py`](../../spec/model/basket_model.py). Its property tests are in [`spec/model/test_basket_model.py`](../../spec/model/test_basket_model.py) (17 tests, all passing). Deliberately breaking the rounding, the loss index, or the claim path makes those tests fail. When this document and the model disagree, the model is right and this document gets fixed.
 
-## What the product promises
+## What Unlisted promises
 
 A basket that still pays out when the issuer acts. Three rules carry that promise:
 

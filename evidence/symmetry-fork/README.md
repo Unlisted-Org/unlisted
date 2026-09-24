@@ -5,7 +5,7 @@
 1. **One paused constituent blocks the whole withdrawal after the shares are burned.** The user receives none of the basket's other tokens until the issuer unpauses.
 2. **A permanent-delegate seizure breaks every redemption**, because Symmetry accounts from its own records instead of the vault's actual balances.
 
-Our basket is built around these two failures (see `docs/specs/01-shares-and-pricing.md`).
+Unlisted is built around these two failures (see `docs/specs/01-shares-and-pricing.md`).
 
 ## How it was produced
 

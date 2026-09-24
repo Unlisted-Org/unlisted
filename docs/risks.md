@@ -43,7 +43,7 @@ The same batch set xAI to 0 bps. Change 2's signatures are in `docs/phase0-fee-e
 
 **Spread.** On top of the fees, market spread measured on 2026-09-24 adds about 0.5% at $10, 1.3% at $1k and 2.0% at $10k. Estimated round trips at 300 bps are therefore **≈ 6.5%, 7.2% and 7.9%**. This is arithmetic on measured spreads, to be re-measured after epoch 1043.
 
-**Minting or redeeming through the basket is never cheaper than buying the seven tokens directly.** At best it costs the same. The basket's convenience (one transferable token, one account instead of seven) is real but secondary. Trading the basket token itself pays no PreStocks fee; see §2 for what that means.
+**Minting or redeeming Unlisted is never cheaper than buying the seven tokens directly.** At best it costs the same. Unlisted's convenience (one transferable token, one account instead of seven) is real but secondary. Trading the basket token itself pays no PreStocks fee; see §2 for what that means.
 
 **The accounting is unaffected by any of this.** No fee is stored. Every inflow is credited at its measured delta, and each payout's fee falls on its recipient. The *fee change mid-position* fixture scenario reproduces change 3 on devnet.
 
@@ -90,7 +90,7 @@ A Squads v4 multisig, `53Ab3Rqx1a5uiV7qmsX4qbdbrqstVDpnH4LoJGfsZsU8`, controls e
 
 | Question | Decision |
 |---|---|
-| Written OK from PreStocks? | **Yes: ask in writing, don't block on it, record the reply.** The Terms allow written exceptions and name `legal@prestocks.com` as the only address for notices. The request is drafted in [`docs/outreach/2026-09-25-prestocks-request.md`](outreach/2026-09-25-prestocks-request.md). It has to be sent from the team's own email, because this environment can't send mail. |
+| Written OK from PreStocks? | **Requested in writing; the user is sending it.** It blocks nothing. The Terms appear to permit wrapping and pooling "without our involvement, knowledge, consent, or approval", so we proceed on the assumption that consent isn't required, and record any reply in [`docs/outreach/2026-09-25-prestocks-request.md`](outreach/2026-09-25-prestocks-request.md). |
 | Route a fee to PreStocks? | **No.** It complicates the product and concedes a point nobody has made. Every basket deposit and redemption already pays their fee on every leg. What skips it is secondary trading of the basket token, the product category their own bounty invites ("structured products", "DeFi integrations"). |
 | Geoblock? | **No; plain disclosure instead.** This is devnet, with fixture tokens that mirror PreStocks and no real PreStocks tokens held by anyone through us. See the note below. |
 
@@ -129,4 +129,4 @@ Down-weighting OpenAI and Anthropic would mean taking a position on a dispute we
 
 ### Disclosure text (app and pitch)
 
-> Two of the seven companies in this basket, OpenAI and Anthropic, have said publicly that transfers of their shares to special purpose vehicles are void. Anthropic says third parties selling its shares through tokenized securities are "likely offering an investment that may have no value". PreStocks tokens give no claim on any company, SPV or PreStocks itself. Their value depends on PreStocks' own undisclosed arrangements, which PreStocks' terms say may be reduced or eliminated. This basket holds these tokens as they are, at equal weight with the other five, and cannot change that. At inception these two names are about 2/7 (≈ 29%) of the basket's value.
+> Two of the seven companies in Unlisted, OpenAI and Anthropic, have said publicly that transfers of their shares to special purpose vehicles are void. Anthropic says third parties selling its shares through tokenized securities are "likely offering an investment that may have no value". PreStocks tokens give no claim on any company, SPV or PreStocks itself. Their value depends on PreStocks' own undisclosed arrangements, which PreStocks' terms say may be reduced or eliminated. Unlisted holds these tokens as they are, at equal weight with the other five, and cannot change that. At inception these two names are about 2/7 (≈ 29%) of the basket's value.

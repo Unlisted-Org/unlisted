@@ -2,16 +2,16 @@
 
 - **To:** legal@prestocks.com (the address the PreStocks Terms of Service name for notices)
 - **From:** the team's own email; this file is the text to send
-- **Status:** drafted 2026-09-25, **not yet sent**
+- **Status:** drafted 2026-09-25; being sent by the user from the team's email. It blocks nothing: PreStocks' Terms appear to permit wrapping and pooling without their consent, and we proceed on that basis.
 - **Reply:** to be recorded below verbatim, with its date. We don't block on it.
 
 ---
 
-**Subject:** Request for written acknowledgement: a basket token over seven PreStocks
+**Subject:** Request for written acknowledgement: Unlisted, a basket token over seven PreStocks
 
 Hello PreStocks team,
 
-We are building a basket token over seven PreStocks: OpenAI, Anthropic, Neuralink, Anduril, Polymarket, Kalshi and FigureAI, at equal weight. It is our entry to Colosseum's Crypto World's Fair (submissions close 12 October 2026).
+We are building Unlisted, a basket token over seven PreStocks: OpenAI, Anthropic, Neuralink, Anduril, Polymarket, Kalshi and FigureAI, at equal weight. It is our entry to Colosseum's Crypto World's Fair (submissions close 12 October 2026).
 
 - **How it works:** a Solana program holds the seven tokens in a vault and issues one share token against them. Shares are minted and redeemed pro rata from the vault's actual holdings, with no oracle. If one token is paused, a redemption pays the other six immediately and settles the paused one after it resumes.
 - **Where it runs:** today it runs **only on devnet**, against fixture mints that mirror your mints' Token-2022 configuration. It holds no PreStocks tokens.
@@ -26,7 +26,7 @@ Your Terms say fees are applied for your own account "unless we expressly state 
 We will state in our submission that PreStocks has not endorsed this project unless you tell us otherwise in writing, and we will quote any reply accurately.
 
 Thank you,
-The stocklana team (GitHub: 1nonlypiece)
+The Unlisted team (github.com/Unlisted-Org)
 
 ---
 
