@@ -1,0 +1,97 @@
+{
+  "what": "Test wallets funded with fixture USDC and legs by the fixture issuer",
+  "cluster": "devnet",
+  "runs": [
+    {
+      "at": "2026-09-24T21:27:02Z",
+      "actor": "ops for Agent A (canonical basket bootstrap)",
+      "wallet": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "usdc_raw": "10000000000",
+      "sol": 0,
+      "legs": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "account": "CAyJTpMq8K6VviTdUvwPYHUUG9rVLCuNnZGb1UwiDC8U",
+          "raw": "1000000000000",
+          "usd_per_raw": 0.0000019552832153746206
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "account": "3nVeufU9YMDXZZQMaoNrmJqp5jj8u1kYT4kxy8kbbDan",
+          "raw": "1000000000000",
+          "usd_per_raw": 0.000001032794097573809
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "account": "8T8GY3pk294D9QwZWZ2gjQFnS7GSh4Y5dmrGMvnoqWXW",
+          "raw": "1000000000000",
+          "usd_per_raw": 4.222618375244455e-7
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "account": "HKH11tpJue6yACRhtPJxgHLmb1xoNqs67ZQegXBjCvQU",
+          "raw": "1000000000000",
+          "usd_per_raw": 1.6188516510390708e-7
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "account": "AYYGrkBu9jac31YAZDmWfUfQ5oaAsnMhUbhNJ143B1CD",
+          "raw": "1000000000000",
+          "usd_per_raw": 1.4571594687419403e-7
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "account": "DvfDjzAN1XTkjA4vnvNSBGchTjPECsiKBwdBvbhgWAqM",
+          "raw": "1000000000000",
+          "usd_per_raw": 8.863362757492611e-7
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "account": "7zQrgFwcnoVeKM4q9aUDS61JCgagaxkfqdgmAczJDFHR",
+          "raw": "1000000000000",
+          "usd_per_raw": 1.7683322129361356e-7
+        }
+      ],
+      "signatures": [
+        {
+          "step": "fund 10000000000 raw fixture USDC",
+          "signature": "4kqpYg67r234EZ9kqLCcWB7cRBL9TCG31B8SuYU3RYvtSQnJPHZPYCjNA2oLGbhBsk2cLQAcR2Rh32Ljz1F2KKBZ",
+          "slot": 503661851,
+          "block_time": 1790285214,
+          "block_time_iso": "2026-09-24T21:26:54Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3neKNJsqkov8bVwi689KiPVSc9VVhWjYG63gA6KfCh4vo9J3z2QZ1ufHt3kraXeJERnr6vEiexhziWpTfUsJdyGN",
+          "slot": 503661869,
+          "block_time": 1790285217,
+          "block_time_iso": "2026-09-24T21:26:57Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3viXXRtDDyxVyZM8kXhrWxaCFQDzJ9TBcgFTZrqvWk1X5RTs4eMhnHhVV4wXUBAJB6ZJwVSAk6CiVs5WnPww17cT",
+          "slot": 503661886,
+          "block_time": 1790285220,
+          "block_time_iso": "2026-09-24T21:27:00Z",
+          "err": null
+        }
+      ]
+    }
+  ]
+}

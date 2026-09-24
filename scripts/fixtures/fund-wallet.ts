@@ -1,6 +1,6 @@
 // Fund a (fresh) test wallet with fixture USDC and every fixture leg, for app e2e tests.
 //
-//   node scripts/fixtures/fund-wallet.ts --cluster devnet --wallet <pubkey> [--usdc 200] [--leg-usd 20] [--sol 0.02]
+//   node scripts/fixtures/fund-wallet.ts --cluster devnet --wallet <pubkey> [--usdc 200] [--leg-usd 20 | --leg-raw <n>] [--sol 0.02]
 //
 // - fixture USDC: `--usdc` whole USDC (MintToChecked into the wallet's ATA);
 // - each leg: `--leg-usd` dollars' worth at its fixture_amm pool price (MintToChecked, so no transfer fee);
@@ -24,6 +24,7 @@ if (!walletArg) throw new Error("--wallet <pubkey> required");
 const wallet = new PublicKey(walletArg);
 const usdc = BigInt(Math.round(Number(arg("usdc", "200")) * 1e6));
 const legUsd = Number(arg("leg-usd", "20"));
+const legRaw = arg("leg-raw") ? BigInt(arg("leg-raw")!) : null; // exact raw amount per leg, overrides --leg-usd
 const sol = Number(arg("sol", "0"));
 
 async function run() {
@@ -45,7 +46,7 @@ async function run() {
       if (l && q) usdPerRaw = q / 1e6 / l;
     }
     if (!usdPerRaw) throw new Error(`${leg.symbol}: no pool price`);
-    const raw = BigInt(Math.floor(legUsd / usdPerRaw));
+    const raw = legRaw ?? BigInt(Math.floor(legUsd / usdPerRaw));
     const a = ixCreateAtaIdempotent(issuer.publicKey, wallet, leg.mint, TOKEN_2022_PROGRAM);
     ixs.push(a.ix, ixMintToChecked(TOKEN_2022_PROGRAM, leg.mint, a.address, issuer.publicKey, raw, leg.decimals));
     legs.push({ index: leg.index, symbol: leg.symbol, mint: leg.mint, account: a.address.toBase58(), raw: raw.toString(), usd_per_raw: usdPerRaw });
