@@ -1,0 +1,16 @@
+{
+  "name": "unlisted-valuation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Valuation API (spec 03) and issuer-change watcher for the Unlisted basket",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node src/server.ts",
+    "test": "node --test test/*.test.ts",
+    "watcher": "node src/watcher-cli.ts"
+  },
+  "dependencies": {
+    "@solana/web3.js": "1.98.4"
+  }
+}

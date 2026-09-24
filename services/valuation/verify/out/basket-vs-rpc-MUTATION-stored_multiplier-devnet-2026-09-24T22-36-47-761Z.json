@@ -1,0 +1,707 @@
+{
+ "check": "every raw number in /v1/basket vs independent decode of RPC account bytes, bracketed read",
+ "cluster": "devnet",
+ "stable": true,
+ "changed_during_window": {
+  "cluster": [],
+  "mainnet_checked_fields": []
+ },
+ "api_slot": 503686907,
+ "rpc_slots": [
+  503686903,
+  503687127
+ ],
+ "mainnet_slots": [
+  450165582,
+  450165725
+ ],
+ "api_mainnet_slot": 450165586,
+ "basket_source": "program",
+ "checks": [
+  {
+   "what": "share.supply_raw",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "share.decimals",
+   "api": "9",
+   "rpc": "9",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.balance_raw (vault amount @64)",
+   "api": "51643426",
+   "rpc": "51643426",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.multiplier.stored",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.multiplier.effective",
+   "api": "1",
+   "rpc": "1.4861347",
+   "ok": false
+  },
+  {
+   "what": "OPENAI.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.vault (Basket)",
+   "api": "CdkukgxJDrfdLhTsPB3RwU5N5DQRfVAAD6epThejhS5y",
+   "rpc": "CdkukgxJDrfdLhTsPB3RwU5N5DQRfVAAD6epThejhS5y",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.accounted_raw (Basket)",
+   "api": "51643426",
+   "rpc": "51643426",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.per_share_raw.num (= B - pending, P = 0)",
+   "api": "51643426",
+   "rpc": "51643426",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "OPENAI.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1.4861347",
+   "ok": false
+  },
+  {
+   "what": "ANTHROPIC.balance_raw (vault amount @64)",
+   "api": "97771203",
+   "rpc": "97771203",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.multiplier.stored",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.multiplier.effective",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.vault (Basket)",
+   "api": "F8QshcwaZ94DyvTrVsigxZfTTtkR1WSWaE4SyaSW9SiF",
+   "rpc": "F8QshcwaZ94DyvTrVsigxZfTTtkR1WSWaE4SyaSW9SiF",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.accounted_raw (Basket)",
+   "api": "97771203",
+   "rpc": "97771203",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.per_share_raw.num (= B - pending, P = 0)",
+   "api": "97771203",
+   "rpc": "97771203",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.balance_raw (vault amount @64)",
+   "api": "239134832",
+   "rpc": "239134832",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.multiplier.stored",
+   "api": "2",
+   "rpc": "2",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.multiplier.effective",
+   "api": "2",
+   "rpc": "1",
+   "ok": false
+  },
+  {
+   "what": "NEURALINK.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.vault (Basket)",
+   "api": "WNSuhhyK5vD9fwhpeG78mqJT55jSk6mPxdopbYdJwUF",
+   "rpc": "WNSuhhyK5vD9fwhpeG78mqJT55jSk6mPxdopbYdJwUF",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.accounted_raw (Basket)",
+   "api": "239134832",
+   "rpc": "239134832",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.per_share_raw.num (= B - pending, P = 0)",
+   "api": "239134832",
+   "rpc": "239134832",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.balance_raw (vault amount @64)",
+   "api": "623760176",
+   "rpc": "623760176",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.multiplier.stored",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.multiplier.effective",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.vault (Basket)",
+   "api": "8TnxNKq43Ns7ScnEkqRK3uu4ae7ryrVuemYTRYMnJN6w",
+   "rpc": "8TnxNKq43Ns7ScnEkqRK3uu4ae7ryrVuemYTRYMnJN6w",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.accounted_raw (Basket)",
+   "api": "623760176",
+   "rpc": "623760176",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.per_share_raw.num (= B - pending, P = 0)",
+   "api": "623760176",
+   "rpc": "623760176",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "ANDURIL.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.balance_raw (vault amount @64)",
+   "api": "692975011",
+   "rpc": "692975011",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.multiplier.stored",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.multiplier.effective",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.vault (Basket)",
+   "api": "7PHWdkJPXcL2MzkeCPYAMPPWLuRvpKRjF4yEcXbhSE5S",
+   "rpc": "7PHWdkJPXcL2MzkeCPYAMPPWLuRvpKRjF4yEcXbhSE5S",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.accounted_raw (Basket)",
+   "api": "692975011",
+   "rpc": "692975011",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.per_share_raw.num (= B - pending, P = 0)",
+   "api": "692975011",
+   "rpc": "692975011",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "POLYMARKET.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.balance_raw (vault amount @64)",
+   "api": "113926848",
+   "rpc": "113926848",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.multiplier.stored",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.multiplier.effective",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.vault (Basket)",
+   "api": "3ixVZ9hTjtkRLuEjmGQY3cwW7U3dRBngex3SWA9P6c97",
+   "rpc": "3ixVZ9hTjtkRLuEjmGQY3cwW7U3dRBngex3SWA9P6c97",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.accounted_raw (Basket)",
+   "api": "113926848",
+   "rpc": "113926848",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.per_share_raw.num (= B - pending, P = 0)",
+   "api": "113926848",
+   "rpc": "113926848",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "KALSHI.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.balance_raw (vault amount @64)",
+   "api": "571032382",
+   "rpc": "571032382",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.status frozen? (vault state @108)",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.fee.now_bps",
+   "api": "100",
+   "rpc": "100",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.fee.pending.bps",
+   "api": "300",
+   "rpc": "300",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.multiplier.stored",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.multiplier.effective",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.paused",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.hook",
+   "api": "false",
+   "rpc": "false",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.vault (Basket)",
+   "api": "6hRubtaoRPD9QgXVF4g24F3SnmfU1DP3WvMxWSTAMZPw",
+   "rpc": "6hRubtaoRPD9QgXVF4g24F3SnmfU1DP3WvMxWSTAMZPw",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.accounted_raw (Basket)",
+   "api": "571032382",
+   "rpc": "571032382",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.claim_units (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.pending_norm (Basket)",
+   "api": "0",
+   "rpc": "0",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.loss_index (Basket)",
+   "api": "1000000000000000000",
+   "rpc": "1000000000000000000",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.per_share_raw.num (= B - pending, P = 0)",
+   "api": "571032382",
+   "rpc": "571032382",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.per_share_raw.den (= S + C)",
+   "api": "1019974699",
+   "rpc": "1019974699",
+   "ok": true
+  },
+  {
+   "what": "FIGUREAI.reference.effective_multiplier (mainnet mint)",
+   "api": "1",
+   "rpc": "1",
+   "ok": true
+  }
+ ],
+ "all_ok": false
+}

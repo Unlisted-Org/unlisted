@@ -1,0 +1,178 @@
+{
+ "check": "/v1/quote/redeem vs measured redeem payout, per leg, to the unit",
+ "cluster": "devnet",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "basket": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+ "share_mint": "HjpaxrkjftbtcRJuyAEm7oR8scasnWNxKNgnN26p7iqj",
+ "holder": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+ "shares": "5000000",
+ "mode": "in_kind",
+ "paused_leg": null,
+ "quote_slot": 503682477,
+ "redeem_signature": "5xn1xzpTZWoXkZVt55cgtqXSej4ELfcYC6QSQJwCgNwq9DArjToQ9A3KHRY7x7gMPf9XNJaUVbYvA7Gs9yfcTPJW",
+ "redeem_slot": 503682599,
+ "vaults_stable_across_quote": true,
+ "legs": [
+  {
+   "index": 0,
+   "symbol": "OPENAI",
+   "action": "pay",
+   "quote_gross_raw": "253160",
+   "measured_gross_raw": "253160",
+   "quote_net_raw": "250628",
+   "measured_net_raw": "250628",
+   "quote_fee_raw": "2532",
+   "measured_fee_raw": "2532",
+   "vault_pre_in_tx": "52149746",
+   "vault_at_quote": "52149746",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "253160",
+    "received": "250628"
+   },
+   "redeemed_event_paid": "250628",
+   "match": true
+  },
+  {
+   "index": 1,
+   "symbol": "ANTHROPIC",
+   "action": "pay",
+   "quote_gross_raw": "479282",
+   "measured_gross_raw": "479282",
+   "quote_net_raw": "474489",
+   "measured_net_raw": "474489",
+   "quote_fee_raw": "4793",
+   "measured_fee_raw": "4793",
+   "vault_pre_in_tx": "98729767",
+   "vault_at_quote": "98729767",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "479282",
+    "received": "474489"
+   },
+   "redeemed_event_paid": "474489",
+   "match": true
+  },
+  {
+   "index": 2,
+   "symbol": "NEURALINK",
+   "action": "pay",
+   "quote_gross_raw": "1172258",
+   "measured_gross_raw": "1172258",
+   "quote_net_raw": "1160535",
+   "measured_net_raw": "1160535",
+   "quote_fee_raw": "11723",
+   "measured_fee_raw": "11723",
+   "vault_pre_in_tx": "241479348",
+   "vault_at_quote": "241479348",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "1172258",
+    "received": "1160535"
+   },
+   "redeemed_event_paid": "1160535",
+   "match": true
+  },
+  {
+   "index": 3,
+   "symbol": "ANDURIL",
+   "action": "pay",
+   "quote_gross_raw": "3057723",
+   "measured_gross_raw": "3057723",
+   "quote_net_raw": "3027145",
+   "measured_net_raw": "3027145",
+   "quote_fee_raw": "30578",
+   "measured_fee_raw": "30578",
+   "vault_pre_in_tx": "629875622",
+   "vault_at_quote": "629875622",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "3057723",
+    "received": "3027145"
+   },
+   "redeemed_event_paid": "3027145",
+   "match": true
+  },
+  {
+   "index": 4,
+   "symbol": "POLYMARKET",
+   "action": "pay",
+   "quote_gross_raw": "3397020",
+   "measured_gross_raw": "3397020",
+   "quote_net_raw": "3363049",
+   "measured_net_raw": "3363049",
+   "quote_fee_raw": "33971",
+   "measured_fee_raw": "33971",
+   "vault_pre_in_tx": "699769051",
+   "vault_at_quote": "699769051",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "3397020",
+    "received": "3363049"
+   },
+   "redeemed_event_paid": "3363049",
+   "match": true
+  },
+  {
+   "index": 5,
+   "symbol": "KALSHI",
+   "action": "pay",
+   "quote_gross_raw": "558478",
+   "measured_gross_raw": "558478",
+   "quote_net_raw": "552893",
+   "measured_net_raw": "552893",
+   "quote_fee_raw": "5585",
+   "measured_fee_raw": "5585",
+   "vault_pre_in_tx": "115043804",
+   "vault_at_quote": "115043804",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "558478",
+    "received": "552893"
+   },
+   "redeemed_event_paid": "552893",
+   "match": true
+  },
+  {
+   "index": 6,
+   "symbol": "FIGUREAI",
+   "action": "pay",
+   "quote_gross_raw": "2799247",
+   "measured_gross_raw": "2799247",
+   "quote_net_raw": "2771254",
+   "measured_net_raw": "2771254",
+   "quote_fee_raw": "27993",
+   "measured_fee_raw": "27993",
+   "vault_pre_in_tx": "576630876",
+   "vault_at_quote": "576630876",
+   "ticket_leg": {
+    "kind": "Paid",
+    "amount": "2799247",
+    "received": "2771254"
+   },
+   "redeemed_event_paid": "2771254",
+   "match": true
+  }
+ ],
+ "claim_settlement": null,
+ "redeemed_event": {
+  "owner": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+  "ticket": "EvDP7uX6ECmqiRhHgMACDciRkiPEz7g6pfXyjLwKqE82",
+  "shares": "5000000",
+  "paid": [
+   "250628",
+   "474489",
+   "1160535",
+   "3027145",
+   "3363049",
+   "552893",
+   "2771254",
+   "0"
+  ],
+  "claims_mask": 0
+ },
+ "events": [
+  "Redeemed"
+ ],
+ "all_match": true
+}

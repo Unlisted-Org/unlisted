@@ -1,0 +1,50 @@
+{
+  "what": "In-kind deposits into the basket by ops-held keys (to hold shares for redeem checks)",
+  "cluster": "devnet",
+  "runs": [
+    {
+      "at": "2026-09-24T22:23:52Z",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+      "share_mint": "HjpaxrkjftbtcRJuyAEm7oR8scasnWNxKNgnN26p7iqj",
+      "holder": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+      "target_shares_raw": "20000000",
+      "gross": [
+        "1022872",
+        "1936496",
+        "4736400",
+        "12354442",
+        "13725338",
+        "2256482",
+        "11310094"
+      ],
+      "shares_after_raw": "20000002",
+      "signatures": [
+        {
+          "step": "fund holder with fixture legs (mint_to)",
+          "signature": "4f4gbrKMEGDix6RFj3kaKNLrXk4Cw8NESYE98f6ciPqxTVqm5RTod9rjKGsUyZwaR9tRSu5Q2qPrMw2FFEBRcHL5",
+          "slot": 503682404,
+          "block_time": 1790288621,
+          "block_time_iso": "2026-09-24T22:23:41Z",
+          "err": null
+        },
+        {
+          "step": "fund holder with fixture legs (mint_to)",
+          "signature": "33QfwUGGi6sMcDwdYXFJ6pY4Ws4iyCr3LkUtkcjmddSxjLWKx8Xesb7EGbSpHmvCxzyfX9bvb9pY7qwXDEReoC4N",
+          "slot": 503682428,
+          "block_time": 1790288625,
+          "block_time_iso": "2026-09-24T22:23:45Z",
+          "err": null
+        },
+        {
+          "step": "deposit_in_kind target 20000000 raw shares",
+          "signature": "36ME63RSX234NucEyXNfAUevP6dd4FM9ydhcojkX4rXCW2xmzaU8PFxBGSwYDdm96fXdivrKFvZ7oq3JuDmigDhY",
+          "slot": 503682452,
+          "block_time": 1790288629,
+          "block_time_iso": "2026-09-24T22:23:49Z",
+          "err": null
+        }
+      ]
+    }
+  ]
+}

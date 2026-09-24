@@ -1,0 +1,350 @@
+{
+  "what": "On-chain proof that fixture mints are back in their mirror state after each mint-level scenario",
+  "cluster": "devnet",
+  "checks": [
+    {
+      "after": "pause/resume KALSHI",
+      "at": "2026-09-24T22:25:37Z",
+      "fixture_slot": 503683096,
+      "mainnet_slot": 450163204,
+      "all_restored": true,
+      "legs": [
+        {
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1.4861347",
+          "mainnet_multiplier_effective": "1.4861347",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "after": "hook on/off FIGUREAI",
+      "at": "2026-09-24T22:26:06Z",
+      "fixture_slot": 503683274,
+      "mainnet_slot": 450163311,
+      "all_restored": true,
+      "legs": [
+        {
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1.4861347",
+          "mainnet_multiplier_effective": "1.4861347",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "after": "default state OPENAI",
+      "at": "2026-09-24T22:26:37Z",
+      "fixture_slot": 503683459,
+      "mainnet_slot": 450163429,
+      "all_restored": true,
+      "legs": [
+        {
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1.4861347",
+          "mainnet_multiplier_effective": "1.4861347",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "after": "multiplier NEURALINK 1 -> 2 -> 1",
+      "at": "2026-09-24T22:30:35Z",
+      "fixture_slot": 503684883,
+      "mainnet_slot": 450164319,
+      "all_restored": true,
+      "legs": [
+        {
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1.4861347",
+          "mainnet_multiplier_effective": "1.4861347",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        },
+        {
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "paused": false,
+          "hook_program": null,
+          "default_state": "initialized",
+          "multiplier_effective": "1",
+          "mainnet_multiplier_effective": "1",
+          "multiplier_pending": null,
+          "ok": true
+        }
+      ]
+    }
+  ]
+}

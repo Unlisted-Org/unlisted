@@ -1,0 +1,332 @@
+{
+  "scenario": "frozen-vault",
+  "cluster": "devnet",
+  "description": "Fixture issuer freezes the vault token account itself (AccountFrozen 0x11 on any transfer in or out).",
+  "fixture_issuer": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+  "runs": [
+    {
+      "action": "freeze",
+      "actor": "ops",
+      "note": "stand-in target",
+      "at": "2026-09-24T22:10:48Z",
+      "target": {
+        "vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+        "vault_owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "symbol": "ANTHROPIC",
+        "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "standin": true
+      },
+      "steps": [
+        {
+          "step": "FreezeAccount on the vault",
+          "signature": "4vzAdrE7iahMLcs5W2G4YsfaQ6grKLPHPBLPyzNCiLLHBzHi94afzW6xMS3nsekWZCK6szqtF7vsu8bV4Njazwsd",
+          "slot": 503677692,
+          "block_time": 1790287841,
+          "block_time_iso": "2026-09-24T22:10:41Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503677662,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:10:36Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467760715273",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503677724,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:10:47Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "frozen",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467760715273",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503677670,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "47948094",
+          "vault_withheld_after_raw": 10000
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503677733,
+          "err": {
+            "InstructionError": [
+              0,
+              {
+                "Custom": 17
+              }
+            ]
+          },
+          "error_log": "Program log: Error: Account is frozen",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        }
+      ],
+      "ok": true
+    },
+    {
+      "action": "thaw",
+      "actor": "ops",
+      "note": "stand-in target",
+      "at": "2026-09-24T22:11:05Z",
+      "target": {
+        "vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+        "vault_owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "symbol": "ANTHROPIC",
+        "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "standin": true
+      },
+      "steps": [
+        {
+          "step": "ThawAccount on the vault",
+          "signature": "57EMkMZxSsBBxD7mqmW5rm6rXMPihDSHcfYgupwMnhd8NhmzCbwq5fcHodpjsta9suRzWmbp9vgj8oNXksWm7KWP",
+          "slot": 503677792,
+          "block_time": 1790287857,
+          "block_time_iso": "2026-09-24T22:10:57Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503677764,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:10:53Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "frozen",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467760715273",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503677824,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:11:04Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467760715273",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503677771,
+          "err": {
+            "InstructionError": [
+              0,
+              {
+                "Custom": 17
+              }
+            ]
+          },
+          "error_log": "Program log: Error: Account is frozen",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503677833,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "47948094",
+          "vault_withheld_after_raw": 10000
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

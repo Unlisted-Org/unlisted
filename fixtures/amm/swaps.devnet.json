@@ -1,0 +1,185 @@
+{
+  "cluster": "devnet",
+  "program": "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF",
+  "started_at": "2026-09-24T21:27:40Z",
+  "recipient_owner": "66RPprZt3rkC7r7QqKFDvzdVi4NbwLsfZhULxnzw7b8U",
+  "legs": [
+    {
+      "symbol": "OPENAI",
+      "epoch": 1165,
+      "buy": {
+        "signature": "fDfGkJWRbaPKTQAS9N9knhuAf94dAEupmbf8dbvJAun5dvETSxtfCApXAJ6sQ9j5uQD2ePS4VqiWFNYHaHppg9o",
+        "slot": 503662161,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "10100637",
+        "measured_delivered": "10100637",
+        "leg_fee_withheld": "102027",
+        "destination": "34iu7BcUQBpuR1KvsxA6Cj6dUAp3LYVe4byM2eiuLVge",
+        "match": true
+      },
+      "sell": {
+        "signature": "3NUArkWQ1ABme3ZFBgEtZb3bS8ncNomYZuaVUHYWDJpPUxngP94xK9f8qB7ZaBCNL61uN6KRRWSoqdvsVzj5tfgX",
+        "slot": 503662196,
+        "fee_bps_in_force": 100,
+        "leg_in": "10202664",
+        "quoted_delivered": "19701133",
+        "measured_delivered": "19701133",
+        "leg_fee_withheld": "102027",
+        "match": true
+      }
+    },
+    {
+      "symbol": "ANTHROPIC",
+      "epoch": 1165,
+      "buy": {
+        "signature": "4V25yzdzEVHX3SoFrWmEciRWE5bByWfzVE9Eq4i5KkTAam4dMyEmWV3mwBS8oAQbFLhisBhai7cFtR7ENjqRKLmN",
+        "slot": 503662228,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "19122575",
+        "measured_delivered": "19122575",
+        "leg_fee_withheld": "193158",
+        "destination": "3YfzHeRaS55x7vsmV6BQkquLitFvoAUHMaNJQ5ZsyPD3",
+        "match": true
+      },
+      "sell": {
+        "signature": "5aenbEQdZ9cA9tWXwbzDzS7uqj6Uhza9CB15M6ubZ9s4zrmFCcUxssZufKhXZAFB3L6oL9un6YTFvyH296Up2VXR",
+        "slot": 503662429,
+        "fee_bps_in_force": 100,
+        "leg_in": "19315733",
+        "quoted_delivered": "19701133",
+        "measured_delivered": "19701133",
+        "leg_fee_withheld": "193158",
+        "match": true
+      }
+    },
+    {
+      "symbol": "NEURALINK",
+      "epoch": 1165,
+      "buy": {
+        "signature": "27Xqida5e3BBYSGHf2H37oeXS95HCLaXFM9uZhzytQH3x334YagMhdu91uHkzXH4hwyX352b3rxncL538nS4E6fX",
+        "slot": 503662787,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "46765468",
+        "measured_delivered": "46765468",
+        "leg_fee_withheld": "472379",
+        "destination": "AJxy3SZSx8vmchGBFjJGJRQndpgjymbCXSVKamcdweqs",
+        "match": true
+      },
+      "sell": {
+        "signature": "4C9y2ohWW9VB7QbpmB3qUhJ9upRfGHtB4eYsM9eX6mJJuojn565kyAZ4V92sfqU4dobP9zZ7nTBj9VFXUrxMJxB4",
+        "slot": 503662823,
+        "fee_bps_in_force": 100,
+        "leg_in": "47237847",
+        "quoted_delivered": "19701171",
+        "measured_delivered": "19701171",
+        "leg_fee_withheld": "472379",
+        "match": true
+      }
+    },
+    {
+      "symbol": "ANDURIL",
+      "epoch": 1165,
+      "buy": {
+        "signature": "38T2HhUpc76jKwv7hFAjiwb5PgxFX1ypvhzYGsdHXtqzyC9C29xcrQ9Tcxq9T9kf4fBswHp8Z5MpRMJvza1r8op5",
+        "slot": 503662859,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "121992725",
+        "measured_delivered": "121992725",
+        "leg_fee_withheld": "1232250",
+        "destination": "3wC9CfKezBomwVB4xJ45yJaA6Fx2tKHjyTbGuBWkF94R",
+        "match": true
+      },
+      "sell": {
+        "signature": "4dw8wwFcdMkuTDdBwg8J7WvxgaurbJPDgr9CDWmJA4v1zbcP7MGasxc1aRASUTevPL1c9AfSERPLzpDK8bLASkah",
+        "slot": 503662896,
+        "fee_bps_in_force": 100,
+        "leg_in": "123224975",
+        "quoted_delivered": "19701148",
+        "measured_delivered": "19701148",
+        "leg_fee_withheld": "1232250",
+        "match": true
+      }
+    },
+    {
+      "symbol": "POLYMARKET",
+      "epoch": 1165,
+      "buy": {
+        "signature": "2yivumAYJXYcRhmJr6uiYqquWWYGhHvZgA4ij5qXDHUV2pxc77Q7aaxM2zua3dLA8QbrfsJ7y2mXrtHCdErZHQVQ",
+        "slot": 503662932,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "135512834",
+        "measured_delivered": "135512834",
+        "leg_fee_withheld": "1368817",
+        "destination": "HbFKjt4p7dMvWPBmLPvBhBHne9obD1yZvVntAAzcFwmS",
+        "match": true
+      },
+      "sell": {
+        "signature": "5YHioGGMgrH6Ab2sU9uD71gJLv8mhCDxx71AjjTSQ4qF1sLkjiCnXoP8zUcqo7EmhwdTzgdShKKbb34KEpTY5KLh",
+        "slot": 503662968,
+        "fee_bps_in_force": 100,
+        "leg_in": "136881651",
+        "quoted_delivered": "19701185",
+        "measured_delivered": "19701185",
+        "leg_fee_withheld": "1368817",
+        "match": true
+      }
+    },
+    {
+      "symbol": "KALSHI",
+      "epoch": 1165,
+      "buy": {
+        "signature": "5fLPhSdp1LgvQkNQE559QcMbCreo4ti8Ppem23o75SVwofa7RN7MYg1EGNGntUzRdh6p8F5QR6EzoY29YgzG7HXv",
+        "slot": 503663005,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "22274503",
+        "measured_delivered": "22274503",
+        "leg_fee_withheld": "224995",
+        "destination": "GAg5iyZFBMbU1ZKY29FjL4BoANZdaXQJJLSjnhLjptF5",
+        "match": true
+      },
+      "sell": {
+        "signature": "5ip7TmTouJD9Zk8eSB1CsbPSqFHT7d3RWWuVU27HPDv6FXa6bqjofFbJvpCPgwKT9ybHL8rYuD8wZu7j6bUjzT5K",
+        "slot": 503663040,
+        "fee_bps_in_force": 100,
+        "leg_in": "22499498",
+        "quoted_delivered": "19701239",
+        "measured_delivered": "19701239",
+        "leg_fee_withheld": "224995",
+        "match": true
+      }
+    },
+    {
+      "symbol": "FIGUREAI",
+      "epoch": 1165,
+      "buy": {
+        "signature": "3eS7qP9jeqjZ1uVr3FuVE8dBv3Hg2rxAhWM4RFwWjT6oCkyVrUwwUVJWgaei6GPwoznps8GoYpsjQeBK6MnpTTfc",
+        "slot": 503663073,
+        "fee_bps_in_force": 100,
+        "usdc_in": "20000000",
+        "quoted_delivered": "111645117",
+        "measured_delivered": "111645117",
+        "leg_fee_withheld": "1127729",
+        "destination": "H2AwebqYnSmqzUu7LXd81jywQBCBwn2KjF21wRqEWtKa",
+        "match": true
+      },
+      "sell": {
+        "signature": "28vWGV3TKjeecz4wKtaRYrWcJ499FfWWN4DLmhVQcV8jupXng5EceMS26EsnbmiTsJaKsQxWLCRb6qXeepUMh22J",
+        "slot": 503663134,
+        "fee_bps_in_force": 100,
+        "leg_in": "112772846",
+        "quoted_delivered": "19701242",
+        "measured_delivered": "19701242",
+        "leg_fee_withheld": "1127729",
+        "match": true
+      }
+    }
+  ],
+  "finished_at": "2026-09-24T21:30:35Z",
+  "all_match": true
+}

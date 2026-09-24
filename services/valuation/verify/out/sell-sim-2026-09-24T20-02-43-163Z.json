@@ -1,0 +1,194 @@
+{
+ "check": "sell_now leg vs mainnet simulateTransaction of the quoted route, tolerance ±0.1%",
+ "api": "http://localhost:8905",
+ "basket_as_of": {
+  "slot": 257,
+  "block_time": "2026-09-24T19:59:14Z",
+  "epoch": 4,
+  "mainnet_slot": 450130307,
+  "generated_at": "2026-09-24T20:01:27Z"
+ },
+ "tolerance": 0.001,
+ "legs": [
+  {
+   "index": 0,
+   "symbol": "OPENAI",
+   "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+   "amount_raw": "25568017",
+   "api_out_usdc_raw": "50165402",
+   "api_route": "Meteora DLMM + Whirlpool",
+   "api_quoted_at_slot": 450130314,
+   "simulated_route": "Meteora DLMM + BisonFi",
+   "rebuilt_quote_out_usdc_raw": "50209871",
+   "taker": "D8J5wMyQSfnPohtMdYSz7VEYsH8Uk4DXY5Me8jVc1BsW",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450130875,
+    "err": null,
+    "units": 129673,
+    "usdc_ata": "J6GQFs44FwNXcLEs1AYfAV4Cr721g7pq2ZAKb2cTnfr5",
+    "pre": "221309929532",
+    "post": "221360139403",
+    "delivered": "50209871",
+    "logs_tail": [
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 673445 compute units",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success"
+    ]
+   },
+   "delivered_vs_api": "0.0886%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 1,
+   "symbol": "ANTHROPIC",
+   "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+   "amount_raw": "48232861",
+   "api_out_usdc_raw": "50096202",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450130589,
+   "simulated_route": "Meteora DLMM",
+   "rebuilt_quote_out_usdc_raw": "50041288",
+   "taker": "HkvpFqa3WngHoQcfLttAX4am7Ng8vezF6EEGRSbMsRj9",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450130875,
+    "err": null,
+    "units": 67393,
+    "usdc_ata": "4e4m9Zwi6puaKgX4fYZfkcKMZHVob9GV55FAZBT2TjZR",
+    "pre": "0",
+    "post": "50041288",
+    "delivered": "50041288",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 53826 of 389433 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 yJH7AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "-0.1096%",
+   "within_0_1pct": false
+  },
+  {
+   "index": 2,
+   "symbol": "NEURALINK",
+   "mint": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+   "amount_raw": "115200189",
+   "api_out_usdc_raw": "49703339",
+   "api_route": "Meteora DLMM + BisonFi",
+   "api_quoted_at_slot": 450130322,
+   "simulated_route": "Meteora DLMM + Flux",
+   "rebuilt_quote_out_usdc_raw": "49748197",
+   "taker": "6GJbPKBtovsrMEEMcic5KMi5tswh9qSyT5ZYLMqEwNgt",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450130876,
+    "err": null,
+    "units": 105349,
+    "usdc_ata": "7aCEMELUCEddCTXeDtrC1NuhCeqjCJPZWUvdwbubP9vq",
+    "pre": "309180029092",
+    "post": "309229775224",
+    "delivered": "49746132",
+    "logs_tail": [
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 697769 compute units",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success"
+    ]
+   },
+   "delivered_vs_api": "0.0861%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 3,
+   "symbol": "ANDURIL",
+   "mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+   "amount_raw": "310790198",
+   "api_out_usdc_raw": "49911073",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450130635,
+   "simulated_route": "Meteora DLMM",
+   "rebuilt_quote_out_usdc_raw": "49911073",
+   "taker": "4142rbqBz3a3T7xLwLTiY69AVyJZwQPJ1xjp6vBZDXcS",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450130969,
+    "err": null,
+    "units": 52108,
+    "usdc_ata": "FMvkVMi3HzVqzYjwXrfW4jk5kUxpihFGpkx676SX3k48",
+    "pre": "18390608338",
+    "post": "18440519411",
+    "delivered": "49911073",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 47620 of 398512 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 IZX5AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "0.0000%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 4,
+   "symbol": "POLYMARKET",
+   "mint": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+   "amount_raw": "344151253",
+   "api_out_usdc_raw": "49924898",
+   "api_route": "Meteora DLMM + BisonFi",
+   "api_quoted_at_slot": 450130634,
+   "simulated_route": "Meteora DLMM + BisonFi",
+   "rebuilt_quote_out_usdc_raw": "49927830",
+   "taker": "2sujbbTjp2r5ugbjfHgUNDSwtdVfYpTiCSKPgT84CvD7",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450130970,
+    "err": null,
+    "units": 127130,
+    "usdc_ata": "mxyDfD4Tqbz6i8PMbpS9iwcZyoA54kRqNNPQAfqFxJE",
+    "pre": "5391893173",
+    "post": "5441813520",
+    "delivered": "49920347",
+    "logs_tail": [
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 675988 compute units",
+     "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success"
+    ]
+   },
+   "delivered_vs_api": "-0.0091%",
+   "within_0_1pct": true
+  },
+  {
+   "index": 5,
+   "symbol": "KALSHI",
+   "error": "https://solana-mainnet.gateway.tatum.io HTTP 429"
+  },
+  {
+   "index": 6,
+   "symbol": "FIGUREAI",
+   "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+   "amount_raw": "285704113",
+   "api_out_usdc_raw": "50057393",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450130814,
+   "simulated_route": "Meteora DLMM",
+   "rebuilt_quote_out_usdc_raw": "50057393",
+   "taker": "4GXmM7FwHHHCgQhADfdaMuPJiWtNH5LXeFGxqgvdhuaR",
+   "taker_rebuilt": true,
+   "simulation": {
+    "slot": 450131098,
+    "err": null,
+    "units": 51914,
+    "usdc_ata": "9PdiPSoEtKnZcWYWwfJp7Exvy2TqambaKdEvjkrQhKUg",
+    "pre": "0",
+    "post": "50057393",
+    "delivered": "50057393",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 47426 of 398512 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 sdD7AgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "0.0000%",
+   "within_0_1pct": true
+  }
+ ],
+ "all_ok": false
+}

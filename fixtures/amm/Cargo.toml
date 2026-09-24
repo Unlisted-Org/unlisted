@@ -1,0 +1,16 @@
+[package]
+name = "fixture_amm"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal constant-product pools (fixture USDC <-> fixture legs) used as the basket's devnet router"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+pinocchio = "=0.9.2"
+
+[lints.rust]
+unexpected_cfgs = { level = "allow" }

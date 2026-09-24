@@ -1,0 +1,330 @@
+{
+  "scenario": "hook-switched-on",
+  "cluster": "devnet",
+  "description": "Fixture issuer attaches a transfer-hook program (fixture_hook) to the vault's mint, and later clears it.",
+  "fixture_issuer": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+  "runs": [
+    {
+      "action": "hook-on",
+      "actor": "ops",
+      "note": "window: canonical basket vault",
+      "at": "2026-09-24T22:25:54Z",
+      "target": {
+        "vault": "6hRubtaoRPD9QgXVF4g24F3SnmfU1DP3WvMxWSTAMZPw",
+        "vault_owner": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+        "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+        "symbol": "FIGUREAI",
+        "mirror_of": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+        "standin": false
+      },
+      "steps": [
+        {
+          "step": "set transfer hook -> fixture_hook 5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ + init validation account",
+          "signature": "4voJ5Vc2mLkm3jWSgyr5SckTcVyYD8MYmKotn78Z3ahppsPpbg91wxzro1VHyFMPqMdPMSd9W3MxaQAEs5uVVy7r",
+          "slot": 503683172,
+          "block_time": 1790288749,
+          "block_time_iso": "2026-09-24T22:25:49Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503683145,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:25:45Z",
+        "vault": {
+          "owner": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+          "amount_raw": "571032382",
+          "state": "initialized",
+          "withheld_raw": 5824555
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1281574401028",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503683194,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:25:53Z",
+        "vault": {
+          "owner": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+          "amount_raw": "571032382",
+          "state": "initialized",
+          "withheld_raw": 5824555
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": "5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ",
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1281574401028",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503683151,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "572022382",
+          "vault_withheld_after_raw": 5834555
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503683200,
+          "err": {
+            "InstructionError": [
+              0,
+              "MissingAccount"
+            ]
+          },
+          "error_log": "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: An account required by the instruction is missing",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        }
+      ],
+      "hook_program": "5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ",
+      "validation_account": "HA8Ug1HcpeZG52iJof5EF65YZPnhpB2fdWYpCV9dsc2R",
+      "ok": true
+    },
+    {
+      "action": "hook-off",
+      "actor": "ops",
+      "note": "window: canonical basket vault",
+      "at": "2026-09-24T22:26:06Z",
+      "target": {
+        "vault": "6hRubtaoRPD9QgXVF4g24F3SnmfU1DP3WvMxWSTAMZPw",
+        "vault_owner": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+        "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+        "symbol": "FIGUREAI",
+        "mirror_of": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+        "standin": false
+      },
+      "steps": [
+        {
+          "step": "clear transfer hook (program id None)",
+          "signature": "5zLhSWAskcctZuX1iSDvAxvSUGcuQ3BwtJzinaG1XvQSb5DLh6V5LHqYCRSA3HNKapia6woEzphV1fqBS8bDaHng",
+          "slot": 503683241,
+          "block_time": 1790288760,
+          "block_time_iso": "2026-09-24T22:26:00Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503683220,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:25:58Z",
+        "vault": {
+          "owner": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+          "amount_raw": "571032382",
+          "state": "initialized",
+          "withheld_raw": 5824555
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": "5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ",
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1281574401028",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503683262,
+        "epoch": 1165,
+        "read_at": "2026-09-24T22:26:05Z",
+        "vault": {
+          "owner": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+          "amount_raw": "571032382",
+          "state": "initialized",
+          "withheld_raw": 5824555
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1165
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1281574401028",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503683226,
+          "err": {
+            "InstructionError": [
+              0,
+              "MissingAccount"
+            ]
+          },
+          "error_log": "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: An account required by the instruction is missing",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503683268,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "572022382",
+          "vault_withheld_after_raw": 5834555
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

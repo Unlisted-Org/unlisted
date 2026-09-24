@@ -1,0 +1,70 @@
+{
+ "check": "fixture multiplier change moves display fields only, after the effective time",
+ "cluster": "local",
+ "symbol": "KALSHI",
+ "old": 1,
+ "value": 2,
+ "slots": {
+  "A": 896,
+  "B": 1045,
+  "C": 1162
+ },
+ "effective_at": "2026-09-24T22:47:04.000Z",
+ "checks": [
+  {
+   "what": "B (before effective time): effective multiplier unchanged",
+   "a": "\"1\"",
+   "b": "\"1\"",
+   "ok": true
+  },
+  {
+   "what": "B: per_share_ui unchanged",
+   "a": "\"0.0560478675537\"",
+   "b": "\"0.0560478675537\"",
+   "ok": true
+  },
+  {
+   "what": "B: pending shows the new multiplier",
+   "a": "2",
+   "b": "2",
+   "ok": true
+  },
+  {
+   "what": "B: raw fields and valuation inputs unchanged",
+   "a": "{\"raw\":[\"56776490\",\"56776490\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"56776490\",\"den\":\"1013000003\"},\"sell_amount\":\"56047867\",\"ref_multiplier\":\"1\"}",
+   "b": "{\"raw\":[\"56776490\",\"56776490\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"56776490\",\"den\":\"1013000003\"},\"sell_amount\":\"56047867\",\"ref_multiplier\":\"1\"}",
+   "ok": true
+  },
+  {
+   "what": "C (after effective time): effective == new value",
+   "a": "1",
+   "b": "2",
+   "ok": false
+  },
+  {
+   "what": "C: pending cleared",
+   "a": "null",
+   "b": "null",
+   "ok": true
+  },
+  {
+   "what": "C: per_share_ui scaled by new/old",
+   "a": "1.000000000",
+   "b": "2.000000000",
+   "ok": false
+  },
+  {
+   "what": "C: raw fields and valuation inputs unchanged",
+   "a": "{\"raw\":[\"56776490\",\"56776490\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"56776490\",\"den\":\"1013000003\"},\"sell_amount\":\"56047867\",\"ref_multiplier\":\"1\"}",
+   "b": "{\"raw\":[\"56776490\",\"56776490\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"56776490\",\"den\":\"1013000003\"},\"sell_amount\":\"56047867\",\"ref_multiplier\":\"1\"}",
+   "ok": true
+  },
+  {
+   "what": "C: stored field unchanged (set with a future timestamp)",
+   "a": "\"1\"",
+   "b": "\"1\"",
+   "ok": true
+  }
+ ],
+ "all_ok": false
+}

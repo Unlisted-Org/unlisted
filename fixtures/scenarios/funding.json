@@ -1,0 +1,461 @@
+{
+  "what": "Test wallets funded with fixture USDC and legs by the fixture issuer",
+  "cluster": "devnet",
+  "runs": [
+    {
+      "at": "2026-09-24T21:27:02Z",
+      "actor": "ops for Agent A (canonical basket bootstrap)",
+      "wallet": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "usdc_raw": "10000000000",
+      "sol": 0,
+      "legs": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "account": "CAyJTpMq8K6VviTdUvwPYHUUG9rVLCuNnZGb1UwiDC8U",
+          "raw": "1000000000000",
+          "usd_per_raw": 0.0000019552832153746206
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "account": "3nVeufU9YMDXZZQMaoNrmJqp5jj8u1kYT4kxy8kbbDan",
+          "raw": "1000000000000",
+          "usd_per_raw": 0.000001032794097573809
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "account": "8T8GY3pk294D9QwZWZ2gjQFnS7GSh4Y5dmrGMvnoqWXW",
+          "raw": "1000000000000",
+          "usd_per_raw": 4.222618375244455e-7
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "account": "HKH11tpJue6yACRhtPJxgHLmb1xoNqs67ZQegXBjCvQU",
+          "raw": "1000000000000",
+          "usd_per_raw": 1.6188516510390708e-7
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "account": "AYYGrkBu9jac31YAZDmWfUfQ5oaAsnMhUbhNJ143B1CD",
+          "raw": "1000000000000",
+          "usd_per_raw": 1.4571594687419403e-7
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "account": "DvfDjzAN1XTkjA4vnvNSBGchTjPECsiKBwdBvbhgWAqM",
+          "raw": "1000000000000",
+          "usd_per_raw": 8.863362757492611e-7
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "account": "7zQrgFwcnoVeKM4q9aUDS61JCgagaxkfqdgmAczJDFHR",
+          "raw": "1000000000000",
+          "usd_per_raw": 1.7683322129361356e-7
+        }
+      ],
+      "signatures": [
+        {
+          "step": "fund 10000000000 raw fixture USDC",
+          "signature": "4kqpYg67r234EZ9kqLCcWB7cRBL9TCG31B8SuYU3RYvtSQnJPHZPYCjNA2oLGbhBsk2cLQAcR2Rh32Ljz1F2KKBZ",
+          "slot": 503661851,
+          "block_time": 1790285214,
+          "block_time_iso": "2026-09-24T21:26:54Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3neKNJsqkov8bVwi689KiPVSc9VVhWjYG63gA6KfCh4vo9J3z2QZ1ufHt3kraXeJERnr6vEiexhziWpTfUsJdyGN",
+          "slot": 503661869,
+          "block_time": 1790285217,
+          "block_time_iso": "2026-09-24T21:26:57Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3viXXRtDDyxVyZM8kXhrWxaCFQDzJ9TBcgFTZrqvWk1X5RTs4eMhnHhVV4wXUBAJB6ZJwVSAk6CiVs5WnPww17cT",
+          "slot": 503661886,
+          "block_time": 1790285220,
+          "block_time_iso": "2026-09-24T21:27:00Z",
+          "err": null
+        }
+      ]
+    },
+    {
+      "at": "2026-09-24T21:39:19Z",
+      "actor": "app-e2e",
+      "wallet": "CtcphnqXXmLSaDVcnHNr4mHGy1PPWomywUaLQo8p87K9",
+      "usdc_raw": "50000000",
+      "sol": 0,
+      "legs": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "account": "ArhRY8MshAp2vhrsZ8pJMVFiLDscyeLsRAZZ1x5XMkUB",
+          "raw": "10228639",
+          "usd_per_raw": 0.0000019552942579595706
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "account": "GkmfpQ9FvMXoZayT7hnWPCakE3c3GusfaHw4cabgzHKT",
+          "raw": "19364844",
+          "usd_per_raw": 0.0000010327994359008494
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "account": "2jVG65EonDXF2cUVLSKaaK6qCQbvMNWJevBCjirpjCZi",
+          "raw": "47363008",
+          "usd_per_raw": 4.2227047076407046e-7
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "account": "HRdjfjidfsHxiF82tyESQUo4nZA5CtNmPtAGvSqXuags",
+          "raw": "123543044",
+          "usd_per_raw": 1.618868955328057e-7
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "account": "6uS19zsrJsNVgb4pdUG1ekB4j3w9MVDQWR3DjSWW5BaK",
+          "raw": "137249755",
+          "usd_per_raw": 1.457197494218605e-7
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "account": "2TnT2hs1Tmwsam6RpYHCGqkwvambFEUgKrzhh4BHu2KY",
+          "raw": "22563683",
+          "usd_per_raw": 8.863800808878765e-7
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "account": "3NxNZMk21R2pyimwqfnDXwzjkghNDfTopt7CMNdUwRfq",
+          "raw": "113095234",
+          "usd_per_raw": 1.7684211141325e-7
+        }
+      ],
+      "signatures": [
+        {
+          "step": "fund 50000000 raw fixture USDC",
+          "signature": "UzwaEyEFQMp7VrNvaTvHLVfguJAJw55KPgqYy2a3EK7dFU46TvCe1CqTBvVXab9Z4WEh2HVxxL5X9QYTGnBke8B",
+          "slot": 503664884,
+          "block_time": 1790285717,
+          "block_time_iso": "2026-09-24T21:35:17Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3pCiNPLkHrTAkrifh7b39Cc4ztgzZJS45zMscyh4bqfUDuc6srPA9X97eRBAhyFbGx5kHuim8J3X6H5WUEc2fEt5",
+          "slot": 503664905,
+          "block_time": 1790285720,
+          "block_time_iso": "2026-09-24T21:35:20Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "4KzJqUbYjrkcZY2VVkTiwWBDv9Mszk6gJDVZbiFQYTyxEifaGFm72sVjtvpMPe8apBKyrokcSXcVxr4mShWQG51H",
+          "slot": 503665118,
+          "block_time": 1790285756,
+          "block_time_iso": "2026-09-24T21:35:56Z",
+          "err": null
+        }
+      ]
+    },
+    {
+      "at": "2026-09-24T21:44:39Z",
+      "actor": "app-e2e",
+      "wallet": "G79a2Aqxp48yyTNugmrUFGga9dfKYUx4bSgjv2hXrFme",
+      "usdc_raw": "50000000",
+      "sol": 0,
+      "legs": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "account": "B92C2nWzqkMkjxtjNNy8Fb9K7rE4iDCvQ6VwBatG5VUm",
+          "raw": "10228639",
+          "usd_per_raw": 0.0000019552942579595706
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "account": "9Fp5NtEKgx3P9bX6mPafGsj8QZCqBrwR3T9WSFWYriwv",
+          "raw": "19364844",
+          "usd_per_raw": 0.0000010327994359008494
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "account": "GHDbXRTx58otLbJtgrgBsQ8EggMgdxMcQiCKQ8movjkV",
+          "raw": "47363008",
+          "usd_per_raw": 4.2227047076407046e-7
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "account": "EvuW61AvfobpAJVeZumRy4kek2yjX3DDnf6BA92Eu1ii",
+          "raw": "123543044",
+          "usd_per_raw": 1.618868955328057e-7
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "account": "6hmKbYs2Vq8Xmv8a3aZiTMXNdx9m4Av72xUGExzVgtGd",
+          "raw": "137249755",
+          "usd_per_raw": 1.457197494218605e-7
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "account": "FBFxDexpVhEDm5qUbLkjbvK9HA28zG3EMTdmz7eM6bVZ",
+          "raw": "22563683",
+          "usd_per_raw": 8.863800808878765e-7
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "account": "CWRgZk4VfJUYctH6dr6mmVDy6HDei6CE97PfwicdddSH",
+          "raw": "113095234",
+          "usd_per_raw": 1.7684211141325e-7
+        }
+      ],
+      "signatures": [
+        {
+          "step": "fund 50000000 raw fixture USDC",
+          "signature": "3A8sCxLqLS7ezFG375Gsqyo8ytr9eLb5HymTeTqjsE1Ji4Gzc7mUhcokcruHa7V6fymEDNfm5MA2RZnn4GrdYmJ9",
+          "slot": 503668125,
+          "block_time": 1790286253,
+          "block_time_iso": "2026-09-24T21:44:13Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "2musx3VrhyYtQQq8v4mi27nGPM1cFQd8FXRvBzPxcEm3HGrkPvivNYoP392m3ac1aYu9S5W9rpiwPKfEGN41bJCr",
+          "slot": 503668243,
+          "block_time": 1790286273,
+          "block_time_iso": "2026-09-24T21:44:33Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "4yTXwQEZ2rKdKRJENHj9q8NBC3Cfb3sryAVrmnd3pHeRjSTJeFjYes2444Kc5CsUc1sjVQxs7AMY4zU7TWgwLf8a",
+          "slot": 503668258,
+          "block_time": 1790286276,
+          "block_time_iso": "2026-09-24T21:44:36Z",
+          "err": null
+        }
+      ]
+    },
+    {
+      "at": "2026-09-24T21:53:21Z",
+      "actor": "app-e2e",
+      "wallet": "6ezsfwjxXBNKKUT6ugSSK2EjRfJB5irWEHDq62UsRoY6",
+      "usdc_raw": "50000000",
+      "sol": 0,
+      "legs": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "account": "6vbhGHoYLAXnBXWfYWyDAd4tTz9viPZiJrj13oz5K1Tt",
+          "raw": "10228639",
+          "usd_per_raw": 0.0000019552942579595706
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "account": "2ykS5e51HLu22EzjWhKNYEGBYQAWK9N8iAKMb9fkWwna",
+          "raw": "19364844",
+          "usd_per_raw": 0.0000010327994359008494
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "account": "AEfWCqaVr1B5JaEPiZECR4o6x2UX3veHTGLxeFGQKSLj",
+          "raw": "47363008",
+          "usd_per_raw": 4.2227047076407046e-7
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "account": "AQTSukHspesnDt3QRYwWPREMPhu34qUBi2dzmv6PrrWM",
+          "raw": "123543044",
+          "usd_per_raw": 1.618868955328057e-7
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "account": "5MbPK776wSU4pJ9GxEMVY1dFiQRh2LPDcSAda2rCWaLW",
+          "raw": "137249755",
+          "usd_per_raw": 1.457197494218605e-7
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "account": "AmsbewrVC9QTyAT5tuaXKx5bYbwSQT4puAHUymG4pAEr",
+          "raw": "22563683",
+          "usd_per_raw": 8.863800808878765e-7
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "account": "BSBgu363DT5Y2LCsD3d32EEtyhQnFdvX8ScMHyz6E8E5",
+          "raw": "113095234",
+          "usd_per_raw": 1.7684211141325e-7
+        }
+      ],
+      "signatures": [
+        {
+          "step": "fund 50000000 raw fixture USDC",
+          "signature": "hqNGrjn9vNE1SrSRLxG8so1Yc84UgCYvAUX5WyZhQqc15iwwPc314hjNBjTUh1ejA3tK8vb8uwqBpMysi2pvNzR",
+          "slot": 503671348,
+          "block_time": 1790286789,
+          "block_time_iso": "2026-09-24T21:53:09Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "5RFmKL9v4QAKRvSPfRosFUxhTZidL6x4mjuKq6QwUkGMhozVWzmqKHhzYNMU1sTnNxcKE4dYSGT5ka5JdrHmSo8P",
+          "slot": 503671384,
+          "block_time": 1790286795,
+          "block_time_iso": "2026-09-24T21:53:15Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "UjFc25Ju8tZLSbKdqzoFPopVkZz1ye2XW9dFTxrnE7ANQPfku9rLMi7aDoNJGKDyVmeLtZ4jV8ZcaUuUuwvYWep",
+          "slot": 503671403,
+          "block_time": 1790286798,
+          "block_time_iso": "2026-09-24T21:53:18Z",
+          "err": null
+        }
+      ]
+    },
+    {
+      "at": "2026-09-24T22:40:03Z",
+      "actor": "app-e2e",
+      "wallet": "Ctfc3hxPoMUhpeRkietjRQKeFueJmNfAF9FevBxwPixj",
+      "usdc_raw": "50000000",
+      "sol": 0,
+      "legs": [
+        {
+          "index": 0,
+          "symbol": "OPENAI",
+          "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+          "account": "7R9U8ALixbbpiGiUnGtCQkTFwJbHGqb2R2s9RRVVowtz",
+          "raw": "10228639",
+          "usd_per_raw": 0.0000019552942579595706
+        },
+        {
+          "index": 1,
+          "symbol": "ANTHROPIC",
+          "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+          "account": "Af6ELBPkYuoLYRFqNsYzKTLjshtqNLLsbQqJ7ZLBoxzk",
+          "raw": "19364844",
+          "usd_per_raw": 0.0000010327994359008494
+        },
+        {
+          "index": 2,
+          "symbol": "NEURALINK",
+          "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+          "account": "4veTBVxHoKpZrULsWbh2By9xr9svNuo1xDvzfYNPQeVh",
+          "raw": "47363008",
+          "usd_per_raw": 4.2227047076407046e-7
+        },
+        {
+          "index": 3,
+          "symbol": "ANDURIL",
+          "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+          "account": "E2D4CZZgP4H6mHQfgrWADmkRsHxzUqLZVpnq3aYBSG5C",
+          "raw": "123543044",
+          "usd_per_raw": 1.618868955328057e-7
+        },
+        {
+          "index": 4,
+          "symbol": "POLYMARKET",
+          "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+          "account": "EHzL53CKYUWDbvW3MFB4cywF6LrPURxX9pAiAYWS4fA",
+          "raw": "137249755",
+          "usd_per_raw": 1.457197494218605e-7
+        },
+        {
+          "index": 5,
+          "symbol": "KALSHI",
+          "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+          "account": "5pDjEfU1M3MpRd3GxcsJbQcAZNk2nwuW87ryGnQcF9o2",
+          "raw": "22563683",
+          "usd_per_raw": 8.863800808878765e-7
+        },
+        {
+          "index": 6,
+          "symbol": "FIGUREAI",
+          "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+          "account": "B2SWcU2VsPaLVo8WnVKVNUmV4Sm5dcBM7AA3BGLQ3R6H",
+          "raw": "113095234",
+          "usd_per_raw": 1.7684211141325e-7
+        }
+      ],
+      "signatures": [
+        {
+          "step": "fund 50000000 raw fixture USDC",
+          "signature": "5jo93LYtXumPKK4QYwc41mFGRNnWetjK8CjgokrPau3vKT2hFKRp2yMuJGugeseutmQCFhAF5g49ZGzX3BaBMdAD",
+          "slot": 503688204,
+          "block_time": 1790289584,
+          "block_time_iso": "2026-09-24T22:39:44Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3dEDaWN4bA6ZPpCyc4HV6rtJVfKc6E9Jt2a34u5roahziwWmBZX4TnZWcTSMVDiE2t5649DQ7qbw8dimChKRVqCp",
+          "slot": 503688234,
+          "block_time": 1790289589,
+          "block_time_iso": "2026-09-24T22:39:49Z",
+          "err": null
+        },
+        {
+          "step": "fund fixture legs (mint_to)",
+          "signature": "3BaoyGRDv76XJELbqgzdzUECeKwjMsa7mVCz3UEoCcCnJXbsBWWGcxRuGKEgrtQfRUmLP66NHKxBKEXTYXohnpcu",
+          "slot": 503688300,
+          "block_time": 1790289600,
+          "block_time_iso": "2026-09-24T22:40:00Z",
+          "err": null
+        }
+      ]
+    }
+  ]
+}

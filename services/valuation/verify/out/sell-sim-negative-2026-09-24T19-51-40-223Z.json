@@ -1,0 +1,217 @@
+{
+ "check": "NEGATIVE CONTROL: Manifest-allowed quote vs its own simulation",
+ "api": "http://localhost:8905",
+ "basket_as_of": {
+  "slot": 2721,
+  "block_time": "2026-09-24T19:51:02Z",
+  "epoch": 42,
+  "mainnet_slot": 450128494,
+  "generated_at": "2026-09-24T19:51:21Z"
+ },
+ "tolerance": 0.001,
+ "legs": [
+  {
+   "index": 0,
+   "symbol": "OPENAI",
+   "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+   "amount_raw": "25141186",
+   "api_out_usdc_raw": "49452837",
+   "api_route": "Meteora DLMM + Flux",
+   "api_quoted_at_slot": 450128499,
+   "simulated_route": "Manifest",
+   "rebuilt_quote_out_usdc_raw": "49767245",
+   "taker": "D8J5wMyQSfnPohtMdYSz7VEYsH8Uk4DXY5Me8jVc1BsW",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450128564,
+    "err": {
+     "InstructionError": [
+      2,
+      {
+       "Custom": 6001
+      }
+     ]
+    },
+    "units": 30411,
+    "usdc_ata": "J6GQFs44FwNXcLEs1AYfAV4Cr721g7pq2ZAKb2cTnfr5",
+    "pre": "221309929532",
+    "post": null,
+    "delivered": null,
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 22923 of 395512 compute units",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 failed: custom program error: 0x1771"
+    ]
+   },
+   "delivered_vs_api": null,
+   "within_0_1pct": false
+  },
+  {
+   "index": 1,
+   "symbol": "ANTHROPIC",
+   "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+   "amount_raw": "48134343",
+   "api_out_usdc_raw": "49994217",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450128498,
+   "simulated_route": "Manifest + Kipseli",
+   "rebuilt_quote_out_usdc_raw": "50520039",
+   "taker": "HkvpFqa3WngHoQcfLttAX4am7Ng8vezF6EEGRSbMsRj9",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450128565,
+    "err": {
+     "InstructionError": [
+      3,
+      {
+       "Custom": 6001
+      }
+     ]
+    },
+    "units": 104178,
+    "usdc_ata": "4e4m9Zwi6puaKgX4fYZfkcKMZHVob9GV55FAZBT2TjZR",
+    "pre": "0",
+    "post": null,
+    "delivered": null,
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 77198 of 776020 compute units",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 failed: custom program error: 0x1771"
+    ]
+   },
+   "delivered_vs_api": null,
+   "within_0_1pct": false
+  },
+  {
+   "index": 2,
+   "symbol": "NEURALINK",
+   "mint": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+   "amount_raw": "112591504",
+   "api_out_usdc_raw": "48706854",
+   "api_route": "Meteora DLMM + BisonFi",
+   "api_quoted_at_slot": 450128499,
+   "simulated_route": "Manifest",
+   "rebuilt_quote_out_usdc_raw": "49327467",
+   "taker": "6GJbPKBtovsrMEEMcic5KMi5tswh9qSyT5ZYLMqEwNgt",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450128627,
+    "err": {
+     "InstructionError": [
+      2,
+      {
+       "Custom": 6001
+      }
+     ]
+    },
+    "units": 27113,
+    "usdc_ata": "7aCEMELUCEddCTXeDtrC1NuhCeqjCJPZWUvdwbubP9vq",
+    "pre": "309180029092",
+    "post": null,
+    "delivered": null,
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 22625 of 398512 compute units",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 failed: custom program error: 0x1771"
+    ]
+   },
+   "delivered_vs_api": null,
+   "within_0_1pct": false
+  },
+  {
+   "index": 3,
+   "symbol": "ANDURIL",
+   "mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+   "amount_raw": "302165726",
+   "api_out_usdc_raw": "48593383",
+   "api_route": "Meteora DLMM + BisonFi",
+   "api_quoted_at_slot": 450128499,
+   "simulated_route": "Manifest",
+   "rebuilt_quote_out_usdc_raw": "49113822",
+   "taker": "4142rbqBz3a3T7xLwLTiY69AVyJZwQPJ1xjp6vBZDXcS",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450128627,
+    "err": null,
+    "units": 27238,
+    "usdc_ata": "FMvkVMi3HzVqzYjwXrfW4jk5kUxpihFGpkx676SX3k48",
+    "pre": "18390608338",
+    "post": "18439231022",
+    "delivered": "48622684",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 22750 of 398512 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 XOzlAgAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "-1.0000%",
+   "within_0_1pct": false
+  },
+  {
+   "index": 5,
+   "symbol": "KALSHI",
+   "mint": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+   "amount_raw": "56661906",
+   "api_out_usdc_raw": "49156239",
+   "api_route": "Meteora DLMM + BisonFi",
+   "api_quoted_at_slot": 450128500,
+   "simulated_route": "Manifest",
+   "rebuilt_quote_out_usdc_raw": "49640698",
+   "taker": "2sujbbTjp2r5ugbjfHgUNDSwtdVfYpTiCSKPgT84CvD7",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450128630,
+    "err": {
+     "InstructionError": [
+      2,
+      {
+       "Custom": 6001
+      }
+     ]
+    },
+    "units": 28472,
+    "usdc_ata": "mxyDfD4Tqbz6i8PMbpS9iwcZyoA54kRqNNPQAfqFxJE",
+    "pre": "5391893173",
+    "post": null,
+    "delivered": null,
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 22484 of 397012 compute units",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 failed: custom program error: 0x1771"
+    ]
+   },
+   "delivered_vs_api": null,
+   "within_0_1pct": false
+  },
+  {
+   "index": 6,
+   "symbol": "FIGUREAI",
+   "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+   "amount_raw": "293415209",
+   "api_out_usdc_raw": "51349413",
+   "api_route": "Meteora DLMM",
+   "api_quoted_at_slot": 450128562,
+   "simulated_route": "Manifest",
+   "rebuilt_quote_out_usdc_raw": "51878467",
+   "taker": "4GXmM7FwHHHCgQhADfdaMuPJiWtNH5LXeFGxqgvdhuaR",
+   "taker_rebuilt": false,
+   "simulation": {
+    "slot": 450128631,
+    "err": null,
+    "units": 27072,
+    "usdc_ata": "9PdiPSoEtKnZcWYWwfJp7Exvy2TqambaKdEvjkrQhKUg",
+    "pre": "0",
+    "post": "51359683",
+    "delivered": "51359683",
+    "logs_tail": [
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 consumed 22584 of 398512 compute units",
+     "Program return: JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 w68PAwAAAAA=",
+     "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 success"
+    ]
+   },
+   "delivered_vs_api": "-1.0000%",
+   "within_0_1pct": false
+  }
+ ],
+ "all_ok": false
+}

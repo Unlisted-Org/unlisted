@@ -1,0 +1,16 @@
+[package]
+name = "cpi_probe"
+version = "0.1.0"
+edition = "2021"
+description = "LOCAL TEST ONLY: forwards opaque instruction data to a router with a PDA taker, like the basket does"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+pinocchio = "=0.9.2"
+
+[lints.rust]
+unexpected_cfgs = { level = "allow" }

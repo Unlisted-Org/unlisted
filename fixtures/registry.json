@@ -1,0 +1,1011 @@
+{
+  "schema": 1,
+  "cluster": "devnet",
+  "fixture_issuer": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+  "token_2022_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+  "legs": [
+    {
+      "index": 0,
+      "symbol": "OPENAI",
+      "mirror_of": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450146037,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1.4861347",
+        "multiplier_new_ts": 1784305800
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "h7w27c7eT7xbZUZBaG36SAaNPKhMsjvKso1Tq8nR3M8AeNnPBukkTdzhwXTYze195WBMoVXkdfVT8iZxwoQLQWF",
+          "slot": 503655552,
+          "block_time": 1790284168,
+          "block_time_iso": "2026-09-24T21:09:28Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) initializeTokenMetadata",
+          "signature": "3vNCiC3YSDs5oTtrwK8x4Lu2ooKTAEhnNzU1Pz9ve6LzgYfpNyvm6vQ3qpvdtFKNnLxjp422PXwybEkdWVRk7AHB",
+          "slot": 503655686,
+          "block_time": 1790284190,
+          "block_time_iso": "2026-09-24T21:09:50Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) setTransferFee",
+          "signature": "5aUMxFidK5B3vwhRg1duSQMRtJUo7mQfpi8ZBUFNjdFRBFKZ9cYr3khxwgHykSu5ctVW51qMr77NRbddzMLaeVkV",
+          "slot": 503655693,
+          "block_time": 1790284191,
+          "block_time_iso": "2026-09-24T21:09:51Z",
+          "err": null
+        },
+        {
+          "step": "UpdateMultiplier 1.4861347 at 1790284512 (mainnet newMultiplier; stored field left as mainnet's)",
+          "signature": "47xsh7Zjmod3VUFzd9a8E9x6xGDNDNxk79AF1sGAm5MhzFQPLsVrMc1XWzibvUGZcag1NRMuprp8HMitx26FqCFA",
+          "slot": 503657928,
+          "block_time": 1790284564,
+          "block_time_iso": "2026-09-24T21:16:04Z",
+          "err": null
+        },
+        {
+          "step": "repair: UpdateMultiplier 1 at 0 (restore stored field) [landed; recorded afterwards: the poller timed out under RPC rate limits]",
+          "signature": "2uuV9aN1tN2gLi3TFv9YTdzA39bQP6xdeYPCFDDoVRsiCKQWM8zux6TWTkVru7UsZrSTEnwxspsaiYu2svnEcpWj",
+          "slot": 503659140,
+          "block_time": 1790284764,
+          "block_time_iso": "2026-09-24T21:19:24Z",
+          "err": null
+        },
+        {
+          "step": "repair: UpdateMultiplier 1 at 0 (restore stored field)",
+          "signature": "4khb9X71Xj6tNr3HhvH2HPJveevfAK8jR4hxi3DeqGeRtnNM7BehbAVwo9Dtd5TaNocYVGCu42VHyGF9tfLpRtUn",
+          "slot": 503659800,
+          "block_time": 1790284873,
+          "block_time_iso": "2026-09-24T21:21:13Z",
+          "err": null
+        },
+        {
+          "step": "repair: UpdateMultiplier 1.4861347 at 1790285056 (stored field left as mainnet's)",
+          "signature": "2xHEyKL8xgXBtXLz7S2z8MhHcCFYNv5umrs4isbfgz2caEsz2Gr6tbGYZ1Hoys6vp19UqfGrd5bNcALbULw8RDvh",
+          "slot": 503659818,
+          "block_time": 1790284876,
+          "block_time_iso": "2026-09-24T21:21:16Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "5S1QcB171hhaZJWXTu5U1TAjaDukx3UpvTVTCGCXKdJpzQmXAoupGeRi3gksiJTxRG1ov7VSQQcVLSVgCgwRwhVd",
+          "slot": 503661011,
+          "block_time": 1790285074,
+          "block_time_iso": "2026-09-24T21:24:34Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "5Q3doqTwc7WfP55sUFy5K2sqQPR6tdNn69DVRGnJvqL443nguTgzLx5GSWY497RixF98xhYhU4uBFyJ6s6oWwuo7",
+          "slot": 503661027,
+          "block_time": 1790285077,
+          "block_time_iso": "2026-09-24T21:24:37Z",
+          "err": null
+        }
+      ],
+      "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+      "complete": true
+    },
+    {
+      "index": 1,
+      "symbol": "ANTHROPIC",
+      "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450146574,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1",
+        "multiplier_new_ts": 0
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "gAtAi5z9D1NfRKuVD2Ac3fpMid5HwgDGhtUXBt92UA6DWh1J7GqsEjpy3b1YdTHtBvGZjUQxASSsQQnBsTLptjN",
+          "slot": 503656411,
+          "block_time": 1790284311,
+          "block_time_iso": "2026-09-24T21:11:51Z",
+          "err": null
+        },
+        {
+          "step": "initialize-metadata",
+          "signature": "45Mgng2WJPR8azCyW38Tr1nDSH923UfEmUxnC4pPoHy75vWGecSeRmxMgdJwLPWisJ3qBQmFhtEPRZSk4fMLkrfV",
+          "slot": 503657363,
+          "block_time": 1790284470,
+          "block_time_iso": "2026-09-24T21:14:30Z",
+          "err": null
+        },
+        {
+          "step": "SetTransferFee 100->300 bps, maximumFee 18446744073709551615 (mirrors mainnet pending change, effective mainnet epoch 1043)",
+          "signature": "3VaHN5C41kD6ffH3oVvuzfSjLi99ooUSgSvrPJ6CTS9dffyYvdb61q5TaXMiXt6PxuaaGHUCvDKAYno4XCewfk8v",
+          "slot": 503657372,
+          "block_time": 1790284471,
+          "block_time_iso": "2026-09-24T21:14:31Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "57Y4GW9fz6BUVandwZcifEQfvcZ5X8ak94uoMrvnn7XL5Mq9HTCRHfQgGXSFwkRjUtnNmRvKRWVzXdm8zKyqVacW",
+          "slot": 503661047,
+          "block_time": 1790285080,
+          "block_time_iso": "2026-09-24T21:24:40Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "KaUVD3sZMzmFTNGrAzgXjPhA72LPSZabL8b6uWLVJ8BW88CGaH2hjvG69bcoRWpD7Nj88TbQAF9hnjZmWZjLZMd",
+          "slot": 503661065,
+          "block_time": 1790285083,
+          "block_time_iso": "2026-09-24T21:24:43Z",
+          "err": null
+        }
+      ],
+      "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+      "complete": true
+    },
+    {
+      "index": 2,
+      "symbol": "NEURALINK",
+      "mirror_of": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450147019,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1",
+        "multiplier_new_ts": 0
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "4r5owJPuuNYckHYvrT8uHW1miTwSzHU1bVKcps5iBkC9RV8s4qz3ghonp8CCsfVNigtjcW82CKXXDrGtAaHpPxKJ",
+          "slot": 503657388,
+          "block_time": 1790284474,
+          "block_time_iso": "2026-09-24T21:14:34Z",
+          "err": null
+        },
+        {
+          "step": "initialize-metadata",
+          "signature": "5Bd1wLSUYwdtDnPh4EhjzJ6Ldc4VvMqDHoGZuWPbtvUjBsiYUT3XKeWNh15NsGsfcz38RURQFEsuNTVVYgPRt2GC",
+          "slot": 503657459,
+          "block_time": 1790284486,
+          "block_time_iso": "2026-09-24T21:14:46Z",
+          "err": null
+        },
+        {
+          "step": "SetTransferFee 100->300 bps, maximumFee 18446744073709551615 (mirrors mainnet pending change, effective mainnet epoch 1043)",
+          "signature": "4euNxJjcE1SkdwXU2WonZuTFeXkK6GDZ3FNfuituJhcAVdm78NsiNQBouA7Yoz2TErxzDUPS5ZniHcwBjMG1pGF3",
+          "slot": 503657465,
+          "block_time": 1790284487,
+          "block_time_iso": "2026-09-24T21:14:47Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "4ypURHbgJtpTe8741cuC2wAdPcgasEC62qfQTV4iopTqPRurZsMjTeZvQBGYnkXGUBsCaRDcV8puLSzBAMrJZsWx",
+          "slot": 503661083,
+          "block_time": 1790285085,
+          "block_time_iso": "2026-09-24T21:24:45Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "2T6utnAC7kbW2ovxKtTSKR9aZnhuyfHeZeq1dvvyJ4g3ck3E6K9FsTXpodbCuwDR6ntvCDfUTqNN4nT8yD19pshM",
+          "slot": 503661102,
+          "block_time": 1790285088,
+          "block_time_iso": "2026-09-24T21:24:48Z",
+          "err": null
+        }
+      ],
+      "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+      "complete": true
+    },
+    {
+      "index": 3,
+      "symbol": "ANDURIL",
+      "mirror_of": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450147019,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1",
+        "multiplier_new_ts": 0
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "5YUY3s76PYEUTFJ529wbAFFVTQp4Vr8EqJtcnHjZHcXMprYXTNbC7GbyWPoNPbD2au2cd5DEE3dgaBwpxVsiKeWX",
+          "slot": 503657484,
+          "block_time": 1790284490,
+          "block_time_iso": "2026-09-24T21:14:50Z",
+          "err": null
+        },
+        {
+          "step": "initialize-metadata",
+          "signature": "3PtbTCosLeV891aFnLMRgvNVfcX6fXB7UUW4g84c1hm4NcvbZdvtSDZwyiTAM72QsfwXJU5PtkvognTmwZqc4nET",
+          "slot": 503657556,
+          "block_time": 1790284502,
+          "block_time_iso": "2026-09-24T21:15:02Z",
+          "err": null
+        },
+        {
+          "step": "SetTransferFee 100->300 bps, maximumFee 18446744073709551615 (mirrors mainnet pending change, effective mainnet epoch 1043)",
+          "signature": "5iDS1Wgwqi1cQGMGEfUwYqkvxzDeBUQWMM6NirQNjAPnfXrh25i663u1zLjQjKvzA6ecrcYT1BSCih99rHvwTeNA",
+          "slot": 503657562,
+          "block_time": 1790284503,
+          "block_time_iso": "2026-09-24T21:15:03Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "5hdHWmREbXVDXLdgwpu4D76f5U2KF5EVQ5Z1f7b5Lf5sKr43xJbQcTdZ6wbyZabsewQWo1dvDC6LAW14hyEu9uAG",
+          "slot": 503661119,
+          "block_time": 1790285091,
+          "block_time_iso": "2026-09-24T21:24:51Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "4kZqDmbAZ7Uc7FPbr8UCZS1XV9kR8LRQTCUDAgqZu6RXKTd5vvJZcvF7FjCZNVg4dCcVT8FU1Z2ALH2tFqyysEuV",
+          "slot": 503661137,
+          "block_time": 1790285094,
+          "block_time_iso": "2026-09-24T21:24:54Z",
+          "err": null
+        }
+      ],
+      "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+      "complete": true
+    },
+    {
+      "index": 4,
+      "symbol": "POLYMARKET",
+      "mirror_of": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450147019,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1",
+        "multiplier_new_ts": 0
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "mJgbEpRWXXF61i2VSn4UFUdnsu9yJQtKu44S4Wd82f5gnqN2qKz5ZGsKh6ZAWcrQhvtTq1PzxZoMCWSN3p5FkrD",
+          "slot": 503657634,
+          "block_time": 1790284515,
+          "block_time_iso": "2026-09-24T21:15:15Z",
+          "err": null
+        },
+        {
+          "step": "initialize-metadata",
+          "signature": "3cccPRXxuWUAPYvATcKBfFgiNwCTXX2tAg6MHhqXGZVXSnbdksxK9qAmMkGHAGbcJyX6xhyAnGMdWWFirJH2XPe9",
+          "slot": 503657708,
+          "block_time": 1790284527,
+          "block_time_iso": "2026-09-24T21:15:27Z",
+          "err": null
+        },
+        {
+          "step": "SetTransferFee 100->300 bps, maximumFee 18446744073709551615 (mirrors mainnet pending change, effective mainnet epoch 1043)",
+          "signature": "3xSRduz48bqX3KMunWwWin9v6KR69EhPGzrYvSRzFpiZ86j8nXM1PFo2SDsmBCNXVaEzZiFzx9GhppTQcZR9efgG",
+          "slot": 503657715,
+          "block_time": 1790284528,
+          "block_time_iso": "2026-09-24T21:15:28Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "2z4hDN9AWL2QN1Bvsjetv48kSEWmojPmJ3Sm1S2A6vtzRuCQA9ZaoBtPLmMCNAm91buX6XB7qF4qdupHuVq3xQch",
+          "slot": 503661155,
+          "block_time": 1790285097,
+          "block_time_iso": "2026-09-24T21:24:57Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "3KNT1MRPE8PBt41dLaU3J28c7ismscNxZDiij8814H31866YFgNspfgV5iXdypHxheBmkRd3tTf38wwuF3Gpxp9u",
+          "slot": 503661176,
+          "block_time": 1790285101,
+          "block_time_iso": "2026-09-24T21:25:01Z",
+          "err": null
+        }
+      ],
+      "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+      "complete": true
+    },
+    {
+      "index": 5,
+      "symbol": "KALSHI",
+      "mirror_of": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450147019,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1",
+        "multiplier_new_ts": 0
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "3LECd7iV5b9yGedoHbSMBxbndbByQ4uwLMnnVTF1Yi7uh8dWXZDzSMu3DXv4bR46rsr1jcCMKHRPnecqLKnkgL2s",
+          "slot": 503657734,
+          "block_time": 1790284531,
+          "block_time_iso": "2026-09-24T21:15:31Z",
+          "err": null
+        },
+        {
+          "step": "initialize-metadata",
+          "signature": "4LDb8mxmRCkdR35uQE5PB86ReiBAUetvaCU9NsASyuKRdU3oh1x7VxDW6ubk2Ug7EyrZjbrQEnVJnZHAVEfMB5fE",
+          "slot": 503657805,
+          "block_time": 1790284543,
+          "block_time_iso": "2026-09-24T21:15:43Z",
+          "err": null
+        },
+        {
+          "step": "SetTransferFee 100->300 bps, maximumFee 18446744073709551615 (mirrors mainnet pending change, effective mainnet epoch 1043)",
+          "signature": "Jot1R4vadNpFPC5JtS8boATqNNouGnKVJcyVyS8DW8zxJYhqDHrTjcpKTC7thbyrD4MYxA1oFoZEwqV7ogBLqSZ",
+          "slot": 503657814,
+          "block_time": 1790284545,
+          "block_time_iso": "2026-09-24T21:15:45Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "3VZgVGJHSB7hA77hUDk2r2DtHuhBdLi2UYDrxcdK78r4j9EESX5ASGXy657T9i9WoWismk3JJaKxhp7fmwc3thuf",
+          "slot": 503661193,
+          "block_time": 1790285104,
+          "block_time_iso": "2026-09-24T21:25:04Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "5C9dbmj5fCqbizyfykk9G9CpmAQXrYtMxSDXjYSB427EqjJSetudxDR4U5ZzztXdzNEEDqjA1X3hPFCSVadfbmny",
+          "slot": 503661211,
+          "block_time": 1790285106,
+          "block_time_iso": "2026-09-24T21:25:06Z",
+          "err": null
+        }
+      ],
+      "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+      "complete": true
+    },
+    {
+      "index": 6,
+      "symbol": "FIGUREAI",
+      "mirror_of": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+      "decimals": 9,
+      "token_program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "mirrored_at_mainnet_slot": 450147019,
+      "mirrored": {
+        "fee_now_bps": 100,
+        "fee_pending": {
+          "bps": 300,
+          "maximum_fee": "18446744073709551615",
+          "effective_epoch": 1043
+        },
+        "multiplier_stored": "1",
+        "multiplier_new": "1",
+        "multiplier_new_ts": 0
+      },
+      "signatures": [
+        {
+          "step": "create-token",
+          "signature": "3emkjpZwuv3nDuJzQkU22r98yHLxDcEewTQAT18da3cUrPhx8U8QYbdVSXzXgCCpCfU3ZMmQaagBbQCMkijgjjTz",
+          "slot": 503657891,
+          "block_time": 1790284558,
+          "block_time_iso": "2026-09-24T21:15:58Z",
+          "err": null
+        },
+        {
+          "step": "initialize-metadata",
+          "signature": "5BPBkvvDzMsxnqbxuC8wz56YU9SJz1ScmDxUHFTV7oHgtawwRu1bbeHBQtmnZU8vpNTmzxNMaP5apH3FYc7ef4dp",
+          "slot": 503657905,
+          "block_time": 1790284560,
+          "block_time_iso": "2026-09-24T21:16:00Z",
+          "err": null
+        },
+        {
+          "step": "SetTransferFee 100->300 bps, maximumFee 18446744073709551615 (mirrors mainnet pending change, effective mainnet epoch 1043)",
+          "signature": "2E96jXz4kk6vbEQjh8LwK2AYifUgEDWtCKwVVZ8uZFhSs3iJoZHgL3RfgiwMuyfrgUNL56iAiMqGBaJtsuYy8B3q",
+          "slot": 503657913,
+          "block_time": 1790284561,
+          "block_time_iso": "2026-09-24T21:16:01Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+          "signature": "3nL1jgFFDRGccPwHJ9AjUG8WR9zAG9RJ6K29wBpz5muSysUYXp3R8x1Tb7iViAGx9LtGJd8ViHp3HcD9wCHS7xqh",
+          "slot": 503661228,
+          "block_time": 1790285109,
+          "block_time_iso": "2026-09-24T21:25:09Z",
+          "err": null
+        },
+        {
+          "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+          "signature": "2RgcRBBcmNeQxK4JroWvGKZ6WkCZzyXMJ9csU1Lh6pmk7oVybxHCyp48xRBN6KgBJ7YGY6uMKAkMevTECKotSjUk",
+          "slot": 503661246,
+          "block_time": 1790285112,
+          "block_time_iso": "2026-09-24T21:25:12Z",
+          "err": null
+        }
+      ],
+      "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+      "complete": true
+    }
+  ],
+  "usdc": {
+    "mint": "5qD6fWLePJ8MiFDa3er38G76RHY53VatQUNZRm7i8M15",
+    "decimals": 6,
+    "token_program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "mirror_of": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+    "signatures": [
+      {
+        "step": "create-token (fixture USDC, classic SPL)",
+        "signature": "3Wb4XNm19WZcsqtCTUnddLmBrGQsqxxJjP1z6CgzKnai4ckUkPdRAzTBKXcsKDMsnmCfRrfwQCiZNPhwRrWE22Ra",
+        "slot": 503657995,
+        "block_time": 1790284575,
+        "block_time_iso": "2026-09-24T21:16:15Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "5S1QcB171hhaZJWXTu5U1TAjaDukx3UpvTVTCGCXKdJpzQmXAoupGeRi3gksiJTxRG1ov7VSQQcVLSVgCgwRwhVd",
+        "slot": 503661011,
+        "block_time": 1790285074,
+        "block_time_iso": "2026-09-24T21:24:34Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "5Q3doqTwc7WfP55sUFy5K2sqQPR6tdNn69DVRGnJvqL443nguTgzLx5GSWY497RixF98xhYhU4uBFyJ6s6oWwuo7",
+        "slot": 503661027,
+        "block_time": 1790285077,
+        "block_time_iso": "2026-09-24T21:24:37Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "57Y4GW9fz6BUVandwZcifEQfvcZ5X8ak94uoMrvnn7XL5Mq9HTCRHfQgGXSFwkRjUtnNmRvKRWVzXdm8zKyqVacW",
+        "slot": 503661047,
+        "block_time": 1790285080,
+        "block_time_iso": "2026-09-24T21:24:40Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "KaUVD3sZMzmFTNGrAzgXjPhA72LPSZabL8b6uWLVJ8BW88CGaH2hjvG69bcoRWpD7Nj88TbQAF9hnjZmWZjLZMd",
+        "slot": 503661065,
+        "block_time": 1790285083,
+        "block_time_iso": "2026-09-24T21:24:43Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "4ypURHbgJtpTe8741cuC2wAdPcgasEC62qfQTV4iopTqPRurZsMjTeZvQBGYnkXGUBsCaRDcV8puLSzBAMrJZsWx",
+        "slot": 503661083,
+        "block_time": 1790285085,
+        "block_time_iso": "2026-09-24T21:24:45Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "2T6utnAC7kbW2ovxKtTSKR9aZnhuyfHeZeq1dvvyJ4g3ck3E6K9FsTXpodbCuwDR6ntvCDfUTqNN4nT8yD19pshM",
+        "slot": 503661102,
+        "block_time": 1790285088,
+        "block_time_iso": "2026-09-24T21:24:48Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "5hdHWmREbXVDXLdgwpu4D76f5U2KF5EVQ5Z1f7b5Lf5sKr43xJbQcTdZ6wbyZabsewQWo1dvDC6LAW14hyEu9uAG",
+        "slot": 503661119,
+        "block_time": 1790285091,
+        "block_time_iso": "2026-09-24T21:24:51Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "4kZqDmbAZ7Uc7FPbr8UCZS1XV9kR8LRQTCUDAgqZu6RXKTd5vvJZcvF7FjCZNVg4dCcVT8FU1Z2ALH2tFqyysEuV",
+        "slot": 503661137,
+        "block_time": 1790285094,
+        "block_time_iso": "2026-09-24T21:24:54Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "2z4hDN9AWL2QN1Bvsjetv48kSEWmojPmJ3Sm1S2A6vtzRuCQA9ZaoBtPLmMCNAm91buX6XB7qF4qdupHuVq3xQch",
+        "slot": 503661155,
+        "block_time": 1790285097,
+        "block_time_iso": "2026-09-24T21:24:57Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "3KNT1MRPE8PBt41dLaU3J28c7ismscNxZDiij8814H31866YFgNspfgV5iXdypHxheBmkRd3tTf38wwuF3Gpxp9u",
+        "slot": 503661176,
+        "block_time": 1790285101,
+        "block_time_iso": "2026-09-24T21:25:01Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "3VZgVGJHSB7hA77hUDk2r2DtHuhBdLi2UYDrxcdK78r4j9EESX5ASGXy657T9i9WoWismk3JJaKxhp7fmwc3thuf",
+        "slot": 503661193,
+        "block_time": 1790285104,
+        "block_time_iso": "2026-09-24T21:25:04Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "5C9dbmj5fCqbizyfykk9G9CpmAQXrYtMxSDXjYSB427EqjJSetudxDR4U5ZzztXdzNEEDqjA1X3hPFCSVadfbmny",
+        "slot": 503661211,
+        "block_time": 1790285106,
+        "block_time_iso": "2026-09-24T21:25:06Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) getAccountDataSize, initializeImmutableOwner, initializeAccount3, getAccountDataSize, initializeImmutableOwner, initializeAccount3",
+        "signature": "3nL1jgFFDRGccPwHJ9AjUG8WR9zAG9RJ6K29wBpz5muSysUYXp3R8x1Tb7iViAGx9LtGJd8ViHp3HcD9wCHS7xqh",
+        "slot": 503661228,
+        "block_time": 1790285109,
+        "block_time_iso": "2026-09-24T21:25:09Z",
+        "err": null
+      },
+      {
+        "step": "(backfilled from chain history) mintToChecked, mintToChecked",
+        "signature": "2RgcRBBcmNeQxK4JroWvGKZ6WkCZzyXMJ9csU1Lh6pmk7oVybxHCyp48xRBN6KgBJ7YGY6uMKAkMevTECKotSjUk",
+        "slot": 503661246,
+        "block_time": 1790285112,
+        "block_time_iso": "2026-09-24T21:25:12Z",
+        "err": null
+      }
+    ]
+  },
+  "fixture_amm": {
+    "program_id": "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF",
+    "upgrade_authority": "DrnHAjYSkNVv6zpNqS5kiWjimjKTcfc9G4sEYFzYuL7u",
+    "so_size_bytes": 32344,
+    "lp_fee_bps": 25,
+    "pools": [
+      {
+        "index": 0,
+        "symbol": "OPENAI",
+        "leg_mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+        "pool": "Ciz3eg49sUTtizztUNmtg36otfebjzVh1Mbqc6uDYLhe",
+        "leg_vault": "7epE6dLznRL8R6oqA7LrBvAJwZrzEcKKdMMsv2c5JgrX",
+        "usdc_vault": "H6yfZCYA2SBXanzz2and6WxdgefnqDguiq72WWC9jBXP",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "jupiter": {
+            "usdPrice": 1315.683709807034,
+            "usdPricePrescaled": 1955.2832153689635,
+            "blockId": 450149461,
+            "liquidity": 883871.8709190534,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 0.0000019552832153689637,
+          "reserves_after": {
+            "leg_raw": "226021443842",
+            "usdc_raw": "441935935459",
+            "slot": 503661041
+          },
+          "pool_usd_per_raw": 0.0000019552832153746206,
+          "seeded_at": "2026-09-24T21:24:39Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "5S1QcB171hhaZJWXTu5U1TAjaDukx3UpvTVTCGCXKdJpzQmXAoupGeRi3gksiJTxRG1ov7VSQQcVLSVgCgwRwhVd",
+              "slot": 503661011,
+              "block_time": 1790285074,
+              "block_time_iso": "2026-09-24T21:24:34Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "5Q3doqTwc7WfP55sUFy5K2sqQPR6tdNn69DVRGnJvqL443nguTgzLx5GSWY497RixF98xhYhU4uBFyJ6s6oWwuo7",
+              "slot": 503661027,
+              "block_time": 1790285077,
+              "block_time_iso": "2026-09-24T21:24:37Z",
+              "err": null
+            }
+          ]
+        }
+      },
+      {
+        "index": 1,
+        "symbol": "ANTHROPIC",
+        "leg_mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "pool": "FD7PUGpAKFyg7aXSF9TnMwLDB3SyGuKQXi62PfKQ7SW4",
+        "leg_vault": "J1fQ8vdRLsn49EucomBSwUM2cNk49Je3kj3EKsHQqBZh",
+        "usdc_vault": "C6B8JPLiBC4tMRnm2tc3yENX9fJmJqwvSdaGkfP1XcED",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+          "jupiter": {
+            "usdPrice": 1032.794097573108,
+            "usdPricePrescaled": 1032.794097573108,
+            "blockId": 450149477,
+            "liquidity": 965737.5589893713,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 0.000001032794097573108,
+          "reserves_after": {
+            "leg_raw": "467536346914",
+            "usdc_raw": "482868779494",
+            "slot": 503661077
+          },
+          "pool_usd_per_raw": 0.000001032794097573809,
+          "seeded_at": "2026-09-24T21:24:45Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "57Y4GW9fz6BUVandwZcifEQfvcZ5X8ak94uoMrvnn7XL5Mq9HTCRHfQgGXSFwkRjUtnNmRvKRWVzXdm8zKyqVacW",
+              "slot": 503661047,
+              "block_time": 1790285080,
+              "block_time_iso": "2026-09-24T21:24:40Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "KaUVD3sZMzmFTNGrAzgXjPhA72LPSZabL8b6uWLVJ8BW88CGaH2hjvG69bcoRWpD7Nj88TbQAF9hnjZmWZjLZMd",
+              "slot": 503661065,
+              "block_time": 1790285083,
+              "block_time_iso": "2026-09-24T21:24:43Z",
+              "err": null
+            }
+          ]
+        }
+      },
+      {
+        "index": 2,
+        "symbol": "NEURALINK",
+        "leg_mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+        "pool": "Ae61FfRZHuHEqspMVgxpPEfMnvazWevMzMZUofYNrh7Y",
+        "leg_vault": "8fZHtTxcSwSGcoYpNBiEnJU8EjSmBoAt6QSooAj7UsUx",
+        "usdc_vault": "HATyC3TyWs48fYCju8ydP9JGWNK8kuwtDmnqrT2DNhbH",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+          "jupiter": {
+            "usdPrice": 422.2618375230448,
+            "usdPricePrescaled": 422.2618375230448,
+            "blockId": 450148897,
+            "liquidity": 244145.8394665697,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 4.2226183752304477e-7,
+          "reserves_after": {
+            "leg_raw": "289092948699",
+            "usdc_raw": "122072919733",
+            "slot": 503661114
+          },
+          "pool_usd_per_raw": 4.222618375244455e-7,
+          "seeded_at": "2026-09-24T21:24:51Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "4ypURHbgJtpTe8741cuC2wAdPcgasEC62qfQTV4iopTqPRurZsMjTeZvQBGYnkXGUBsCaRDcV8puLSzBAMrJZsWx",
+              "slot": 503661083,
+              "block_time": 1790285085,
+              "block_time_iso": "2026-09-24T21:24:45Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "2T6utnAC7kbW2ovxKtTSKR9aZnhuyfHeZeq1dvvyJ4g3ck3E6K9FsTXpodbCuwDR6ntvCDfUTqNN4nT8yD19pshM",
+              "slot": 503661102,
+              "block_time": 1790285088,
+              "block_time_iso": "2026-09-24T21:24:48Z",
+              "err": null
+            }
+          ]
+        }
+      },
+      {
+        "index": 3,
+        "symbol": "ANDURIL",
+        "leg_mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+        "pool": "ChEbZyQMUX5T3DZd2gma6Pyo1F89Me2hUoTq4yXcZL2e",
+        "leg_vault": "5P8wYJx6PT12tMptDqgpDA1M5pHGiYxZqtcXDPokq2Z9",
+        "usdc_vault": "47txdw66UUEcCgHiKkHa5hcxYh3WjXhjeNd4uZfv9BQu",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+          "jupiter": {
+            "usdPrice": 161.88516510390485,
+            "usdPricePrescaled": 161.88516510390485,
+            "blockId": 450148430,
+            "liquidity": 466982.1193651445,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 1.6188516510390486e-7,
+          "reserves_after": {
+            "leg_raw": "1442325240439",
+            "usdc_raw": "233491059682",
+            "slot": 503661150
+          },
+          "pool_usd_per_raw": 1.6188516510390708e-7,
+          "seeded_at": "2026-09-24T21:24:57Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "5hdHWmREbXVDXLdgwpu4D76f5U2KF5EVQ5Z1f7b5Lf5sKr43xJbQcTdZ6wbyZabsewQWo1dvDC6LAW14hyEu9uAG",
+              "slot": 503661119,
+              "block_time": 1790285091,
+              "block_time_iso": "2026-09-24T21:24:51Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "4kZqDmbAZ7Uc7FPbr8UCZS1XV9kR8LRQTCUDAgqZu6RXKTd5vvJZcvF7FjCZNVg4dCcVT8FU1Z2ALH2tFqyysEuV",
+              "slot": 503661137,
+              "block_time": 1790285094,
+              "block_time_iso": "2026-09-24T21:24:54Z",
+              "err": null
+            }
+          ]
+        }
+      },
+      {
+        "index": 4,
+        "symbol": "POLYMARKET",
+        "leg_mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+        "pool": "5P21LBbjvUgQF583eyLwYDLQ62YzYi3jc3uWjA4cP9EJ",
+        "leg_vault": "EyUG2MYTZprze4nZ3kr1Qi8gZeZoHBHkJSjtEGKKZfmR",
+        "usdc_vault": "5piyw3JcVPhWR7A8UHdAkjVZ5eG5PYhysSVwdKYkMksG",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+          "jupiter": {
+            "usdPrice": 145.71594687415092,
+            "usdPricePrescaled": 145.71594687415092,
+            "blockId": 450149489,
+            "liquidity": 191280.32093537448,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 1.4571594687415091e-7,
+          "reserves_after": {
+            "leg_raw": "656346559993",
+            "usdc_raw": "95640160467",
+            "slot": 503661188
+          },
+          "pool_usd_per_raw": 1.4571594687419403e-7,
+          "seeded_at": "2026-09-24T21:25:03Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "2z4hDN9AWL2QN1Bvsjetv48kSEWmojPmJ3Sm1S2A6vtzRuCQA9ZaoBtPLmMCNAm91buX6XB7qF4qdupHuVq3xQch",
+              "slot": 503661155,
+              "block_time": 1790285097,
+              "block_time_iso": "2026-09-24T21:24:57Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "3KNT1MRPE8PBt41dLaU3J28c7ismscNxZDiij8814H31866YFgNspfgV5iXdypHxheBmkRd3tTf38wwuF3Gpxp9u",
+              "slot": 503661176,
+              "block_time": 1790285101,
+              "block_time_iso": "2026-09-24T21:25:01Z",
+              "err": null
+            }
+          ]
+        }
+      },
+      {
+        "index": 5,
+        "symbol": "KALSHI",
+        "leg_mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+        "pool": "4W7cwipT8Rsts4Nh546BDRK8X1jnjE6a2eRfGErVBPXh",
+        "leg_vault": "35JEaFXAgNgDCvL58AusPfbBDSnKLJYSc1jcUKnvFMBo",
+        "usdc_vault": "CjCmvSQW4jruZUo52R3E1mzFpi2Egk5tjXATtjj4zjBP",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+          "jupiter": {
+            "usdPrice": 886.3362757425293,
+            "usdPricePrescaled": 886.3362757425293,
+            "blockId": 450145536,
+            "liquidity": 100994.54035934307,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 8.863362757425293e-7,
+          "reserves_after": {
+            "leg_raw": "56973037842",
+            "usdc_raw": "50497270179",
+            "slot": 503661223
+          },
+          "pool_usd_per_raw": 8.863362757492611e-7,
+          "seeded_at": "2026-09-24T21:25:09Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "3VZgVGJHSB7hA77hUDk2r2DtHuhBdLi2UYDrxcdK78r4j9EESX5ASGXy657T9i9WoWismk3JJaKxhp7fmwc3thuf",
+              "slot": 503661193,
+              "block_time": 1790285104,
+              "block_time_iso": "2026-09-24T21:25:04Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "5C9dbmj5fCqbizyfykk9G9CpmAQXrYtMxSDXjYSB427EqjJSetudxDR4U5ZzztXdzNEEDqjA1X3hPFCSVadfbmny",
+              "slot": 503661211,
+              "block_time": 1790285106,
+              "block_time_iso": "2026-09-24T21:25:06Z",
+              "err": null
+            }
+          ]
+        }
+      },
+      {
+        "index": 6,
+        "symbol": "FIGUREAI",
+        "leg_mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+        "pool": "4tyZqv3tt7Kcm8xnWGuDesC4XMfgyJDdhz8mSseVgBq4",
+        "leg_vault": "772hJb8CFSvmKEMVSkixtt4A4nMwMFeQ2c4WfKTLnfm1",
+        "usdc_vault": "8CN3Cew4HuDrwPSxJxQ8eyniTzdP7GCs3Ww3nuT8CxHs",
+        "seed": {
+          "source": "jupiter price v3 usdPricePrescaled (mainnet)",
+          "mainnet_mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+          "jupiter": {
+            "usdPrice": 176.83322129343975,
+            "usdPricePrescaled": 176.83322129343975,
+            "blockId": 450144700,
+            "liquidity": 99284.17215314208,
+            "fetched_at": "2026-09-24T21:24:34Z"
+          },
+          "usd_per_raw_target": 1.7683322129343975e-7,
+          "reserves_after": {
+            "leg_raw": "280728280087",
+            "usdc_raw": "49642086076",
+            "slot": 503661261
+          },
+          "pool_usd_per_raw": 1.7683322129361356e-7,
+          "seeded_at": "2026-09-24T21:25:15Z",
+          "signatures": [
+            {
+              "step": "create pool vaults + init_pool",
+              "signature": "3nL1jgFFDRGccPwHJ9AjUG8WR9zAG9RJ6K29wBpz5muSysUYXp3R8x1Tb7iViAGx9LtGJd8ViHp3HcD9wCHS7xqh",
+              "slot": 503661228,
+              "block_time": 1790285109,
+              "block_time_iso": "2026-09-24T21:25:09Z",
+              "err": null
+            },
+            {
+              "step": "seed reserves (mint_to into pool vaults)",
+              "signature": "2RgcRBBcmNeQxK4JroWvGKZ6WkCZzyXMJ9csU1Lh6pmk7oVybxHCyp48xRBN6KgBJ7YGY6uMKAkMevTECKotSjUk",
+              "slot": 503661246,
+              "block_time": 1790285112,
+              "block_time_iso": "2026-09-24T21:25:12Z",
+              "err": null
+            }
+          ]
+        }
+      }
+    ],
+    "interface": "fixtures/amm/src/lib.rs (header); client encoders and exact quote maths: services/valuation/src/lib/amm.ts"
+  },
+  "hook_program": {
+    "program_id": "5GyNwRXdvWDuQLDaYKnirNH35hwWZdun7mZ3m6bGdHEJ",
+    "deployed": true,
+    "so_size_bytes": 15272,
+    "source": "fixtures/hook/src/lib.rs"
+  },
+  "fixture_issuer_keypair_path": "~/.config/solana/stocklana/fixture-issuer.json",
+  "fixture_issuer_policy": {
+    "owner": "Agent C (ops)",
+    "agent_b_may": [
+      "pause/resume a fixture leg",
+      "fund test wallets with fixture USDC and fixture legs"
+    ],
+    "everything_else": "issuer scenarios are run by Agent C or Agent A only",
+    "scripts": {
+      "pause": "node scripts/scenarios/issuer.ts pause --cluster devnet --symbol <SYMBOL>",
+      "resume": "node scripts/scenarios/issuer.ts resume --cluster devnet --symbol <SYMBOL>",
+      "fund_wallet": "node scripts/fixtures/fund-wallet.ts --cluster devnet --wallet <pubkey> [--usdc 200] [--leg-usd 20] [--sol 0.02]",
+      "setup": "npm install in services/valuation (the scripts import @solana/web3.js from there)"
+    }
+  },
+  "mirror_source": {
+    "cluster": "mainnet",
+    "slot": 450148732,
+    "epoch": 1042,
+    "read_at": "2026-09-24T21:21:13Z"
+  },
+  "created_at_slot": 503660920,
+  "updated_at": "2026-09-24T21:25:15Z",
+  "standin_vaults": {
+    "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+    "derivation": "PDA([\"standin-vault\"], fixture_amm aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF)",
+    "vaults": [
+      {
+        "index": 0,
+        "symbol": "OPENAI",
+        "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+        "vault": "9fPPiCyn26RPiMJ2iFYMzmdFpfmxPTjR1o6RBWH1rt68"
+      },
+      {
+        "index": 1,
+        "symbol": "ANTHROPIC",
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ"
+      },
+      {
+        "index": 2,
+        "symbol": "NEURALINK",
+        "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+        "vault": "9u36QUfCYyhGzMfiD8okUzSeggXBCKjwmty9F9HRJyDq"
+      },
+      {
+        "index": 3,
+        "symbol": "ANDURIL",
+        "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+        "vault": "BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv"
+      },
+      {
+        "index": 4,
+        "symbol": "POLYMARKET",
+        "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+        "vault": "2NDCXCCBPx3yxhhd3VU7Q5H4XWv3TBmKYgBvHGNQ7Mku"
+      },
+      {
+        "index": 5,
+        "symbol": "KALSHI",
+        "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+        "vault": "GCdZoNYWhqEYNXwCrC9EBVgd3quEpS9sUbdrRTgNX7xJ"
+      },
+      {
+        "index": 6,
+        "symbol": "FIGUREAI",
+        "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+        "vault": "9D4CxAk8FasJMMuJnkxjYjLTmj8wvmk4ucHw3FSA8FQo"
+      }
+    ]
+  }
+}

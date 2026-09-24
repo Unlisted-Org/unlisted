@@ -1,0 +1,191 @@
+{
+  "kind": "standin-basket",
+  "note": "Not the basket program. Real vaults and share mint on chain; A/C/P/L held here as the program would store them after bootstrap.",
+  "cluster": "devnet",
+  "basket": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+  "share_mint": "EqutKg7fL4dP1nGomUgLLGp2KNAWQgn2xWtyMunYczYy",
+  "share_holder": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+  "initial_shares": "1000000000",
+  "bootstrap": {
+    "usd_per_leg": 50,
+    "weights": "equal by value",
+    "accounted_at_slot": 503663611,
+    "at": "2026-09-24T21:31:47Z"
+  },
+  "legs": [
+    {
+      "index": 0,
+      "symbol": "OPENAI",
+      "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+      "mirror_of": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "vault": "9fPPiCyn26RPiMJ2iFYMzmdFpfmxPTjR1o6RBWH1rt68",
+      "target_raw": "25537372",
+      "price": {
+        "usd_per_raw": 0.0000019579148046352606,
+        "usdPricePrescaled": 1957.9148046352607,
+        "blockId": 450150869,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "25537372",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    },
+    {
+      "index": 1,
+      "symbol": "ANTHROPIC",
+      "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+      "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+      "vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+      "target_raw": "46958094",
+      "price": {
+        "usd_per_raw": 0.0000010647791621017602,
+        "usdPricePrescaled": 1064.7791621017602,
+        "blockId": 450150663,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "46958094",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    },
+    {
+      "index": 2,
+      "symbol": "NEURALINK",
+      "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+      "mirror_of": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+      "vault": "9u36QUfCYyhGzMfiD8okUzSeggXBCKjwmty9F9HRJyDq",
+      "target_raw": "118409942",
+      "price": {
+        "usd_per_raw": 4.2226183752304477e-7,
+        "usdPricePrescaled": 422.2618375230448,
+        "blockId": 450148897,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "118409942",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    },
+    {
+      "index": 3,
+      "symbol": "ANDURIL",
+      "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+      "mirror_of": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+      "vault": "BTHccCHpnKwX3TJwZ6b4cnrZtgRc5uMuoWZRQSzxWZJv",
+      "target_raw": "308860913",
+      "price": {
+        "usd_per_raw": 1.6188516510390486e-7,
+        "usdPricePrescaled": 161.88516510390485,
+        "blockId": 450148430,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "308860913",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    },
+    {
+      "index": 4,
+      "symbol": "POLYMARKET",
+      "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+      "mirror_of": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+      "vault": "2NDCXCCBPx3yxhhd3VU7Q5H4XWv3TBmKYgBvHGNQ7Mku",
+      "target_raw": "334167779",
+      "price": {
+        "usd_per_raw": 1.4962543687025762e-7,
+        "usdPricePrescaled": 149.62543687025763,
+        "blockId": 450151087,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "334167779",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    },
+    {
+      "index": 5,
+      "symbol": "KALSHI",
+      "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+      "mirror_of": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+      "vault": "GCdZoNYWhqEYNXwCrC9EBVgd3quEpS9sUbdrRTgNX7xJ",
+      "target_raw": "58066471",
+      "price": {
+        "usd_per_raw": 8.61082112722363e-7,
+        "usdPricePrescaled": 861.0821127223629,
+        "blockId": 450150420,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "58066471",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    },
+    {
+      "index": 6,
+      "symbol": "FIGUREAI",
+      "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+      "mirror_of": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+      "vault": "9D4CxAk8FasJMMuJnkxjYjLTmj8wvmk4ucHw3FSA8FQo",
+      "target_raw": "282752299",
+      "price": {
+        "usd_per_raw": 1.7683322129343975e-7,
+        "usdPricePrescaled": 176.83322129343975,
+        "blockId": 450144700,
+        "fetched_at": "2026-09-24T21:31:41Z",
+        "source": "jupiter price v3 usdPricePrescaled (mainnet)"
+      },
+      "accounted": "282752299",
+      "claim_units": "0",
+      "pending_norm": "0",
+      "loss_index": "1000000000000000000",
+      "status": "Active"
+    }
+  ],
+  "signatures": [
+    {
+      "step": "create share mint (classic SPL, 9 decimals)",
+      "signature": "EDtDEvJyx4mdd4kxhknsiHmof1Yyzz9ftKHLiDdsxCfauQj1aBQxD1pm8ZYHGrktz3HuLwv6tFYone5knjcLs9E",
+      "slot": 503663497,
+      "block_time": 1790285487,
+      "block_time_iso": "2026-09-24T21:31:27Z",
+      "err": null
+    },
+    {
+      "step": "mint INITIAL_SHARES to the issuer",
+      "signature": "5RsUbqMUHQkYkzBN66kw6kNRdRrNHFZV9APgQAPyXwqjieLhtnLBAskRvRfDuLhvyftGwPFTNHL2AG4r8hvF1RrK",
+      "slot": 503663565,
+      "block_time": 1790285499,
+      "block_time_iso": "2026-09-24T21:31:39Z",
+      "err": null
+    },
+    {
+      "step": "set stand-in vaults to equal USD value (mint_to / setup trim)",
+      "signature": "3rKUgTdGC1JiHReHfqLLYSdQMUAARJ2RCLTsUi9Z2CTeBiXbFxbmG8bQX9MVvjyPVmT7AYfLR7t8ZZLPSj29AKz8",
+      "slot": 503663585,
+      "block_time": 1790285502,
+      "block_time_iso": "2026-09-24T21:31:42Z",
+      "err": null
+    },
+    {
+      "step": "set stand-in vaults to equal USD value (mint_to / setup trim)",
+      "signature": "2VL4i3JJ1WCE81wQzvfrimcBzm1XgddgxmZwqnpMB8tgPKJrz5W1Rmfs6s7rUWy7pgzfigoQphQaH4WEKGmurrkz",
+      "slot": 503663600,
+      "block_time": 1790285504,
+      "block_time_iso": "2026-09-24T21:31:44Z",
+      "err": null
+    }
+  ]
+}

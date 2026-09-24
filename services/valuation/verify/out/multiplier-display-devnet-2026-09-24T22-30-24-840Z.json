@@ -1,0 +1,70 @@
+{
+ "check": "fixture multiplier change moves display fields only, after the effective time",
+ "cluster": "devnet",
+ "symbol": "NEURALINK",
+ "old": 1,
+ "value": 2,
+ "slots": {
+  "A": 503683466,
+  "B": 503683739,
+  "C": 503684596
+ },
+ "effective_at": "2026-09-24T22:29:43.000Z",
+ "checks": [
+  {
+   "what": "B (before effective time): effective multiplier unchanged",
+   "a": "\"1\"",
+   "b": "\"1\"",
+   "ok": true
+  },
+  {
+   "what": "B: per_share_ui unchanged",
+   "a": "\"0.234451729278\"",
+   "b": "\"0.234451729278\"",
+   "ok": true
+  },
+  {
+   "what": "B: pending shows the new multiplier",
+   "a": "2",
+   "b": "2",
+   "ok": true
+  },
+  {
+   "what": "B: raw fields and valuation inputs unchanged",
+   "a": "{\"raw\":[\"239134832\",\"239134832\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"239134832\",\"den\":\"1019974699\"},\"sell_amount\":\"234451729\",\"ref_multiplier\":\"1\"}",
+   "b": "{\"raw\":[\"239134832\",\"239134832\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"239134832\",\"den\":\"1019974699\"},\"sell_amount\":\"234451729\",\"ref_multiplier\":\"1\"}",
+   "ok": true
+  },
+  {
+   "what": "C (after effective time): effective == new value",
+   "a": "2",
+   "b": "2",
+   "ok": true
+  },
+  {
+   "what": "C: pending cleared",
+   "a": "null",
+   "b": "null",
+   "ok": true
+  },
+  {
+   "what": "C: per_share_ui scaled by new/old",
+   "a": "2.000000000",
+   "b": "2.000000000",
+   "ok": true
+  },
+  {
+   "what": "C: raw fields and valuation inputs unchanged",
+   "a": "{\"raw\":[\"239134832\",\"239134832\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"239134832\",\"den\":\"1019974699\"},\"sell_amount\":\"234451729\",\"ref_multiplier\":\"1\"}",
+   "b": "{\"raw\":[\"239134832\",\"239134832\",\"0\",\"0\",\"0\",\"1000000000000000000\"],\"per_share_raw\":{\"num\":\"239134832\",\"den\":\"1019974699\"},\"sell_amount\":\"234451729\",\"ref_multiplier\":\"1\"}",
+   "ok": true
+  },
+  {
+   "what": "C: stored field unchanged (set with a future timestamp)",
+   "a": "\"1\"",
+   "b": "\"1\"",
+   "ok": true
+  }
+ ],
+ "all_ok": true
+}
