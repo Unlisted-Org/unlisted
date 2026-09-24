@@ -1,3 +1,4 @@
 .data/
 node_modules/
 test/redeem_vectors.json
+verify/out/*-local-*
