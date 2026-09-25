@@ -4,7 +4,11 @@ import path from "node:path";
 // Browsers live in a project-local path (see CONTRIBUTING.md §5); never the shared cache.
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= path.resolve(__dirname, "../.playwright-browsers");
 
-const PORT = Number(process.env.E2E_PORT ?? 3200);
+// Each run gets its own port (derived from the runner's pid), so a server left over from an earlier,
+// interrupted run can never block the next one. E2E_PORT overrides.
+// Chosen once in the main runner and inherited by the workers through the environment.
+process.env.E2E_PORT ??= String(3300 + (process.pid % 600));
+const PORT = Number(process.env.E2E_PORT);
 const REPO = path.resolve(__dirname, "..");
 
 export default defineConfig({

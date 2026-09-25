@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Connection, PublicKey, SendTransactionError, VersionedTransaction } from "@solana/web3.js";
 import type { Wallet } from "@wallet-standard/base";
 import {
@@ -13,7 +13,7 @@ import { sendSequentialWithRetry } from "./send";
 import { HttpValuation, MockValuation, Valuation } from "./valuation/api";
 import type { BasketResponse, EventsResponse, QuoteDepositResponse } from "./valuation/types";
 import {
-  Banners, BasisStrip, ClaimRow, Guard, IssuerActivity, OpenDepositTickets, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
+  Banners, BasisStrip, ClaimRow, claimsOf, Guard, IssuerActivity, OpenDepositTickets, ClaimsList, Disclosures, EventsPanel, LegsTable, PricePanel, RedemptionHistory, TxLog, TxRecord, issuerBanners,
 } from "./components/Panels";
 import { DepositPanel, RedeemPanel } from "./components/Actions";
 import * as copy from "./copy";
@@ -65,6 +65,7 @@ export function App({ config }: { config: AppConfig }) {
   const [busy, setBusy] = useState(false);
   const [log, setLog] = useState<TxRecord[]>([]);
   const [connectErr, setConnectErr] = useState<string | null>(null);
+  const [tab, setTab] = useState<string | null>(null); // details tabs: all collapsed by default
 
   useEffect(() => onWalletsChanged(() => setWallets(usableWallets())), []);
   useEffect(() => {
@@ -170,31 +171,108 @@ export function App({ config }: { config: AppConfig }) {
       {!view ? <p className="muted">Reading the basket from {config.rpcUrl}…</p> : (
         <>
           <div id="events-banners"><Banners banners={issuerBanners(view, events.rows, apiEvents)} /></div>
-          <section className="intro">
-            <p>{copy.ISSUER_POWERS}</p>
-            <ul>{copy.WHAT_THIS_BASKET_DOES.map((t) => <li key={t}>{t}</li>)}</ul>
-            <p><b>{copy.NOT_PROTECTION}</b></p>
-          </section>
-          <div id="overview"><Guard name="Price panel"><PricePanel api={api} error={apiErr} /></Guard></div>
-          {wallet && !valuation.isMock && pos && pos.shares > 0n && (
-            <Guard name="Position value"><PricePanel api={apiPos} error={apiPosErr} testid="position-price-panel"
-              title={`Your ${fmtShares(pos.shares)} shares, valued at your size: three sources`} /></Guard>
-          )}
-          <div id="legs"><LegsTable v={view} pos={pos} api={api} onObserve={wallet ? onObserve : undefined} busy={busy} /></div>
+          <div id="overview" className="two">
+            <Guard name="Price panel"><PricePanel api={api} error={apiErr} /></Guard>
+            <PositionCard wallet={!!wallet} pos={pos} apiPos={apiPos} apiPosErr={apiPosErr} isMock={valuation.isMock}
+              openClaims={claimsOf(pos).length} openTickets={pos?.deposits.length ?? 0} onShowClaims={() => setTab("claims")} />
+          </div>
           <div className="two">
             <div id="deposit"><DepositPanel v={view} pos={pos} busy={busy} routerReady={routerReady} quoteDeposit={(u) => valuation.quoteDeposit(view, u)} onInKind={onInKind} onUsdc={onUsdc} /></div>
             <div id="redeem"><RedeemPanel v={view} pos={pos} busy={busy} usdcReady={config.router.kind === "none" ? "USDC redemption settles through the devnet router, not configured on this cluster yet." : null} onRedeem={onRedeem}
               quoteRedeem={valuation.isMock ? null : (s, m) => valuation.quoteRedeem(view, s, m)} /></div>
           </div>
-          <div id="claims" className="page"><OpenDepositTickets v={view} pos={pos} onAbort={onAbort} busy={busy} />
-          <ClaimsList v={view} pos={pos} onSettle={onSettle} busy={busy} usdcRouter={config.router.kind === "fixture_amm"} rows={events.rows} /></div>
-          <div id="activity" className="page"><RedemptionHistory v={view} pos={pos} />
-          <TxLog log={log} explorer={config.explorerTx} />
-          <EventsPanel v={view} rows={events.rows} /></div>
-          <div id="issuer"><Guard name="Issuer activity"><IssuerActivity api={apiEvents} isMock={valuation.isMock} /></Guard></div>
-          <div id="disclosures"><Disclosures upgradeAuthority={config.upgradeAuthority} authority={short(view.basket.authority)} /></div>
+          <TxLog log={log} explorer={config.explorerTx} latestOnly />
+          <Details tab={tab} setTab={setTab} tabs={[
+            { id: "legs", label: "Seven legs", body: <LegsTable v={view} pos={pos} api={api} onObserve={wallet ? onObserve : undefined} busy={busy} /> },
+            { id: "claims", label: `Claims${claimsOf(pos).length ? ` (${claimsOf(pos).length})` : ""}`, body: (
+              <div className="page">
+                <OpenDepositTickets v={view} pos={pos} onAbort={onAbort} busy={busy} />
+                <ClaimsList v={view} pos={pos} onSettle={onSettle} busy={busy} usdcRouter={config.router.kind === "fixture_amm"} rows={events.rows} />
+                <RedemptionHistory v={view} pos={pos} />
+              </div>) },
+            { id: "activity", label: "Activity", body: <div className="page"><TxLog log={log} explorer={config.explorerTx} /><EventsPanel v={view} rows={events.rows} /></div> },
+            { id: "issuer", label: "Issuer events", body: <Guard name="Issuer activity"><IssuerActivity api={apiEvents} isMock={valuation.isMock} /></Guard> },
+            { id: "about", label: "How it works and disclosures", body: (
+              <div className="page">
+                <section className="intro">
+                  <p>{copy.ISSUER_POWERS}</p>
+                  <ul>{copy.WHAT_THIS_BASKET_DOES.map((t) => <li key={t}>{t}</li>)}</ul>
+                  <p><b>{copy.NOT_PROTECTION}</b></p>
+                </section>
+                <Disclosures upgradeAuthority={config.upgradeAuthority} authority={short(view.basket.authority)} />
+              </div>) },
+          ]} />
         </>
       )}
     </div>
+  );
+}
+
+// ---------------------------------------------------------------- position card and details tabs
+
+function PositionCard(p: { wallet: boolean; pos: import("./state").Position | null; apiPos: any; apiPosErr: string | null; isMock: boolean;
+  openClaims: number; openTickets: number; onShowClaims: () => void }) {
+  if (!p.wallet) return (
+    <section data-testid="position">
+      <h2>Your position</h2>
+      <p className="muted">Connect a wallet to see what you own. Everything else on this page reads the basket without one.</p>
+    </section>
+  );
+  const pos = p.pos;
+  const usd = p.apiPos?.values?.sell_now?.usd;
+  return (
+    <section data-testid="position">
+      <h2>Your position</h2>
+      {!pos ? <p className="muted">Reading your balances…</p> : (
+        <>
+          <div className="big-line"><span className="mono" data-testid="position-shares-summary" data-raw={pos.shares.toString()}>{fmtShares(pos.shares)}</span> shares</div>
+          {pos.shares > 0n && !p.isMock && (
+            <div className="muted" data-testid="position-value">
+              {usd != null ? <>Worth <b className="mono">{fmtUsdShort(usd)}</b> if you redeemed now.</> : p.apiPosErr ? `Value unavailable: ${p.apiPosErr}` : "Valuing…"}
+            </div>
+          )}
+          {p.openClaims > 0 && (
+            <div className="banner warn" data-testid="position-open-claims">
+              <b>{p.openClaims} open claim{p.openClaims > 1 ? "s" : ""}</b>
+              <div>A paused or unavailable leg you're still owed. <button className="linklike" onClick={p.onShowClaims} data-testid="show-claims">View claims</button></div>
+            </div>
+          )}
+          {p.openTickets > 0 && <div className="muted">{p.openTickets} unfinished USDC deposit ticket(s), under Claims.</div>}
+          {pos.shares > 0n && !p.isMock && (
+            <details><summary>Your shares, valued three ways</summary>
+              <Guard name="Position value"><PricePanel api={p.apiPos} error={p.apiPosErr} testid="position-price-panel" title={`Your ${fmtShares(pos.shares)} shares, valued at your size`} /></Guard>
+            </details>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
+
+function fmtUsdShort(v: string | number) {
+  const n = Number(v);
+  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+}
+
+function Details({ tab, setTab, tabs }: { tab: string | null; setTab: (t: string | null) => void; tabs: { id: string; label: string; body: ReactNode }[] }) {
+  return (
+    <section id="details" className="details" data-testid="details">
+      <h2>Details</h2>
+      <div role="tablist" aria-label="Details" className="tabs">
+        {tabs.map((t) => (
+          <button key={t.id} role="tab" id={`tab-${t.id}`} aria-selected={tab === t.id} aria-controls={`panel-${t.id}`} className={tab === t.id ? "on" : ""}
+            onClick={() => setTab(tab === t.id ? null : t.id)} data-testid={`details-tab-${t.id}`}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {tab === null && <p className="muted" data-testid="details-collapsed">Pick a tab to open it. The figures behind every number above are here.</p>}
+      {tabs.map((t) => (
+        // Kept mounted when hidden, so nothing is lost; only one is shown at a time.
+        <div key={t.id} role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} hidden={tab !== t.id} data-testid={`details-panel-${t.id}`}>
+          {t.body}
+        </div>
+      ))}
+    </section>
   );
 }

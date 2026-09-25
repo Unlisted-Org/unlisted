@@ -83,3 +83,29 @@ This is Agent B's flow, ported to `/app`, and run on 2026-09-25 with the valuati
   - an interrupt (SIGTERM) restores at once and exits 130;
   - a hard kill (SIGKILL) leaves `<file>.mutant-backup` for recovery.
 - The first version used a blocking `spawnSync`, so an interrupt was only handled after the command ended and was misreported as "survived". It was fixed with an async spawn and re-tested.
+
+# Restructure (2026-09-25): five-section landing, `/evidence`, four-thing app
+
+Every figure and signature survives the move. The evidence spec proves it: all 36 signatures in `lib/evidence.json` must be on `/evidence` as explorer links.
+
+| Spec | `BROKEN=` | What it breaks | Failed at |
+|---|---|---|---|
+| landing | `company` | one of the seven names removed from the hero | `the seven companies in the hero` |
+| landing | `hide` | the survival section hidden (retargeted from the removed `#proof`) | the section's visibility (timeout) |
+| landing | `wide`, `motion`, `blank` | unchanged | as before |
+| evidence | `dropsig` | one signature's row removed | `signatures missing from /evidence: 2smHrk8U` |
+| evidence | `wide` | a 2000px element | `page scrolls sideways: 2112 > 1440` |
+| app | `expanded` | the details panels opened | `details panels open by default` (7 received) |
+| app | `allvalues` | the value expander opened by default | `last trade folded by default: Expected hidden, Received visible` |
+| app | `costfirst` | the cost box moved above the buy action | `Expected "button, then cost", Received "cost, then button"` |
+| app | `nopaging` | 11 extra entries injected into an event list | `entries shown before 'Show more': Expected <= 10, Received 21` |
+| app | `wide`, `motion`, `404` | retargeted from the removed `#legs` to `#overview` | as before |
+
+**Real run:** 22 of 22 pass (landing, evidence, app, send).
+
+**Three broken versions were themselves broken at first,** and were each fixed and re-run before being relied on:
+- `expanded` injected CSS, which can't override Tailwind's layered `!important` `[hidden]` rule, so it tested nothing. It now removes the attribute.
+- landing `hide` targeted `#proof`, which no longer exists on the landing page.
+- app `wide` and `motion` targeted `#legs`, which no longer exists.
+
+**Not re-run after the restructure:** app `hide` (the three-values panel hidden). The run hung, and it was stopped rather than waited on. Before the restructure it failed at the intended assertion. It has since been changed to fail fast (20 s), and needs one run.

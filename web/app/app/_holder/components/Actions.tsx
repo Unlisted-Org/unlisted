@@ -68,12 +68,12 @@ export function DepositPanel(p: {
 
   return (
     <section data-testid="deposit">
-      <h2>Deposit</h2>
+      <h2>Buy</h2>
+      <p className="muted">Deposit the seven tokens, or USDC, and receive Unlisted shares.</p>
       <div className="tabs">
         <button className={tab === "inkind" ? "on" : ""} onClick={() => setTab("inkind")} data-testid="tab-inkind">In kind (you hold the seven tokens)</button>
         <button className={tab === "usdc" ? "on" : ""} onClick={() => setTab("usdc")} data-testid="tab-usdc">USDC (deposit ticket)</button>
       </div>
-      <CostBox v={v} />
       {refused && <div className="banner alert" data-testid="deposit-refused">{refused}</div>}
       {tab === "inkind" ? (
         <div>
@@ -118,6 +118,8 @@ export function DepositPanel(p: {
           <button disabled={!pos || p.busy || !!refused || !!p.routerReady || !quote} onClick={() => quote && p.onUsdc(parseUnits(usdc, 6), quote)} data-testid="usdc-submit">Deposit USDC</button>
         </div>
       )}
+      {/* Cost stays on the buy box, stated plainly, but after the action rather than before it. */}
+      <CostBox v={v} />
     </section>
   );
 }
@@ -152,7 +154,7 @@ export function RedeemPanel(p: { v: BasketView; pos: Position | null; busy: bool
   }, [preview && !("error" in preview) ? preview.s : 0n, mode, v.slot]);
   return (
     <section data-testid="redeem">
-      <h2>Redeem</h2>
+      <h2>Sell</h2>
       <p className="muted">Redemption never fails because a leg is unavailable. Every available leg pays now; each unavailable leg becomes a claim.</p>
       <label>Shares <input value={amount} onChange={(e) => setAmount(e.target.value)} data-testid="redeem-shares" /></label>
       {pos && <span className="muted"> You hold <span data-testid="position-shares" data-raw={pos.shares.toString()}>{fmtShares(pos.shares)}</span> shares.</span>}

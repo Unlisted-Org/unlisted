@@ -13,7 +13,7 @@ export function Cost() {
     <section id="cost" className="border-t border-line bg-ground py-16 md:py-24" aria-labelledby="cost-title">
       <Container className="grid grid-cols-1 [&>*]:min-w-0 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <div className="flex flex-col gap-5">
-          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-claim">What it costs</p>
+          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-claim">What it costs, and what we don&apos;t claim</p>
           <h2 id="cost-title" className="font-display text-3xl font-semibold tracking-[-0.01em] md:text-5xl">
             About 7.9% for a $10,000 round trip
           </h2>
@@ -53,7 +53,8 @@ export function Cost() {
           </div>
           <p className="text-[12px] text-ink-muted">
             Fees: 1 − 0.97² = 5.91% at 300 bps, exact. Spread: measured on 24 Sep 2026 and to be re-measured under the new
-            fee, so the totals are estimates. <a className="underline" href={recordUrl("docs/risks.md")}>Workings</a>
+            fee, so the totals are estimates. <a className="underline" href={recordUrl("docs/risks.md")}>Workings</a> ·{" "}
+            <a className="underline" href="/evidence">Evidence</a>
           </p>
         </div>
       </Container>

@@ -4,13 +4,9 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 const NAV = [
   { href: "#overview", label: "Value" },
-  { href: "#legs", label: "Legs" },
-  { href: "#deposit", label: "Deposit" },
-  { href: "#redeem", label: "Redeem" },
-  { href: "#claims", label: "Claims" },
-  { href: "#activity", label: "Activity" },
-  { href: "#issuer", label: "Issuer events" },
-  { href: "#disclosures", label: "Disclosures" },
+  { href: "#deposit", label: "Buy" },
+  { href: "#redeem", label: "Sell" },
+  { href: "#details", label: "Details" },
 ];
 
 /** The app frame, from the Nodus dashboard layout: a static sidebar and a dense main column. No motion. */

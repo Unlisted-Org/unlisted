@@ -141,6 +141,10 @@ export function Versus() {
             ))}
           </ul>
         </div>
+        <p className="text-[13px] text-ink-muted">
+          The full Symmetry transcripts, the fork slot, and a live read of Symmetry's mainnet vaults:{" "}
+          <a className="text-paid underline underline-offset-2" href="/evidence#symmetry">the evidence page</a>.
+        </p>
       </Container>
     </section>
   );

@@ -15,7 +15,7 @@ export function Close() {
             <Link href="/app">Open the app (devnet)</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="#proof">Check the signatures</Link>
+            <Link href="/evidence">Check every signature</Link>
           </Button>
           <Button asChild variant="ghost">
             <a href={REPO}>Source on GitHub</a>

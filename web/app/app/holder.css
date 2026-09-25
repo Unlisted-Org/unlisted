@@ -106,3 +106,16 @@
 .holder .events { list-style: none; padding: 0; }
 .holder .events li { padding: 4px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
 .holder .disclosures { background: var(--ground); }
+
+/* Restructure (2026-09-25): one value leads, the rest folds. */
+.holder .cards3.lead { grid-template-columns: minmax(0, 1fr); }
+.holder .cards3.lead .big { font-size: 30px; }
+.holder .value-more > summary { color: var(--ink-muted); font-size: 12.5px; }
+.holder .value-more[open] > summary { margin-bottom: 10px; }
+.holder .big-line { font-size: 15px; margin: 2px 0 6px; }
+.holder .big-line .mono { font-size: 26px; font-weight: 500; margin-right: 4px; }
+.holder main button.more, .holder main button.linklike {
+  background: transparent; color: var(--paid); border: 0; padding: 4px 0; text-decoration: underline; text-underline-offset: 2px;
+}
+.holder .details [role="tabpanel"] { margin-top: 10px; }
+.holder .details [role="tabpanel"] > section, .holder .details [role="tabpanel"] .page > section { border-color: var(--line); background: var(--ground); }

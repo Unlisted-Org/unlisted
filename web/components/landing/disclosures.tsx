@@ -52,11 +52,11 @@ const ITEMS: { q: string; a: React.ReactNode }[] = [
 
 export function Disclosures() {
   return (
-    <section id="disclosures" className="border-t border-line py-16 md:py-24" aria-labelledby="disclosures-title">
+    <section id="disclosures" className="bg-ground pb-16 md:pb-24" aria-labelledby="disclosures-title">
       <Container className="grid grid-cols-1 [&>*]:min-w-0 gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="flex flex-col gap-4">
           <h2 id="disclosures-title" className="font-display text-3xl font-semibold tracking-[-0.01em] md:text-5xl">
-            What we disclose
+            What we don&apos;t claim
           </h2>
           <p className="text-base text-ink-muted">
             Read these before anything else on this page. <a className="underline" href={recordUrl("docs/risks.md")}>Sources</a>

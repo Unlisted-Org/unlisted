@@ -16,6 +16,23 @@ const REASON_TEXT: Record<string, string> = {
   PendingSale: "pending USDC sale",
 };
 
+// ---------------------------------------------------------------- paging
+
+/** The ten most recent items, then "Show more" in steps of ten. Nothing is dropped, only folded. */
+export function Paged<T>({ items, render, step = 10, testid }: { items: T[]; render: (x: T, i: number) => ReactNode; step?: number; testid: string }) {
+  const [n, setN] = useState(step);
+  return (
+    <>
+      <ul className="events" data-testid={testid}>{items.slice(0, n).map(render)}</ul>
+      {items.length > n && (
+        <button className="more" onClick={() => setN((k) => k + step)} data-testid={`${testid}-more`}>
+          Show more ({items.length - n} older)
+        </button>
+      )}
+    </>
+  );
+}
+
 // ---------------------------------------------------------------- basis strip
 
 export function BasisStrip({ clusterLabel, basis, mock, slot }: { clusterLabel: string; basis: string | null; mock: string | null; slot: number | null }) {
@@ -121,15 +138,13 @@ export function IssuerActivity({ api, isMock }: { api: EventsResponse | null; is
         <div key={name}>
           <h3>{name === "mainnet" ? "Real PreStocks mints (mainnet)" : "Fixture mints"}</h3>
           {list.length === 0 ? <p className="muted">No events in the window.</p> : (
-            <ul className="events">
-              {list.slice(0, 20).map((e, i) => (
+            <Paged testid={`issuer-list-${name === "mainnet" ? "mainnet" : "fixture"}`} items={list} render={(e: any, i: number) => (
                 <li key={i} data-testid={`issuer-event-${e.name}`}>
                   <b>{e.name}</b> {e.symbol ?? ""} <span className="muted">{e.block_time_iso ?? `slot ${e.slot}`}</span>{" "}
                   <span className="muted">{e.before ? `${JSON.stringify(e.before)} → ` : ""}{JSON.stringify(e.after)}</span>
                   {e.signature && <span className="mono muted"> {short(e.signature)}</span>}
                 </li>
-              ))}
-            </ul>
+              )} />
           )}
         </div>
       ))}
@@ -194,7 +209,7 @@ export function LegsTable({ v, pos, api, onObserve, busy }: { v: BasketView; pos
 
 // ---------------------------------------------------------------- price panel
 
-export function PricePanel({ api, error, title = "Value of one share: three sources, never one price", testid = "price-panel" }: { api: BasketResponse | null; error: string | null; title?: string; testid?: string }) {
+export function PricePanel({ api, error, title = "What one share is worth", testid = "price-panel" }: { api: BasketResponse | null; error: string | null; title?: string; testid?: string }) {
   if (error) return <section data-testid={testid}><h2>{title}</h2><div className="banner warn">Valuation API unavailable: {error}. No value is shown rather than a guessed one.</div></section>;
   if (!api) return <section data-testid={testid}><h2>{title}</h2><p className="muted">Loading…</p></section>;
   if (!api.values?.sell_now || !api.values?.last_trade || !api.values?.reference)
@@ -211,13 +226,17 @@ export function PricePanel({ api, error, title = "Value of one share: three sour
   return (
     <section data-testid={testid}>
       <h2>{title}</h2>
-      <div className="cards3">
+      <div className="cards3 lead">
         <div className="card" data-testid="value-sell-now">
           <div className="label">{v.sell_now.label}</div>
           <div className="big" data-usd={v.sell_now.usd}>{fmtUsd(v.sell_now.usd)}</div>
           <div className="muted">Live fee-inclusive sell quotes of the mirrored mainnet tokens, Manifest excluded. {sellAge != null ? `Oldest quote ${fmtAge(sellAge)}` : sellSlots.length ? `Quoted at mainnet slot ${Math.min(...sellSlots)}` : ""}.</div>
           {unq.length > 0 && <div className="warnline" data-testid="unquotable">Valued at 0 here (no route): {unq.map((u) => u.symbol ?? sym(u.index)).join(", ")}</div>}
         </div>
+      </div>
+      <details className="value-more" data-testid="value-more">
+        <summary>Two other values, and the gaps between them</summary>
+      <div className="cards3">
         <div className="card" data-testid="value-last-trade">
           <div className="label">{v.last_trade.label}</div>
           <div className="big" data-usd={v.last_trade.usd}>{fmtUsd(v.last_trade.usd)}</div>
@@ -260,6 +279,7 @@ export function PricePanel({ api, error, title = "Value of one share: three sour
             </tbody>
           </table>
         </div>
+      </details>
       </details>
     </section>
   );
@@ -401,8 +421,7 @@ export function EventsPanel({ v, rows }: { v: BasketView; rows: EventRow[] }) {
     <section data-testid="events">
       <h2>On-chain events</h2>
       {lines.length === 0 ? <p className="muted">No basket events in the recent transactions.</p> : (
-        <ul className="events">
-          {lines.map(({ r, e, k }) => (
+        <Paged testid="event-list" items={lines} render={({ r, e, k }) => (
             <li key={`${r.signature}-${k}`} data-testid={`event-${e.name}`}>
               <span className="muted">slot {r.slot}</span> <b>{e.name}</b>{" "}
               {e.name === "ShortfallObserved" && <>{sym(e.leg)}: {fmtRaw(e.expected)} → {fmtRaw(e.actual)} (−{pct(e.expected - e.actual, e.expected)}, shared pro rata)</>}
@@ -414,8 +433,7 @@ export function EventsPanel({ v, rows }: { v: BasketView; rows: EventRow[] }) {
               {e.name === "LegListing" && <>{sym(e.leg)} listed; conversion after {new Date(Number(e.convertAfter) * 1000).toISOString()}</>}
               {" "}<span className="mono muted">{short(r.signature)}</span>
             </li>
-          ))}
-        </ul>
+          )} />
       )}
     </section>
   );
@@ -445,19 +463,20 @@ export function Disclosures({ upgradeAuthority, authority }: { upgradeAuthority:
 
 export interface TxRecord { id: string; label: string; signatures: string[]; status: "ok" | "failed" | "pending"; error?: string; approvals: number; at: string; retries?: string[] }
 
-export function TxLog({ log, explorer }: { log: TxRecord[]; explorer: string | null }) {
+export function TxLog({ log, explorer, latestOnly = false }: { log: TxRecord[]; explorer: string | null; latestOnly?: boolean }) {
   if (!log.length) return null;
+  if (latestOnly) log = log.slice(0, 1);
   return (
-    <section data-testid="tx-log">
-      <h2>This session's transactions</h2>
+    <section data-testid={latestOnly ? "tx-latest" : "tx-log"}>
+      <h2>{latestOnly ? "Your last transaction" : "This session's transactions"}</h2>
       <ul className="events">
         {log.map((t, i) => (
-          <li key={t.id} data-testid={`tx-${i}`} data-status={t.status}>
-            <b>{t.label}</b>: <span data-testid={`tx-status-${i}`}>{t.status}</span> · {t.signatures.length} transaction(s), {t.approvals} wallet approval(s)
-            {t.retries?.length ? <div className="muted" data-testid={`tx-retries-${i}`}>Re-sent after a transient RPC error ({t.retries.length}×; same signed transaction): {t.retries.join("; ")}</div> : null}
+          <li key={t.id} data-testid={latestOnly ? `tx-${i}` : `txlog-${i}`} data-status={t.status}>
+            <b>{t.label}</b>: <span data-testid={`${latestOnly ? "tx" : "txlog"}-status-${i}`}>{t.status}</span> · {t.signatures.length} transaction(s), {t.approvals} wallet approval(s)
+            {t.retries?.length ? <div className="muted" data-testid={`${latestOnly ? "tx" : "txlog"}-retries-${i}`}>Re-sent after a transient RPC error ({t.retries.length}×; same signed transaction): {t.retries.join("; ")}</div> : null}
             {t.error && <div className="warnline">{t.error}</div>}
             {t.signatures.map((s) => (
-              <div key={s} className="mono" data-testid="tx-signature">{explorer ? <a href={explorer.replace("{sig}", s)} target="_blank" rel="noreferrer">{s}</a> : s}</div>
+              <div key={s} className="mono" data-testid={latestOnly ? "tx-signature" : "txlog-signature"}>{explorer ? <a href={explorer.replace("{sig}", s)} target="_blank" rel="noreferrer">{s}</a> : s}</div>
             ))}
           </li>
         ))}

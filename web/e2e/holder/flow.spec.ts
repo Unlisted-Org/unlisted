@@ -18,6 +18,9 @@ import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundWalle
 const HERE = __dirname + "/";
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
 
+// E2E_VIDEO=1 records the run (demo footage): 1440x900, the whole browser session, saved as test-results/**/video.webm.
+if (process.env.E2E_VIDEO) test.use({ viewport: { width: 1440, height: 900 }, video: { mode: "on", size: { width: 1440, height: 900 } }, colorScheme: "dark" });
+
 // Opt-in: this spends devnet SOL and has the fixture issuer pause a leg of the canonical basket.
 test.skip(process.env.E2E_ENV !== "devnet", "set E2E_ENV=devnet to run the fresh-wallet devnet flow");
 
@@ -25,6 +28,13 @@ async function raw(page: Page, testid: string): Promise<bigint> {
   const v = await page.getByTestId(testid).getAttribute("data-raw");
   if (v == null || v === "") throw new Error(`${testid} has no data-raw`);
   return BigInt(v);
+}
+
+/** Opens a details tab (the app's details are collapsed by default); a no-op if it's already open. */
+async function openTab(page: Page, id: string) {
+  const tab = page.getByTestId(`details-tab-${id}`);
+  if ((await tab.getAttribute("aria-selected")) !== "true") await tab.click();
+  await expect(page.getByTestId(`details-panel-${id}`)).toBeVisible();
 }
 
 /** Waits for the newest tx-log entry to finish; returns its signatures (as rendered by the app). */
@@ -202,6 +212,9 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     expect(tickets).toHaveLength(1);
     const claims = openClaims(tickets[0].ticket);
     expect(claims).toEqual([{ leg: legIdx, units: redeemShares, reason: "Paused" }]);
+    // The default view points the holder at the claim; the claims themselves are one tab away.
+    await expect(page.getByTestId("position-open-claims")).toBeVisible();
+    await openTab(page, "claims");
     await expect(page.getByTestId(`claim-${PAUSE_LEG}`)).toBeVisible();
     expect(await raw(page, `claim-units-${PAUSE_LEG}`)).toBe(claims[0].units);
     await expect(page.getByTestId(`settle-${PAUSE_LEG}`)).toBeDisabled();
@@ -219,6 +232,7 @@ test("deposit, redeem with a paused leg (claim), settle after resume", async ({ 
     await page.reload();
     await page.getByTestId("connect-Unlisted Test Wallet").click();
     await expect(page.getByTestId(`leg-availability-${PAUSE_LEG}`)).toHaveText("available");
+    await openTab(page, "claims");
     await expect(page.getByTestId(`settle-${PAUSE_LEG}`)).toBeEnabled();
     const estimate = await raw(page, `claim-estimate-${PAUSE_LEG}`);
     const estimateGross = BigInt((await page.getByTestId(`claim-estimate-${PAUSE_LEG}`).getAttribute("data-gross"))!);

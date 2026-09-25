@@ -1,7 +1,6 @@
 import { Container } from "../container";
-import { evidence, recordUrl } from "@/lib/evidence";
-import { slot } from "@/lib/format";
-import { Sig } from "./sig";
+import { evidence, explorerTx } from "@/lib/evidence";
+import Link from "next/link";
 import { StepsBeam } from "./steps-beam";
 
 const RULES = [
@@ -13,7 +12,6 @@ const RULES = [
 
 export function Survive() {
   const steps = evidence.survive;
-  const [seize, observe] = evidence.seizure;
   return (
     <section id="survive" className="py-16 md:py-24 lg:py-28" aria-labelledby="survive-title">
       <Container className="grid grid-cols-1 [&>*]:min-w-0 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
@@ -25,9 +23,6 @@ export function Survive() {
           <p className="text-base text-ink-muted md:text-lg">
             The same pause, on Unlisted's program on Solana devnet. Each step below is a finalized transaction.
           </p>
-          <a className="text-[13px] text-paid underline underline-offset-2" href={recordUrl(steps[0].record)}>
-            Full scenario record
-          </a>
         </div>
         <StepsBeam>
         <ol className="relative flex flex-col" aria-label="Pause, redeem, resume, settle">
@@ -40,34 +35,22 @@ export function Survive() {
               <div className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-4">
                 <h3 className="font-display text-lg font-semibold">{s.label}</h3>
                 <p className="text-[14px] text-ink-muted">{RULES[i]}</p>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <Sig signature={s.signature} network={s.network} />
-                </div>
-                <span className="font-mono text-[11px] text-ink-muted">devnet · slot {slot(s.slot)}</span>
+                <a className="self-start text-[13px] text-paid underline underline-offset-2" href={explorerTx(s.signature, s.network)} target="_blank" rel="noreferrer" data-signature={s.signature} data-network={s.network}>
+                  View the transaction
+                </a>
               </div>
             </li>
           ))}
         </ol>
         </StepsBeam>
       </Container>
-      <Container className="mt-12 grid gap-4 md:grid-cols-2">
-        <div className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-5">
-          <h3 className="font-display text-lg font-semibold">A seizure is seen and shared, not hidden</h3>
-          <p className="text-[14px] text-ink-muted">
-            The vault's actual balance is the truth, never a recorded number. When the issuer takes tokens out, anyone can
-            record the shortfall, and every holder bears it pro rata. No later depositor makes anyone whole.
-          </p>
-          <Sig signature={seize.signature} network={seize.network} short />
-          <Sig signature={observe.signature} network={observe.network} short />
-        </div>
-        <div className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-5">
-          <h3 className="font-display text-lg font-semibold">No oracle</h3>
-          <p className="text-[14px] text-ink-muted">
-            Deposits and redemptions are computed from the vault's holdings alone. The app shows three labelled values
-            (what you'd get selling now, the last trade, and PreStocks' own reference) with their ages and the gaps
-            between them. It never shows a single "price".
-          </p>
-        </div>
+      <Container className="mt-10">
+        <p className="max-w-3xl text-[15px] text-ink-muted">
+          <b className="text-ink">A seizure</b> is handled the same way: the vault's real balance is the truth, the loss is
+          recorded on chain, and every holder shares it pro rata.{" "}
+          <b className="text-ink">No oracle:</b> deposits and redemptions are computed from what the vault holds.{" "}
+          <Link className="text-paid underline underline-offset-2" href="/evidence#devnet">Every step, slot and scenario on the evidence page</Link>.
+        </p>
       </Container>
     </section>
   );

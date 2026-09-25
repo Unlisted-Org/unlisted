@@ -11,9 +11,10 @@ import { mkdirSync, writeFileSync } from "node:fs";
 
   Broken versions (run each and see it fail before relying on the check):
     BROKEN=wide    a 2000px-wide element inside a section         -> "no horizontal scroll" fails
-    BROKEN=hide    the signatures section hidden                    -> "readable without a wallet" fails
+    BROKEN=hide    the survival section hidden                      -> "readable without a wallet" fails
     BROKEN=motion  a component animating despite reduced motion     -> "reduced motion" fails
     BROKEN=blank   one terminal emptied until replayed               -> "complete at rest" fails
+    BROKEN=company one of the seven company names removed from the hero -> "what it is" fails
 */
 const BROKEN = process.env.BROKEN ?? "";
 const SHOTS = "e2e/shots";
@@ -21,9 +22,10 @@ const SHOTS = "e2e/shots";
 async function breakPage(page: Page) {
   if (BROKEN === "wide")
     await page.evaluate(() => { const d = document.createElement("div"); d.style.width = "2000px"; d.style.height = "4px"; document.querySelector("#cost")!.appendChild(d); });
-  if (BROKEN === "hide") await page.addStyleTag({ content: "#proof{display:none!important}" });
+  if (BROKEN === "hide") await page.addStyleTag({ content: "#survive{display:none!important}" });
   if (BROKEN === "motion")
     await page.evaluate(() => { const el = document.querySelector("h1")!; el.animate([{ opacity: 1 }, { opacity: 0.4 }], { duration: 60_000, iterations: Infinity }); });
+  if (BROKEN === "company") await page.evaluate(() => { document.querySelector("[data-testid=companies] li:nth-child(3)")?.remove(); });
   if (BROKEN === "blank") await page.evaluate(() => { document.querySelectorAll("#breaks .whitespace-pre-wrap").forEach((n) => n.remove()); });
 }
 
@@ -37,14 +39,14 @@ async function open(page: Page, width: number, scheme: "light" | "dark", reduced
 }
 
 const SECTIONS: [string, RegExp][] = [
-  ["#hero-title", /issuer who can pause them, seize them/],
-  ["#happened-title", /It has already happened/],
+  ["#hero-title", /Seven pre-IPO companies\. One token\. You can always get your share out\./],
+  ["#happened-title", /pause, seize and re-price/],
   ["#breaks-title", /Basket protocols break/],
   ["#survive-title", /This one pays you out anyway/],
-  ["#proof-title", /Every other issuer action/],
   ["#cost-title", /About 7\.9% for a \$10,000 round trip/],
-  ["#disclosures-title", /What we disclose/],
+  ["#disclosures-title", /What we don.t claim/],
 ];
+const COMPANIES = ["OpenAI", "Anthropic", "Neuralink", "Anduril", "Polymarket", "Kalshi", "FigureAI"];
 
 for (const width of [1440, 390]) {
   for (const scheme of ["light", "dark"] as const) {
@@ -62,8 +64,12 @@ for (const width of [1440, 390]) {
         await expect(el, `${sel} visible`).toBeVisible();
         await expect(el).toHaveText(text);
       }
-      // The evidence itself: at least 20 full signatures rendered as explorer links.
-      expect(await page.locator("a[data-signature]").count()).toBeGreaterThanOrEqual(20);
+      // What it is, on the first screen: all seven companies are named in the hero.
+      const names = await page.locator("[data-testid=companies] li").allInnerTexts();
+      expect(names, "the seven companies in the hero").toEqual(COMPANIES);
+      // The landing keeps one link per claim; the full signature tables live on /evidence.
+      expect(await page.locator("a[data-signature]").count(), "evidence links on the landing").toBeGreaterThanOrEqual(8);
+      await expect(page.locator("a[href='/evidence']").first()).toBeAttached();
 
       mkdirSync(SHOTS, { recursive: true });
       await page.evaluate(() => window.scrollTo(0, 0));

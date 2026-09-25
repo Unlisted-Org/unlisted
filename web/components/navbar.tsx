@@ -6,11 +6,10 @@ import { ModeToggle } from "./mode-toggle";
 import { REPO } from "@/lib/evidence";
 
 const LINKS = [
-  { title: "What happened", href: "/#happened" },
+  { title: "The problem", href: "/#happened" },
   { title: "How it survives", href: "/#survive" },
-  { title: "Signatures", href: "/#proof" },
   { title: "Cost", href: "/#cost" },
-  { title: "Disclosures", href: "/#disclosures" },
+  { title: "Evidence", href: "/evidence" },
 ];
 
 export const Navbar = () => (
