@@ -21,7 +21,7 @@ export function AppShell({ children, wallet, badges = {}, notice }: { children: 
     <div className="holder min-h-screen bg-ground">
       <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 border-b border-line bg-surface px-4 lg:px-5">
         <div className="flex items-center gap-3">
-          <Link href="/" aria-label="Unlisted home"><Logo /></Link>
+          <Logo />
           <span className="rounded-sm border border-claim/40 bg-claim-soft px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-claim">devnet</span>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">

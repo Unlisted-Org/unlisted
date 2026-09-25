@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/png/unlisted-banner-dark.png">
+    <img alt="Unlisted: seven pre-IPO companies, one token. You can always get your share out." src="brand/png/unlisted-banner-light.png" width="100%">
+  </picture>
+</p>
+
 # Unlisted
 
 **A basket of tokenized pre-IPO companies that still pays you out when the issuer acts.**

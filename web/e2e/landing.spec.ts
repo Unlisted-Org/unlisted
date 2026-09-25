@@ -20,6 +20,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
     BROKEN=tilt    the hero card rotated in 3D                        -> "the hero card is straight" fails
     BROKEN=nohero  the hero card's entrance removed                   -> "plays in once" fails
     BROKEN=replay  a Replay button added to the section               -> "no Replay control" fails
+    BROKEN=oldlogo the wordmark removed from every logo                -> "the logo is on every surface" fails
+    BROKEN=oldicon the favicon without the mark                       -> "the icons are the mark" fails
     (mutants, scripts/mutant.mjs: the run never starting on scroll, and the run looping back to the first
      step, each fail "plays once when scrolled into view")
     BROKEN=company one of the seven company names removed from the hero -> "what it is" fails
@@ -175,4 +177,25 @@ test("Basket protocols break: no Replay; plays once on scroll, steps advance in 
   expect(await term.innerText(), "terminal text 3 s after the end").toBe(text);
   await expect(run).toHaveAttribute("data-run", "finished");
   if (!BROKEN) await page.locator("#breaks").screenshot({ path: `${SHOTS}/landing-breaks-finished-1440-light.png` });
+});
+
+// The logo (brand/): the U mark and the UNLISTED wordmark, from the delivered SVG, on every surface.
+test("the Unlisted logo is on every surface, and the icons are the mark", async ({ page, request }) => {
+  test.setTimeout(120_000);
+  const MARK = "M 850.324219 301.675781"; // the start of the U mark's path in brand/svg/unlisted-logo-stacked-black.svg
+  for (const [path, min] of [["/", 2], ["/evidence", 2], ["/app", 1]] as const) {
+    await page.goto(path, { waitUntil: "load" });
+    if (path === "/app") await expect(page.getByTestId("connect-wallet")).toBeVisible({ timeout: 60_000 });
+    if (BROKEN === "oldlogo") await page.evaluate(() => document.querySelectorAll("[data-testid=logo] svg:last-child").forEach((s) => s.remove()));
+    const logos = page.getByTestId("logo");
+    expect(await logos.count(), `logos on ${path}`).toBeGreaterThanOrEqual(min);
+    for (const l of await logos.all()) {
+      const paths = await l.locator("path").evaluateAll((ps) => ps.map((p) => p.getAttribute("d") ?? ""));
+      expect(paths.length, `mark + 8 wordmark glyphs on ${path}`).toBe(9);
+      expect(paths[0].startsWith(MARK), `the U mark on ${path}`).toBe(true);
+    }
+  }
+  const icon = await (await request.get("/icon.svg")).text();
+  expect(BROKEN === "oldicon" ? icon.replace(MARK, "M 0 0") : icon, "favicon is the mark").toContain(MARK);
+  for (const p of ["/favicon.ico", "/apple-icon.png", "/opengraph-image.png"]) expect((await request.get(p)).status(), p).toBe(200);
 });
