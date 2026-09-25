@@ -38,6 +38,9 @@ async function raw(page: Page, testid: string): Promise<bigint> {
   return BigInt(v);
 }
 
+/** Set by the test: records every app transaction the moment it lands. */
+let onChain: ((s: { step: string; signatures: string[] }) => void) | null = null;
+
 /** Waits for the newest tx-log entry to finish; returns its signatures (as rendered by the app). */
 async function lastTx(page: Page, label: RegExp): Promise<string[]> {
   const entry = page.getByTestId("tx-0");
@@ -45,8 +48,11 @@ async function lastTx(page: Page, label: RegExp): Promise<string[]> {
   await expect(entry).toHaveAttribute("data-status", /ok|failed/, { timeout: 180_000 });
   const status = await entry.getAttribute("data-status");
   const text = await entry.innerText();
+  const sigs = await entry.getByTestId("tx-signature").allInnerTexts();
+  // On the record at once, before any check on this step can fail: a run's record lists everything it put on chain.
+  onChain?.({ step: `landed: ${label.source}${status === "ok" ? "" : " (failed in the app)"}`, signatures: sigs });
   if (status !== "ok") throw new Error(`transaction failed in the app: ${text}`);
-  return entry.getByTestId("tx-signature").allInnerTexts();
+  return sigs;
 }
 
 const approvals = (page: Page) => page.evaluate(() => window.__testWallet!.approvals.map((a) => a.transactions));
@@ -70,6 +76,7 @@ test("buy in, issuer pauses one, redeem anyway (claim), pause lifts, claim pays 
     rec.screenshots.push(file.slice(file.indexOf("e2e/")));
   };
   const onOverview = () => expect(page).toHaveURL(/\/app$/);
+  onChain = ({ step, signatures }) => { if (signatures.length) rec.add({ step, by: step.includes("Issuer") || /pauses|resumes/.test(step) ? "fixture issuer (app control)" : "test wallet (browser)", signatures }); };
   let pausedByUs = false;
   try {
     expect(await mintPausedByRpc(env, pausedMint)).toBe(false); // a shared fixture: never start from someone else's pause
