@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Unlisted design tokens. One palette for the landing page and the app.
+  Neutrals lean slightly green, toward the accent (the green of a printed share certificate).
+  Semantic colours: paid (= accent), claim (paid later), issuer (an issuer action).
+  Every text colour below was measured at >= 5.5:1 against its theme's background.
+*/
+:root {
+  --radius: 0.5rem;
+
+  --ground: #f6f8f7;
+  --surface: #ffffff;
+  --line: #dce2df;
+  --ink: #0d1412;
+  --ink-muted: #55615c;
+
+  --paid: #17664f;
+  --paid-soft: #e3f1eb;
+  --claim: #8a5a00;
+  --claim-soft: #fbf1dc;
+  --issuer: #b3261e;
+  --issuer-soft: #fbe7e5;
+
+  --background: var(--surface);
+  --foreground: var(--ink);
+  --card: var(--ground);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: #f6f8f7;
+  --secondary: #edf1ef;
+  --secondary-foreground: var(--ink);
+  --muted: #edf1ef;
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--paid-soft);
+  --accent-foreground: var(--paid);
+  --destructive: var(--issuer);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--paid);
+
+  --shadow-brand-var:
+    -82px 54px 27px 0px rgba(9, 12, 11, 0.01),
+    -52px 35px 25px 0px rgba(9, 12, 11, 0.04),
+    -29px 19px 21px 0px rgba(9, 12, 11, 0.12),
+    -13px 9px 16px 0px rgba(9, 12, 11, 0.2), -3px 2px 9px 0px rgba(9, 12, 11, 0.24);
+}
+
+.dark {
+  --ground: #090c0b;
+  --surface: #101514;
+  --line: #212a27;
+  --ink: #e6ece9;
+  --ink-muted: #8c9892;
+
+  --paid: #43be93;
+  --paid-soft: #12291f;
+  --claim: #e2ae3d;
+  --claim-soft: #2a2110;
+  --issuer: #f2705f;
+  --issuer-soft: #2c1512;
+
+  --background: var(--ground);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: #090c0b;
+  --secondary: #1a211f;
+  --secondary-foreground: var(--ink);
+  --muted: #1a211f;
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--paid-soft);
+  --accent-foreground: var(--paid);
+  --destructive: var(--issuer);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--paid);
+  color-scheme: dark;
+
+  --shadow-brand-var:
+    -82px 54px 27px 0px rgba(230, 236, 233, 0.01),
+    -52px 35px 25px 0px rgba(230, 236, 233, 0.03),
+    -29px 19px 21px 0px rgba(230, 236, 233, 0.08),
+    -13px 9px 16px 0px rgba(230, 236, 233, 0.12),
+    -3px 2px 9px 0px rgba(230, 236, 233, 0.16);
+}
+
+@theme inline {
+  /* The template uses Tailwind's neutral scale directly; redefining it recolours every component. */
+  --color-neutral-50: #f6f8f7;
+  --color-neutral-100: #edf1ef;
+  --color-neutral-200: #dce2df;
+  --color-neutral-300: #c2cbc7;
+  --color-neutral-400: #8c9892;
+  --color-neutral-500: #55615c;
+  --color-neutral-600: #3f4945;
+  --color-neutral-700: #2b3330;
+  --color-neutral-800: #1a211f;
+  --color-neutral-900: #111715;
+  --color-neutral-950: #090c0b;
+
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-paid: var(--paid);
+  --color-paid-soft: var(--paid-soft);
+  --color-claim: var(--claim);
+  --color-claim-soft: var(--claim-soft);
+  --color-issuer: var(--issuer);
+  --color-issuer-soft: var(--issuer-soft);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Type: IBM Plex. The template's font-inter / font-display names are kept so its components follow. */
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-inter: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-plex-condensed), var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-brand: var(--shadow-brand-var);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion: no animation or transition runs anywhere. Components also render their final
+   state directly (see components/motion.tsx); this is the backstop for anything that forgets. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

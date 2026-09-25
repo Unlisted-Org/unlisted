@@ -1,0 +1,338 @@
+{
+ "survive": [
+  {
+   "label": "The issuer pauses ANTHROPIC",
+   "signature": "5v24J1KmennZW6GQNUj2iWGNLG7TqccwqQTZW7MeLZHro4JuvRfQzRcKNjw2FpQTBTT96qkQCVLCiPGcmcHBMzsm",
+   "slot": 503654748,
+   "network": "devnet",
+   "record": "tests/program/devnet/pause-mid-redemption.json"
+  },
+  {
+   "label": "Redeem during the pause: six legs paid now, ANTHROPIC becomes a claim",
+   "signature": "2jShDvn43AK1ReyA8LJF74DDXBgiUfwagPhFRRKy3uQqji7VLFBXEADW5Fhn3rETj7kkQKJLdeKDaf66MXd1dQd7",
+   "slot": 503655019,
+   "network": "devnet",
+   "record": "tests/program/devnet/pause-mid-redemption.json"
+  },
+  {
+   "label": "The issuer resumes ANTHROPIC",
+   "signature": "2WYsJ97XLasHnN6VzspzMG8kYZtH6VxKmvjNdSwPZDRAFiSn6wbeAURPR4Sjz7MPvTJcbxKs5EsxRkxUrPQa3H3",
+   "slot": 503655230,
+   "network": "devnet",
+   "record": "tests/program/devnet/pause-mid-redemption.json"
+  },
+  {
+   "label": "Anyone settles the claim: it pays out",
+   "signature": "4pois1iLUcfHM5NQr8uotgMRGyqF6pSBWEnHC4MvcMrNss6BMAh6whjYKwC12zj7KHvaFH5tyZcSHxupBKQ29cbs",
+   "slot": 503655256,
+   "network": "devnet",
+   "record": "tests/program/devnet/pause-mid-redemption.json"
+  }
+ ],
+ "seizure": [
+  {
+   "label": "The issuer burns NEURALINK out of the vault",
+   "signature": "RdiTG5MnYvPmLiHkKPjrhPbhKmMaRhWaoLcMSHXCtDUaayE5CDUiiyVe1v9oLDxNfygk4b9Z1G3W8Q2VEp83GCL",
+   "slot": 503654088,
+   "network": "devnet",
+   "record": "tests/program/devnet/seizure.json"
+  },
+  {
+   "label": "Anyone records the shortfall",
+   "signature": "4NHSajqyThX7Ai4B3Ye8R88GZLwYHjYgm9CLok4wCnyz7HJN6Zq9ZjbewJHJ8a7igcd1tCbuKvAJPLo6FbJmnZos",
+   "slot": 503654111,
+   "network": "devnet",
+   "record": "tests/program/devnet/seizure.json"
+  },
+  {
+   "label": "Redemption: NEURALINK pays pro rata less, the rest in full",
+   "signature": "3GyqdBmrRr8cq8x1cwUmXcKFppE5K4yXtj13Be3m64tUaBPJ26smyBy3jRLPd2N6gQvTNS8qd3oRdvkaqBjv7Z7k",
+   "slot": 503654345,
+   "network": "devnet",
+   "record": "tests/program/devnet/seizure.json"
+  }
+ ],
+ "browser": {
+  "wallet": "Ctfc3hxPoMUhpeRkietjRQKeFueJmNfAF9FevBxwPixj",
+  "steps": [
+   {
+    "label": "Deposit in kind from a fresh wallet",
+    "signature": "3DqAo1fP3rhY39yChnDP75e5eoVqd5m9c5yA6TDZZVizAxszjg2P8Ckgr2p65GDxkYfQ4FNaiDMK6J2WatY6YFda",
+    "slot": 503688761,
+    "network": "devnet",
+    "record": "app/e2e/runs/2026-09-24-devnet.json"
+   },
+   {
+    "label": "The issuer pauses ANTHROPIC",
+    "signature": "5Ee8PHkqcU5P4BwHQpVa2eMhNTuBFQhNrvKK417yRy67n5R4k1UNCDo7TAtTxwuTZno3Vf3JLZQB4X1g4zJLsF3u",
+    "slot": null,
+    "network": "devnet",
+    "record": "app/e2e/runs/2026-09-24-devnet.json"
+   },
+   {
+    "label": "Redeem in the app: six legs paid, one claim",
+    "signature": "5kvL8WJvdxW1dgQ2Z1iTydr77cB7Sq85DgTGYSceN9YmD7BMi4Th5wyXbFLCuMoyXRoa7zG1TXNEJJtaPkLQVxXQ",
+    "slot": 503689532,
+    "network": "devnet",
+    "record": "app/e2e/runs/2026-09-24-devnet.json"
+   },
+   {
+    "label": "Settle the claim after the resume",
+    "signature": "5H9wmxQjuZuBShATirDAhNnAorA16TTbyDR9VLCDWFji46ExXVXc9vFxMhrAPzw8ipufniEtw62rYZ2PfvEV6fN4",
+    "slot": 503690006,
+    "network": "devnet",
+    "record": "app/e2e/runs/2026-09-24-devnet.json"
+   }
+  ],
+  "paidNow": {
+   "OPENAI": "2353811",
+   "NEURALINK": "10898884",
+   "ANDURIL": "28422439",
+   "POLYMARKET": "31576587",
+   "KALSHI": "5189640",
+   "FIGUREAI": "26010275"
+  },
+  "claim": {
+   "leg": "ANTHROPIC",
+   "units": "46928691",
+   "reason": "Paused"
+  },
+  "settled": {
+   "received": "4455297",
+   "appEstimate": "4455297",
+   "appEstimateGross": "4500301",
+   "claimSettledAmount": "4455297",
+   "feeBps": 100
+  }
+ },
+ "proofTable": [
+  {
+   "label": "Freeze the vault",
+   "signature": "4rmpzqjTtvEE6dnRrhdmGG28dndBH655qtdrLBkCvXVKh7c73ipigbLMmSm3pgKQKZyvpZCKLKiAp9gqqh3BsSXE",
+   "slot": 503660456,
+   "network": "devnet",
+   "record": "tests/program/devnet/frozen-vault.json",
+   "scenario": "frozen-vault"
+  },
+  {
+   "label": "Redeem: six paid, one claim",
+   "signature": "5bb3tt6tBtskqRMd5ixAZnm4CQDcPoweHqNXLNZ7GsNRzrKmdxGjQjxbj5fL42DYvjPaJtoKeo9FPbQQWv9DvqGL",
+   "slot": 503660553,
+   "network": "devnet",
+   "record": "tests/program/devnet/frozen-vault.json",
+   "scenario": "frozen-vault"
+  },
+  {
+   "label": "Thaw: claim settles",
+   "signature": "3DjmwAdYYbnKwPunSjEPaARmBXELrpZBXw1NReTW1mxtQAmJuWPMMzzw9eCyDMzBCtFcgEwS8sDeN5BbBD4gstjy",
+   "slot": 503660621,
+   "network": "devnet",
+   "record": "tests/program/devnet/frozen-vault.json",
+   "scenario": "frozen-vault"
+  },
+  {
+   "label": "Switch on a transfer hook",
+   "signature": "35FoPcCiBEv5JsJRiecxmKyEECqyBEExehfL8AX4pvsSNSkG9DtsS3X6KoX3xdw8c8mfGYoU13UmZXFUpHjXYNoo",
+   "slot": 503660088,
+   "network": "devnet",
+   "record": "tests/program/devnet/hook-switched-on.json",
+   "scenario": "hook-switched-on"
+  },
+  {
+   "label": "Redeem: six paid, one claim",
+   "signature": "2YDjBJSBUubZhdJ5GjKvLsLC6XKF5cEPCLNKvSHPX4Kp2mbs2K6HUpSJRJoYKAK84u6gptuHX2QecK5KB4EU9fNe",
+   "slot": 503660196,
+   "network": "devnet",
+   "record": "tests/program/devnet/hook-switched-on.json",
+   "scenario": "hook-switched-on"
+  },
+  {
+   "label": "Hook off: claim settles",
+   "signature": "4G1DVR6c9LJGzkzBFDFAH9829JS17EHiQx92gUGCtGytrNgaN77Y5L2qSZGHKG8KrjTWMLmGu3rXea97o1NDXKui",
+   "slot": 503660332,
+   "network": "devnet",
+   "record": "tests/program/devnet/hook-switched-on.json",
+   "scenario": "hook-switched-on"
+  },
+  {
+   "label": "Change the display multiplier",
+   "signature": "29fHTPJLdsGFempCbQAv2PJfV3wf2VdxfvGzWZgoQWFu2tPCb6ZX8tcjEd7dBK51tGR5KT6cMaPG17jt4JTCK3hk",
+   "slot": 503656959,
+   "network": "devnet",
+   "record": "tests/program/devnet/multiplier-change-mid-position.json",
+   "scenario": "multiplier-change-mid-position"
+  },
+  {
+   "label": "Redeem: raw payout unchanged",
+   "signature": "5oP2cxobVcj3ub3PKjHmNXzwtpJdxeLeZjpb5dAucjn6yfU1UJvUfuRAoVqczmnAF6nJv1fzfRo49Ki1TayVL9T6",
+   "slot": 503658048,
+   "network": "devnet",
+   "record": "tests/program/devnet/multiplier-change-mid-position.json",
+   "scenario": "multiplier-change-mid-position"
+  },
+  {
+   "label": "Schedule the fee 100 \u2192 300 bps",
+   "signature": "2BE63mgq8yjVNFX5UbfotHEWE72n5UHyX4pFZknALGGVA5vtL25Ks6Tnrbu9vY7n7GSSgEWpVyPjKUi7K5DD1Ax8",
+   "slot": 503656152,
+   "network": "devnet",
+   "record": "tests/program/devnet/fee-change-mid-position.json",
+   "scenario": "fee-change-mid-position"
+  },
+  {
+   "label": "Redeem under the current fee",
+   "signature": "378eagk8KGEUxxyMV7Xa3qmyHTL8QrHHoy4dL3ghBZ4yd1GF5fJAW4p3pQYE8UfYcSFsPmmjmJe2YNfKyBJG5swL",
+   "slot": 503656517,
+   "network": "devnet",
+   "record": "tests/program/devnet/fee-change-mid-position.json",
+   "scenario": "fee-change-mid-position"
+  }
+ ],
+ "deposit": [
+  {
+   "label": "Open a USDC deposit ticket",
+   "signature": "4jpNeWdk9BqhQ7Mo7HsruktK4cjfyyZc1cETyFvjQtdbMLXt31UxJ4Wezn6XKMd6zwTzRVhAUJbYqhLg2pCyySEt",
+   "slot": 503663101,
+   "network": "devnet",
+   "record": "tests/program/devnet/canonical.json"
+  },
+  {
+   "label": "Finalize: shares minted, leftovers refunded",
+   "signature": "4tgiPRfHeyfnN2zpJmgNUTKrj3ZF4UhQwKrG3BQM1hHRoZZafririXsbiqsYPvFHmqx95CJMCneGa4trX8f5wamw",
+   "slot": 503663425,
+   "network": "devnet",
+   "record": "tests/program/devnet/canonical.json"
+  },
+  {
+   "label": "Abort: every unit and every lamport of rent returned",
+   "signature": "4mnuhQABT6zLdBDiZ7NbsbUP51fThBtR8br967Qbo9k39HzLye7WtB7n1MrdY7yxW51fnxCvrsZBsk4cZxQhmKgc",
+   "slot": 503692226,
+   "network": "devnet",
+   "record": "tests/program/devnet/refund-path.json"
+  }
+ ],
+ "deploy": {
+  "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+  "signature": "3MGLsSPQtK7nU1pUvrQRRBvKXUuPsUMVSBKzYVZpunwDVhqTYhwiRtyucgjV82QtsZU5PoupQTyHPuAwBqEcpmUB",
+  "slot": 503653050,
+  "sha256": "80db3bace6b493dbc09513437db25455058447ba11fbb71ba47b90aa56817dcc",
+  "network": "devnet"
+ },
+ "feeChanges": [
+  {
+   "mint": "FIGUREAI",
+   "signature": "3kPL56XVmfLSPFv9hbKwcLTBCnHqChm8vANdZ3adV9Q5gaSoWvoPiSDSKGRkoNWb5hyWNEceCDDkLJ62MwtonUgP",
+   "network": "mainnet"
+  },
+  {
+   "mint": "NEURALINK",
+   "signature": "38NvKxQ8askR7FqrZLj4doFDLK8Tatfpgaqu1Y9tsuKnhc9sZ366zkqGPwDNxj1nq43gMfuVw76injsHzbJMbEqY",
+   "network": "mainnet"
+  },
+  {
+   "mint": "KALSHI",
+   "signature": "2kCnFhFK7zJL2mejcNU21SyVGGWbT4ggrsV7KFirGKYgkBjp5tiQtbhKxTNX2ghDipHUGXEvC3Kxvnz9Wgc1C6Vc",
+   "network": "mainnet"
+  },
+  {
+   "mint": "ANDURIL",
+   "signature": "2FyJC4aNayfKdH2SzTBG6GK9s3AWEHxHNpf1HiPMdzVhRQCS4DCFX9cjofbL7vjDbx9bpEtozmSAregaYf619nUq",
+   "network": "mainnet"
+  },
+  {
+   "mint": "POLYMARKET",
+   "signature": "43EW7SJspmdsvn56M2yRpCzYVKvEKdtCfkuARTrLPk1vcEtqyKNgHN6woA5XXcfbPckC4PbrDwQdyasCTZB6saTe",
+   "network": "mainnet"
+  },
+  {
+   "mint": "ANTHROPIC",
+   "signature": "kZFHsxbxPBh2xSssiCjR7e5PPFhyCBhi8ou8bSoyjACAvk3nk2ZZCXn45r7zsMctcdL5qWzpAnRrc4niKMpn2wu",
+   "network": "mainnet"
+  },
+  {
+   "mint": "OPENAI",
+   "signature": "2FxzQ66J7U1TUnrDpBRtay71uw5BKsA5EWWsTmGkL8s6R2daNcKSHrkw3YdsB9WVXkuoqcgtTvnEgs22iUM9H3mD",
+   "network": "mainnet"
+  }
+ ],
+ "multiplier": [
+  {
+   "mint": "OPENAI",
+   "multiplier": "1.4861347",
+   "signed": "2026-07-17 16:20:19",
+   "effective": "2026-07-17 16:30:00",
+   "warning": "9 min 41 s",
+   "signature": "2bNNe87cA182GFke6h5DnE8X7itPTnxDaaKnHsh1DvjeE5EoWu3q3cVVKrkNsprLf1YCGxhpGWN1FdNBRECyvFAQ",
+   "network": "mainnet"
+  },
+  {
+   "mint": "SPACEX",
+   "multiplier": "5",
+   "signed": "2026-06-10 04:01:15",
+   "effective": "2026-06-10 04:30:00",
+   "warning": "28 min 45 s",
+   "signature": "EymeLSUsiPvcJWGvAQvFdy4s8dgYfGed88hhdGxXQb2pnK6MUJ8A6DWNyXDb5YBQcmMZcBnQuMCcN7GvEP9yQ1G",
+   "network": "mainnet"
+  }
+ ],
+ "seizureMainnet": [
+  {
+   "signature": "2smHrk8UHqyZgqWS5ozisWGitWFMPv6mmA2VNnVSv45xrEU7uMDXycKMrSbE6YNapp9YF6Xd1ESt4aZwH6QxvkHB",
+   "network": "mainnet"
+  },
+  {
+   "signature": "3Umb9MA4U4LzWdpuT24qLDUdAsvn7UXgwSwgPtd39UVEDFHVnZJWY7cTVHew6Q3rhC11zWvBPQvkPEsE1WaWiY7y",
+   "network": "mainnet"
+  }
+ ],
+ "fork": {
+  "forkStartSlot": 450137772,
+  "record": "tests/program/fork/transcript-final7.json"
+ },
+ "symmetry": {
+  "program": "BASKT7aKd8n7ibpUbwLP3Wiyxyi3yoiXsxBk4Hpumate",
+  "pauseReceived": 0,
+  "seizeReceived": 0,
+  "pauseSteps": [
+   {
+    "step": "sellVaultTx (burns shares, creates withdraw intent)",
+    "ok": true
+   },
+   {
+    "step": "pause NVDAx mid-redemption",
+    "ok": null
+   },
+   {
+    "step": "redeemTokensTx",
+    "ok": false
+   },
+   {
+    "step": "redeemTokensTx retry (still paused)",
+    "ok": false
+   },
+   {
+    "step": "resume NVDAx",
+    "ok": null
+   },
+   {
+    "step": "redeemTokensTx after resume",
+    "ok": true
+   }
+  ],
+  "seizeSteps": [
+   {
+    "step": "seize: vault AAPLx balance set to 0 (simulated permanent-delegate burn)",
+    "ok": null
+   },
+   {
+    "step": "sellVaultTx (burns shares, creates withdraw intent)",
+    "ok": true
+   },
+   {
+    "step": "redeemTokensTx",
+    "ok": false
+   }
+  ],
+  "reconSlot": 450108480,
+  "vaultsScanned": 39
+ }
+}
