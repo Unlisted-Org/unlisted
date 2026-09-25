@@ -1,0 +1,278 @@
+/* ------------------------------------------------------------ tokens
+   The Unlisted app's palette (web/app/globals.css), mapped onto Starlight's scale.
+   Starlight inverts its grey scale in light mode: --sl-color-white is the strongest
+   text and --sl-color-black the page ground. Neutrals lean slightly green, toward
+   the accent: "certificate green", the green of a printed share certificate.
+   Three semantic colours, as in the app: paid (= the accent), claim (paid later,
+   amber) and issuer (an issuer action, red). They mean nothing else here. */
+
+:root {
+	--sl-font: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--sl-font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+	--ul-display: 'IBM Plex Sans Condensed', var(--sl-font);
+
+	/* dark (web/app/globals.css .dark) */
+	--sl-color-accent-low: #12291f;
+	--sl-color-accent: #43be93;
+	--sl-color-accent-high: #43be93;
+	--sl-color-white: #e6ece9;
+	--sl-color-gray-1: #dce2df;
+	--sl-color-gray-2: #c2cbc7;
+	--sl-color-gray-3: #8c9892;
+	--sl-color-gray-4: #55615c;
+	--sl-color-gray-5: #2b3330;
+	--sl-color-gray-6: #1a211f;
+	--sl-color-black: #090c0b;
+	--sl-color-bg-nav: #090c0b;
+	--sl-color-bg-sidebar: #0c1110;
+	--sl-color-hairline-light: #212a27;
+	--sl-color-hairline: #212a27;
+	--sl-color-hairline-shade: #090c0b;
+	--sl-color-bg-inline-code: #1a211f;
+
+	--ul-surface: #101514;
+	--ul-paid: #43be93;
+	--ul-paid-soft: #12291f;
+	--ul-claim: #e2ae3d;
+	--ul-claim-soft: #2a2110;
+	--ul-issuer: #f2705f;
+	--ul-issuer-soft: #2c1512;
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: #e3f1eb;
+	--sl-color-accent: #17664f;
+	--sl-color-accent-high: #0f4a39;
+	--sl-color-white: #0d1412;
+	--sl-color-gray-1: #111715;
+	--sl-color-gray-2: #2b3330;
+	--sl-color-gray-3: #55615c;
+	--sl-color-gray-4: #8c9892;
+	--sl-color-gray-5: #c2cbc7;
+	--sl-color-gray-6: #edf1ef;
+	--sl-color-gray-7: #f6f8f7;
+	--sl-color-black: #ffffff;
+	--sl-color-bg-nav: #ffffff;
+	--sl-color-bg-sidebar: #f6f8f7;
+	--sl-color-hairline-light: #edf1ef;
+	--sl-color-hairline: #dce2df;
+	--sl-color-hairline-shade: #c2cbc7;
+	--sl-color-bg-inline-code: #edf1ef;
+
+	--ul-surface: #ffffff;
+	--ul-paid: #17664f;
+	--ul-paid-soft: #e3f1eb;
+	--ul-claim: #8a5a00;
+	--ul-claim-soft: #fbf1dc;
+	--ul-issuer: #b3261e;
+	--ul-issuer-soft: #fbe7e5;
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+}
+:root[data-theme='light'] {
+	color-scheme: light;
+}
+
+/* ------------------------------------------------------------ type */
+.site-title {
+	font-family: var(--ul-display);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	color: var(--sl-color-white);
+}
+.site-title img {
+	height: 0.8rem;
+	width: auto;
+}
+h1#_top,
+.sl-markdown-content :is(h2, h3) {
+	font-family: var(--ul-display);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+.sl-markdown-content {
+	line-height: 1.7;
+}
+.sl-markdown-content :is(td, th) {
+	font-variant-numeric: tabular-nums;
+}
+.sl-markdown-content code:not(pre code) {
+	overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------ semantic colour
+   Paid, claim and issuer mean what they mean in the app, and nothing else. */
+.paid {
+	color: var(--ul-paid);
+	font-weight: 600;
+}
+.claim {
+	color: var(--ul-claim);
+	font-weight: 600;
+}
+.issuer {
+	color: var(--ul-issuer);
+	font-weight: 600;
+}
+.muted {
+	color: var(--sl-color-gray-3);
+}
+.sl-markdown-content tr.paid-row td {
+	background: var(--ul-paid-soft);
+}
+.sl-markdown-content tr.claim-row td {
+	background: var(--ul-claim-soft);
+}
+.sl-markdown-content tr.issuer-row td {
+	background: var(--ul-issuer-soft);
+}
+
+/* A plain-language callout for what isn't proven yet. */
+.sl-markdown-content .unverified {
+	border-inline-start: 3px solid var(--ul-claim);
+	background: var(--ul-claim-soft);
+	padding: 0.5rem 0.9rem;
+	border-radius: 0.25rem;
+}
+
+/* The "where this comes from" line at the foot of a page. */
+.sources {
+	margin-top: 2.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--sl-color-hairline);
+	font-size: var(--sl-text-sm);
+	color: var(--sl-color-gray-3);
+}
+.sources a {
+	color: inherit;
+}
+
+/* Narrow screens: tables keep every column in view where they can. */
+@media (max-width: 50rem) {
+	.sl-markdown-content :is(th, td) {
+		padding-inline: 0.45rem;
+	}
+	.sl-markdown-content :is(th, td):first-child {
+		padding-inline-start: 0;
+	}
+	.sl-markdown-content table {
+		font-size: var(--sl-text-sm);
+	}
+}
+
+/* Addresses, signatures and account names in tables wrap instead of widening them. */
+.sl-markdown-content td code {
+	word-break: break-all;
+}
+.sl-markdown-content td a code {
+	word-break: normal;
+	white-space: nowrap;
+}
+
+/* Wide reference tables (instructions, the fee history) wrap anywhere on narrow screens rather
+   than scroll sideways inside their box and hide columns. */
+@media (max-width: 50rem) {
+	.sl-markdown-content :is(td, th) {
+		overflow-wrap: anywhere;
+		hyphens: auto;
+	}
+	.sl-markdown-content td a code {
+		white-space: normal;
+		word-break: break-all;
+	}
+}
+
+/* Reference tables with long cells stack into one block per row on narrow screens, each cell
+   labelled, instead of squeezing four columns into 390 px. */
+@media (max-width: 50rem) {
+	.sl-markdown-content .stack :is(table, thead, tbody, tr, th, td) {
+		display: block;
+		width: auto;
+	}
+	.sl-markdown-content .stack table {
+		overflow: visible;
+	}
+	.sl-markdown-content .stack thead {
+		display: none;
+	}
+	.sl-markdown-content .stack tr {
+		border-top: 1px solid var(--sl-color-hairline);
+		padding-block: 0.6rem;
+	}
+	.sl-markdown-content .stack td {
+		border: 0;
+		padding: 0.15rem 0;
+		overflow-wrap: break-word;
+		hyphens: manual;
+	}
+	.sl-markdown-content .stack td:first-child {
+		font-weight: 600;
+	}
+	.sl-markdown-content .stack td:not(:first-child)::before {
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		margin-inline-end: 0.4rem;
+	}
+	.sl-markdown-content .ix td:nth-child(2)::before {
+		content: 'Accounts';
+	}
+	.sl-markdown-content .ix td:nth-child(3)::before {
+		content: 'Arguments';
+	}
+	.sl-markdown-content .ix td:nth-child(4)::before {
+		content: 'Who';
+	}
+}
+@media (max-width: 50rem) {
+	.sl-markdown-content .fee td:nth-child(1)::before {
+		content: 'Change';
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		margin-inline-end: 0.4rem;
+	}
+	.sl-markdown-content .fee td:nth-child(2)::before {
+		content: 'Rate';
+	}
+	.sl-markdown-content .fee td:nth-child(3)::before {
+		content: 'Set on chain';
+	}
+	.sl-markdown-content .fee td:nth-child(4)::before {
+		content: 'Takes effect';
+	}
+	.sl-markdown-content .fee td:nth-child(5)::before {
+		content: 'Notice';
+	}
+	.sl-markdown-content .fee td:nth-child(6)::before {
+		content: 'Announcement';
+	}
+	.sl-markdown-content .mult td:nth-child(2)::before {
+		content: 'New multiplier';
+	}
+	.sl-markdown-content .mult td:nth-child(3)::before {
+		content: 'Signed';
+	}
+	.sl-markdown-content .mult td:nth-child(4)::before {
+		content: 'Effective';
+	}
+	.sl-markdown-content .mult td:nth-child(5)::before {
+		content: 'Warning';
+	}
+	.sl-markdown-content .mult td:nth-child(6)::before {
+		content: 'Transaction';
+	}
+	.sl-markdown-content .err td:nth-child(2)::before {
+		content: 'Hex';
+	}
+	.sl-markdown-content .err td:nth-child(3)::before {
+		content: 'Name';
+	}
+	.sl-markdown-content .err td:nth-child(4)::before {
+		content: 'Message';
+	}
+}
