@@ -196,11 +196,30 @@ export function HolderProvider({ config, children }: { config: AppConfig; childr
     }),
     onObserve: (leg) => run(`Observe ${view?.legs[leg].symbol}`, async (v, o, bh) => [planObserve({ v, cranker: o, mask: 1 << leg, blockhash: bh })]),
     issuer: (action, symbol, passcode) => track(`Issuer ${action === "pause" ? "pauses" : "resumes"} ${symbol} (devnet fixture)`, async (rec, update) => {
-      const res = await fetch("/api/issuer", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action, symbol, passcode }) });
-      const j = await res.json().catch(() => ({}));
-      if (j.signature) { rec.signatures.push(j.signature); update(); }
-      if (!res.ok) throw new Error(j.error ?? `HTTP ${res.status}`);
-      rec.status = "ok";
+      // The chain is the truth: if the request is lost, read the mint and report what actually happened.
+      const want = action === "pause";
+      const onChain = async () => {
+        const v = await client.fetchBasket();
+        return v.legs.find((l) => l.symbol === symbol)?.unavailable.includes("paused") === want;
+      };
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 55_000);
+        try {
+          const res = await fetch("/api/issuer", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action, symbol, passcode }), signal: ctl.signal });
+          const j = await res.json().catch(() => ({}));
+          if (j.signature) { rec.signatures.push(j.signature); update(); }
+          if (!res.ok) throw Object.assign(new Error(j.error ?? `HTTP ${res.status}`), { http: res.status });
+          rec.status = "ok";
+          return;
+        } catch (e: any) {
+          if (e?.http && e.http < 500) throw e; // refused (passcode, input): nothing to retry
+          if (await onChain().catch(() => false)) { rec.status = "ok"; return; } // it landed; only the answer was lost
+          if (attempt === 1) throw e; // the server is idempotent, so one retry is safe
+        } finally {
+          clearTimeout(timer);
+        }
+      }
     }),
     faucet: () => track("Get test tokens", async (rec, update) => {
       if (!owner || !wallet) throw new Error("Connect a wallet first.");

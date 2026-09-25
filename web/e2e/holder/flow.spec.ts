@@ -140,8 +140,9 @@ test("buy in, issuer pauses one, redeem anyway (claim), pause lifts, claim pays 
     await onOverview();
 
     // ---------------------------------------------------------------- 3. redeem anyway
-    const redeemShares = sharesAfter / 2n;
-    await page.getByTestId("demo-redeem-shares").fill((Number(redeemShares) / 1e9).toFixed(9));
+    // As filmed: the Redeem box's default, every share the wallet holds. Nothing is typed.
+    const redeemShares = sharesAfter;
+    await expect(page.getByTestId("demo-redeem-shares")).toHaveValue((Number(redeemShares) / 1e9).toFixed(9).replace(/\.?0+$/, ""));
     await expect(page.getByTestId(`tile-claimnext-${PAUSE_LEG}`)).toHaveAttribute("data-raw", redeemShares.toString());
     const predictedNet: Record<string, bigint> = {};
     for (const l of env.legs) if (l.symbol !== PAUSE_LEG) predictedNet[l.symbol] = await raw(page, `tile-receive-${l.symbol}`);

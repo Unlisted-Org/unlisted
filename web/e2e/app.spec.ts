@@ -246,3 +246,15 @@ test("app (Overview): the seven tiles are seven across or one per row, never an 
     expect([1, 7], `tile rows at ${width}px: ${rows}`).toContain(rows);
   }
 });
+
+// The issuer control is idempotent: asking for the state a mint is already in sends nothing. (Devnet,
+// with the passcode and key configured; it signs nothing when it passes.)
+test("api: resuming a company that isn't paused returns at once and sends nothing", async ({ request }) => {
+  test.skip(process.env.E2E_ENV !== "devnet", "needs the devnet issuer configuration");
+  const code = process.env.E2E_DEMO_PASSCODE ?? require("node:fs").readFileSync(require("node:path").join(__dirname, "holder/.local/demo-passcode"), "utf8").trim();
+  const r = await request.post("/api/issuer", { data: { action: "resume", symbol: "KALSHI", passcode: code } });
+  const j = await r.json();
+  expect(r.status(), JSON.stringify(j)).toBe(200);
+  expect(j.already, "already in that state").toBe(true);
+  expect(j.signature, "no transaction sent").toBeUndefined();
+});

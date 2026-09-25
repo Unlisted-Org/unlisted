@@ -1,0 +1,11 @@
+run 1/10: PASS in 108s 
+run 2/10: PASS in 109s 
+run 3/10: PASS in 81s 
+run 4/10: PASS in 113s 
+run 5/10: PASS in 103s 
+run 6/10: FAIL in 124s     Error: transaction failed in the app: Issuer resumes ANTHROPIC (devnet fixture): failed · 0 transaction(s), 0 wallet approval(s) (kept: e2e/tmp/rehearsal-20260925T152531Z-6)
+run 7/10: PASS in 108s 
+run 8/10: PASS in 95s 
+run 9/10: PASS in 104s 
+run 10/10: PASS in 112s 
+passed 9 of 10
