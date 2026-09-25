@@ -120,7 +120,7 @@ function Tile({ v, leg, claim, pos, out, onSettle, busy }: { v: BasketView; leg:
       <div className="tile-body">
         {claim ? (
           <>
-            <span data-testid={`tile-claim-${l.symbol}`} data-raw={claim.units.toString()}>Your claim: {fmtShares(claim.units)} units</span>
+            <span data-testid={`tile-claim-${l.symbol}`} data-raw={claim.units.toString()}>Your claim: {fmtShares(claim.units)} shares</span>
             {est && <span data-testid={`tile-estimate-${l.symbol}`} data-raw={est.net.toString()} data-gross={est.gross.toString()}>Pays {fmtRaw(est.net)} now</span>}
             <button disabled={busy || down} onClick={() => onSettle(claim)} data-testid={`tile-settle-${l.symbol}`}>{down ? "Pays when resumed" : "Settle"}</button>
           </>
@@ -190,6 +190,7 @@ function IssuerControl() {
     <section className="issuer-ctl" data-testid="issuer-control">
       <h2>Issuer <span className="pill alert">devnet fixture</span></h2>
       <p className="muted">PreStocks can pause any of its tokens at any time. This control does the same to the devnet fixtures, so you can watch the basket keep paying. It needs the presenter's demo passcode.</p>
+      <p className="muted" data-testid="issuer-simulation-note"><b>A devnet simulation.</b> The control signs with a test key that controls only this app's fixture mints on devnet. It can't touch PreStocks' real tokens or anything on mainnet.</p>
       <div className="row">
         <label>Company <select value={sym} onChange={(e) => setSym(e.target.value)} data-testid="issuer-symbol">
           {v.legs.map((l) => <option key={l.symbol} value={l.symbol}>{nameOf(l.symbol)}{l.unavailable.includes("paused") ? " (paused)" : ""}</option>)}

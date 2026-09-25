@@ -56,7 +56,7 @@ export function issuerBanners(v: BasketView, rows: EventRow[], api: EventsRespon
   const out: Banner[] = [];
   for (const l of v.legs) {
     if (l.unavailable.includes("paused"))
-      out.push({ key: `p${l.index}`, level: "alert", testid: `banner-paused-${l.symbol}`, title: `${l.symbol} is paused by the issuer`,
+      out.push({ key: `p${l.index}`, level: "alert", testid: `banner-paused-${l.symbol}`, title: `${l.symbol} is paused by the issuer (devnet fixture)`,
         body: `Deposits are refused while any leg is unavailable. Redemptions still pay the other ${v.legs.length - 1} legs now; ${l.symbol} becomes a claim that pays after the issuer resumes it.` });
     if (l.unavailable.includes("hook"))
       out.push({ key: `h${l.index}`, level: "alert", testid: `banner-hook-${l.symbol}`, title: `${l.symbol}: transfer hook set (${short(l.mintInfo.hookProgram!)})`,
