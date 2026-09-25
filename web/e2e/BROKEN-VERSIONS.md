@@ -18,3 +18,15 @@ The `motion` and `blank` runs also failed the 390 tests. That was a real defect,
 Also enforced at build time: `npm run build` runs `scripts/verify-evidence.mjs` first. That script fails unless every signature on the page is finalized, without error, on its network, and at its recorded slot. Its broken versions both failed:
 - a slot off by one;
 - two signatures swapped between rows.
+
+## Logged-out link check (`LINKS=1 npx playwright test e2e/links.spec.ts`), 2026-09-25, after the repo went public
+
+- **Explorer:** all 36 evidence signatures open on explorer.solana.com in a fresh browser context (no cookies, no wallet) and show Success and Finalized. Mainnet signatures use the default cluster; devnet ones use `?cluster=devnet`.
+- **GitHub:** all 16 github.com links on the page return 200 to an unauthenticated request.
+- **Broken versions (`BROKEN_LINKS=1`):** both checks failed, each on exactly the injected item:
+  - a well-formed signature that doesn't exist on chain → `devnet 4uRBN9XK…: not found`, while the 36 real ones passed;
+  - a record path that doesn't exist → `404 …/docs/does-not-exist.md`.
+
+## Section 3 swapped to the Pro `feature-section-with-terminal` frame
+
+The complete-at-rest check now requires two things at rest: the selected transcript in full, and all four outcomes (Symmetry and Unlisted, pause and seizure) visible. `BROKEN=blank` still fails it (`terminal lines at rest`), and `BROKEN=wide` still fails the width check. Real run: 6 of 6 pass.

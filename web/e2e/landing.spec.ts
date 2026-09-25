@@ -87,10 +87,12 @@ test("reduced motion: nothing animates, and animated parts show their final stat
 test("complete at rest with motion allowed: terminals and fee chart are full before any interaction", async ({ page }) => {
   await open(page, 1440, "light", "no-preference");
   const lines = page.locator("#breaks .whitespace-pre-wrap");
-  // Symmetry pause run: 4 commands + 6 output lines; Unlisted run: 4 commands + 13 output lines.
-  expect(await lines.count(), "terminal lines at rest").toBeGreaterThanOrEqual(20);
+  // The selected run (Symmetry, pause) is complete: 4 commands + 5 output lines.
+  expect(await lines.count(), "terminal lines at rest").toBeGreaterThanOrEqual(9);
   await expect(page.locator("#breaks")).toContainText("received: nothing");
-  await expect(page.locator("#breaks")).toContainText("claim of 46,928,691 units");
+  // All four outcomes are visible at rest, not only the selected one.
+  for (const [id, text] of [["sym-pause", "Receives nothing"], ["unl-pause", "6 of 7 legs paid immediately"], ["sym-seize", "fails and pays nothing"], ["unl-seize", "shared pro rata"]])
+    await expect(page.locator(`[data-outcome="${id}"]`)).toContainText(text);
   await expect(page.locator("#happened svg path").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Replay" }).first()).toBeVisible();
   writeFileSync(`${SHOTS}/.gitkeep`, "");
