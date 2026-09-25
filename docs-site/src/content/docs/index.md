@@ -54,6 +54,7 @@ The team wrote to PreStocks (legal@prestocks.com) on 2026-09-25 with three quest
 ## Where to go next
 
 - **The thesis in one page:** [The user flow](/product/user-flow/): buy in, the issuer pauses a company, redeem anyway, the claim pays out.
+- **Use the app:** the [Dashboard guide](/app/dashboard/) and [Wallet connection](/app/wallet/).
 - **Check it yourself:** [Evidence](/trust/evidence/) and [Getting started](/start/getting-started/).
 - **The risks we disclose:** [Security and assumptions](/trust/security/).
 

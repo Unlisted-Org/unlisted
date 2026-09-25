@@ -46,6 +46,13 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Using the app',
+					items: [
+						{ label: 'Dashboard guide', slug: 'app/dashboard' },
+						{ label: 'Wallet connection', slug: 'app/wallet' },
+					],
+				},
+				{
 					label: 'The protocol',
 					items: [
 						{ label: 'The protocol flow', slug: 'protocol/flow' },

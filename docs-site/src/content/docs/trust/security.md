@@ -59,6 +59,7 @@ A USDC deposit may need an intermediate token account owned by the ticket (Jupit
 
 - **Everything that writes runs on devnet or a local fork.** Nothing in this project signs a mainnet transaction. The fixture mints hold no PreStocks tokens, and the devnet basket holds no one's real tokens.
 - **Why devnet is the right place to prove it:** the cases that matter are issuer actions, and only the issuer's keys can trigger them on mainnet.
+- **The deployed app's server holds the devnet fixture issuer's key**, as a platform secret, never committed. It uses it for two things: minting test tokens to a visitor's wallet, and the demo's pause and resume, which need the presenter's passcode. That key has the same powers over the fixture mints as PreStocks' multisig has over the real ones, including over the fixture vault, which is the point of the demo. It has no power on mainnet.
 - **Prices are mainnet's.** The app values the devnet basket at mainnet market prices for the real tokens, and says so on every value.
 
 **Where a mainnet version would differ** (flagged in `docs/risks.md`, not legal advice):
@@ -74,6 +75,6 @@ A USDC deposit may need an intermediate token account owned by the ticket (Jupit
 
 <div class="sources">
 
-Sources: `docs/risks.md` §2–§3, *PreStocks' reply*; `docs/specs/02-onchain-interface.md` (*Known limitation*, *Authority*); `tests/program/devnet/refund-path.json`; `docs/deploy.md`.
+Sources: `docs/risks.md` §2–§3, *PreStocks' reply*; `docs/specs/02-onchain-interface.md` (*Known limitation*, *Authority*); `tests/program/devnet/refund-path.json`; `docs/deploy.md`; `web/lib/server/issuer.ts`, `web/app/api/faucet/route.ts`, `web/app/api/issuer/route.ts`.
 
 </div>

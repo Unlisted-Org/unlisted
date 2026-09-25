@@ -20,7 +20,7 @@ const args = process.argv.slice(2);
 const opt = (k, d) => (args.includes(k) ? args[args.indexOf(k) + 1] : d);
 const DIST = opt('--dist', new URL('../dist/', import.meta.url).pathname);
 const SHOTS = opt('--shots', null);
-const PAGES = opt('--pages', '/,/product/user-flow/,/protocol/claims/,/protocol/program/').split(',');
+const PAGES = opt('--pages', '/,/product/user-flow/,/app/dashboard/,/protocol/claims/').split(',');
 const QUERY = opt('--query', 'claim');
 const EXPECT = opt('--expect', '/protocol/claims/');
 

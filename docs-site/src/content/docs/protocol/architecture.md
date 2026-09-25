@@ -37,7 +37,7 @@ Unlisted has five parts. Only the program holds or moves value; everything else 
 ```
 
 - **The browser reads devnet directly.** The app gets its settings from `/config.json` (cluster, program, share mint, lookup table, router and the valuation API's URL). It refuses any cluster but devnet or localnet.
-- **The wallet signs; nothing else does.** The SDK turns a user flow into unsigned transactions, and the app hands all of a flow's transactions to the wallet in one signing request.
+- **Your wallet signs everything that spends from it.** The SDK turns a user flow into unsigned transactions, and the app hands all of a flow's transactions to the wallet in one signing request. The only other signer is the app's server, as the devnet fixture issuer: it co-signs test-token mints (your wallet pays the fees) and signs the demo's pause and resume ([The web app](#the-web-app)).
 - **Values come from the valuation API.** The program has no price, so the app asks the API for the three values and prints the API's `pricing_basis` next to them.
 - **Mainnet is only read.** The valuation service reads the real mints, Jupiter's quotes and prices, and the issuer's multisig. Nothing in the project signs on mainnet.
 
@@ -89,8 +89,8 @@ Its only outside calls are to Token-2022 and the classic token program, the asso
 
 - **Its build checks its own evidence.** Before every build, `scripts/verify-evidence.mjs` checks that every signature in `lib/evidence.json` is finalized without error on its network, and at its recorded slot where the record gives one.
 - **The devnet RPC key is visible in the browser.** A client-side app has to hand the browser its RPC URL, so `/config.json` includes the Helius devnet URL with its key. The key is never committed; it's built from an environment variable at request time. `docs/deploy.md` records restricting the key to the site's domain as still to do.
-
-The app is being restructured as these docs are written; a guide to what you see in it will follow on its own page.
+- **The holder app** has six routes (Overview, Buy, Sell, Claims, Basket, History), described on the [Dashboard guide](/app/dashboard/). It connects wallets through the Solana wallet adapter ([Wallet connection](/app/wallet/)).
+- **Two server routes hold the devnet fixture issuer's key**, set as a platform secret and never committed (`web/lib/server/issuer.ts`). `POST /api/faucet` mints test tokens to a visitor's wallet, which pays the fees. `POST /api/issuer` pauses or resumes one fixture company for the demo, behind the presenter's passcode. The key controls only the fixture mints on devnet, and the server refuses a mainnet RPC.
 
 ## Devnet fixtures
 
@@ -103,6 +103,6 @@ On devnet the issuer is played by a **fixture issuer** key, `3kJFLzxPYt5CHtM4cpz
 
 <div class="sources">
 
-Sources: `docs/specs/00-agent-split.md`, `02-onchain-interface.md`, `03-valuation-api.md`; `Anchor.toml`; `sdk/src/*.ts`; `services/valuation/src/server.ts`, `config.ts`, `watcher.ts`; `web/README.md`; `web/app/config.json/route.ts`; `docs/deploy.md`; `fixtures/registry.json`; `fixtures/DIFF.md`.
+Sources: `docs/specs/00-agent-split.md`, `02-onchain-interface.md`, `03-valuation-api.md`; `Anchor.toml`; `sdk/src/*.ts`; `services/valuation/src/server.ts`, `config.ts`, `watcher.ts`; `web/README.md`; `web/app/config.json/route.ts`; `web/app/api/faucet/route.ts`, `web/app/api/issuer/route.ts`, `web/lib/server/issuer.ts`; `docs/deploy.md`; `fixtures/registry.json`; `fixtures/DIFF.md`.
 
 </div>

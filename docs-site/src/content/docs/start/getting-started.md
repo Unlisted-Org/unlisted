@@ -9,7 +9,13 @@ The app is at **[unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/
 
 The landing page, [unlisted-rosy.vercel.app](https://unlisted-rosy.vercel.app), tells the story in five sections, and [/evidence](https://unlisted-rosy.vercel.app/evidence) lists every transaction behind it.
 
-The app is being restructured as these docs are written. A guide to what you see in it, and how to connect a wallet, will follow on their own pages once the new version is deployed.
+To try it:
+
+1. **Connect a wallet** set to devnet, with a little devnet SOL for fees ([faucet.solana.com](https://faucet.solana.com)). See [Wallet connection](/app/wallet/).
+2. **Get test tokens** on the Overview: 50 fixture USDC and about $20 of each company, once per wallet.
+3. **Buy in**, then **Redeem** on the Overview. The issuer control that pauses a company needs the presenter's passcode, so you'll see a pause only when a presenter runs one, or when a leg is already unavailable.
+
+What each part of the screen does is on the [Dashboard guide](/app/dashboard/).
 
 ## Reproduce the proofs
 
@@ -39,11 +45,7 @@ python3 evidence/build-proven.py --out /tmp/proven.md   # the whole proven list
 
 `verify-evidence.mjs` passed on 2026-09-25: 36 signatures finalized without error, 24 at their recorded slot.
 
-<div class="unverified">
-
-**Known issue:** `evidence/build-proven.py`, as committed on 2026-09-25, reads records from agent branches that have since been deleted and stops with a `git show` error. Reading every record from the current checkout, the same checks passed: 148 devnet and 11 mainnet signatures, all finalized without error ([Evidence](/trust/evidence/#re-verify-everything-yourself)). The fix has been reported.
-
-</div>
+`build-proven.py` passed on 2026-09-25 at 13:44 UTC, from `main` at `92fe09c`: 163 devnet and 11 mainnet signatures, all finalized without error ([Evidence](/trust/evidence/#re-verify-everything-yourself)).
 
 ### Reproduce the Symmetry failure
 
@@ -59,7 +61,7 @@ What to expect is on [The problem](/product/problem/#what-happens-to-a-basket-wh
 
 ### The fresh-wallet flow in a browser
 
-`web/e2e/holder/flow.spec.ts` is the test behind [The user flow](/product/user-flow/). In a real browser it generates a new wallet, deposits in kind and with USDC, has the fixture issuer pause ANTHROPIC, redeems (six legs paid, one claim), has the issuer resume, and settles the claim. It records every signature in `web/e2e/holder/runs/`.
+`web/e2e/holder/flow.spec.ts` is the test behind [The user flow](/product/user-flow/). In a real browser, on the app's Overview, it generates a new wallet, takes the app's test tokens, buys in, pauses ANTHROPIC with the issuer control, redeems (six legs paid, one claim), resumes, and settles the claim on its tile; then it deposits USDC on Buy and checks Claims and Basket. It records every signature in `web/e2e/holder/runs/`.
 
 The command the project uses, from `web/e2e/holder/repeat.sh` (run from `web/`, after `npm install` there and in `sdk/`, and `npm run test-wallet`, which bundles the test wallet):
 
@@ -67,10 +69,10 @@ The command the project uses, from `web/e2e/holder/repeat.sh` (run from `web/`, 
 N=1 E2E_BASE_URL=https://unlisted-rosy.vercel.app e2e/holder/repeat.sh
 ```
 
-These docs didn't re-run it. **It needs the project's own devnet keys, so it can't run from a fresh clone.** The pause and resume are the issuer's actions: on devnet they're signed by the fixture issuer key, which isn't in the repository. `repeat.sh` also reads a dedicated devnet RPC key from the repository root's `.env.local`, which is never committed, and funding the fresh wallet uses a project key. To check the flow without running it, read the recorded runs: every signature in `web/e2e/holder/runs/2026-09-25-devnet.json` is on devnet, and [The user flow](/product/user-flow/) links each one.
+These docs didn't re-run it. **It needs the project's own secrets, so it can't run from a fresh clone:** the presenter's demo passcode for the issuer control (`E2E_DEMO_PASSCODE`), a dedicated devnet RPC key read from the repository root's `.env.local`, and the project key that sends the fresh wallet its SOL. None of them is committed. To check the flow without running it, read the recorded runs: every signature in `web/e2e/holder/runs/2026-09-25-devnet-overview.json` is on devnet, and [The user flow](/product/user-flow/) links those of one run.
 
 <div class="sources">
 
-Sources: `README.md` (*Reproduce*); `evidence/symmetry-fork/README.md`, `run.sh`; `web/README.md`; `web/e2e/holder/flow.spec.ts`, `harness.ts`, `repeat.sh`; `web/app/config.json/route.ts`.
+Sources: `README.md` (*Reproduce*); `evidence/symmetry-fork/README.md`, `run.sh`; `web/README.md`; `web/e2e/holder/flow.spec.ts`, `harness.ts`, `repeat.sh`; `web/app/config.json/route.ts`; `web/app/app/_holder/views/Overview.tsx`; `web/app/api/faucet/route.ts`.
 
 </div>

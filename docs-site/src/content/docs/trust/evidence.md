@@ -25,7 +25,7 @@ Anything else is labelled: *reported* (from research, with its source), *local* 
 | The program's devnet scenarios, one JSON record each | [`tests/program/devnet/`](https://github.com/Unlisted-Org/unlisted/tree/main/tests/program/devnet) |
 | The fixture issuer's scenarios on the canonical basket | [`fixtures/scenarios/`](https://github.com/Unlisted-Org/unlisted/tree/main/fixtures/scenarios) |
 | The fixtures against the real mints, field by field | [`fixtures/DIFF.md`](https://github.com/Unlisted-Org/unlisted/blob/main/fixtures/DIFF.md) |
-| Fresh-wallet browser runs on devnet | [`web/e2e/holder/runs/`](https://github.com/Unlisted-Org/unlisted/tree/main/web/e2e/holder/runs), [`app/e2e/runs/`](https://github.com/Unlisted-Org/unlisted/tree/main/app/e2e/runs) |
+| Fresh-wallet browser runs on devnet, including the whole story on the app's Overview (`2026-09-25-devnet-overview.json`) | [`web/e2e/holder/runs/`](https://github.com/Unlisted-Org/unlisted/tree/main/web/e2e/holder/runs), [`app/e2e/runs/`](https://github.com/Unlisted-Org/unlisted/tree/main/app/e2e/runs) |
 | The valuation API against the chain | [`services/valuation/verify/out/`](https://github.com/Unlisted-Org/unlisted/tree/main/services/valuation/verify/out) |
 | The share maths as an executable model | [`spec/model/`](https://github.com/Unlisted-Org/unlisted/tree/main/spec/model) |
 
@@ -34,7 +34,7 @@ Anything else is labelled: *reported* (from research, with its source), *local* 
 A summary, grouped the way `evidence/build-proven.py` groups it. Each item links to its signatures on the page that explains it.
 
 1. **The program is deployed on devnet**, and the deployed bytes hash to the same sha256 as the tested build ([The program](/protocol/program/#identity-and-deploy)).
-2. **A pause in one name doesn't lock the basket:** on the program's own fixture mints, in a real browser by a fresh wallet, and measured against the valuation API ([The user flow](/product/user-flow/), [Claims](/protocol/claims/#paused)).
+2. **A pause in one name doesn't lock the basket:** on the program's own fixture mints, in a real browser by a fresh wallet on the deployed app (4 of 4 runs), and measured against the valuation API ([The user flow](/product/user-flow/), [Claims](/protocol/claims/#paused)).
 3. **A seizure is observed and shared pro rata**, including while a claim is open ([How it works](/product/how-it-works/#seizure-handling), [Claims](/protocol/claims/#a-seizure-while-a-claim-is-open)).
 4. **Every other issuer action degrades one leg, not the basket:** frozen vault, transfer hook, display multiplier, and the first half of a fee change ([Claims](/protocol/claims/#every-unavailable-leg-case-signed-on-devnet)).
 5. **Deposits work in kind, through a USDC ticket, and through the refund path** ([How it works](/product/how-it-works/#deposits)).
@@ -97,14 +97,10 @@ These were each seen to fail against a broken version, and they support the proo
 - **The landing page's evidence:** `node web/scripts/verify-evidence.mjs` checks every signature in `web/lib/evidence.json`. Run on 2026-09-25: 36 signatures finalized without error, 24 at their recorded slot.
 - **The whole proven list:** `evidence/build-proven.py` rebuilds it from the records and re-checks every signature it cites, plus every signature in every devnet record it links, with `getSignatureStatuses`. It writes nothing if any signature is missing, failed or not finalized.
 
-  <div class="unverified">
-
-  **Known issue (2026-09-25):** the committed script reads each record from the agent branch that first owned it (`program`, `app`, `ops`). Those branches were merged into `main` and deleted, so as committed it stops with a `git show` error on its first record. Run with each record read from the current checkout instead, it passed on 2026-09-25 at 12:31 UTC: **148 devnet signatures and 11 mainnet signatures**, all finalized without error, checked at devnet slot 503,988,812 and mainnet slot 450,353,376. This has been reported for a fix.
-
-  </div>
+  Run on 2026-09-25 at 13:44 UTC, from `main` at `92fe09c`: **163 devnet signatures and 11 mainnet signatures**, all finalized without error, checked at devnet slot 504,015,250 and mainnet slot 450,369,757. An earlier version of the script read records from agent branches that had been deleted; that is fixed on `main`.
 
 <div class="sources">
 
-Sources: `docs/specs/00-agent-split.md` (*What "proven" means*); `evidence/README.md`; `evidence/build-proven.py` and its output of 2026-09-25 12:31 UTC; `web/scripts/verify-evidence.mjs`; `fixtures/scenarios/*.json`; `tests/program/devnet/refund-path.json`; `services/valuation/verify/out/`.
+Sources: `docs/specs/00-agent-split.md` (*What "proven" means*); `evidence/README.md`; `evidence/build-proven.py` and its output of 2026-09-25 13:44 UTC; `web/scripts/verify-evidence.mjs`; `fixtures/scenarios/*.json`; `tests/program/devnet/refund-path.json`; `services/valuation/verify/out/`.
 
 </div>

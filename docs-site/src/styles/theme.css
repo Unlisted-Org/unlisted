@@ -276,3 +276,9 @@ h1#_top,
 		content: 'Message';
 	}
 }
+
+/* Company names in the paid / claim tables stay whole on a phone. */
+.sl-markdown-content :is(tr.paid-row, tr.claim-row) td:first-child {
+	overflow-wrap: normal;
+	white-space: nowrap;
+}

@@ -172,3 +172,71 @@ ALL CHECKS PASSED
 https://unlisted-docs.vercel.app: signatures: 65 cited across 14 pages (devnet 54, mainnet 11); 49 with a stated slot; 791 signature-shaped strings in committed records
 SIGNATURE CHECK PASSED: every signature is linked, committed, and finalized without error on its network
 ```
+
+---
+
+# Round 2 (2026-09-25): the dashboard guide, the wallet page, and the rewritten user flow
+
+Added `app/dashboard` and `app/wallet`, rewrote `product/user-flow` around the restructured
+app's recorded Overview run, and updated four other pages. The same five checks were re-run.
+The mutations below target the new and rewritten pages specifically; each was built, checked
+and reverted with `git checkout`.
+
+**Broken version,** three mutations at once:
+- `app/wallet.md` links to an anchor that doesn't exist (`/app/dashboard/#the-issuer-panel`);
+- `app/dashboard.md` gets a 620 px fixed-width box;
+- `product/user-flow.md`: one character changed in the claim settlement's signature, a signature new in this round.
+
+`verify.mjs`:
+
+```
+links: 780 internal links across 16 pages, 1 broken
+  BROKEN /app/wallet/ → /app/dashboard/#the-issuer-panel (no #the-issuer-panel)
+explorer labels: MISMATCH
+product/user-flow.md: "4jV4Jkfo…g68idNHk" should be "4jV4Jkfo…g68idNHj"
+1 of 74 explorer labels mismatched
+overflow: 15 pages × 2 widths × 2 themes, 2 problems
+  /app/dashboard/ @390 light: scrollWidth 636 > innerWidth 390
+  /app/dashboard/ @390 dark: scrollWidth 636 > innerWidth 390
+FAILED: 4 problem(s)
+exit=1
+```
+
+`verify-sigs.mjs`:
+
+```
+SIGNATURE CHECK FAILED (2):
+  /product/user-flow/: 4jV4JkfoaA3E… is in no committed record outside docs-site/
+  /product/user-flow/: devnet 4jV4JkfoaA3E… not found
+exit=1
+```
+
+**Search, re-run** because the result order changed (the user-flow page now ranks first for
+"claim"): with `pagefind: false` on the claims page, `search "claim": 20 results … — FAIL: /protocol/claims/ not found`, exit 1.
+
+**Screenshots:** the proof set now covers the home page, the user flow, the dashboard guide and
+claims and settlement, at 1440 and 390, light and dark, from the deployed site
+(`proof/screenshots/`, replacing round 1's).
+
+**Passing runs, round 2.** Local build: 780 internal links across 16 pages, 0 broken; 15 pages ×
+2 widths × 2 themes, 0 overflow problems; theme and toggle ok; search ok; 70 signatures (59
+devnet, 11 mainnet), all in committed records and finalized, 51 at their stated slot.
+
+Deployed site (https://unlisted-docs.vercel.app):
+
+```
+links: 780 internal links across 16 pages, 0 broken
+explorer labels: all match their URLs
+live: 18 URLs fetched from https://unlisted-docs.vercel.app, 0 not 200
+overflow: 15 pages × 2 widths × 2 themes, 0 problems
+first visit with OS set to dark: theme=dark ok
+toggle click: theme=light stored=light ok
+first visit with OS set to light: theme=light ok
+toggle click: theme=dark stored=dark ok
+search "claim": 20 results, first /product/user-flow/, … — ok
+screenshots written to …: 4 pages × 2 widths × 2 themes
+ALL CHECKS PASSED
+
+https://unlisted-docs.vercel.app: signatures: 70 cited across 16 pages (devnet 59, mainnet 11); 51 with a stated slot; 853 signature-shaped strings in committed records
+SIGNATURE CHECK PASSED: every signature is linked, committed, and finalized without error on its network
+```
