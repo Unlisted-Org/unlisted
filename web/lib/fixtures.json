@@ -1,0 +1,62 @@
+{
+ "_source": "fixtures/registry.json (addresses) and fixtures/scenarios/funding.json run at 2026-09-25T10:43:51Z (per-leg raw amounts, about $20 each at the fixture pools then)",
+ "fixtureIssuer": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+ "usdc": {
+  "mint": "5qD6fWLePJ8MiFDa3er38G76RHY53VatQUNZRm7i8M15",
+  "decimals": 6,
+  "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  "faucetRaw": "50000000"
+ },
+ "token2022": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+ "legs": [
+  {
+   "index": 0,
+   "symbol": "OPENAI",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "decimals": 9,
+   "faucetRaw": "10227963"
+  },
+  {
+   "index": 1,
+   "symbol": "ANTHROPIC",
+   "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+   "decimals": 9,
+   "faucetRaw": "19363694"
+  },
+  {
+   "index": 2,
+   "symbol": "NEURALINK",
+   "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+   "decimals": 9,
+   "faucetRaw": "47351688"
+  },
+  {
+   "index": 3,
+   "symbol": "ANDURIL",
+   "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+   "decimals": 9,
+   "faucetRaw": "123528126"
+  },
+  {
+   "index": 4,
+   "symbol": "POLYMARKET",
+   "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+   "decimals": 9,
+   "faucetRaw": "137212324"
+  },
+  {
+   "index": 5,
+   "symbol": "KALSHI",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "decimals": 9,
+   "faucetRaw": "22552536"
+  },
+  {
+   "index": 6,
+   "symbol": "FIGUREAI",
+   "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+   "decimals": 9,
+   "faucetRaw": "113038057"
+  }
+ ]
+}

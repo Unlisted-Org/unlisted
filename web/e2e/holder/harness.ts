@@ -59,7 +59,7 @@ export const loadKey = (p: string) => Keypair.fromSecretKey(Uint8Array.from(JSON
 /** Every signature the run produces, in order, with who made it. */
 export class RunRecord {
   readonly startedAt = new Date().toISOString();
-  steps: { step: string; by: "test wallet (browser)" | "test wallet (harness)" | "fixture issuer (harness)" | "funder (harness)"; signatures: string[]; slot?: number; note?: string; checks?: Record<string, unknown> }[] = [];
+  steps: { step: string; by: "test wallet (browser)" | "test wallet (harness)" | "fixture issuer (harness)" | "fixture issuer (app control)" | "funder (harness)"; signatures: string[]; slot?: number; note?: string; checks?: Record<string, unknown> }[] = [];
   screenshots: string[] = [];
   outcome?: "passed" | "failed";
   error?: string;
@@ -82,7 +82,8 @@ export class RunRecord {
       mutation: process.env.E2E_MUTATION ?? null, // set when this run is a deliberate-bug check (expected to fail)
       rpc: this.env.rpc.replace(/([?&](?:api[-_]?key|token)=)[^&]+/i, "$1<redacted>"), program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
       wallet: { address: this.wallet, kind: "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)" },
-      valuationApi: (this.env as any).valuationApi ?? null,
+      // The API this run's checks actually used (E2E_VALUATION_URL), not the static env file's local default.
+      valuationApi: process.env.E2E_VALUATION_URL ? { url: process.env.E2E_VALUATION_URL } : (this.env as any).valuationApi ?? null,
       steps: this.steps, screenshots: this.screenshots,
     };
     // One entry per run: a later write (e.g. after returning SOL) replaces this run's entry.
@@ -156,6 +157,14 @@ export async function fundWallet(env: E2eEnv, wallet: PublicKey, amount: bigint,
  *  - local: spl-token CLI with the local issuer key;
  *  - devnet: Agent C's scripts/scenarios/issuer.ts in C's worktree (records in fixtures/scenarios/pause-resume.json).
  */
+/** SOL only, from the stocklana app key: everything else the wallet gets, it gets through the app (the faucet). */
+export async function fundSol(env: E2eEnv, wallet: PublicKey, lamports: number, rec: RunRecord) {
+  if (!env.funderKey) throw new Error("no funder key in the e2e env");
+  const funder = loadKey(env.funderKey);
+  const s = await sendAndConfirmTransaction(conn(env), new Transaction().add(SystemProgram.transfer({ fromPubkey: funder.publicKey, toPubkey: wallet, lamports })), [funder]);
+  rec.add({ step: `${lamports / LAMPORTS_PER_SOL} SOL to the fresh wallet from the app key`, by: "funder (harness)", signatures: [s] });
+}
+
 export function issuerAction(env: E2eEnv, action: "pause" | "resume", symbol: string): string[] {
   if (env.cluster === "devnet") {
     const { json } = opsScript(["scripts/scenarios/issuer.ts", action, "--cluster", "devnet", "--symbol", symbol, "--actor", "app-e2e"]);

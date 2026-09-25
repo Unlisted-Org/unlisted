@@ -41,6 +41,10 @@ export const IN_KIND_RESIDUAL =
 export const CLAIM_NOTE =
   "A claim is owed one leg only, in units of burned shares. It pays out after the leg is available again and shares that leg's gains and losses (including any seizure) until then. It can't be transferred.";
 
-export const NOT_ENDORSED = "PreStocks has not endorsed this project.";
+// PreStocks' reply of 2026-09-25 (docs/risks.md, "PreStocks' reply"): no objection, which is not an endorsement.
+export const NOT_ENDORSED = "PreStocks told us it has no objection to this basket, including a future mainnet version. That is not an endorsement, and we don't present it as one.";
+
+export const NO_ADVANCE_NOTICE =
+  "PreStocks has no channel that announces fee or multiplier changes in advance. This app reads the mints directly and shows every scheduled change the moment it exists on chain; that is the only advance warning a holder gets.";
 
 export const TEST_NETWORK = "Devnet only. Every token here is a fixture mint that mirrors a real PreStocks token extension for extension; none has value.";

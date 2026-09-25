@@ -104,8 +104,8 @@ function roundTrip(bps: number): string {
   return `${((1 - k * k) * 100).toFixed(2)}%`;
 }
 
-export function Banners({ banners }: { banners: Banner[] }) {
-  if (!banners.length) return <div className="banner info" data-testid="no-issuer-events">No issuer action in effect on any leg at this slot.</div>;
+export function Banners({ banners, quiet = false }: { banners: Banner[]; quiet?: boolean }) {
+  if (!banners.length) return quiet ? null : <div className="banner info" data-testid="no-issuer-events">No issuer action in effect on any leg at this slot.</div>;
   return (
     <div className="banners">
       {banners.map((b) => (
@@ -133,7 +133,7 @@ export function IssuerActivity({ api, isMock }: { api: EventsResponse | null; is
   return (
     <section data-testid="issuer-activity">
       <h2>Issuer activity</h2>
-      <p className="muted">Every change the issuer's authority made, read by the watcher from the real PreStocks mints on mainnet and from the fixture mints, with before and after values.</p>
+      <p className="muted">Every change the issuer's authority made, read by the watcher from the real PreStocks mints on mainnet and from the fixture mints, with before and after values. PreStocks announces none of these in advance; this list and the app's banners are the only notice.</p>
       {isMock ? <p className="muted">Needs the valuation API (not connected).</p> : groups.map(([name, list]) => (
         <div key={name}>
           <h3>{name === "mainnet" ? "Real PreStocks mints (mainnet)" : "Fixture mints"}</h3>
@@ -450,6 +450,7 @@ export function Disclosures({ upgradeAuthority, authority }: { upgradeAuthority:
       <h3>The issuer</h3>
       <p>{copy.ISSUER_POWERS}</p>
       <p><b>{copy.NOT_PROTECTION}</b></p>
+      <p data-testid="no-advance-notice">{copy.NO_ADVANCE_NOTICE}</p>
       <h3>Cost</h3>
       <p>{copy.COST_PLAIN}</p>
       <h3>The basket's own authority</h3>

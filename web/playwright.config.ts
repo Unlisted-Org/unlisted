@@ -1,4 +1,6 @@
 import { defineConfig } from "@playwright/test";
+import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 // Browsers live in a project-local path (see CONTRIBUTING.md §5); never the shared cache.
@@ -11,6 +13,17 @@ process.env.E2E_PORT ??= String(3300 + (process.pid % 600));
 const PORT = Number(process.env.E2E_PORT);
 const REPO = path.resolve(__dirname, "..");
 
+// The demo's issuer control and faucet need the fixture issuer key and a passcode on the server.
+// For a devnet run they are read here and handed to the server's environment only; never written.
+const read = (p: string) => { try { return fs.readFileSync(p, "utf8").trim(); } catch { return undefined; } };
+const serverEnv: Record<string, string> = {};
+if (process.env.E2E_ENV === "devnet") {
+  const key = read(path.join(os.homedir(), ".config/solana/stocklana/fixture-issuer.json"));
+  const code = process.env.E2E_DEMO_PASSCODE ?? read(path.join(__dirname, "e2e/holder/.local/demo-passcode"));
+  if (key) serverEnv.FIXTURE_ISSUER_KEY = key;
+  if (code) serverEnv.DEMO_PASSCODE = code;
+}
+
 export default defineConfig({
   testDir: "e2e",
   testIgnore: ["tmp/**"],
@@ -20,7 +33,7 @@ export default defineConfig({
   // E2E_BASE_URL runs the same checks against a deployed site (no local servers started).
   use: { baseURL: process.env.E2E_BASE_URL ?? `http://localhost:${PORT}` },
   webServer: process.env.E2E_BASE_URL ? undefined : [
-    { command: `npx next start -p ${PORT}`, url: `http://localhost:${PORT}`, reuseExistingServer: false, timeout: 120_000 },
+    { command: `npx next start -p ${PORT}`, url: `http://localhost:${PORT}`, reuseExistingServer: false, timeout: 120_000, env: serverEnv },
     {
       // Agent C's valuation API (spec 03) against the canonical devnet basket; the app's three values come from it.
       command: `CLUSTER=devnet PORT=8907 FIXTURE_BACKFILL=0 MAINNET_BACKFILL=0 BASKET_SHARE_MINT=HjpaxrkjftbtcRJuyAEm7oR8scasnWNxKNgnN26p7iqj IDL_PATH=${REPO}/programs/basket/idl/basket.json node src/server.ts`,
