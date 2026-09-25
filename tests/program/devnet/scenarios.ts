@@ -410,6 +410,24 @@ const scenarios: Record<string, () => Promise<void>> = {
     const S = BigInt(await b.supply());
     const gross = await Promise.all(MINTS.map(async (_, i) => (s * (await b.owned(i))) / S));
     const before = await Promise.all(MINTS.map((m) => tokenAmount(b.ata(alice.publicKey, m))));
+    // Broken version first: a fee model frozen at the old 100 bps (what a program that stored the fee at deposit,
+    // or a client that cached it, would predict). Simulate the signed redemption (not sent), read alice's leg
+    // accounts from the simulated post-state, and require that model to FAIL on every leg and 300 bps to hold.
+    {
+      const { ix: simIx } = b.redeemIx(alice, s);
+      b.nonce.set(alice.publicKey.toBase58(), n);
+      const { tx } = await build([simIx], [alice], ALT);
+      const atas = MINTS.map((m) => b.ata(alice.publicKey, m));
+      const sim = await conn.simulateTransaction(tx, { sigVerify: true, commitment: "confirmed", accounts: { encoding: "base64", addresses: atas.map((a) => a.toBase58()) } });
+      const got = (sim.value.accounts ?? []).map((a, i) => (a ? Buffer.from(a.data[0], "base64").readBigUInt64LE(64) - before[i] : -1n));
+      const frozen = gross.map((g) => g - fee(g, 100n)), now = gross.map((g) => g - fee(g, 300n));
+      rec.steps.push({ label: "BROKEN: fee model frozen at 100 bps, checked against a simulated redemption (not sent)", simulated: true, simulatedAtSlot: sim.context.slot,
+        err: sim.value.err, received: got, predictedAt100: frozen, predictedAt300: now });
+      save();
+      check("broken (fee frozen at 100 bps) caught: its prediction is wrong on every leg of the simulated redemption",
+        !sim.value.err && got.every((x, i) => x !== frozen[i]), { received: got, predictedAt100: frozen });
+      check("the simulated redemption matches 300 bps on every leg", got.every((x, i) => x === now[i]), { received: got, predictedAt300: now });
+    }
     const n0 = rec.steps.length;
     await redeemAndCheck(b, alice, s, [], `alice redeems after epoch ${rec.feeEffectiveEpoch}: the new 300 bps applies`);
     const after = await Promise.all(MINTS.map((m) => tokenAmount(b.ata(alice.publicKey, m))));
