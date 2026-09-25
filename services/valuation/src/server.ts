@@ -2,6 +2,8 @@
 //   CLUSTER=devnet node src/server.ts         (see src/config.ts for every variable)
 
 import { createServer } from "node:http";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { loadConfig } from "./config.ts";
 import { Valuation } from "./valuation.ts";
 import { Watcher } from "./watcher.ts";
@@ -17,14 +19,33 @@ const v = new Valuation(cfg, watcher);
 
 // /v1/basket is kept warm: recomputed every BASKET_REFRESH_S in the background and served from the
 // latest completed computation (its as_of says when). `?fresh=1` computes on demand.
-let latest: { at: number; body: unknown } | null = null;
+// The latest computation is also saved to disk, so a restarted service answers at once with the last
+// good basket (marked `served.from: "cache"` with its age) while a fresh one is computed. A cold
+// visitor never waits for the first computation unless there has never been one.
+const REFRESH_S = Number(process.env.BASKET_REFRESH_S ?? 30);
+const CACHE_FILE = process.env.BASKET_CACHE_FILE ?? join(dirname(cfg.dataPath), `basket-latest-${cfg.cluster}.json`);
+let latest: { at: number; body: any; fromDisk?: boolean } | null = null;
+if (!process.env.NO_BASKET_CACHE && existsSync(CACHE_FILE)) {
+  try { const c = JSON.parse(readFileSync(CACHE_FILE, "utf8")); latest = { at: c.at, body: c.body, fromDisk: true }; console.log(`serving the saved basket from ${new Date(c.at).toISOString()} until a fresh one is computed`); }
+  catch (e) { console.error("saved basket unreadable, ignoring", e); }
+}
 let computing: Promise<unknown> | null = null;
-const refresh = () => (computing ??= v.getBasket().then((b) => { latest = { at: Date.now(), body: b }; return b; }).finally(() => { computing = null; }));
-const warmBasket = async () => (latest && Date.now() - latest.at < 2 * Number(process.env.BASKET_REFRESH_S ?? 30) * 1000 ? latest.body : refresh());
-setInterval(() => refresh().catch((e) => console.error("basket refresh", e)), Number(process.env.BASKET_REFRESH_S ?? 30) * 1000);
-refresh().catch((e) => console.error("basket refresh", e));
-
 const json = (x: unknown) => JSON.stringify(x, (_k, val) => (typeof val === "bigint" ? val.toString() : val), 1);
+const save = (at: number, body: unknown) => {
+  if (process.env.NO_BASKET_CACHE) return;
+  try { mkdirSync(dirname(CACHE_FILE), { recursive: true }); writeFileSync(`${CACHE_FILE}.tmp`, json({ at, body })); renameSync(`${CACHE_FILE}.tmp`, CACHE_FILE); }
+  catch (e) { console.error("could not save basket", e); }
+};
+const refresh = () => (computing ??= v.getBasket().then((b) => { latest = { at: Date.now(), body: b }; save(latest.at, b); return b; }).finally(() => { computing = null; }));
+const served = (from: "live" | "cache") => ({ from, age_s: latest ? Math.round((Date.now() - latest.at) / 1000) : null, refresh_s: REFRESH_S });
+const warmBasket = async () => {
+  if (!latest) return { ...(await refresh() as any), served: served("live") };
+  const stale = latest.fromDisk || Date.now() - latest.at >= 2 * REFRESH_S * 1000;
+  if (stale) refresh().catch((e) => console.error("basket refresh", e)); // never make the visitor wait for it
+  return { ...latest.body, served: served(stale ? "cache" : "live") };
+};
+setInterval(() => refresh().catch((e) => console.error("basket refresh", e)), REFRESH_S * 1000);
+const firstBasket = refresh().catch((e) => console.error("basket refresh", e));
 
 const routes: [RegExp, (m: RegExpMatchArray, q: URLSearchParams) => Promise<unknown>][] = [
   [/^\/v1\/basket$/, (_m, q) => (q.get("include_builds") ? v.getBasket({ includeBuilds: true, fresh: true }) : q.get("fresh") ? v.getBasket({ fresh: true }) : warmBasket())],
@@ -68,6 +89,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(cfg.port, () => console.log(`Unlisted valuation API on :${cfg.port} (cluster ${cfg.cluster}, basket source ${cfg.basket.source})${MUTATION ? ` MUTATION ACTIVE: ${MUTATION}` : ""}`));
+// The watcher's history backfill uses the same RPCs; start it after the first basket (or 60 s), so it
+// never competes with the first answer.
 const poll = () => watcher.pollOnce().catch((e) => console.error("watcher", e));
-poll();
-setInterval(poll, cfg.pollS * 1000);
+Promise.race([firstBasket, new Promise((r) => setTimeout(r, 60_000))]).then(() => { poll(); setInterval(poll, cfg.pollS * 1000); });

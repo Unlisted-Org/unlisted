@@ -97,9 +97,14 @@ export class Valuation {
    * otherwise QUOTE_TAKER. Holder lookups are serialised and cached for an hour (public RPC limits).
    */
   holderChain: Promise<unknown> = Promise.resolve();
+  // The holder lookup (getTokenLargestAccounts) can take minutes on a rate-limited RPC, and the quoted
+  // amount doesn't depend on the taker. So it never blocks a quote: the last known holders are used if
+  // any, else QUOTE_TAKER, while the lookup refreshes in the background.
+  holdersKnown = new Map<string, { owner: string; amount: bigint }[]>();
   async takerFor(mint: string, amount: bigint): Promise<{ taker: string; holds_input: boolean }> {
     const fallback = process.env.QUOTE_TAKER ?? "H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS";
-    const holders: any[] | null = await this.holders(mint).catch(() => null);
+    const lookup = this.holders(mint).then((h) => { this.holdersKnown.set(mint, h); return h; }).catch(() => null);
+    const holders = process.env.BLOCKING_HOLDERS ? await lookup : this.holdersKnown.get(mint) ?? null;
     const h = holders?.find((x: any) => x.amount >= amount);
     return h ? { taker: h.owner, holds_input: true } : { taker: fallback, holds_input: false };
   }
