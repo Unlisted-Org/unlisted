@@ -1,6 +1,6 @@
 # Spec 02: On-chain interface
 
-Status: **draft for agreement.** Agent A implements this. Agents B and C build against this document before A's generated IDL exists.
+Status: **agreed** (2026-09-25); agents A, B and C built against it. The product is **Unlisted**; `basket` remains the technical identifier for the program, its accounts, seeds and instructions (see the naming note in [spec 00](00-agent-split.md)). Agent A implements this. Agents B and C build against this document before A's generated IDL exists.
 
 When A's generated Anchor IDL differs from this document in any name, type, account order or seed, A reports the difference and the spec owner decides which side changes. Neither side silently adapts.
 

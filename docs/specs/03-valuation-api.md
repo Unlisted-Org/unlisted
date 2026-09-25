@@ -1,6 +1,6 @@
 # Spec 03: Valuation API
 
-Status: **draft for agreement.** Agent C implements the service (`services/valuation/`). Agent B consumes it, and before C ships, B builds against the example responses in this document.
+Status: **agreed** (2026-09-25); agents A, B and C built against it. The product is **Unlisted**; `basket` remains the technical identifier for the program, its accounts, seeds and instructions (see the naming note in [spec 00](00-agent-split.md)). Agent C implements the service (`services/valuation/`). Agent B consumes it, and before C ships, B builds against the example responses in this document.
 
 ## Principles
 

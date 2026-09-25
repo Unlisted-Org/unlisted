@@ -1,6 +1,6 @@
 # Spec 01: Shares and pricing
 
-Status: **draft for agreement.**
+Status: **agreed** (2026-09-25); agents A, B and C built against it. The product is **Unlisted**; `basket` remains the technical identifier for the program, its accounts, seeds and instructions (see the naming note in [spec 00](00-agent-split.md)).
 Executable form: [`spec/model/basket_model.py`](../../spec/model/basket_model.py). Its property tests are in [`spec/model/test_basket_model.py`](../../spec/model/test_basket_model.py) (17 tests, all passing). Deliberately breaking the rounding, the loss index, or the claim path makes those tests fail. When this document and the model disagree, the model is right and this document gets fixed.
 
 ## What Unlisted promises

@@ -43,7 +43,7 @@ The same batch set xAI to 0 bps. Change 2's signatures are in `docs/phase0-fee-e
 
 **Spread.** On top of the fees, market spread measured on 2026-09-24 adds about 0.5% at $10, 1.3% at $1k and 2.0% at $10k. Estimated round trips at 300 bps are therefore **≈ 6.5%, 7.2% and 7.9%**. This is arithmetic on measured spreads, to be re-measured after epoch 1043.
 
-**Minting or redeeming Unlisted is never cheaper than buying the seven tokens directly.** At best it costs the same. Unlisted's convenience (one transferable token, one account instead of seven) is real but secondary. Trading the basket token itself pays no PreStocks fee; see §2 for what that means.
+**Minting or redeeming Unlisted is never cheaper than buying the seven tokens directly.** At best it costs the same. Unlisted's convenience (one transferable token, one account instead of seven) is real but secondary. Trading the Unlisted token itself pays no PreStocks fee; see §2 for what that means.
 
 **The accounting is unaffected by any of this.** No fee is stored. Every inflow is credited at its measured delta, and each payout's fee falls on its recipient. The *fee change mid-position* fixture scenario reproduces change 3 on devnet.
 
@@ -91,7 +91,7 @@ A Squads v4 multisig, `53Ab3Rqx1a5uiV7qmsX4qbdbrqstVDpnH4LoJGfsZsU8`, controls e
 | Question | Decision |
 |---|---|
 | Written OK from PreStocks? | **Requested in writing; the user is sending it.** It blocks nothing. The Terms appear to permit wrapping and pooling "without our involvement, knowledge, consent, or approval", so we proceed on the assumption that consent isn't required, and record any reply in [`docs/outreach/2026-09-25-prestocks-request.md`](outreach/2026-09-25-prestocks-request.md). |
-| Route a fee to PreStocks? | **No.** It complicates the product and concedes a point nobody has made. Every basket deposit and redemption already pays their fee on every leg. What skips it is secondary trading of the basket token, the product category their own bounty invites ("structured products", "DeFi integrations"). |
+| Route a fee to PreStocks? | **No.** It complicates the product and concedes a point nobody has made. Every basket deposit and redemption already pays their fee on every leg. What skips it is secondary trading of the Unlisted token, the product category their own bounty invites ("structured products", "DeFi integrations"). |
 | Geoblock? | **No; plain disclosure instead.** This is devnet, with fixture tokens that mirror PreStocks and no real PreStocks tokens held by anyone through us. See the note below. |
 
 **Where the legal exposure would differ** (flagged, not legal advice):

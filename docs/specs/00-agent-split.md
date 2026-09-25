@@ -2,7 +2,7 @@
 
 **Naming (2026-09-25):** the product is **Unlisted** (repo `github.com/Unlisted-Org/unlisted`). `basket` stays as the technical identifier for the program, its accounts, PDA seeds, instructions and the reference model. Package names use `unlisted` (`@unlisted/app`, `@unlisted/sdk`, `unlisted-valuation`). Machine-local paths such as `~/.config/solana/stocklana/` are unchanged.
 
-Status: **draft for agreement.** No agent starts until specs 01–03 are agreed.
+Status: **agreed** (2026-09-25). Specs 01–03 were agreed before any agent started.
 
 ## Order of work
 
