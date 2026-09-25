@@ -256,6 +256,12 @@ seize_sigs = [s for s in dict.fromkeys(re.findall(r"[1-9A-HJ-NP-Za-km-z]{86,88}"
 w("- **The fee set to 300 bps on all seven mints,** effective from epoch 1043, one transaction per mint (details in [risks §1](risks.md#1-the-fee-three-changes-in-sixteen-days)):")
 for name, s in fee_rows:
     w(f"  - {name}: {M(s)}")
+mult_rows = re.findall(r"^\| (OPENAI|SPACEX) \([^)]*\) \| ([\d.]+) \| ([^|]+) \| ([^|]+) \| \*{0,2}([^|*]+?)\*{0,2} \| `([1-9A-HJ-NP-Za-km-z]{86,88})` \|$", risks, re.M)
+if len(mult_rows) != 2:
+    sys.exit(f"expected 2 multiplier rows in docs/risks.md, found {len(mult_rows)}")
+w("- **Display multiplier changed with little warning** (details in [risks §2](risks.md#display-multiplier-changes-and-how-much-warning-they-gave-verified)):")
+for name, mult, signed, eff, warn, s in mult_rows:
+    w(f"  - {name} → {mult}, signed {signed.strip()}, effective {eff.strip()}: {warn.strip()} warning. {M(s)}")
 w("- **Seizure:** on 2025-09-19 the permanent delegate emptied 29 holder accounts. Two example transactions ([evidence §3](../evidence/README.md#3-the-issuer-has-already-used-the-seizure-power-mainnet-verified)):")
 for s in seize_sigs:
     w(f"  - {M(s)}")

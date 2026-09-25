@@ -66,6 +66,17 @@ A Squads v4 multisig, `53Ab3Rqx1a5uiV7qmsX4qbdbrqstVDpnH4LoJGfsZsU8`, controls e
 - **Method.** Authority and source owner were read from each transaction's parsed instructions and `preTokenBalances`.
 - **Since then.** No further use against holders was found in the 963 transactions from March to September 2026. In roughly 714 of the multisig's last 1,000 transactions there are no Pause or FreezeAccount instructions (reported, partial scan).
 
+### Display-multiplier changes, and how much warning they gave (verified)
+
+A read-only scan of all 1,653 transactions the issuer vault (`WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc`) has signed since 2025-07-23 found two `updateMultiplier` instructions. Warning is measured from the transaction's block time to the new multiplier's effective timestamp:
+
+| Mint | New multiplier | Signed (UTC) | Effective (UTC) | Warning | Transaction |
+|---|---|---|---|---|---|
+| OPENAI (in the basket) | 1.4861347 | 2026-07-17 16:20:19 | 2026-07-17 16:30:00 | **9 min 41 s** | `2bNNe87cA182GFke6h5DnE8X7itPTnxDaaKnHsh1DvjeE5EoWu3q3cVVKrkNsprLf1YCGxhpGWN1FdNBRECyvFAQ` |
+| SPACEX (not in the basket) | 5 | 2026-06-10 04:01:15 | 2026-06-10 04:30:00 | 28 min 45 s | `EymeLSUsiPvcJWGvAQvFdy4s8dgYfGed88hhdGxXQb2pnK6MUJ8A6DWNyXDb5YBQcmMZcBnQuMCcN7GvEP9yQ1G` |
+
+Both are finalized without error. The multiplier changes only what wallets display; the raw token amounts, and so what the basket holds and pays, don't change. Unlisted's program never reads it (proven on devnet: `multiplier-change-mid-position`). What we claim from this is narrow: **the issuer changed OpenAI's display multiplier with under ten minutes' notice.** We don't claim this is its usual notice.
+
 ### What their Terms reserve (verified against the ToS text, `prestocks.notion.site/terms-of-service`)
 
 - **Enforcement.** They may "restrict, suspend, disable, deprecate, delist, pause, wind down, compulsorily redeem, or permanently discontinue any token, feature, functionality, market, pool, integration, or Service". They may also "freeze … recover, claw back, or compulsorily transfer or re-assign any token; … burn".
