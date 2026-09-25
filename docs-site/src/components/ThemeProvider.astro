@@ -1,0 +1,18 @@
+---
+// Replaces Starlight's provider. The Unlisted app (web/app/layout.tsx) follows the OS colour
+// scheme until the visitor picks one; the docs do the same, with a two-state toggle that
+// remembers the choice.
+---
+
+{/* Inlined to avoid a flash of the wrong theme. */}
+<script is:inline>
+	window.StarlightThemeProvider = (() => {
+		let stored = null;
+		try {
+			stored = localStorage.getItem('starlight-theme');
+		} catch {}
+		const os = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		document.documentElement.dataset.theme = stored === 'dark' || stored === 'light' ? stored : os;
+		return { updatePickers() {} };
+	})();
+</script>

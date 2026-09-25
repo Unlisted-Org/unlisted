@@ -1,0 +1,10 @@
+# Never upload secrets, local state or build output; Vercel installs and builds from source.
+.env*
+.vercel
+node_modules
+dist
+.astro
+**/*.keypair.json
+**/id.json
+proof
+BROKEN-VERSIONS.md

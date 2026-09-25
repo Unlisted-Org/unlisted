@@ -1,0 +1,24 @@
+{
+  "name": "unlisted-docs",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "verify": "node scripts/verify.mjs",
+    "verify-sigs": "node scripts/verify-sigs.mjs"
+  },
+  "type": "module",
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.3",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/ibm-plex-sans-condensed": "^5.2.7",
+    "astro": "^7.3.4",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0"
+  },
+  "private": true
+}
