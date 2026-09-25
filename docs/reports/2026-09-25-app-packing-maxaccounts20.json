@@ -1,0 +1,225 @@
+{
+  "measuredAt": "2026-09-24T19:17:06.610Z",
+  "usdcPerLeg": "10000000",
+  "maxAccounts": 20,
+  "perLeg": [
+    {
+      "leg": "OPENAI",
+      "route": "Meteora DLMM",
+      "routeAccounts": 31,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "4936840",
+      "alone": {
+        "bytes": 646,
+        "accounts": 23
+      }
+    },
+    {
+      "leg": "ANTHROPIC",
+      "route": "Hadron",
+      "routeAccounts": 29,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "9480072",
+      "alone": {
+        "bytes": 549,
+        "accounts": 24
+      }
+    },
+    {
+      "leg": "NEURALINK",
+      "route": "Meteora DLMM",
+      "routeAccounts": 31,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "22287865",
+      "alone": {
+        "bytes": 553,
+        "accounts": 23
+      }
+    },
+    {
+      "leg": "ANDURIL",
+      "route": "Meteora DLMM",
+      "routeAccounts": 31,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "60293668",
+      "alone": {
+        "bytes": 615,
+        "accounts": 23
+      }
+    },
+    {
+      "leg": "POLYMARKET",
+      "route": "Meteora DLMM",
+      "routeAccounts": 30,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "67128942",
+      "alone": {
+        "bytes": 551,
+        "accounts": 22
+      }
+    },
+    {
+      "leg": "KALSHI",
+      "route": "Meteora DLMM",
+      "routeAccounts": 30,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "11214390",
+      "alone": {
+        "bytes": 613,
+        "accounts": 22
+      }
+    },
+    {
+      "leg": "FIGUREAI",
+      "route": "Raydium CLMM",
+      "routeAccounts": 27,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "56370000",
+      "alone": {
+        "bytes": 544,
+        "accounts": 22
+      }
+    }
+  ],
+  "packings": {
+    "routeLutsOnly.max4": [
+      {
+        "legs": [
+          0,
+          1,
+          2
+        ],
+        "bytes": 1232,
+        "accounts": 51,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          3,
+          4,
+          5
+        ],
+        "bytes": 1185,
+        "accounts": 42,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          6
+        ],
+        "bytes": 1197,
+        "accounts": 40,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "routeLutsOnly.max3": [
+      {
+        "legs": [
+          0,
+          1,
+          2
+        ],
+        "bytes": 1232,
+        "accounts": 51,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          3,
+          4,
+          5
+        ],
+        "bytes": 1185,
+        "accounts": 42,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          6
+        ],
+        "bytes": 1197,
+        "accounts": 40,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "withBasketLut.max4": [
+      {
+        "legs": [
+          0,
+          1,
+          2
+        ],
+        "bytes": 1080,
+        "accounts": 51,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          3,
+          4,
+          5
+        ],
+        "bytes": 1064,
+        "accounts": 42,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          6
+        ],
+        "bytes": 754,
+        "accounts": 40,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "withBasketLut.max3": [
+      {
+        "legs": [
+          0,
+          1,
+          2
+        ],
+        "bytes": 1080,
+        "accounts": 51,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          3,
+          4,
+          5
+        ],
+        "bytes": 1064,
+        "accounts": 42,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          6
+        ],
+        "bytes": 754,
+        "accounts": 40,
+        "open": false,
+        "finalize": true
+      }
+    ]
+  }
+}

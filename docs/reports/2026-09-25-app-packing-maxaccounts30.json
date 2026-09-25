@@ -1,0 +1,238 @@
+{
+  "measuredAt": "2026-09-24T19:16:23.823Z",
+  "usdcPerLeg": "10000000",
+  "perLeg": [
+    {
+      "leg": "OPENAI",
+      "route": "Whirlpool → Meteora DLMM",
+      "routeAccounts": 43,
+      "luts": 2,
+      "intermediateAccounts": 1,
+      "quotedOut": "4974170",
+      "alone": {
+        "bytes": 906,
+        "accounts": 35
+      }
+    },
+    {
+      "leg": "ANTHROPIC",
+      "route": "Hadron",
+      "routeAccounts": 29,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "9480079",
+      "alone": {
+        "bytes": 549,
+        "accounts": 24
+      }
+    },
+    {
+      "leg": "NEURALINK",
+      "route": "Meteora DLMM",
+      "routeAccounts": 31,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "22287865",
+      "alone": {
+        "bytes": 553,
+        "accounts": 23
+      }
+    },
+    {
+      "leg": "ANDURIL",
+      "route": "Meteora DLMM",
+      "routeAccounts": 31,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "60293668",
+      "alone": {
+        "bytes": 615,
+        "accounts": 23
+      }
+    },
+    {
+      "leg": "POLYMARKET",
+      "route": "Meteora DLMM",
+      "routeAccounts": 30,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "67128942",
+      "alone": {
+        "bytes": 551,
+        "accounts": 22
+      }
+    },
+    {
+      "leg": "KALSHI",
+      "route": "Meteora DLMM",
+      "routeAccounts": 30,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "11214390",
+      "alone": {
+        "bytes": 613,
+        "accounts": 22
+      }
+    },
+    {
+      "leg": "FIGUREAI",
+      "route": "Raydium CLMM",
+      "routeAccounts": 27,
+      "luts": 1,
+      "intermediateAccounts": 0,
+      "quotedOut": "56370000",
+      "alone": {
+        "bytes": 544,
+        "accounts": 22
+      }
+    }
+  ],
+  "packings": {
+    "routeLutsOnly.max4": [
+      {
+        "legs": [
+          0
+        ],
+        "bytes": 1022,
+        "accounts": 37,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          1,
+          2,
+          3
+        ],
+        "bytes": 1126,
+        "accounts": 48,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          4,
+          5,
+          6
+        ],
+        "bytes": 1150,
+        "accounts": 43,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [],
+        "bytes": 985,
+        "accounts": 26,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "routeLutsOnly.max3": [
+      {
+        "legs": [
+          0
+        ],
+        "bytes": 1022,
+        "accounts": 37,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          1,
+          2,
+          3
+        ],
+        "bytes": 1126,
+        "accounts": 48,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          4,
+          5,
+          6
+        ],
+        "bytes": 1150,
+        "accounts": 43,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [],
+        "bytes": 985,
+        "accounts": 26,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "withBasketLut.max4": [
+      {
+        "legs": [
+          0,
+          1
+        ],
+        "bytes": 1119,
+        "accounts": 51,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          2,
+          3,
+          4
+        ],
+        "bytes": 1004,
+        "accounts": 43,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          5,
+          6
+        ],
+        "bytes": 1002,
+        "accounts": 49,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "withBasketLut.max3": [
+      {
+        "legs": [
+          0,
+          1
+        ],
+        "bytes": 1119,
+        "accounts": 51,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          2,
+          3,
+          4
+        ],
+        "bytes": 1004,
+        "accounts": 43,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          5,
+          6
+        ],
+        "bytes": 1002,
+        "accounts": 49,
+        "open": false,
+        "finalize": true
+      }
+    ]
+  }
+}

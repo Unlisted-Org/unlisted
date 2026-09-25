@@ -1,0 +1,106 @@
+// Mutation checks: the e2e must FAIL when the code it guards is deliberately broken.
+//   E2E_ENV=devnet|local npx tsx e2e/mutations.ts [--only <id>]
+// Each mutant edits one source line (the SDK is consumed from source by the app), runs the flow e2e,
+// restores the file, and is recorded as killed (e2e failed) or SURVIVED (e2e passed: a gap in the checks).
+// Results go to e2e/runs/<date>-<cluster>-mutations.json. The flow's own cleanup resumes a paused mint.
+import { execFileSync } from "node:child_process";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(HERE, "../..");
+
+const MUTANTS = [
+  {
+    id: "redeem-rounds-up",
+    what: "SDK redemption payout rounds up one unit (floor(s x owned / (S + C)) + 1)",
+    file: "sdk/src/math.ts",
+    from: "    const gross = (s * owned(leg)) / (supply + leg.claimUnits);\n    const fee = transferFee(gross, fees[i] ?? null);\n    return { action: \"pay\", gross, fee, net: gross - fee } as const;",
+    to: "    const gross = (s * owned(leg)) / (supply + leg.claimUnits) + 1n;\n    const fee = transferFee(gross, fees[i] ?? null);\n    return { action: \"pay\", gross, fee, net: gross - fee } as const;",
+  },
+  {
+    id: "ignore-pause",
+    what: "App ignores the mint's pause flag (a paused leg is shown as available)",
+    file: "sdk/src/token2022.ts",
+    from: "  if (mint.paused) reasons.push(\"paused\");",
+    to: "  if (false && mint.paused) reasons.push(\"paused\");",
+  },
+  {
+    id: "price-panel-not-api",
+    what: "Price panel's 'if you redeemed now' shows the API's last_trade instead of its sell_now (needs E2E_VALUATION_URL)",
+    file: "app/src/components/Panels.tsx",
+    from: "<div className=\"big\" data-usd={v.sell_now.usd}>{fmtUsd(v.sell_now.usd)}</div>",
+    to: "<div className=\"big\" data-usd={v.last_trade.usd}>{fmtUsd(v.last_trade.usd)}</div>",
+    needsApi: true,
+  },
+  {
+    id: "unrecorded-drop-off-by-one",
+    what: "Legs table under-reports an unrecorded vault drop by one unit",
+    file: "app/src/components/Panels.tsx",
+    from: "data-raw={(l.state.accounted - l.state.balance).toString()}",
+    to: "data-raw={(l.state.accounted - l.state.balance - 1n).toString()}",
+    spec: "seizure",
+  },
+  {
+    id: "stored-multiplier",
+    what: "Legs table shows the mint's stored multiplier field instead of the effective one (killed only where they differ, e.g. devnet NEURALINK)",
+    file: "sdk/src/token2022.ts",
+    from: "  return BigInt(Math.floor(nowUnix)) >= s.newMultiplierEffectiveTimestamp ? s.newMultiplier : s.multiplier;",
+    to: "  return s.multiplier;",
+  },
+  {
+    id: "abort-drops-intermediate",
+    what: "SDK abort passes one fewer ticket-owned account than exists (the program accepts it and strands the rent)",
+    file: "sdk/src/flows.ts",
+    from: "  const closes = p.ticketOwned.filter((k) => !k.equals(t.escrow));",
+    to: "  const closes = p.ticketOwned.filter((k) => !k.equals(t.escrow)).slice(1);",
+    spec: "abort",
+  },
+  {
+    id: "finalize-omits-intermediate",
+    what: "A ticket-owned token account exists at finalize (as a route's output account would) but the SDK doesn't pass it to finalize_deposit",
+    file: "sdk/src/flows.ts",
+    from: "  const finalizeIxs = [\n    createAssociatedTokenAccountIdempotentInstruction(owner, shareAta, owner, v.basket.shareMint, TOKEN_PROGRAM_ID),",
+    to: "  const finalizeIxs = [\n    createAssociatedTokenAccountIdempotentInstruction(owner, ata(ticket, v.legs[0].mint, TOKEN_2022_PROGRAM_ID), ticket, v.legs[0].mint, TOKEN_2022_PROGRAM_ID),\n    createAssociatedTokenAccountIdempotentInstruction(owner, shareAta, owner, v.basket.shareMint, TOKEN_PROGRAM_ID),",
+  },
+] as { id: string; what: string; file: string; from: string; to: string; spec?: string; needsApi?: boolean; also?: { file: string; from: string; to: string }[] }[];
+
+const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1] : null;
+const cluster = (process.env.E2E_ENV ?? "local") === "devnet" ? "devnet" : "localnet";
+const results: any[] = [];
+for (const m of MUTANTS.filter((x) => (!only || x.id === only) && (!x.needsApi || process.env.E2E_VALUATION_URL))) {
+  const path = join(ROOT, m.file);
+  const original = readFileSync(path, "utf8");
+  if (!original.includes(m.from)) throw new Error(`${m.id}: target text not found in ${m.file}`);
+  let mutated = original.replace(m.from, m.to);
+  for (const x of m.also ?? []) {
+    if (x.file !== m.file) throw new Error("also: same file only");
+    if (!mutated.includes(x.from)) throw new Error(`${m.id}: also-target not found`);
+    mutated = mutated.replace(x.from, x.to);
+  }
+  const startedAt = new Date().toISOString();
+  let out = "";
+  let passed = false;
+  writeFileSync(path, mutated);
+  try {
+    out = execFileSync("npx", ["playwright", "test", m.spec ?? "flow", "--timeout", "1500000"], {
+      cwd: resolve(HERE, ".."), encoding: "utf8", env: { ...process.env, E2E_MUTATION: m.id }, stdio: ["ignore", "pipe", "pipe"], maxBuffer: 64 << 20,
+    });
+    passed = true;
+  } catch (e: any) {
+    out = `${e.stdout ?? ""}${e.stderr ?? ""}`;
+  } finally {
+    writeFileSync(path, original);
+  }
+  const clean = out.replace(/\u001b\[[0-9;]*m/g, "");
+  const failure = clean.split("\n").filter((l) => /Error:|Expected|Received|at .*\.spec\.ts:\d+/.test(l)).slice(0, 8).map((l) => l.trim());
+  const r = { id: m.id, what: m.what, file: m.file, spec: m.spec ?? "flow", valuationApi: process.env.E2E_VALUATION_URL ?? null, startedAt, finishedAt: new Date().toISOString(), result: passed ? "SURVIVED" : "killed", failure, runFile: /run file: (\S+)/.exec(clean)?.[1] ?? null };
+  results.push(r);
+  console.log(`${m.id}: ${r.result}${failure.length ? `\n  ${failure.join("\n  ")}` : ""}`);
+}
+const file = join(HERE, "runs", `${new Date().toISOString().slice(0, 10)}-${cluster}-mutations.json`);
+const prior = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")).runs ?? [] : [];
+writeFileSync(file, JSON.stringify({ what: "Mutation checks: each mutant must make the flow e2e fail", runs: [...prior, ...results] }, null, 2));
+console.log(`mutation results: ${file}`);
+if (results.some((r) => r.result === "SURVIVED")) process.exit(1);

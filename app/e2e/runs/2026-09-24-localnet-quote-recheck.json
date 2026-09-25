@@ -1,0 +1,16 @@
+{
+  "what": "Re-check of Agent B's finding: /v1/quote/deposit crashed on a partial registry. Fix: ops@fe341ac. Run on the local validator (no devnet use), GET /v1/quote/deposit?usdc=10000000, each registry variant on a fresh server on port 8911.",
+  "fixed_code": "ops worktree @f0821df (contains fe341ac), services/valuation",
+  "pre_fix_code": "ops@587d518 (copy used for the original finding)",
+  "results": [
+    { "registry": "good (lp_fee_bps 30, pools [])", "fixed": "200, expected_shares 31161, lp_fee 30 from the pool account (chain)" },
+    { "registry": "no lp_fee_bps", "pre_fix": "502 'The number NaN cannot be converted to a BigInt because it is not an integer'", "fixed": "200, expected_shares 32350, lp_fee 30 read from the pool account, not the registry" },
+    { "registry": "pools listed without seed provenance (lp_fee_bps present)", "pre_fix": "502 \"Cannot read properties of undefined (reading 'source')\"", "fixed": "200, expected_shares 32662, price_source 'no seed record in the registry; price = current pool reserves'" },
+    { "registry": "pools without seed and no lp_fee_bps", "pre_fix": "502 NaN BigInt", "fixed": "200, expected_shares 34201" },
+    { "registry": "no fixture_amm", "fixed": "409 'registry has no fixture_amm.program_id or usdc.mint; run scripts/amm/seed-pools.ts for this cluster'" },
+    { "registry": "fixture_amm.program_id with no pools on chain", "fixed": "409 'no fixture_amm pool on local for OPENAI, ... (program 1111...2); run scripts/amm/seed-pools.ts'" }
+  ],
+  "server_survived_every_request": true,
+  "verdict": "Closed. No crash; missing registry data gives a clear 409; a missing lp_fee_bps no longer matters because the fee is read from the pool account; a good registry quotes. expected_shares differs between runs because the split follows live mainnet sell_now weights.",
+  "note": "The fixed response's packing hint still says 4 transactions; the SDK packs by bytes and account locks (devnet run 4 used 2), and the hint itself says the SDK has the final say."
+}

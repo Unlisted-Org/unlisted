@@ -1,0 +1,191 @@
+{
+  "measuredAt": "2026-09-24T19:21:57.259Z",
+  "usdcPerLeg": "10000000",
+  "maxAccounts": 30,
+  "perLeg": [
+    {
+      "leg": "OPENAI",
+      "route": "Flux → Meteora DLMM",
+      "routeAccounts": 43,
+      "luts": 2,
+      "intermediateAccounts": [
+        "FwmZdJ32GKkJaw8TdfBZxYKpapeBkehZDua6Gwo7Hpx5",
+        "9sveGUuETBsxqaavcUNhnCyCV2JsW6c8p1p5L1Ra3Q3W"
+      ],
+      "quotedOut": "4940933",
+      "alone": {
+        "bytes": 828,
+        "accounts": 32
+      }
+    },
+    {
+      "leg": "ANTHROPIC",
+      "route": "Hadron",
+      "routeAccounts": 29,
+      "luts": 1,
+      "intermediateAccounts": [
+        "CbxmtbeHD9d4NrdXdC9ATvPpMVpB3fGMG4DsXsPg26kD"
+      ],
+      "quotedOut": "9478490",
+      "alone": {
+        "bytes": 623,
+        "accounts": 26
+      }
+    },
+    {
+      "leg": "NEURALINK",
+      "route": "Meteora DLMM",
+      "routeAccounts": 31,
+      "luts": 1,
+      "intermediateAccounts": [
+        "rJqtu52KQa7Ndx89Bj5rv7X47HxNBmMjU23g2nCWV8w"
+      ],
+      "quotedOut": "22287865",
+      "alone": {
+        "bytes": 627,
+        "accounts": 25
+      }
+    },
+    {
+      "leg": "ANDURIL",
+      "route": "TesseraV → Meteora DLMM",
+      "routeAccounts": 44,
+      "luts": 2,
+      "intermediateAccounts": [
+        "FwmZdJ32GKkJaw8TdfBZxYKpapeBkehZDua6Gwo7Hpx5",
+        "92i9QsormYSgyFbnzcXFENioPBTgMJ46HDSCBB2VqFC7"
+      ],
+      "quotedOut": "60198313",
+      "alone": {
+        "bytes": 791,
+        "accounts": 33
+      }
+    },
+    {
+      "leg": "POLYMARKET",
+      "route": "Meteora DLMM",
+      "routeAccounts": 30,
+      "luts": 1,
+      "intermediateAccounts": [
+        "hbpxcVfKG7QQJBsW7aM52dNkMAtNGbPCRtQUB1m2et4"
+      ],
+      "quotedOut": "66591615",
+      "alone": {
+        "bytes": 625,
+        "accounts": 24
+      }
+    },
+    {
+      "leg": "KALSHI",
+      "route": "Meteora DLMM",
+      "routeAccounts": 30,
+      "luts": 1,
+      "intermediateAccounts": [
+        "3F25iqnnNZiogWswXJ3xd1r8rihxHV2Ny1oTYfFGppTX"
+      ],
+      "quotedOut": "11214395",
+      "alone": {
+        "bytes": 687,
+        "accounts": 24
+      }
+    },
+    {
+      "leg": "FIGUREAI",
+      "route": "Raydium CLMM",
+      "routeAccounts": 27,
+      "luts": 1,
+      "intermediateAccounts": [
+        "5uWeL1xPDr7zXWjLzxD7mF8KSmd13d8PoNkkPMD2bEb8"
+      ],
+      "quotedOut": "56370000",
+      "alone": {
+        "bytes": 618,
+        "accounts": 24
+      }
+    }
+  ],
+  "packings": {
+    "routeLutsOnly.max4": "Error: finalize_deposit does not fit",
+    "routeLutsOnly.max3": "Error: finalize_deposit does not fit",
+    "withBasketLut.max4": [
+      {
+        "legs": [
+          0,
+          1
+        ],
+        "bytes": 1051,
+        "accounts": 48,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          2,
+          3,
+          4
+        ],
+        "bytes": 1169,
+        "accounts": 53,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          5,
+          6
+        ],
+        "bytes": 930,
+        "accounts": 36,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [],
+        "bytes": 738,
+        "accounts": 35,
+        "open": false,
+        "finalize": true
+      }
+    ],
+    "withBasketLut.max3": [
+      {
+        "legs": [
+          0,
+          1
+        ],
+        "bytes": 1051,
+        "accounts": 48,
+        "open": true,
+        "finalize": false
+      },
+      {
+        "legs": [
+          2,
+          3,
+          4
+        ],
+        "bytes": 1169,
+        "accounts": 53,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [
+          5,
+          6
+        ],
+        "bytes": 930,
+        "accounts": 36,
+        "open": false,
+        "finalize": false
+      },
+      {
+        "legs": [],
+        "bytes": 738,
+        "accounts": 35,
+        "open": false,
+        "finalize": true
+      }
+    ]
+  }
+}
