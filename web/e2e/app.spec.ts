@@ -28,6 +28,7 @@ import { Keypair } from "@solana/web3.js";
     BROKEN=allvalues the value expander open by default (Basket)        -> "one value leads" fails
     BROKEN=costfirst the cost box moved above the buy action (Buy)      -> "buy box leads with the action" fails
     BROKEN=nopaging  eleven entries shown in an event list (History)    -> "logs are paged" fails
+    BROKEN=orphan    the tiles back on an auto-fill grid                -> "seven across or one per row" fails
 */
 const BROKEN = process.env.BROKEN ?? "";
 const SHOTS = "e2e/shots";
@@ -231,4 +232,17 @@ test("api: the issuer control refuses a wrong or missing passcode; the faucet re
   }
   expect((await request.post("/api/faucet", { data: { wallet: "not-a-key" } })).status()).toBe(400);
   expect((await request.get("/api/issuer")).status()).toBe(405);
+});
+
+test("app (Overview): the seven tiles are seven across or one per row, never an orphan", async ({ page }) => {
+  test.setTimeout(300_000);
+  for (const width of [390, 768, 1024, 1280, 1440, 1920]) {
+    await frame(page, width, "light");
+    await page.goto("/app", { waitUntil: "load" });
+    await routeReady(page, "tiles");
+    if (BROKEN === "orphan") await page.addStyleTag({ content: ".holder .tiles{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))!important}" });
+    const tops = await page.locator("[data-testid=tiles] > li").evaluateAll((ls) => ls.map((l) => Math.round(l.getBoundingClientRect().top)));
+    const rows = new Set(tops).size;
+    expect([1, 7], `tile rows at ${width}px: ${rows}`).toContain(rows);
+  }
 });

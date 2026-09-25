@@ -129,6 +129,7 @@ Every figure and signature survives the move. The evidence spec proves it: all 3
 | `allvalues` | the Basket value expander opened | `last trade folded by default: Expected hidden, Received visible` |
 | `costfirst` | the cost box moved above the Buy action | `Expected "button, then cost", Received "cost, then button"` |
 | `nopaging` | 11 entries injected into the History issuer list | `entries shown before 'Show more': Expected <= 10, Received 21` |
+| `orphan` | the tiles put back on an auto-fill grid (FigureAI was left alone on a second row at 1280px in a live run) | `tile rows at 390px: 4`, not 1 or 7 |
 
 - **Retired:** `expanded`. The Details tabs it opened no longer exist; their contents are now routes, which the `merged` check covers.
 - **The old `hide`** (value panel hidden on the previous one-page app) was run once more against the live site, where that layout still ran. It hung again: no result within 280 s, with the test never reporting. That layout is now gone. The new `hide` fails in 30.6 s.
@@ -153,4 +154,5 @@ It then checks Claims, a USDC ticket on Buy, and the values and multipliers on B
   - claim units equal to the shares redeemed;
   - settlement 8,522,834, equal to the tile's estimate.
 - **Broken version:** the tile reports the gross amount instead of what you receive. Killed at `paid now, exactly as the tile said`: expected 4,554,309, received 4,508,765 (the 1% issuer fee). The harness then resumed ANTHROPIC, and a later on-chain read showed `paused: false`.
-- **Real run:** 25 of 25 pass (app, landing, evidence, send, and the API gate).
+- **Real run:** 26 of 26 pass locally: app, landing, evidence, send, the API gate and the tile rows. On the live site, 25 of 25 passed before the tile-row check existed.
+- **Live devnet flow,** against https://unlisted-rosy.vercel.app with the Vercel-held fixture key and the Railway valuation API: **3 of 3 passed first time** (116 s, 176 s, 117 s).

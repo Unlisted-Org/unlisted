@@ -138,13 +138,20 @@
 .holder .claimlink { color: var(--claim); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 
 /* Seven tiles: state as a word, the issuer's red only on the company it touched */
-.holder .tiles-wrap { padding: 0; border: 0; background: transparent; }
-.holder .tiles { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+/* Seven across when the column is wide enough; otherwise one compact row per company. Never an orphan. */
+.holder .tiles-wrap { padding: 0; border: 0; background: transparent; container-type: inline-size; }
+.holder .tiles { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr); }
 .holder .tile {
-  display: flex; flex-direction: column; justify-content: space-between; gap: 10px; min-height: 104px; padding: 12px; border: 1px solid var(--line);
-  border-radius: 8px; background: var(--surface); min-width: 0;
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 6px 12px; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface); min-width: 0;
 }
-.holder .tile-head { display: flex; flex-direction: column; gap: 2px; }
+.holder .tile-head { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.holder .tile .tile-body { align-items: flex-end; text-align: right; }
+@container (min-width: 940px) {
+  .holder .tiles { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+  .holder .tile { flex-direction: column; align-items: stretch; justify-content: space-between; gap: 10px; min-height: 108px; padding: 12px; }
+  .holder .tile .tile-body { align-items: flex-start; text-align: left; }
+}
 .holder .tile-head b { font-family: var(--display); font-size: 15px; font-weight: 600; }
 .holder .tile-state { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--paid); }
 .holder .tile.down { border-color: var(--issuer); background: var(--issuer-soft); }
