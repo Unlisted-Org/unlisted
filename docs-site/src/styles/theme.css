@@ -82,8 +82,9 @@
 	letter-spacing: -0.01em;
 	color: var(--sl-color-white);
 }
+/* The lockup is 2084.86 × 600.06; at 1.4rem tall it sits like the app's header logo. */
 .site-title img {
-	height: 0.8rem;
+	height: 1.4rem;
 	width: auto;
 }
 h1#_top,

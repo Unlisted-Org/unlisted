@@ -240,3 +240,102 @@ ALL CHECKS PASSED
 https://unlisted-docs.vercel.app: signatures: 70 cited across 16 pages (devnet 59, mainnet 11); 51 with a stated slot; 853 signature-shaped strings in committed records
 SIGNATURE CHECK PASSED: every signature is linked, committed, and finalized without error on its network
 ```
+
+---
+
+# Round 3 (2026-09-25): the Unlisted logo
+
+The old seven-bar mark is gone from `docs-site/`. The header uses the lockup (U mark and
+wordmark side by side) from `brand/svg/`, copied unchanged into `src/assets/brand/`: the black
+file on the light theme, the white file on the dark theme, `replacesTitle: true`. The favicon
+is `brand/svg/unlisted-app-icon.svg`, copied unchanged to `public/favicon.svg`. The app
+screenshots on the Dashboard guide were re-cut from `web/e2e/shots/`, which now show the new
+logo; the recorded-run crops never included the app header.
+
+**New check (6), in `verify.mjs`:** at 1440 and 390, in both themes, exactly one header logo
+image is visible, it has loaded (non-zero natural size), it's drawn at least 16 px tall, and
+it's the right file for the theme (`unlisted-lockup-black` on light, `unlisted-lockup-white` on
+dark). The favicon the page links is fetched and must be byte-identical to `public/favicon.svg`.
+
+**Broken version L1, wrong logo path and the old favicon:** in the built pages every logo `src`
+was rewritten to a path without Astro's hash (`/_astro/unlisted-lockup-black.svg`, which doesn't
+exist), and `dist/favicon.svg` was replaced by the old seven-bar favicon.
+
+```
+logo @1440 light: /_astro/unlisted-lockup-black.svg 82×22 loaded=false
+logo @1440 dark: /_astro/unlisted-lockup-white.svg 82×22 loaded=false
+favicon /favicon.svg: 200 MISMATCH
+logo: 5 problems
+  logo @1440 light: /_astro/unlisted-lockup-black.svg did not load (naturalWidth 0)
+  logo @1440 dark: /_astro/unlisted-lockup-white.svg did not load (naturalWidth 0)
+  logo @390 light: /_astro/unlisted-lockup-black.svg did not load (naturalWidth 0)
+  logo @390 dark: /_astro/unlisted-lockup-white.svg did not load (naturalWidth 0)
+  favicon /favicon.svg: 200, differs from public/favicon.svg
+FAILED: 5 problem(s)
+exit=1
+```
+
+(A wrong path in `astro.config.mjs` itself doesn't reach the check: the build refuses it with
+`UNRESOLVED_IMPORT`. That is also a failure, just an earlier one; see the note below.)
+
+**Broken version L2, variants swapped** in `astro.config.mjs` (white lockup on light, black on dark):
+
+```
+logo: 4 problems
+  logo @1440 light: shows /_astro/unlisted-lockup-white.B9RNUEE5.svg, expected unlisted-lockup-black
+  logo @1440 dark: shows /_astro/unlisted-lockup-black.BuKJ8J7q.svg, expected unlisted-lockup-white
+  logo @390 light: shows /_astro/unlisted-lockup-white.B9RNUEE5.svg, expected unlisted-lockup-black
+  logo @390 dark: shows /_astro/unlisted-lockup-black.BuKJ8J7q.svg, expected unlisted-lockup-white
+FAILED: 4 problem(s)
+exit=1
+```
+
+**Broken version L3, logo hidden:** `.site-title img { display: none; }` appended to `theme.css`.
+
+```
+logo: 4 problems
+  logo @1440 light: 0 visible logo images (of 2)
+  logo @1440 dark: 0 visible logo images (of 2)
+  logo @390 light: 0 visible logo images (of 2)
+  logo @390 dark: 0 visible logo images (of 2)
+FAILED: 4 problem(s)
+exit=1
+```
+
+**A mistake in the procedure, caught.** L2 and the first L3 attempt were reverted with
+`git checkout <file>`, which restores the *staged* copy. The logo edits to `astro.config.mjs` and
+`theme.css` weren't staged yet, so the revert put the old seven-bar paths back. The first L3
+build then failed with `UNRESOLVED_IMPORT … mark-dark.svg`, which is how it was noticed; that run
+tested nothing and isn't counted. The edits were re-applied and staged before L3 was run again
+(the result above). L1 and L2 ran on the correct configuration: their output shows the brand files.
+
+**Other checks re-run** after the logo change, and a new record note on the user flow (the
+settlement of the broken-version run's leftover claim, and the 14:02 UTC run that settles its own):
+
+- Local build: 780 internal links across 16 pages, 0 broken; 15 pages × 2 widths × 2 themes, 0
+  overflow problems; theme and toggle ok; logo 0 problems; search ok; 73 signatures (62 devnet, 11
+  mainnet), all committed and finalized, 53 at their stated slot.
+- Deployed site (https://unlisted-docs.vercel.app):
+
+```
+links: 780 internal links across 16 pages, 0 broken
+explorer labels: all match their URLs
+live: 18 URLs fetched from https://unlisted-docs.vercel.app, 0 not 200
+overflow: 15 pages × 2 widths × 2 themes, 0 problems
+first visit with OS set to dark: theme=dark ok
+toggle click: theme=light stored=light ok
+first visit with OS set to light: theme=light ok
+toggle click: theme=dark stored=dark ok
+logo @1440 light: /_astro/unlisted-lockup-black.BuKJ8J7q.svg 78×22 loaded=true
+logo @1440 dark: /_astro/unlisted-lockup-white.B9RNUEE5.svg 78×22 loaded=true
+favicon /favicon.svg: 200 matches public/favicon.svg
+logo: 0 problems
+search "claim": 20 results, first /product/user-flow/, … — ok
+screenshots written to …: 4 pages × 2 widths × 2 themes
+ALL CHECKS PASSED
+
+https://unlisted-docs.vercel.app: signatures: 73 cited across 16 pages (devnet 62, mainnet 11); 53 with a stated slot; 863 signature-shaped strings in committed records
+SIGNATURE CHECK PASSED: every signature is linked, committed, and finalized without error on its network
+```
+
+`proof/screenshots/` was replaced with this run's screenshots (the header shows the new logo).

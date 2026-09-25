@@ -7,6 +7,7 @@
 // 3. Search returns the expected page for a real query.
 // 4. Every Explorer link's label matches its URL. (Signatures on chain: scripts/verify-sigs.mjs.)
 // 5. Screenshots of the listed pages at 1440 and 390, light and dark, into --shots.
+// 6. The header logo loads in both themes (the right lockup file per theme), and the favicon is the brand icon.
 //
 // Browsers come from PLAYWRIGHT_BROWSERS_PATH (the worktree's .playwright-browsers), never the
 // shared cache. Uses chrome-headless-shell: plain headless Chrome ignores --window-size and lays
@@ -165,6 +166,50 @@ for (const o of overflow) console.log('  ' + o);
 	}
 }
 
+// ---------------------------------------------------------------- 6. logo
+// The header logo is the Unlisted lockup: exactly one visible image per theme, loaded (non-zero
+// natural size, drawn at least 16 px tall), the black file on light and the white file on dark.
+// The favicon served is byte-identical to public/favicon.svg (the brand app icon).
+const logoProblems = [];
+for (const width of [1440, 390]) {
+	for (const theme of ['light', 'dark']) {
+		const page = await pageAt(width, theme);
+		await page.goto(ORIGIN + PAGES[0], { waitUntil: 'load' });
+		await page.waitForFunction(() => [...document.querySelectorAll('.site-title img')].every((i) => i.complete), null, { timeout: 10_000 }).catch(() => {});
+		const imgs = await page.$$eval('.site-title img', (els) =>
+			els.map((i) => {
+				const r = i.getBoundingClientRect();
+				const cs = getComputedStyle(i);
+				return { src: i.getAttribute('src'), alt: i.getAttribute('alt'), complete: i.complete, nw: i.naturalWidth, h: r.height, w: r.width, visible: cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 0 && r.height > 0 };
+			}),
+		);
+		const shown = imgs.filter((i) => i.visible);
+		const want = theme === 'light' ? 'unlisted-lockup-black' : 'unlisted-lockup-white';
+		const tag = `logo @${width} ${theme}`;
+		if (shown.length !== 1) logoProblems.push(`${tag}: ${shown.length} visible logo images (of ${imgs.length})`);
+		for (const i of shown) {
+			if (!i.complete || i.nw === 0) logoProblems.push(`${tag}: ${i.src} did not load (naturalWidth ${i.nw})`);
+			if (i.h < 16) logoProblems.push(`${tag}: drawn ${i.h.toFixed(1)} px tall`);
+			if (!i.src?.includes(want)) logoProblems.push(`${tag}: shows ${i.src}, expected ${want}`);
+		}
+		if (width === 1440) console.log(`${tag}: ${shown.map((i) => `${i.src} ${Math.round(i.w)}×${Math.round(i.h)} loaded=${i.complete && i.nw > 0}`).join(', ') || 'none visible'}`);
+		await page.context().close();
+	}
+}
+{
+	const want = readFileSync(new URL('../public/favicon.svg', import.meta.url), 'utf8');
+	const page = await pageAt(1440, 'light');
+	await page.goto(ORIGIN + PAGES[0]);
+	const href = await page.$eval('link[rel="shortcut icon"], link[rel="icon"]', (l) => l.getAttribute('href')).catch(() => null);
+	await page.context().close();
+	const r = href ? await fetch(new URL(href, ORIGIN + '/')) : null;
+	const body = r?.ok ? await r.text() : null;
+	if (body !== want) logoProblems.push(`favicon ${href}: ${r ? r.status : 'no link'}${body && body !== want ? ', differs from public/favicon.svg' : ''}`);
+	console.log(`favicon ${href}: ${r?.status ?? 'none'} ${body === want ? 'matches public/favicon.svg' : 'MISMATCH'}`);
+}
+console.log(`logo: ${logoProblems.length} problems`);
+for (const p of logoProblems) console.log('  ' + p);
+
 // ---------------------------------------------------------------- 3. search
 let searchOk = false;
 {
@@ -216,6 +261,6 @@ if (SHOTS) {
 
 await browser.close();
 if (!REMOTE) server.close();
-const failed = broken.length + overflow.length + (searchOk ? 0 : 1) + (labelsOk ? 0 : 1);
+const failed = broken.length + overflow.length + logoProblems.length + (searchOk ? 0 : 1) + (labelsOk ? 0 : 1);
 console.log(failed ? `FAILED: ${failed} problem(s)` : 'ALL CHECKS PASSED');
 process.exit(failed ? 1 : 0);

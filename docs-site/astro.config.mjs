@@ -8,10 +8,12 @@ export default defineConfig({
 			title: 'Unlisted Docs',
 			description:
 				'A basket of seven tokenized pre-IPO companies on Solana that still pays out when the issuer acts: how it works, what it proves, and how to check it yourself. Devnet only.',
+			// The Unlisted lockup (brand/svg on main, copied unchanged): black on light, white on dark.
 			logo: {
-				light: './src/assets/mark-light.svg',
-				dark: './src/assets/mark-dark.svg',
+				light: './src/assets/brand/unlisted-lockup-black.svg',
+				dark: './src/assets/brand/unlisted-lockup-white.svg',
 				alt: 'Unlisted',
+				replacesTitle: true,
 			},
 			favicon: '/favicon.svg',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/Unlisted-Org/unlisted' }],

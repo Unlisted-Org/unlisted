@@ -3,7 +3,8 @@
 The documentation site for Unlisted, built with Astro Starlight. The setup (theme override,
 two-state theme toggle, explorer-label script and verification discipline) is copied from the
 Uncross docs site; the content, palette (`web/app/globals.css`), type (IBM Plex) and logo are
-Unlisted's.
+Unlisted's. The logo files in `src/assets/brand/` and `public/favicon.svg` are copied unchanged
+from `brand/svg/` (see `brand/README.md`).
 
 ```sh
 npm install
