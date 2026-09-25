@@ -304,3 +304,28 @@ export function toRaw(ui: string, decimals = 9): bigint {
   const [i, f = ""] = t.split(".");
   return BigInt(i) * 10n ** BigInt(decimals) + BigInt((f + "0".repeat(decimals)).slice(0, decimals));
 }
+
+/** Settle every open claim this owner holds (permissionless; the app key pays as cranker). Used on failure
+ *  so a run never leaves a claim open on the canonical basket. Returns the signatures. */
+export async function settleOpenClaims(env: E2eEnv, owner: PublicKey): Promise<string[]> {
+  if (env.cluster !== "devnet" || !env.funderKey) return [];
+  const c = conn(env);
+  const cranker = loadKey(env.funderKey);
+  const client = new sdk.BasketClient(c, { programId: new PublicKey(env.programId), shareMint: new PublicKey(env.shareMint) });
+  const sigs: string[] = [];
+  for (const { address, ticket } of await redemptionTickets(env, owner)) {
+    for (const cl of sdk.openClaims(ticket)) {
+      const v = await client.fetchBasket();
+      if (v.legs[cl.leg].unavailable.length) continue;
+      const { blockhash } = await c.getLatestBlockhash("finalized");
+      const tx = sdk.planSettleClaim({ v, cranker: cranker.publicKey, ticket: address, owner, leg: cl.leg, blockhash });
+      tx.sign([cranker]);
+      const raw = tx.serialize();
+      const sig = await c.sendRawTransaction(raw);
+      const st = await sdk.confirmByPolling(c, sig, raw);
+      if (st.err) throw new Error(`settle ${sig} failed: ${JSON.stringify(st.err)}`);
+      sigs.push(sig);
+    }
+  }
+  return sigs;
+}

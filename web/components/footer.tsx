@@ -8,8 +8,8 @@ export const Footer = () => (
       <div className="flex max-w-sm flex-col gap-3">
         <Logo />
         <p className="text-[13px] text-ink-muted">
-          A basket of seven tokenized pre-IPO companies that keeps paying out when the issuer acts. Devnet only. Not
-          endorsed by PreStocks. Nothing here is investment advice.
+          A basket of seven tokenized pre-IPO companies that keeps paying out when the issuer acts. Devnet only.
+          PreStocks has no objection to it; that is not an endorsement. Nothing here is investment advice.
         </p>
       </div>
       <div className="grid grid-cols-2 gap-8 text-[13px]">

@@ -11,3 +11,6 @@ __pycache__/
 !.env.example
 .playwright-browsers/
 .vercel
+
+# Brand source archives as delivered; the extracted files live in brand/svg and brand/png.
+brand/logos/*.zip

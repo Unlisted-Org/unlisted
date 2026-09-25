@@ -319,6 +319,10 @@ export interface TerminalProps {
   enableSound?: boolean;
   /** Unlisted: when false (the default) every line renders at once, with no typing, cursor blink or sound. */
   animate?: boolean;
+  /** Unlisted: called once when an animated run has printed its last line. */
+  onDone?: () => void;
+  /** Unlisted: when given, the run starts when this turns true, instead of on the terminal's own visibility. */
+  start?: boolean;
 }
 
 export function Terminal({
@@ -331,10 +335,13 @@ export function Terminal({
   initialDelay = 500,
   enableSound = false,
   animate = false,
+  onDone,
+  start,
 }: TerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(containerRef);
+  const seen = useInView(containerRef);
+  const inView = start ?? seen;
   const { down, up } = useAudio(enableSound);
 
   const [lines, setLines] = useState<TerminalLine[]>(() =>
@@ -443,11 +450,18 @@ export function Terminal({
     return () => clearTimeout(t);
   }, [phase, delayBetweenCommands]);
 
+  // The cursor blinks only while the run plays; at the end it stops, so nothing loops.
   useEffect(() => {
-    if (!animate) return;
+    if (!animate || phase === "done") return;
     const interval = setInterval(() => setCursorVisible((v) => !v), 530);
     return () => clearInterval(interval);
-  }, [animate]);
+  }, [animate, phase === "done"]);
+
+  const doneRef = useRef(onDone);
+  doneRef.current = onDone;
+  useEffect(() => {
+    if (animate && phase === "done") doneRef.current?.();
+  }, [animate, phase]);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -467,6 +481,7 @@ export function Terminal({
   return (
     <div
       ref={containerRef}
+      data-phase={phase}
       className={cn(
         "mx-auto w-full max-w-xl px-4 font-mono text-xs",
         className,
@@ -522,8 +537,7 @@ export function Terminal({
             </div>
           )}
 
-          {animate && (phase === "done" ||
-            phase === "pausing" ||
+          {animate && (phase === "pausing" ||
             phase === "outputting") && (
             <div className="leading-relaxed whitespace-pre-wrap">
               {prompt}

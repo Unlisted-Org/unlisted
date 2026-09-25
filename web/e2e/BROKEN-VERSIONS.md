@@ -156,3 +156,25 @@ It then checks Claims, a USDC ticket on Buy, and the values and multipliers on B
 - **Broken version:** the tile reports the gross amount instead of what you receive. Killed at `paid now, exactly as the tile said`: expected 4,554,309, received 4,508,765 (the 1% issuer fee). The harness then resumed ANTHROPIC, and a later on-chain read showed `paused: false`.
 - **Real run:** 26 of 26 pass locally: app, landing, evidence, send, the API gate and the tile rows. On the live site, 25 of 25 passed before the tile-row check existed.
 - **Live devnet flow,** against https://unlisted-rosy.vercel.app with the Vercel-held fixture key and the Railway valuation API: **3 of 3 passed first time** (116 s, 176 s, 117 s).
+
+# Landing (2026-09-25): a straight hero card, and a scroll-triggered run of the "Basket protocols break" section
+
+What changed:
+- **The hero card** is no longer tilted. It plays in once on load (the card rises, the seven rows land in order, the paused company's claim is marked, then the settlement line) and stops. This is CSS only; under reduced motion none of it exists.
+- **The "Basket protocols break" section** has no Replay control. The terminal plays once, when it is half in view. The four steps beside it advance in order as it plays, and it stops on the last step without looping. A click on a step shows that step's run in full and ends the automatic run. Under reduced motion every line is printed at once.
+
+Each check was seen failing on its broken version first:
+
+| Broken version | Mutation | Failed at |
+|---|---|---|
+| `tilt` | the card rotated in 3D (`rotateX(10deg) rotateY(-8deg)`) | `transformed ancestors (reduce)` |
+| `nohero` | the card's entrance animations removed | `entrance animations on the hero card: Expected >= 8, Received 0` |
+| `replay` | a Replay button added to the section | `no Replay control: Expected 0, Received 1` |
+| `blank` | the terminal emptied under reduced motion | `terminal lines at rest: Expected >= 9, Received 0` |
+| mutant: never starts | `start={inView && false}` in `versus.tsx` | `steps, in the order they played`: no steps seen |
+| mutant: loops | at the end, go back to the first step | `steps, in the order they played`: a fifth step seen |
+
+- **One false failure, fixed.** The first real run flagged the card's `matrix(1, 0, 0, 1, 0, 0)`. That is the identity matrix, the entrance's flat end state. The check now accepts the identity only, and `tilt` still fails against it.
+- **Mutants** were applied with `scripts/mutant.mjs` and reverted byte-identical. The check command builds separately, so a mutant that doesn't compile can't pass as killed.
+- **Copy:** the disclosures and footer carry PreStocks' reply of 2026-09-25 (no objection, which is not an endorsement; the vault is treated like any holder; no advance notice of changes). The same wording is on the app's Basket route.
+- **Real run:** 29 of 29 pass (landing, app, evidence, send).

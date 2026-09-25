@@ -1,8 +1,10 @@
 "use client";
-// Section frame from the Aceternity Pro block `feature-section-with-terminal` (selectable items beside a
-// terminal), adapted: static-first terminal (components/ui/terminal.tsx), items are buttons, no height
-// animation, no remote background image. Every item's outcome is visible at rest.
-import { useState } from "react";
+// Section frame from the Aceternity Pro block `feature-section-with-terminal` (steps beside a terminal),
+// adapted: the terminal plays once, when it scrolls into view, and the four steps advance with it in
+// order; it stops on the last one and never loops. There is no replay control. Under reduced motion
+// (and in the server render) every line is printed at once. Every step's outcome is always visible.
+import { useRef, useState } from "react";
+import { useInView } from "motion/react";
 import { Terminal } from "../ui/terminal";
 import { Container } from "../container";
 import { useMotionAllowed } from "../motion";
@@ -85,10 +87,21 @@ function items(): Item[] {
 
 export function Versus() {
   const all = items();
-  const [active, setActive] = useState(all[0].id);
-  const [plays, setPlays] = useState(0);
   const allowed = useMotionAllowed();
-  const current = all.find((i) => i.id === active)!;
+  const stage = useRef<HTMLDivElement>(null);
+  const inView = useInView(stage, { once: true, amount: 0.5 });
+  const [active, setActive] = useState(0);
+  const [auto, setAuto] = useState(true); // the scroll-triggered run; a click on a step ends it
+  const autoRef = useRef(true);
+  const [finished, setFinished] = useState(false);
+  const playing = allowed && auto && !finished;
+  const current = all[active];
+  const next = () => {
+    if (!auto) return;
+    if (active < all.length - 1) setTimeout(() => { if (autoRef.current) setActive((a) => a + 1); }, 1200);
+    else setFinished(true);
+  };
+  const stateOf = (i: number) => (!playing ? (i === active ? "active" : "done") : i < active ? "done" : i === active ? "active" : "next");
   return (
     <section id="breaks" className="border-y border-line bg-ground py-16 md:py-24" aria-labelledby="breaks-title">
       <Container className="flex flex-col gap-10">
@@ -102,44 +115,38 @@ export function Versus() {
             that follows. Symmetry handles transfer fees correctly; the issuer's other powers are the problem.
           </p>
         </div>
-        <div className="grid grid-cols-1 overflow-hidden rounded-3xl bg-surface ring-1 ring-line lg:grid-cols-2 [&>*]:min-w-0">
-          <div className="order-2 flex flex-col gap-3 bg-neutral-100 p-4 md:p-8 lg:order-1 dark:bg-neutral-900">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[13px] text-ink-muted">
-                <span className="font-medium text-ink">{current.who}</span> · {current.where} ·{" "}
-                <a className="underline" href={recordUrl(current.record)}>record</a>
-              </p>
-              {allowed && (
-                <button type="button" onClick={() => setPlays((p) => p + 1)}
-                  className="shrink-0 rounded-md border border-line px-3 py-1.5 font-mono text-[11px] text-ink-muted hover:text-ink">
-                  Replay
-                </button>
-              )}
-            </div>
-            <Terminal key={`${active}-${plays}`} animate={plays > 0} typingSpeed={28} delayBetweenCommands={500} initialDelay={200}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10 [&>*]:min-w-0" data-motion={allowed ? "on" : "off"} data-run={finished ? "finished" : playing ? "playing" : "static"}>
+          <div ref={stage} className="order-2 flex flex-col gap-3 lg:order-1">
+            <p className="text-[13px] text-ink-muted">
+              <span className="font-medium text-ink">{current.who}</span> · {current.where} ·{" "}
+              <a className="underline" href={recordUrl(current.record)}>record</a>
+            </p>
+            <Terminal key={`${current.id}-${allowed && auto ? "run" : "static"}`} animate={allowed && auto} start={inView} onDone={next}
+              typingSpeed={20} delayBetweenCommands={420} initialDelay={active === 0 ? 250 : 150}
               username={current.who === "Symmetry" ? "symmetry-mainnet-fork" : "unlisted-devnet"}
               commands={current.run.commands} outputs={current.run.outputs} className="max-w-none px-0" />
           </div>
-          <ul className="order-1 flex flex-col gap-2 p-4 md:p-8 lg:order-2" aria-label="Issuer actions, Symmetry vs Unlisted">
-            {all.map((it) => (
-              <li key={it.id}><button
-                type="button"
-                aria-pressed={active === it.id}
-                onClick={() => { setActive(it.id); setPlays(0); }}
-                className={cn(
-                  "flex w-full flex-col gap-1 rounded-xl p-4 text-left transition-colors",
-                  active === it.id ? "bg-ground ring-1 ring-line" : "hover:bg-ground/60",
-                )}
-              >
-                <span className="flex flex-wrap items-center gap-2">
-                  <span className={cn("rounded-sm px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider",
-                    it.good ? "bg-paid-soft text-paid" : "bg-issuer-soft text-issuer")}>{it.who}</span>
-                  <span className="font-display text-[17px] font-semibold">{it.action}</span>
-                </span>
-                <span className={cn("text-[14px]", it.good ? "text-paid" : "text-issuer")} data-outcome={it.id}>{it.outcome}</span>
-              </button></li>
-            ))}
-          </ul>
+          <ol className="order-1 flex flex-col lg:order-2" aria-label="Issuer actions, Symmetry vs Unlisted">
+            {all.map((it, i) => {
+              const st = stateOf(i);
+              return (
+                <li key={it.id} data-step={it.id} data-state={st} aria-current={st === "active" ? "step" : undefined}
+                  className={cn("border-l-2 transition-[opacity,border-color] duration-500",
+                    st === "active" ? (it.good ? "border-paid" : "border-issuer") : "border-line",
+                    st === "next" ? "opacity-35" : "opacity-100")}>
+                  <button type="button" onClick={() => { autoRef.current = false; setAuto(false); setActive(i); }}
+                    className="flex w-full flex-col gap-1 py-3 pl-5 pr-2 text-left">
+                    <span className="flex flex-wrap items-center gap-2">
+                      <span className={cn("rounded-sm px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider",
+                        it.good ? "bg-paid-soft text-paid" : "bg-issuer-soft text-issuer")}>{it.who}</span>
+                      <span className="font-display text-[17px] font-semibold">{it.action}</span>
+                    </span>
+                    <span className={cn("text-[14px]", it.good ? "text-paid" : "text-issuer")} data-outcome={it.id}>{it.outcome}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
         </div>
         <p className="text-[13px] text-ink-muted">
           The full Symmetry transcripts, the fork slot, and a live read of Symmetry's mainnet vaults:{" "}

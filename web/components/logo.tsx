@@ -1,22 +1,25 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { MARK, WORDMARK } from "./brand-paths";
 
-/** Seven legs; one hollow. The basket keeps working with a leg out. */
+/** The Unlisted U mark (brand/svg/unlisted-mark-*.svg), in the current text colour. */
 export const LogoIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 30 10" className={cn("h-2.5 w-[30px]", className)} aria-hidden>
-    {Array.from({ length: 7 }).map((_, i) =>
-      i === 1 ? (
-        <rect key={i} x={i * 4.2 + 0.6} y="0.6" width="2.8" height="8.8" rx="0.6" fill="none" stroke="currentColor" strokeWidth="1.1" />
-      ) : (
-        <rect key={i} x={i * 4.2} y="0" width="4" height="10" rx="0.8" fill="currentColor" />
-      ),
-    )}
+  <svg viewBox={`0 0 ${MARK.width} ${MARK.height}`} className={cn("h-6 w-auto", className)} aria-hidden fill="currentColor">
+    <path transform={`translate(${-MARK.x} ${-MARK.y})`} d={MARK.d} />
   </svg>
 );
 
-export const Logo = ({ className }: { className?: string }) => (
-  <Link href="/" className={cn("flex items-center gap-2 text-ink", className)} aria-label="Unlisted home">
+/** The UNLISTED wordmark (brand/svg/unlisted-wordmark-*.svg), in the current text colour. */
+export const Wordmark = ({ className }: { className?: string }) => (
+  <svg viewBox={`0 0 ${WORDMARK.width} ${WORDMARK.height}`} className={cn("h-[11px] w-auto", className)} aria-hidden fill="currentColor">
+    {WORDMARK.glyphs.map((g, i) => <path key={i} transform={`translate(${g.x} ${g.y})`} d={g.d} />)}
+  </svg>
+);
+
+/** Mark and wordmark side by side; a link home. */
+export const Logo = ({ className, href = "/" }: { className?: string; href?: string }) => (
+  <Link href={href} className={cn("flex items-center gap-2.5 text-ink", className)} aria-label="Unlisted home" data-testid="logo">
     <LogoIcon />
-    <span className="font-display text-[17px] font-semibold tracking-[-0.01em]">Unlisted</span>
+    <Wordmark />
   </Link>
 );
