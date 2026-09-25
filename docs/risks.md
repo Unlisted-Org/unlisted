@@ -101,9 +101,26 @@ Both are finalized without error. The multiplier changes only what wallets displ
 
 | Question | Decision |
 |---|---|
-| Written OK from PreStocks? | **Requested in writing; the user is sending it.** It blocks nothing. The Terms appear to permit wrapping and pooling "without our involvement, knowledge, consent, or approval", so we proceed on the assumption that consent isn't required, and record any reply in [`docs/outreach/2026-09-25-prestocks-request.md`](outreach/2026-09-25-prestocks-request.md). |
+| Written OK from PreStocks? | **Answered 2026-09-25: no objection**, including to a future mainnet version, with no conditions (see *PreStocks' reply* below). No objection is not an endorsement, and we don't present it as one. |
 | Route a fee to PreStocks? | **No.** It complicates the product and concedes a point nobody has made. Every basket deposit and redemption already pays their fee on every leg. What skips it is secondary trading of the Unlisted token, the product category their own bounty invites ("structured products", "DeFi integrations"). |
 | Geoblock? | **No; plain disclosure instead.** This is devnet, with fixture tokens that mirror PreStocks and no real PreStocks tokens held by anyone through us. See the note below. |
+
+### PreStocks' reply (received 2026-09-25)
+
+We wrote to legal@prestocks.com on 2026-09-25 with three questions ([request](outreach/2026-09-25-prestocks-request.md)). PreStocks replied the same day. The answers below are as relayed to us. **The verbatim reply is still to be pasted in; until it is, nothing here is quoted as PreStocks' own words.**
+
+1. **A pooled basket token over PreStocks, including a future mainnet version.** No objection, and no conditions attached.
+   - **What we take from it:** permission to proceed, not approval of the product. We say "PreStocks told us it has no objection", never "endorsed by PreStocks".
+2. **Whether a program-owned vault is treated differently under their pause, freeze and recovery powers.** It isn't; it gets the same treatment as any other holder.
+   - **What we take from it:** the vault is no safer than any wallet, by the issuer's own confirmation. That is the assumption the design was built on:
+     - redemption pays every available leg and turns an unavailable one into a claim;
+     - a seizure from the vault is observed and shared pro rata.
+3. **Whether fee and multiplier changes are announced ahead of time.** There is no channel where they are announced in advance.
+   - **What we take from it:** reading the mints directly is the only advance warning a holder can get. A scheduled change exists on chain before it takes effect:
+     - a new transfer fee applies from the epoch after next;
+     - a new display multiplier carries its effective timestamp.
+
+     The app reads the mints on every refresh (every 15 seconds on the hosted app) and shows each pending change as a banner the moment it exists on chain. The valuation service's watcher records every change the issuer makes, with its transaction. PreStocks' confirmation turns that from a convenience into the only notice there is.
 
 **Where the legal exposure would differ** (flagged, not legal advice):
 - **The devnet product holds no PreStocks tokens**, so their Terms, which bind anyone "acquiring, holding, transferring" tokens, don't reach the devnet basket.

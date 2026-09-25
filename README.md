@@ -5,7 +5,7 @@
 PreStocks, the tokens Unlisted holds, are controlled by a 2-of-7 multisig with no time lock. It can pause them, seize them from any account, and change what it costs to move them. It has done all three:
 
 - **Seized:** it emptied 29 holders' accounts to zero on 2025-09-19, with no memo.
-- **Changed the fee three times in sixteen days:** 0 → 50 → 100 → 300 bps. The last two came with no announcement we could find.
+- **Changed the fee three times in sixteen days:** 0 → 50 → 100 → 300 bps. The last two came with no announcement we could find, and PreStocks has since confirmed there is no channel announcing such changes in advance. Unlisted reads the mints directly instead.
 
 Basket protocols break when that happens. Symmetry, run with its own program on a mainnet fork, burns the user's shares and then pays nothing while one leg is paused, and fails every redemption after a seizure. It does handle transfer fees correctly; fees aren't the problem.
 

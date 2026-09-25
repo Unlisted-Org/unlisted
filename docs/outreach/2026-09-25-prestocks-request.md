@@ -2,7 +2,7 @@
 
 - **To:** legal@prestocks.com (the address the PreStocks Terms of Service name for notices)
 - **From:** the team's own email; this file is the text to send
-- **Status:** drafted 2026-09-25; being sent by the user from the team's email. It blocks nothing: PreStocks' Terms appear to permit wrapping and pooling without their consent, and we proceed on that basis.
+- **Status:** sent 2026-09-25 by the user; PreStocks replied the same day (see the reply log). It blocks nothing: PreStocks' Terms appear to permit wrapping and pooling without their consent, and we proceed on that basis.
 - **Reply:** to be recorded below verbatim, with its date. We don't block on it.
 
 ---
@@ -34,4 +34,4 @@ The Unlisted team (github.com/Unlisted-Org)
 
 | Date | From | Summary | Full text |
 |---|---|---|---|
-| — | — | No reply yet | — |
+| 2026-09-25 | PreStocks | (1) No objection to a pooled basket token over PreStocks, including a future mainnet version; no conditions. (2) A program-owned vault is treated no differently from any other holder under their pause, freeze and recovery powers. (3) There is no channel where fee or multiplier changes are announced in advance. | Relayed by the user; verbatim text to be pasted here |

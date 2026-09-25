@@ -46,7 +46,7 @@ The failure cases are issuer actions (pause, seize, fee change, multiplier chang
 ## What we disclose
 
 - **The SPV dispute.** OpenAI and Anthropic say share transfers to SPVs are void. Anthropic, verbatim: third parties selling its shares through tokenized securities are "likely offering an investment that may have no value". Both stay at equal weight: we don't adjudicate the dispute, and we state the exposure (about 29% of the basket at inception). ([risks §3](risks.md#3-the-spv-dispute-openai-and-anthropic-say-the-underlying-transfers-are-void))
-- **No endorsement.** PreStocks hasn't endorsed this project. We have asked them in writing ([request](outreach/2026-09-25-prestocks-request.md)); their Terms appear to permit wrapping and pooling without their consent, so we proceed on that basis.
+- **What PreStocks told us (2026-09-25).** No objection to the basket, including a future mainnet version, with no conditions. That is not an endorsement, and we don't call it one. They also confirmed the vault gets no special treatment under their pause, freeze and recovery powers, and that there is no channel announcing fee or multiplier changes in advance. So the app reading the mints directly is the only advance warning a holder has. ([risks](risks.md#prestocks-reply-received-2026-09-25))
 - **No protection claimed.** We don't claim protection from the issuer, only that the basket degrades per name instead of failing whole.
 
 ## Video outline (2–3 minutes)
