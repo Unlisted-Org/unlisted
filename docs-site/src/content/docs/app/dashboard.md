@@ -3,7 +3,7 @@ title: Dashboard guide
 description: What you see in the Unlisted app, route by route, from the Overview's company tiles and issuer control to Buy, Sell, Claims, Basket and History.
 ---
 
-The app is at **[unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app)**, on devnet only. This guide describes the deployed app as read on 2026-09-25, and its code on `main` at `92fe09c`. Connecting a wallet is on its own page: [Wallet connection](/app/wallet/).
+The app is at **[unlisted-basket.vercel.app/app](https://unlisted-basket.vercel.app/app)**, on devnet only. This guide describes the deployed app as read on 2026-09-25, and its code on `main` at `92fe09c`. Connecting a wallet is on its own page: [Wallet connection](/app/wallet/).
 
 ## The frame
 

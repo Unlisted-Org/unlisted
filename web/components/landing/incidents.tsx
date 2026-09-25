@@ -46,7 +46,7 @@ export function Incidents() {
             These tokens come with an issuer who can pause, seize and re-price them
           </h2>
           <p className="max-w-2xl text-base text-ink-muted md:text-lg">
-            One multisig, two signatures needed, no time lock. It has used those powers, on mainnet:
+            One multisig, two signatures needed, no time lock. It has seized and re-priced on mainnet, and nothing stops it pausing:
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">

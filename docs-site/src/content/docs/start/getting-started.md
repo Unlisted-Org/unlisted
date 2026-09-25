@@ -5,9 +5,9 @@ description: Open the devnet app, and reproduce the proofs yourself, from the sh
 
 ## Open the devnet app
 
-The app is at **[unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app)**. It runs on **devnet only**, against the canonical basket over the seven fixture mints; it refuses any other cluster. The values it shows are priced from the mainnet market for the real tokens, and it says so next to every value.
+The app is at **[unlisted-basket.vercel.app/app](https://unlisted-basket.vercel.app/app)**. It runs on **devnet only**, against the canonical basket over the seven fixture mints; it refuses any other cluster. The values it shows are priced from the mainnet market for the real tokens, and it says so next to every value.
 
-The landing page, [unlisted-rosy.vercel.app](https://unlisted-rosy.vercel.app), tells the story in five sections, and [/evidence](https://unlisted-rosy.vercel.app/evidence) lists every transaction behind it.
+The landing page, [unlisted-basket.vercel.app](https://unlisted-basket.vercel.app), tells the story in five sections, and [/evidence](https://unlisted-basket.vercel.app/evidence) lists every transaction behind it.
 
 To try it:
 
@@ -66,7 +66,7 @@ What to expect is on [The problem](/product/problem/#what-happens-to-a-basket-wh
 The command the project uses, from `web/e2e/holder/repeat.sh` (run from `web/`, after `npm install` there and in `sdk/`, and `npm run test-wallet`, which bundles the test wallet):
 
 ```sh
-N=1 E2E_BASE_URL=https://unlisted-rosy.vercel.app e2e/holder/repeat.sh
+N=1 E2E_BASE_URL=https://unlisted-basket.vercel.app e2e/holder/repeat.sh
 ```
 
 These docs didn't re-run it. **It needs the project's own secrets, so it can't run from a fresh clone:** the presenter's demo passcode for the issuer control (`E2E_DEMO_PASSCODE`), a dedicated devnet RPC key read from the repository root's `.env.local`, and the project key that sends the fresh wallet its SOL. None of them is committed. To check the flow without running it, read the recorded runs: every signature in `web/e2e/holder/runs/2026-09-25-devnet-overview.json` is on devnet, and [The user flow](/product/user-flow/) links those of one run.

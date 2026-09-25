@@ -3,7 +3,7 @@ title: The user flow
 description: Buy in, the issuer pauses one company, redeem anyway, the pause lifts, the claim pays out. Signed on devnet by a wallet created for the run.
 ---
 
-This is the product's thesis in five steps. Everything on this page happened on devnet, in a real browser, on the deployed app at [unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app), through the app's own controls on its Overview, from a wallet generated fresh for the run. Every transaction below is finalized.
+This is the product's thesis in five steps. Everything on this page happened on devnet, in a real browser, on the deployed app at [unlisted-basket.vercel.app/app](https://unlisted-basket.vercel.app/app), through the app's own controls on its Overview, from a wallet generated fresh for the run. Every transaction below is finalized.
 
 **The record:** `web/e2e/holder/runs/2026-09-25-devnet-overview.json`, the run that started 2026-09-25 13:29:40 UTC, valued by the hosted valuation service. Wallet `89BxksDMUXm9eswGhNptEgRuH8PoFMWuGuwomciFc8pt`, a Wallet Standard test wallet (not Phantom). What each part of the screen does is on the [Dashboard guide](/app/dashboard/).
 

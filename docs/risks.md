@@ -2,7 +2,7 @@
 
 Updated 2026-09-25. Each claim is labelled **verified** (read live, or checked against the primary text by the spec owner) or **reported** (from a research sub-agent, with its source).
 
-These aren't risks we hope nobody asks about. They are the reason the product exists. PreStocks tokens come with an issuer that can pause them, seize them from any account, and change what it costs to move them, at short notice and without announcement. The sections below show that it has done each of these. A basket over these tokens has to keep paying out when the issuer acts. Ours is built to; the live alternative is shown failing in `evidence/symmetry-fork/`.
+These aren't risks we hope nobody asks about. They are the reason the product exists. PreStocks tokens come with an issuer that can pause them, seize them from any account, and change what it costs to move them, at short notice and without announcement. The sections below show that it has seized from holders and changed both the fee and the display multiplier. No pause has been seen on mainnet (a partial scan, §2), but a pause needs only the same two signatures. A basket over these tokens has to keep paying out when the issuer acts. Ours is built to; the live alternative is shown failing in `evidence/symmetry-fork/`.
 
 ---
 

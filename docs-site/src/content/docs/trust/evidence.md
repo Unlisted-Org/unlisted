@@ -18,7 +18,7 @@ Anything else is labelled: *reported* (from research, with its source), *local* 
 
 | What | Where |
 |---|---|
-| Every transaction behind the landing page, each checked on chain before the site builds | [unlisted-rosy.vercel.app/evidence](https://unlisted-rosy.vercel.app/evidence) |
+| Every transaction behind the landing page, each checked on chain before the site builds | [unlisted-basket.vercel.app/evidence](https://unlisted-basket.vercel.app/evidence) |
 | The whole proven list, rebuilt from the records and re-verified on chain | `python3 evidence/build-proven.py --out <file>` ([see the note below](#re-verify-everything-yourself)) |
 | The issuer's record: fees, seizure, multiplier, SPV dispute | [`docs/risks.md`](https://github.com/Unlisted-Org/unlisted/blob/main/docs/risks.md) |
 | Symmetry on a mainnet fork | [`evidence/symmetry-fork/`](https://github.com/Unlisted-Org/unlisted/tree/main/evidence/symmetry-fork) |

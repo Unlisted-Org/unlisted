@@ -26,6 +26,7 @@ export function AppShell({ children, wallet, badges = {}, notice }: { children: 
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
           <Link href="/" className="hidden text-[13px] text-ink-muted hover:text-ink md:inline">About Unlisted</Link>
+          <a href="https://unlisted-docs.vercel.app/app/dashboard/" className="hidden text-[13px] text-ink-muted hover:text-ink md:inline">Docs</a>
           <ModeToggle />
           {wallet}
         </div>

@@ -16,9 +16,25 @@ export interface RetryOptions {
   attempts?: number; // total tries per transaction
   delayMs?: (attempt: number) => number;
   onRetry?: (i: number, attempt: number, reason: string) => void;
+  /** The block height after which the flow's blockhash is dead (from getLatestBlockhash). When given,
+   *  expiry is read from the chain's height, not guessed from the error text: a lagging node and an
+   *  expired blockhash both say "Blockhash not found", and only the height tells them apart. */
+  lastValidBlockHeight?: number;
+  /** Status poll interval while confirming. 3 s suits the public RPC's quota; a dedicated RPC can go faster. */
+  pollMs?: number;
 }
 
-type SendConn = Pick<Connection, "sendRawTransaction" | "isBlockhashValid" | "getSignatureStatuses">;
+type SendConn = Pick<Connection, "sendRawTransaction" | "isBlockhashValid" | "getSignatureStatuses"> & Partial<Pick<Connection, "getBlockHeight">>;
+
+const expiredError = (i: number, why: string) =>
+  new Error(`transaction ${i + 1} expired before it could land; nothing was charged. Sign again. (${why})`);
+
+/** True when the chain is past the flow's last valid block height (so nothing signed with it can land). */
+async function pastValidHeight(conn: SendConn, opts: RetryOptions): Promise<boolean> {
+  if (opts.lastValidBlockHeight == null || !conn.getBlockHeight) return false;
+  const h = await conn.getBlockHeight("confirmed").catch(() => 0);
+  return h > opts.lastValidBlockHeight;
+}
 
 export async function sendOne(conn: SendConn, tx: VersionedTransaction, i: number, opts: RetryOptions = {}): Promise<string> {
   const attempts = opts.attempts ?? 6;
@@ -33,8 +49,9 @@ export async function sendOne(conn: SendConn, tx: VersionedTransaction, i: numbe
       const msg = String((e as any)?.message ?? e) + "\n" + ((e as any)?.logs ?? []).join("\n");
       if (!TRANSIENT.test(msg)) throw e; // the program or the runtime rejected it: don't mask that
       // Still worth sending? A blockhash can only become invalid, never valid again.
+      if (await pastValidHeight(conn, opts)) throw expiredError(i, msg.split("\n")[0]);
       const valid = await conn.isBlockhashValid(tx.message.recentBlockhash, { commitment: "processed" }).then((r) => r.value).catch(() => true);
-      if (!valid && !/Blockhash not found/i.test(msg)) throw new Error(`transaction ${i + 1} expired before it could be sent; nothing was charged. Sign again. (${msg.split("\n")[0]})`);
+      if (!valid && !/Blockhash not found/i.test(msg)) throw expiredError(i, msg.split("\n")[0]);
       opts.onRetry?.(i, a + 1, msg.split("\n")[0]);
       await new Promise((r) => setTimeout(r, delay(a)));
     }
@@ -49,9 +66,31 @@ export async function sendSequentialWithRetry(conn: Connection, txs: VersionedTr
   for (let i = 0; i < txs.length; i++) {
     const sig = await sendOne(conn, txs[i], i, opts);
     onSent?.(i, sig);
-    const st = await confirmByPolling(conn, sig, txs[i].serialize());
+    const st = opts.pollMs != null || opts.lastValidBlockHeight != null
+      ? await confirmFast(conn, sig, txs[i].serialize(), i, opts)
+      : await confirmByPolling(conn, sig, txs[i].serialize());
     out.push({ signature: sig, slot: st.slot, err: st.err });
     if (st.err) break;
   }
   return out;
+}
+
+/** Confirm by polling, re-broadcasting the same bytes every ~2 s, and giving up as soon as the chain is
+ *  past the blockhash's last valid height (it can no longer land), instead of waiting out a timeout. */
+export async function confirmFast(conn: SendConn, sig: string, raw: Uint8Array, i: number, opts: RetryOptions): Promise<{ slot: number | null; err: unknown }> {
+  const poll = opts.pollMs ?? 3_000;
+  const start = Date.now();
+  for (let n = 0; Date.now() - start < 120_000; n++) {
+    const st = (await conn.getSignatureStatuses([sig], { searchTransactionHistory: n > 0 && n % 10 === 0 })).value[0];
+    if (st && (st.confirmationStatus === "confirmed" || st.confirmationStatus === "finalized" || st.err)) return { slot: st.slot, err: st.err };
+    if (n > 0 && (n * poll) % 2_000 < poll) await conn.sendRawTransaction(raw, { skipPreflight: true, maxRetries: 0 }).catch(() => {});
+    if (n > 0 && n % 3 === 0 && (await pastValidHeight(conn, opts))) {
+      // One last look: it may have landed in the final valid block.
+      const last = (await conn.getSignatureStatuses([sig], { searchTransactionHistory: true })).value[0];
+      if (last) return { slot: last.slot, err: last.err };
+      throw expiredError(i, "its blockhash expired while waiting to land");
+    }
+    await new Promise((r) => setTimeout(r, poll));
+  }
+  throw new Error(`transaction ${sig} not confirmed within 120 s`);
 }

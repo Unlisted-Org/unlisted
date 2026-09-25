@@ -24,6 +24,7 @@ export const Navbar = () => (
         ))}
       </nav>
       <div className="flex items-center gap-2">
+        <a href="https://unlisted-docs.vercel.app" className="hidden text-[13px] font-medium text-ink-muted hover:text-ink sm:inline">Docs</a>
         <a href={REPO} className="hidden text-[13px] font-medium text-ink-muted hover:text-ink sm:inline">GitHub</a>
         <ModeToggle />
         <Button asChild size="sm">

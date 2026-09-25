@@ -31,7 +31,9 @@ export default defineConfig({
   workers: 1,
   reporter: [["list"]],
   // E2E_BASE_URL runs the same checks against a deployed site (no local servers started).
-  use: { baseURL: process.env.E2E_BASE_URL ?? `http://localhost:${PORT}` },
+  // No step may wait forever: a click on a button that never appears or never enables fails after 60 s
+  // (with a screenshot and trace) instead of hanging until the test's own timeout.
+  use: { baseURL: process.env.E2E_BASE_URL ?? `http://localhost:${PORT}`, actionTimeout: 60_000, navigationTimeout: 60_000, trace: "retain-on-failure" },
   webServer: process.env.E2E_BASE_URL ? undefined : [
     { command: `npx next start -p ${PORT}`, url: `http://localhost:${PORT}`, reuseExistingServer: false, timeout: 120_000, env: serverEnv },
     {

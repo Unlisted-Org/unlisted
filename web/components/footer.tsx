@@ -21,6 +21,7 @@ export const Footer = () => (
         </div>
         <div className="flex flex-col gap-2">
           <span className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">Project</span>
+          <a className="hover:underline" href="https://unlisted-docs.vercel.app">Docs</a>
           <a className="hover:underline" href={REPO}>GitHub</a>
           <a className="hover:underline" href="/app">App (devnet)</a>
         </div>

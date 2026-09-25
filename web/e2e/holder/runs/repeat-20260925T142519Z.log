@@ -1,0 +1,11 @@
+run 1/10: PASS in 115s 
+run 2/10: PASS in 129s 
+run 3/10: PASS in 108s 
+run 4/10: PASS in 108s 
+run 5/10: FAIL in 172s     Error: transaction failed in the app: Buy with USDC (ticket): failed · 1 transaction(s), 1 wallet approval(s)
+run 6/10: PASS in 131s 
+run 7/10: FAIL in 1201s 
+run 8/10: PASS in 119s 
+run 9/10: PASS in 94s 
+run 10/10: PASS in 126s 
+passed 8 of 10

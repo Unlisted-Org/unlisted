@@ -40,7 +40,7 @@ Each leg on devnet is a **fixture mint** that mirrors the real PreStocks mint, e
 - **Devnet only, by design.** The cases that matter are issuer actions, and only the issuer's keys can trigger them on mainnet. On devnet a fixture issuer key holds every fixture authority, so each issuer action can be run against the real program, with a signature for each step.
 - **Program:** `GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv` on devnet ([The program](/protocol/program/)).
 - **Canonical basket:** `GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV`; share mint `HjpaxrkjftbtcRJuyAEm7oR8scasnWNxKNgnN26p7iqj`.
-- **The app:** [unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app), devnet only. Prices come from the mainnet market for the real token each fixture mirrors, and the app says so on every value.
+- **The app:** [unlisted-basket.vercel.app/app](https://unlisted-basket.vercel.app/app), devnet only. Prices come from the mainnet market for the real token each fixture mirrors, and the app says so on every value.
 - **Never mainnet.** Nothing in this project signs a mainnet transaction. Mainnet is only read.
 
 ## What PreStocks said

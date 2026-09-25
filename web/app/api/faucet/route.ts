@@ -29,7 +29,8 @@ export async function POST(req: Request) {
       ...fixtures.legs.map((l) => ({ mint: new PublicKey(l.mint), program: t22, decimals: l.decimals, raw: BigInt(l.faucetRaw) })),
     ];
     // Two transactions keep each well under the size limit; the wallet approves both at once.
-    const { blockhash } = await conn.getLatestBlockhash("finalized");
+    // Confirmed on the dedicated RPC: about 13 s more life than finalized for the two faucet transactions.
+    const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash(process.env.HELIUS_API_KEY ? "confirmed" : "finalized");
     const txs = [items.slice(0, 4), items.slice(4)].map((group) => {
       const tx = new Transaction({ feePayer: wallet, recentBlockhash: blockhash });
       for (const it of group) {
@@ -40,7 +41,7 @@ export async function POST(req: Request) {
       tx.partialSign(kp);
       return tx.serialize({ requireAllSignatures: false }).toString("base64");
     });
-    return json({ transactions: txs, blockhash });
+    return json({ transactions: txs, blockhash, lastValidBlockHeight });
   } catch (e: any) {
     return json({ error: String(e?.message ?? e).slice(0, 300) }, e?.status ?? 502);
   }

@@ -20,8 +20,9 @@ export function GET() {
       router: { kind: "fixture_amm", programId: "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF" },
       upgradeAuthority: "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
       explorerTx: "https://explorer.solana.com/tx/{sig}?cluster=devnet",
-      // A dedicated RPC doesn't need the public endpoint's spacing.
-      ...(key ? { rpcMinIntervalMs: 60, rpcConcurrency: 3, refreshMs: 15000 } : {}),
+      // A dedicated RPC doesn't need the public endpoint's spacing, and serves a fresh blockhash reliably
+      // (fastRpc: "confirmed" blockhash, fast confirmation polling; see app/app/_holder/send.ts).
+      ...(key ? { rpcMinIntervalMs: 60, rpcConcurrency: 3, refreshMs: 15000, fastRpc: true } : {}),
     },
     { headers: { "cache-control": "no-store" } },
   );

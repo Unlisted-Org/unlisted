@@ -3,7 +3,7 @@ title: Wallet connection
 description: How the Unlisted app connects a Solana wallet, what one approval per action means, how to get devnet SOL and test tokens, and what the app refuses.
 ---
 
-The app at [unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app) runs on **devnet only**. Everything on this page is from the deployed app (checked on 2026-09-25) and its code on `main` at `92fe09c`.
+The app at [unlisted-basket.vercel.app/app](https://unlisted-basket.vercel.app/app) runs on **devnet only**. Everything on this page is from the deployed app (checked on 2026-09-25) and its code on `main` at `92fe09c`.
 
 **You don't need a wallet to look around.** Without one, every route reads the basket: the seven companies, the values, the events and the issuer's activity. You need one only to buy in, redeem or settle a claim.
 

@@ -4,7 +4,7 @@ import evidence from "../lib/evidence.json";
 /*
   Silent footage for the pitch video (docs/video/pitch-script.md), one clip per shot, recorded from
   the live site with motion allowed. Opt-in:
-    PITCH_FOOTAGE=1 E2E_BASE_URL=https://unlisted-rosy.vercel.app npx playwright test e2e/pitch-footage.spec.ts
+    PITCH_FOOTAGE=1 E2E_BASE_URL=https://unlisted-basket.vercel.app npx playwright test e2e/pitch-footage.spec.ts
   Clips land in test-results/<test>/video.webm; scripts/collect-footage copies them to docs/video/takes/.
 */
 test.skip(!process.env.PITCH_FOOTAGE, "set PITCH_FOOTAGE=1 to record pitch footage");

@@ -20,6 +20,8 @@ export interface AppConfig {
   refreshMs: number;
   rpcMinIntervalMs: number;
   rpcConcurrency: number;
+  /** A dedicated RPC: take a "confirmed" blockhash (about 13 s fresher than "finalized") and poll fast. */
+  fastRpc: boolean;
 }
 
 export async function loadConfig(): Promise<AppConfig | { error: string }> {
@@ -48,5 +50,6 @@ export async function loadConfig(): Promise<AppConfig | { error: string }> {
     refreshMs: Number(raw.refreshMs ?? (raw.cluster === "devnet" ? 20_000 : 8_000)),
     rpcMinIntervalMs: Number(raw.rpcMinIntervalMs ?? (raw.cluster === "devnet" ? 200 : 0)),
     rpcConcurrency: Number(raw.rpcConcurrency ?? (raw.cluster === "devnet" ? 1 : 4)),
+    fastRpc: raw.fastRpc === true,
   };
 }

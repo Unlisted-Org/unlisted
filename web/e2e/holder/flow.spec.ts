@@ -39,10 +39,11 @@ async function raw(page: Page, testid: string): Promise<bigint> {
 }
 
 /** Set by the test: records every app transaction the moment it lands. */
-let onChain: ((s: { step: string; signatures: string[] }) => void) | null = null;
+let onChain: ((s: { step: string; signatures: string[]; ms: number }) => void) | null = null;
 
 /** Waits for the newest tx-log entry to finish; returns its signatures (as rendered by the app). */
 async function lastTx(page: Page, label: RegExp): Promise<string[]> {
+  const t0 = Date.now(); // called right after the click: this is what a viewer waits
   const entry = page.getByTestId("tx-0");
   await expect(entry).toContainText(label);
   await expect(entry).toHaveAttribute("data-status", /ok|failed/, { timeout: 180_000 });
@@ -50,7 +51,7 @@ async function lastTx(page: Page, label: RegExp): Promise<string[]> {
   const text = await entry.innerText();
   const sigs = await entry.getByTestId("tx-signature").allInnerTexts();
   // On the record at once, before any check on this step can fail: a run's record lists everything it put on chain.
-  onChain?.({ step: `landed: ${label.source}${status === "ok" ? "" : " (failed in the app)"}`, signatures: sigs });
+  onChain?.({ step: `landed: ${label.source}${status === "ok" ? "" : " (failed in the app)"}`, signatures: sigs, ms: Date.now() - t0 });
   if (status !== "ok") throw new Error(`transaction failed in the app: ${text}`);
   return sigs;
 }
@@ -76,7 +77,7 @@ test("buy in, issuer pauses one, redeem anyway (claim), pause lifts, claim pays 
     rec.screenshots.push(file.slice(file.indexOf("e2e/")));
   };
   const onOverview = () => expect(page).toHaveURL(/\/app$/);
-  onChain = ({ step, signatures }) => { if (signatures.length) rec.add({ step, by: step.includes("Issuer") || /pauses|resumes/.test(step) ? "fixture issuer (app control)" : "test wallet (browser)", signatures }); };
+  onChain = ({ step, signatures, ms }) => { if (signatures.length) rec.add({ step, by: /pauses|resumes/.test(step) ? "fixture issuer (app control)" : "test wallet (browser)", signatures, checks: { clickToOkMs: ms } }); };
   let pausedByUs = false;
   try {
     expect(await mintPausedByRpc(env, pausedMint)).toBe(false); // a shared fixture: never start from someone else's pause

@@ -9,7 +9,7 @@
 
 **A basket of tokenized pre-IPO companies that still pays you out when the issuer acts.**
 
-PreStocks, the tokens Unlisted holds, are controlled by a 2-of-7 multisig with no time lock. It can pause them, seize them from any account, and change what it costs to move them. It has done all three:
+PreStocks, the tokens Unlisted holds, are controlled by a 2-of-7 multisig with no time lock. It can pause them, seize them from any account, and change what it costs to move them. It has seized and it has re-priced; a pause hasn't been seen on mainnet, but nothing stops one:
 
 - **Seized:** it emptied 29 holders' accounts to zero on 2025-09-19, with no memo.
 - **Changed the fee three times in sixteen days:** 0 → 50 → 100 → 300 bps. The last two came with no announcement we could find, and PreStocks has since confirmed there is no channel announcing such changes in advance. Unlisted reads the mints directly instead.
@@ -33,9 +33,9 @@ Unlisted is built so that:
 - **Specs approved** (`docs/specs/`). The share maths is an executable model with 17 property tests (`spec/model/`).
 - **Deployed on devnet:**
   - the program, `GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv`, with the canonical basket over seven fixture mints;
-  - the app, at [unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app);
+  - the app, at [unlisted-basket.vercel.app/app](https://unlisted-basket.vercel.app/app);
   - the valuation API and issuer watcher, on Railway;
-  - every cited signature, on [/evidence](https://unlisted-rosy.vercel.app/evidence).
+  - every cited signature, on [/evidence](https://unlisted-basket.vercel.app/evidence).
 - **The live app runs the whole story:** buy in, the fixture issuer pauses one company, redeem anyway (six pay now, one becomes a claim), the pause lifts, the claim pays out. A fresh-wallet browser test runs it against the live site; the records are in `web/e2e/holder/runs/`.
 - This README is updated only when something is proven.
 

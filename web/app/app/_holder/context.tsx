@@ -145,17 +145,20 @@ export function HolderProvider({ config, children }: { config: AppConfig; childr
       if (!owner || !wallet) throw new Error("Connect a wallet first.");
       const fresh = await client.fetchBasket(); // plan against the latest state, not the rendered one
       // Finalized: every RPC node already has it, so a lagging node can't answer "Blockhash not found".
-      const { blockhash } = await conn.getLatestBlockhash("finalized");
+      const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash(config.fastRpc ? "confirmed" : "finalized");
       const txs = await build(fresh, owner, blockhash);
       const signed = await signAll(wallet.adapter, owner, config.cluster, txs); // ONE approval for the flow
       rec.approvals = 1;
       const sent = await sendSequentialWithRetry(conn, signed, (_i, sig) => { rec.signatures.push(sig); update(); },
-        { onRetry: (i, a, why) => { rec.retries = [...(rec.retries ?? []), `tx ${i + 1} attempt ${a + 1}: ${why}`]; update(); } });
+        { onRetry: (i, a, why) => { rec.retries = [...(rec.retries ?? []), `tx ${i + 1} attempt ${a + 1}: ${why}`]; update(); }, ...sendTuning(lastValidBlockHeight) });
       const failed = sent.find((s) => s.err);
       rec.status = failed || sent.length < signed.length ? "failed" : "ok";
       if (failed) rec.error = `transaction ${failed.signature} failed: ${JSON.stringify(failed.err)}`;
     });
   }
+
+  // Confirmation pacing: fast on a dedicated RPC, and every flow stops the moment its blockhash is dead.
+  const sendTuning = (lastValidBlockHeight?: number) => ({ lastValidBlockHeight, pollMs: config.fastRpc ? 800 : 3_000 });
 
   const router = (v: BasketView) => (config.router.kind === "fixture_amm" ? FixtureAmmRouter.live(conn, config.router.programId, v.basket.usdcMint) : null);
 
@@ -208,7 +211,7 @@ export function HolderProvider({ config, children }: { config: AppConfig; childr
       const txs = (j.transactions as string[]).map((b) => VersionedTransaction.deserialize(Buffer.from(b, "base64")));
       const signed = await signAll(wallet.adapter, owner, config.cluster, txs);
       rec.approvals = 1;
-      const sent = await sendSequentialWithRetry(conn, signed, (_i, sig) => { rec.signatures.push(sig); update(); });
+      const sent = await sendSequentialWithRetry(conn, signed, (_i, sig) => { rec.signatures.push(sig); update(); }, sendTuning(j.lastValidBlockHeight));
       const failed = sent.find((s) => s.err);
       if (failed || sent.length < signed.length) throw new Error(`transaction ${failed?.signature ?? ""} failed: ${JSON.stringify(failed?.err ?? "not sent")}`);
       rec.status = "ok";
