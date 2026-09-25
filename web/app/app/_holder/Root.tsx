@@ -36,6 +36,8 @@ export default function Root({ children }: { children: ReactNode }) {
 
 function Frame({ children, notice }: { children: ReactNode; notice: ReactNode }) {
   const h = useHolder();
+  // Preload the other routes' code, so navigating never waits on a fetch.
+  useEffect(() => { const t = setTimeout(() => { import("../views").then((v) => v.loadRoutes()).catch(() => {}); }, 1500); return () => clearTimeout(t); }, []);
   const claims = claimsOf(h.pos).length;
   const badge = claims ? <span className="rounded-sm bg-claim-soft px-1.5 font-mono text-[10px] text-claim" data-testid="nav-claims-count">{claims}</span> : null;
   return <AppShell wallet={<ConnectButton />} badges={{ "/app/claims": badge }} notice={notice}>{children}</AppShell>;

@@ -1,0 +1,16 @@
+run 1/15: PASS in 85s 
+run 2/15: PASS in 96s 
+run 3/15: PASS in 84s 
+run 4/15: PASS in 101s 
+run 5/15: FAIL in 6s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154333Z-5)
+run 6/15: FAIL in 6s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154339Z-6)
+run 7/15: FAIL in 6s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154345Z-7)
+run 8/15: FAIL in 5s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154350Z-8)
+run 9/15: FAIL in 3s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154353Z-9)
+run 10/15: FAIL in 5s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154358Z-10)
+run 11/15: FAIL in 6s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154404Z-11)
+run 12/15: FAIL in 9s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154413Z-12)
+run 13/15: FAIL in 4s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154417Z-13)
+run 14/15: FAIL in 4s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154421Z-14)
+run 15/15: FAIL in 3s     Error: Simulation failed.  (kept: e2e/tmp/rehearsal-20260925T154424Z-15)
+passed 4 of 15

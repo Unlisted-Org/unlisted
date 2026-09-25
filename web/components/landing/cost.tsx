@@ -19,8 +19,8 @@ export function Cost() {
           </h2>
           <p className="text-base text-ink-muted md:text-lg">
             Putting money into Unlisted and taking it out is never cheaper than buying the seven tokens yourself. Every
-            token pays PreStocks' 300 bps transfer fee on the way in and again on the way out, and the market spread comes
-            on top.
+            token pays PreStocks' transfer fee on the way in and again on the way out (300 bps from 26 September 2026,
+            100 bps until then), and the market spread comes on top.
           </p>
           <p className="text-[14px] text-ink-muted">
             What you get for it: one token instead of seven, and a basket that keeps paying out when the issuer acts.

@@ -9,7 +9,11 @@ set -a; . ../.env.local; set +a
 export E2E_ENV=devnet E2E_VALUATION_URL=${E2E_VALUATION_URL:-https://valuation-production-e8f3.up.railway.app}
 export E2E_RPC="https://devnet.helius-rpc.com/?api-key=$HELIUS_API_KEY" DEVNET_RPC="https://devnet.helius-rpc.com/?api-key=$HELIUS_API_KEY"
 N=${N:-5}; OUT=e2e/holder/runs/repeat-$(date -u +%Y%m%dT%H%M%SZ).log
+FUNDER=$(solana-keygen pubkey ~/.config/solana/stocklana/app.json)
 for i in $(seq 1 $N); do
+  # Each run funds a fresh wallet with 0.08 SOL and keeps ~0.016 of it (fees and rent): stop, don't fail, when the funder runs low.
+  bal=$(solana balance -u devnet $FUNDER | awk '{print $1}')
+  if awk "BEGIN{exit !($bal < 0.1)}"; then echo "stopped before run $i: the funder ($FUNDER) holds $bal SOL; top it up" | tee -a $OUT; break; fi
   start=$(date +%s)
   if npx playwright test e2e/holder/flow.spec.ts > /tmp/repeat-run-$i.log 2>&1; then r=PASS; else r=FAIL; fi
   why=$(grep -E '^\s+Error:' /tmp/repeat-run-$i.log | head -1 | sed -E 's/api-key=[A-Za-z0-9-]+/api-key=<key>/g')

@@ -1,0 +1,16 @@
+run 1/15: PASS in 135s 
+run 2/15: PASS in 80s 
+run 3/15: PASS in 102s 
+run 4/15: PASS in 80s 
+run 5/15: PASS in 158s 
+run 6/15: PASS in 82s 
+run 7/15: PASS in 101s 
+run 8/15: FAIL in 116s     Error: expect(locator).toBeVisible() failed (kept: e2e/tmp/rehearsal-20260925T160216Z-8)
+run 9/15: PASS in 85s 
+run 10/15: PASS in 98s 
+run 11/15: PASS in 101s 
+run 12/15: PASS in 96s 
+run 13/15: PASS in 97s 
+run 14/15: PASS in 81s 
+run 15/15: FAIL in 92s     Error: browserContext.close: ENOENT: no such file or directory, open '/Users/jagadeesh/1nonly/grants/stocklana/web/test-results/.playwright-artifacts-0/traces/17ded0a0b4e642627169-fc7c8c0b50ceaa2313cf.network' (kept: e2e/tmp/rehearsal-20260925T161311Z-15)
+passed 13 of 15
