@@ -1,0 +1,8 @@
+#!/bin/sh
+# Refuse a commit that adds a .env file, a keypair file, or a key-shaped string. See CONTRIBUTING.md §2a.
+hooks=$(dirname "$0")
+if ! "$hooks/check-secrets" --staged; then
+  echo "pre-commit: refused, the files above look like secrets. Unstage them (git restore --staged <file>)." >&2
+  echo "Never use --no-verify to get past this; pre-push runs the same check." >&2
+  exit 1
+fi

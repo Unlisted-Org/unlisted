@@ -14,7 +14,7 @@ This run shows that a redemption after epoch 1167 pays under 300 bps, with the p
 
 ## Where
 
-- **Worktree:** `/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program`, branch `program`. You own only `programs/basket/` and `tests/program/`.
+- **Checkout:** `/Users/jagadeesh/1nonly/grants/stocklana`, branch `main` (the agent branches were merged and deleted on 2026-09-25). Run `git pull --ff-only` first. You own only `programs/basket/` and `tests/program/`.
 - **Script:** `tests/program/devnet/scenarios.ts`, scenario `fee-change-after`.
 - **Record:** the run appends to `tests/program/devnet/fee-change-mid-position.json`, adding a `BROKEN` simulated step, the real redemption step, its checks, and an `afterFeeEffective` block. Don't create a separate file.
 
@@ -34,7 +34,7 @@ Never use `~/.config/solana/id.json` or anything under `~/.config/solana/uncross
    If `epoch` is below 1167, stop and report that. **Don't wait or poll.**
 2. **Run it:**
    ```sh
-   cd /Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program
+   cd /Users/jagadeesh/1nonly/grants/stocklana/tests/program
    node --import tsx devnet/scenarios.ts fee-change-after 2>&1 | tee devnet/console-fee-after.txt
    ```
    The public devnet RPC rate-limits; the script throttles and retries by itself. Let it finish.
@@ -46,11 +46,11 @@ Never use `~/.config/solana/id.json` or anything under `~/.config/solana/uncross
    - The real redemption lands, and on every leg the net received = gross − ceil(gross·300/10⁴), which differs from the 100 bps figure.
    - `passed: true` in the record.
 4. **Verify on chain.** Confirm the new redemption signature is `finalized` with `err: null` (`getSignatureStatuses` with `searchTransactionHistory: true`). Then run `node --import tsx devnet/verify.ts` if it covers this file, and note its result.
-5. **Commit** the record and `devnet/console-fee-after.txt` on `program`.
+5. **Commit** the record and `devnet/console-fee-after.txt` on `main`.
    - Identity is already set in the repo config (1nonlypiece); don't change it.
    - The message must not contain an AI attribution line. The `commit-msg` hook refuses one, and matches the words anywhere in the message, so don't write them at all.
    - Never use `--no-verify`. Rules: `CONTRIBUTING.md` on `main`.
-   - **Don't push.** The spec owner pushes and merges.
+   - **Push** with the per-command token method in `CONTRIBUTING.md` §3; the pre-push hook checks the commit. Then confirm on GitHub that the commit is there, authored by 1nonlypiece.
 6. **Report and stop.** Report:
    - the epoch;
    - the redemption signature and slot;
@@ -72,6 +72,6 @@ Then stop.
 
 ## Already verified before this session
 
-- **Commit:** `fee-change-after`, including the broken-version step, is committed on `program` (see `git log -3`).
+- **Commit:** `fee-change-after`, including the broken-version step, is committed and merged into `main`.
 - **Rehearsal:** it ran against a fresh local validator with both halves of the scenario, so the code runs as written.
 - **`setup()`:** it reuses `tests/program/devnet/setup.json` and re-creates nothing.

@@ -1,6 +1,6 @@
 #!/bin/sh
 # Refuse a push if any commit being pushed has a Co-Authored-By or
-# "generated with" line, or an author/committer other than 1nonlypiece.
+# "generated with" line, an author/committer other than 1nonlypiece, or adds a secret.
 remote="$1"
 hooks=$(dirname "$0")
 zero=0000000000000000000000000000000000000000
@@ -17,6 +17,10 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     if ! git log -1 --format=%B "$c" | "$hooks/check-commit-message" >/dev/null; then
       echo "pre-push: $remote_ref: commit $c has an AI attribution line:" >&2
       git log -1 --format=%B "$c" | grep -n -i -E 'co-authored-by|generated with|🤖' | sed 's/^/    /' >&2
+      fail=1
+    fi
+    if ! "$hooks/check-secrets" --commits "$c"; then
+      echo "pre-push: $remote_ref: commit $c adds something that looks like a secret (listed above)" >&2
       fail=1
     fi
     ids=$(git log -1 --format='%an <%ae> / %cn <%ce>' "$c")

@@ -25,16 +25,16 @@ The hooks match these words anywhere in a message, not only in trailers. If a co
 
 ### The scan command
 
-Run this before every push, over every branch:
+Run this before every push:
 
 ```sh
-git log main program app ops --format=%B | grep -n -i -E 'co-authored-by|generated with|🤖'
+git log main --format=%B | grep -n -i -E 'co-authored-by|generated with|🤖'
 ```
 
 No output means clean. After pushing, verify on GitHub itself rather than locally:
 
 ```sh
-for b in main program app ops; do
+for b in main; do
   gh api "repos/Unlisted-Org/unlisted/commits?sha=$b&per_page=100" --paginate \
     --jq '.[] | [.sha, (.author.login//"NONE"), (.committer.login//"NONE"), (.commit.message|gsub("\n";" ⏎ "))] | @tsv'
 done | grep -i -E 'co-authored-by|generated with|🤖'
@@ -59,7 +59,7 @@ Enable them once per clone. The setting lives in the shared repo config, so ever
 git config core.hooksPath "$(git rev-parse --show-toplevel)/.githooks"
 ```
 
-The path is absolute, so worktrees on branches that don't carry `.githooks/` are still covered. Check that it's active from any worktree with `git config core.hooksPath`.
+Check that it's active with `git config core.hooksPath`.
 
 Never bypass the hooks with `--no-verify`. If a hook refuses, fix the message:
 - **the last commit:** `git commit --amend`;
@@ -72,6 +72,36 @@ Never bypass the hooks with `--no-verify`. If a hook refuses, fix the message:
   - A real push of a trailered commit was refused, and GitHub returned 404 for the branch.
   - A push of a commit with a wrong author was refused.
   - A dry-run push of `ops` (clean) went through.
+
+## 2a. No secrets in the repo
+
+`.githooks/pre-commit` refuses a commit that stages any of these:
+- a `.env*` file (only `.env.example` is allowed);
+- a `*keypair*.json` or `id.json` file;
+- content that looks like a key:
+  - a Solana keypair (a 64-number byte array);
+  - a PEM private key;
+  - a GitHub, AWS, Slack or `sk-` token;
+  - an env-style `…_API_KEY=` / `…SECRET=` / `…PASSWORD=` / `…_ACCESS_TOKEN=` / `…PRIVATE_KEY=` literal;
+  - a secret-named key given a quoted string literal;
+  - a long random lowercase token (40+ characters, entropy ≥ 4 bits per character, 20%+ digits, not hex).
+
+`pre-push` runs the same check on every file the pushed commits add or change, so a commit made with `--no-verify` is still caught. Findings are printed masked, as a length only.
+
+Run it over the whole tree at any time with `.githooks/check-secrets --all`. It must print nothing.
+
+**Verified 2026-09-25:**
+- **Broken version:** with hooks disabled, a commit adding `.env.test` with an API key was accepted.
+- **With hooks, `pre-commit` refused:**
+  - a `.env.test` file;
+  - the real `.env.local`;
+  - a generated key-shaped token in a `.ts` file;
+  - a keypair array in `wallet-backup.json`;
+  - `MY_API_KEY=…` in a script;
+  - an `id.json`.
+- **`pre-commit` accepted** a clean file.
+- **Bypass case:** a commit made with `--no-verify` that added a key-shaped token was refused by `pre-push`, and GitHub returned 404 for its branch.
+- **Whole tree:** 0 findings.
 
 ## 3. Pushing
 

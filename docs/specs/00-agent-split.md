@@ -7,15 +7,15 @@ Status: **agreed** (2026-09-25). Specs 01–03 were agreed before any agent star
 ## Order of work
 
 1. **Specs, one owner (this pass).** Spec 01 (shares and pricing, backed by `spec/model/`), spec 02 (on-chain interface), spec 03 (valuation API). Owned on `main` by the spec owner. After agreement, any change to them goes through the spec owner.
-2. **Three agents in parallel.** Each has its own folder and its own branch, and no two agents edit the same file.
+2. **Three agents in parallel, all on `main`** (since 2026-09-25; see *Git* below). Each owns its own paths, and no two agents edit the same file.
 
-| Agent | Branch | Owns (only these paths) | Builds | Consumes |
+| Agent | Former branch (merged, deleted) | Owns (only these paths) | Builds | Consumes |
 |---|---|---|---|---|
 | **A: program** | `program` | `programs/basket/`, `tests/program/` | The `basket` Anchor program per spec 02. Tests port `spec/model/test_basket_model.py` case for case. | Specs 01 and 02; the fixture mints and `fixture_amm` program id from C (by address, not by code) |
 | **B: client and app** | `app` | `app/`, `sdk/` | TypeScript SDK for spec 02's instructions; transaction building for deposit tickets (router routes, `maxAccounts≈30`, 4 legs per transaction, lookup tables); the web app with the three-value price panel, claim display and issuer-event banners | Specs 02 and 03. Mocks A's program and C's API from the examples in the specs until they ship. |
 | **C: data and ops** | `ops` | `fixtures/` (mints, `fixture_amm` program, `DIFF.md`, `scenarios/`), `services/valuation/`, `scripts/` | Fixture mints and fixture USDC on devnet, the fixture market, the issuer scenario suite, the valuation API per spec 03, and the issuer-change watcher | Spec 02 for the program's accounts and events; spec 03 |
 
-The spec owner keeps `docs/`, `spec/`, and `evidence/` on `main`.
+The spec owner keeps `docs/`, `spec/`, `evidence/` and `web/` (the landing page and app).
 
 ## Interfaces agreed before building
 
@@ -31,25 +31,33 @@ The spec owner keeps `docs/`, `spec/`, and `evidence/` on `main`.
 - A finds a spec ambiguity: A reports it to the spec owner.
 - C finds a fixture/mainnet field difference: C records it in `DIFF.md` and reports it if it affects A or B.
 
-Reports go in `docs/reports/<date>-<agent>-<topic>.md` on the reporting agent's branch and are raised with the spec owner.
+Reports go in `docs/reports/<date>-<agent>-<topic>.md` and are raised with the spec owner.
 
 ## Git
 
-- Identity inside the repo: `user.name = 1nonlypiece`, `user.email = 190412812+1nonlypiece@users.noreply.github.com`. Every agent's worktree inherits the repo config; don't override it.
+- **One working branch: `main`.** The agent branches (`program`, `app`, `ops`) and `web` were merged on 2026-09-25 and deleted, and their worktrees removed.
+  - Everyone works on `main` in the one checkout.
+  - A short-lived branch is only for a substantial new feature. It is merged back the moment it's done, then deleted.
+  - There are no long-running parallel branches.
+- **Pull before a block, push at the end of it.** Each agent runs `git pull --ff-only` before starting and pushes when its block ends.
+  - Ownership (the table above) is what keeps a shared branch safe: A touches only `programs/` and `tests/program/`, B only `app/` and `sdk/`, C only `fixtures/`, `services/` and `scripts/`.
+  - A needed change in someone else's path is reported, not made.
+- Identity inside the repo: `user.name = 1nonlypiece`, `user.email = 190412812+1nonlypiece@users.noreply.github.com`. Don't override it.
 - **No AI attribution, anywhere.** Commit messages, PR descriptions and issues must not contain a `Co-Authored-By:` line, a "Generated with …" line, or 🤖. That includes attribution a coding tool adds by default.
-- **Scan before every push, over every branch.** No output means clean:
+- **Scan before every push.** No output means clean:
   ```sh
-  git log main program app ops --format=%B | grep -n -i -E 'co-authored-by|generated with|🤖'
+  git log main --format=%B | grep -n -i -E 'co-authored-by|generated with|🤖'
   ```
   After the push, re-read author, committer and message from the GitHub API (command in [CONTRIBUTING.md](../../CONTRIBUTING.md#the-scan-command)), not from local config.
-- **Enforced by hooks.** `core.hooksPath` points every worktree at `.githooks/`:
+- **Enforced by hooks.** `core.hooksPath` points the checkout at `.githooks/`:
   - `commit-msg` refuses a commit with an attribution line;
-  - `pre-push` refuses a push if any commit being pushed has one, or has an author or committer other than 1nonlypiece.
+  - `pre-commit` refuses a commit that stages a `.env*` file (other than `.env.example`), a keypair or `id.json` file, or a key-shaped string. Key-shaped means a Solana keypair array, a PEM private key, a known token prefix, a secret-named literal, or a long random token.
+  - `pre-push` refuses a push if any commit being pushed has an attribution line, has an author or committer other than 1nonlypiece, or adds a secret by the same rules.
 
-  Never bypass them with `--no-verify`. Both were verified by refused attempts on 2026-09-25 (details in CONTRIBUTING.md).
+  Never bypass them with `--no-verify`. Each was verified by refused attempts on 2026-09-25, and a whole-tree run of the secrets check finds nothing (details in CONTRIBUTING.md).
 - **Stopped at source.** `.claude/settings.json` sets Claude Code's `attribution.commit` and `attribution.pr` to `""` and `sessionUrl` to `false`. The hooks remain the enforcement.
 - **Why this is written down:** on 2026-09-25, three commits on `program` picked up a `Co-Authored-By: Claude` trailer from a tool default and were pushed unscanned. The messages were rewritten with the tree unchanged, force-pushed, and re-verified on GitHub.
-- Merges to `main` go through the spec owner after the agent's proof bar (below) is met.
+- **Why the secrets guard exists:** `.env.local` (holding the registry key) sat untracked but not ignored until 2026-09-25. It was never committed, but that was luck, not design.
 
 ## What "proven" means per agent (devnet only; never mainnet)
 
