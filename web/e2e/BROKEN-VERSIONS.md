@@ -30,3 +30,37 @@ Also enforced at build time: `npm run build` runs `scripts/verify-evidence.mjs` 
 ## Section 3 swapped to the Pro `feature-section-with-terminal` frame
 
 The complete-at-rest check now requires two things at rest: the selected transcript in full, and all four outcomes (Symmetry and Unlisted, pause and seizure) visible. `BROKEN=blank` still fails it (`terminal lines at rest`), and `BROKEN=wide` still fails the width check. Real run: 6 of 6 pass.
+
+# Holder app (`/app`) checks: broken versions first
+
+`e2e/app.spec.ts`, recorded 2026-09-25 against a production build, with the valuation API serving the canonical devnet basket.
+
+| `BROKEN=` | What it breaks | Result | Failing output |
+|---|---|---|---|
+| `wide` | a 2000px element inside the legs panel | all 4 layout tests fail | `page scrolls sideways: scrollWidth 2224 > clientWidth 1440` |
+| `hide` | the three-values panel hidden | all 4 layout tests fail | `value-sell-now`: element is not visible (it waits out the timeout) |
+| `motion` | an animation inside the app | the no-motion test fails | `animations running in the app` |
+| `404` | the landing page's "Open app" link pointed at a missing route | the link test fails | `GET /apps` status not 200 |
+
+**Real run:** 12 of 12 pass, landing and app together.
+
+**One bad test was found and replaced while doing this.** The first version of the "Open app" check waited for a full-page navigation. Next's `<Link>` navigates client-side and never makes one, so that test could only time out, whatever the page did. It now loads the link's target directly (it must answer 200 and be the app), then follows the link in the page.
+
+# The fresh-wallet devnet flow in the new app (`e2e/holder/flow.spec.ts`)
+
+This is Agent B's flow, ported to `/app`, and run on 2026-09-25 with the valuation API connected. The record is in `e2e/holder/runs/2026-09-25-devnet.json`, which holds every attempt, failures included.
+
+**Attempt 1 failed** at the pause banner. The ported spec used Playwright's default 5 s wait, while B's config allowed 60 s, and the app's first devnet read after a reload is slower than 5 s. The harness resumed ANTHROPIC and returned the SOL. Fixed by restoring B's 60 s wait.
+
+**Attempt 2 failed** at the USDC ticket's first transaction: `Blockhash not found` from the load-balanced public RPC. The in-kind deposit before it had succeeded. The SOL was returned.
+
+**Attempt 3 passed** (7.9 min), with fresh wallet `GM7UuYmhEToqk6Di1hNGERN16znT4Q2wgHFDJK9DpqT5`:
+- **Deposit in kind:** 79,902,598 shares minted, exactly as the app predicted.
+- **USDC ticket:** 2 transactions; afterwards the ticket owns no token accounts.
+- **Redemption with ANTHROPIC paused:** 6 legs paid, 1 claim.
+- **Settlement after the resume:** 4,454,709 received, equal to the app's estimate.
+- **Approvals:** one wallet approval per flow.
+- **Verification:** all 12 signatures are finalized without error, and ANTHROPIC was confirmed unpaused afterwards.
+- **Screenshots:** `e2e/holder/runs/2026-09-25-devnet-*.png`, showing the claim open, then settled.
+
+**Broken version, run on the new UI:** B's `price-panel-not-api` mutant, applied to the ported `Panels.tsx` (the sell-now card shows the API's last-trade figure). It was killed at the intended assertion: `Expected: "match"`, `Received: panel ["698.977388","698.977388","650.299763"]`. The mutant was reverted, and the file was confirmed byte-identical to B's original. B's other mutants target the shared SDK or localnet-only flows; they were killed against B's UI on 2026-09-24 (`app/e2e/runs/2026-09-24-localnet-mutations.json`), and the SDK code they mutate is unchanged.

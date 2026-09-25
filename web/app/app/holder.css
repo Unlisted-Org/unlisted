@@ -1,0 +1,108 @@
+/* The holder app. It inherits the landing page's tokens (app/globals.css) and restyles the class
+   names used by Agent B's panels. Dense, professional, and no motion at all. */
+
+.holder {
+  --mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --display: var(--font-plex-condensed), var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+/* No motion anywhere in the app, whatever the viewer's setting. */
+.holder *, .holder *::before, .holder *::after { transition: none !important; animation: none !important; }
+
+.holder .page { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.holder main header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.holder h1 { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+.holder h2 { font-family: var(--display); font-size: 17px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.005em; }
+.holder h3 { font-size: 13px; font-weight: 600; margin: 10px 0 4px; }
+.holder p { margin: 0 0 8px; max-width: 80ch; }
+.holder ul { margin: 0 0 8px; padding-left: 18px; }
+.holder .headline { color: var(--ink-muted); font-size: 13px; }
+.holder .muted { color: var(--ink-muted); }
+.holder .mono { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+
+/* Panels */
+.holder section {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; min-width: 0; scroll-margin-top: 72px;
+}
+.holder .two { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 1100px) { .holder .two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.holder .intro { background: var(--ground); }
+
+/* Tables: dense, tabular numbers, always inside their own horizontal scroll */
+.holder .scroll, .holder section > table, .holder section > div > table { max-width: 100%; }
+.holder .scroll { overflow-x: auto; }
+.holder table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.holder section table { display: block; overflow-x: auto; }
+.holder .scroll table { display: table; }
+.holder th {
+  text-align: left; font-family: var(--mono); font-weight: 400; font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-muted); background: var(--ground); padding: 6px 8px;
+  border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+.holder td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.holder tr:last-child td { border-bottom: 0; }
+.holder tr.unavail td { background: var(--issuer-soft); }
+
+/* Chips and pills: state as a word, never colour alone */
+.holder .pill, .holder .chip {
+  display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 3px; font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; border: 1px solid var(--line); color: var(--ink-muted);
+  background: var(--ground); vertical-align: middle;
+}
+.holder .pill.warn { color: var(--claim); background: var(--claim-soft); border-color: transparent; }
+.holder .pill.alert { color: var(--issuer); background: var(--issuer-soft); border-color: transparent; }
+
+/* Issuer-event banners: a severity stripe plus a title */
+.holder .banners { display: flex; flex-direction: column; gap: 8px; }
+.holder .banner {
+  display: flex; flex-direction: column; gap: 2px; border: 1px solid var(--line); border-left-width: 4px;
+  border-radius: 6px; padding: 9px 12px; background: var(--surface);
+}
+.holder .banner b { font-weight: 600; }
+.holder .banner.alert { border-left-color: var(--issuer); }
+.holder .banner.alert b { color: var(--issuer); }
+.holder .banner.warn { border-left-color: var(--claim); }
+.holder .banner.warn b { color: var(--claim); }
+.holder .banner.info { border-left-color: var(--paid); }
+.holder .warnline { color: var(--claim); margin: 6px 0; }
+
+/* The pricing-basis strip */
+.holder .basis {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 12px; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--ground); font-size: 12px;
+}
+.holder .basis .pill { margin-left: 0; }
+
+/* Three values */
+.holder .cards3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+@media (min-width: 720px) { .holder .cards3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.holder .card { background: var(--surface); padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.holder .card .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); }
+.holder .card .big { font-family: var(--mono); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* The cost box */
+.holder .cost { background: var(--claim-soft); border-radius: 6px; padding: 10px 12px; margin: 8px 0; }
+.holder .cost b { color: var(--claim); }
+
+/* Controls */
+.holder main button {
+  font: inherit; font-weight: 500; cursor: pointer; border-radius: 4px; padding: 6px 12px;
+  background: var(--primary); color: var(--primary-foreground); border: 1px solid var(--primary);
+}
+.holder main button:disabled { opacity: 0.45; cursor: not-allowed; }
+.holder main button:focus-visible, .holder main input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.holder .tabs { display: inline-flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; margin: 6px 0 8px; }
+.holder main .tabs button { background: transparent; color: var(--ink-muted); border: 0; border-radius: 0; padding: 5px 10px; }
+.holder main .tabs button.on { background: var(--ink); color: var(--ground); }
+.holder main label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 6px 0; color: var(--ink-muted); }
+.holder main input {
+  font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--ground); border: 1px solid var(--line);
+  border-radius: 4px; padding: 5px 8px; width: 11rem; max-width: 100%;
+}
+.holder details > summary { cursor: pointer; color: var(--ink); margin: 6px 0; }
+.holder .events { list-style: none; padding: 0; }
+.holder .events li { padding: 4px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.holder .disclosures { background: var(--ground); }

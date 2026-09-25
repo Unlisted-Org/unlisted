@@ -651,6 +651,654 @@
         }
       ],
       "ok": true
+    },
+    {
+      "action": "pause",
+      "actor": "app-e2e",
+      "note": null,
+      "at": "2026-09-25T06:44:04Z",
+      "target": {
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "symbol": "ANTHROPIC",
+        "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "vault": null,
+        "probe_vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+        "note": "mint-level action; probes use the leg's stand-in vault"
+      },
+      "steps": [
+        {
+          "step": "pause",
+          "signature": "4k8M7tT6Gha7UVx1ayjLUqmqcCrApbVnPAetGsThFS9UvSYizk8jwCbvMxvKqjJ85sGwEYst3PaDRSov7LYZY6dq",
+          "slot": 503863186,
+          "block_time": 1790318637,
+          "block_time_iso": "2026-09-25T06:43:57Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503863177,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:43:56Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467801381340",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503863219,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:44:04Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": true,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467801381340",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503863179,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "47948094",
+          "vault_withheld_after_raw": 10000
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503863219,
+          "err": {
+            "InstructionError": [
+              0,
+              {
+                "Custom": 67
+              }
+            ]
+          },
+          "error_log": "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x43",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        }
+      ],
+      "ok": true
+    },
+    {
+      "action": "resume",
+      "actor": "app-e2e",
+      "note": null,
+      "at": "2026-09-25T06:45:24Z",
+      "target": {
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "symbol": "ANTHROPIC",
+        "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "vault": null,
+        "probe_vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+        "note": "mint-level action; probes use the leg's stand-in vault"
+      },
+      "steps": [
+        {
+          "step": "resume",
+          "signature": "25vPJ7zWMUJSbpBAuxVqezLM6jiPEvhMpf7K2VXVrkiYwBy23NwofmK8D5z1dSrm653WUAVKe2a6ne2U7ZuvL5ax",
+          "slot": 503863307,
+          "block_time": 1790318658,
+          "block_time_iso": "2026-09-25T06:44:18Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503863274,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:44:16Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": true,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467801381340",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503863703,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:45:24Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467801381340",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503863302,
+          "err": {
+            "InstructionError": [
+              0,
+              {
+                "Custom": 67
+              }
+            ]
+          },
+          "error_log": "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x43",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503863705,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "47948094",
+          "vault_withheld_after_raw": 10000
+        }
+      ],
+      "ok": true
+    },
+    {
+      "action": "pause",
+      "actor": "app-e2e",
+      "note": null,
+      "at": "2026-09-25T06:51:06Z",
+      "target": {
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "symbol": "ANTHROPIC",
+        "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "vault": null,
+        "probe_vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+        "note": "mint-level action; probes use the leg's stand-in vault"
+      },
+      "steps": [
+        {
+          "step": "pause",
+          "signature": "2JDikaJnVXgKzfmhbcUqsgu1Css9YpAkRBp6ryXqSCJ427gF8r4mZDgJe4uAUCdfc6a68TC8Jtvoky6Pee61WNjf",
+          "slot": 503865652,
+          "block_time": 1790319046,
+          "block_time_iso": "2026-09-25T06:50:46Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503865644,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:50:46Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467840110447",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503865768,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:51:06Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": true,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467840110447",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503865646,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "47948094",
+          "vault_withheld_after_raw": 10000
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503865768,
+          "err": {
+            "InstructionError": [
+              0,
+              {
+                "Custom": 67
+              }
+            ]
+          },
+          "error_log": "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x43",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        }
+      ],
+      "ok": true
+    },
+    {
+      "action": "resume",
+      "actor": "app-e2e",
+      "note": null,
+      "at": "2026-09-25T06:53:27Z",
+      "target": {
+        "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+        "symbol": "ANTHROPIC",
+        "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "vault": null,
+        "probe_vault": "8UJn1DuzWhYnkbFWiKZ3ELm98n23btkqRQUPyv4CfZfZ",
+        "note": "mint-level action; probes use the leg's stand-in vault"
+      },
+      "steps": [
+        {
+          "step": "resume",
+          "signature": "24fQGVdACJnCzwqLT5E7KzLV98bVCAbxajDL7Nyu65uf7z5iya8RDVvhg1mUqfha8HwAFyjk6zWaWamUR5eBdG7i",
+          "slot": 503866601,
+          "block_time": 1790319204,
+          "block_time_iso": "2026-09-25T06:53:24Z",
+          "err": null
+        }
+      ],
+      "before": {
+        "slot": 503866593,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:53:23Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": true,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467840110447",
+          "decimals": 9
+        }
+      },
+      "after": {
+        "slot": 503866617,
+        "epoch": 1166,
+        "read_at": "2026-09-25T06:53:27Z",
+        "vault": {
+          "owner": "D17ickLQXT9TgZw3bfH8ijPrGQLMwJZCtuyRDTpFGXUG",
+          "amount_raw": "46958094",
+          "state": "initialized",
+          "withheld_raw": 0
+        },
+        "mint": {
+          "fee": {
+            "now_bps": 100,
+            "now_maximum_fee": "18446744073709551615",
+            "pending": {
+              "bps": 300,
+              "maximum_fee": "18446744073709551615",
+              "effective_epoch": 1167
+            },
+            "older": {
+              "bps": 100,
+              "epoch": 1165,
+              "maximum_fee": "18446744073709551615"
+            },
+            "newer": {
+              "bps": 300,
+              "epoch": 1167,
+              "maximum_fee": "18446744073709551615"
+            },
+            "epoch": 1166
+          },
+          "paused": false,
+          "pause_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "hook_program": null,
+          "hook_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "default_account_state": "initialized",
+          "permanent_delegate": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "multiplier": {
+            "stored": "1",
+            "effective": "1",
+            "effective_since": null,
+            "pending": null,
+            "new_multiplier": "1",
+            "new_multiplier_effective_ts": 0
+          },
+          "multiplier_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "mint_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "freeze_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "fee_config_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "withdraw_withheld_authority": "3kJFLzxPYt5CHtM4cpzTfjpKKdVz2d2k29F3PkmtAWH3",
+          "supply_raw": "1467840110447",
+          "decimals": 9
+        }
+      },
+      "probes": [
+        {
+          "when": "before",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503866594,
+          "err": {
+            "InstructionError": [
+              0,
+              {
+                "Custom": 67
+              }
+            ]
+          },
+          "error_log": "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x43",
+          "vault_amount_after_raw": null,
+          "vault_withheld_after_raw": null
+        },
+        {
+          "when": "after",
+          "kind": "simulation (no signature)",
+          "what": "transfer_checked 1000000 raw issuer -> vault",
+          "slot": 503866619,
+          "err": null,
+          "error_log": null,
+          "vault_amount_after_raw": "47948094",
+          "vault_withheld_after_raw": 10000
+        }
+      ],
+      "ok": true
     }
   ]
 }
