@@ -34,17 +34,17 @@ You record it in Screen Studio. The whole story happens on one screen, the Overv
 
 ## Segments
 
-**Timings.** The seconds in "On-chain wait" were measured on the live site in the rehearsal: the median, then the slowest in brackets, from click to the app showing the result. They don't include your approval in Phantom, so add 2–4 s for that.
+**Timings.** The seconds in "On-chain wait" were measured on the live site in the final rehearsal (16 runs): the median, then the slowest in brackets, from click to the app showing the result. They don't include your approval in Phantom, so add 2–4 s for that.
 
 | # | Time | Screen and cursor | Voiceover | On-chain wait |
 |---|---|---|---|---|
 | 1 | 0:00–0:12 | **Overview, disconnected.** Click **Connect wallet** (top right). The modal lists the wallets your browser has; click **Phantom** and approve. The address appears top right. | [easy, conversational] "This is Unlisted, on Solana devnet: seven pre-IPO companies in one token. One button connects any Solana wallet in your browser." | none |
 | 2 | 0:12–0:24 | **Hold on the seven tiles.** Sweep the cursor slowly along the row. | "Each tile is one company the basket holds: OpenAI, Anthropic, Neuralink, and the rest. They're all available right now." | none |
-| 3 | 0:24–0:44 | **Buy in.** The amount is filled in already, so don't edit it. Click **Buy in** and approve in Phantom. When "Your last transaction" says ok, point at the share count, then along the tiles, which now say "If you redeem: …". | "I'll buy in with the seven tokens in my wallet. The app works out the shares before I sign, [beat] one approval, and they're mine. Every tile now shows exactly what I'd get back." | 4.6 s (6.3 s) |
-| 4 | 0:44–1:04 | **Pause.** Scroll down to **Issuer (devnet fixture)**. Anthropic is already selected; click **Pause Anthropic**. Scroll back up: the red banner, Anthropic's tile turns red, and Buy in now says deposits are refused. | [lean in] "Now the part that breaks other baskets. This control does what the real issuer can do to any of these tokens at any moment: I'm pausing Anthropic. [beat] New deposits stop. Watch what happens to a redemption." | 1.3 s (12.4 s: see "If a step is slow") |
-| 5 | 1:04–1:36 | **Redeem.** The Redeem box already holds all your shares and says "6 pay now, 1 becomes a claim". Point at the six tiles' amounts, then at Anthropic's "becomes a claim". Click **Redeem** and approve. After ok: six tiles show the tokens in your wallet, Anthropic says "Your claim: … units" with a grey "Pays when resumed", and the sidebar's Claims shows 1. | [the key moment, slow down] "I redeem everything anyway. [beat] Six companies pay out immediately, exactly the amounts on the tiles. Anthropic can't move, so instead of the whole redemption failing, it becomes a claim on Anthropic: still mine, and still moving with Anthropic's price." | 3.8 s (5.3 s) |
-| 6 | 1:36–1:50 | **Resume.** Scroll to the issuer control and click **Resume**. Scroll up: Anthropic is available again, and its tile says "Pays … now" with **Settle** lit. | "When the issuer lifts the pause, [beat] the claim can pay out." | 1.3 s (2.3 s) |
-| 7 | 1:50–2:08 | **Settle.** Click **Settle** on the Anthropic tile and approve. After ok, the claim is gone from the tile and the Claims count clears. | "Anyone can settle it; I'll do it myself. [beat] And it pays exactly what the tile said. Every step you've seen is a finalized devnet transaction." | 3.8 s (5.3 s) |
+| 3 | 0:24–0:44 | **Buy in.** The amount is filled in already, so don't edit it. Click **Buy in** and approve in Phantom. When "Your last transaction" says ok, point at the share count, then along the tiles, which now say "If you redeem: …". | "I'll buy in with the seven tokens in my wallet. The app works out the shares before I sign, [beat] one approval, and they're mine. Every tile now shows exactly what I'd get back." | 4.8 s (10.9 s) |
+| 4 | 0:44–1:04 | **Pause.** Scroll down to **Issuer (devnet fixture)**. Anthropic is already selected; click **Pause Anthropic**. Scroll back up: the red banner, Anthropic's tile turns red, and Buy in now says deposits are refused. | [lean in] "Now the part that breaks other baskets. This control does what the real issuer can do to any of these tokens at any moment: I'm pausing Anthropic. [beat] New deposits stop. Watch what happens to a redemption." | 1.8 s (12.9 s: see "If a step is slow") |
+| 5 | 1:04–1:36 | **Redeem.** The Redeem box already holds all your shares and says "6 pay now, 1 becomes a claim". Point at the six tiles' amounts, then at Anthropic's "becomes a claim". Click **Redeem** and approve. After ok: six tiles show the tokens in your wallet, Anthropic says "Your claim: … units" with a grey "Pays when resumed", and the sidebar's Claims shows 1. | [the key moment, slow down] "I redeem everything anyway. [beat] Six companies pay out immediately, exactly the amounts on the tiles. Anthropic can't move, so instead of the whole redemption failing, it becomes a claim on Anthropic: still mine, and still moving with Anthropic's price." | 4.3 s (6.8 s) |
+| 6 | 1:36–1:50 | **Resume.** Scroll to the issuer control and click **Resume**. Scroll up: Anthropic is available again, and its tile says "Pays … now" with **Settle** lit. | "When the issuer lifts the pause, [beat] the claim can pay out." | 1.8 s (2.3 s) |
+| 7 | 1:50–2:08 | **Settle.** Click **Settle** on the Anthropic tile and approve. After ok, the claim is gone from the tile and the Claims count clears. | "Anyone can settle it; I'll do it myself. [beat] And it pays exactly what the tile said. Every step you've seen is a finalized devnet transaction." | 4.3 s (6.3 s) |
 | 8 | 2:08–2:28 | **Claims** in the sidebar: the settled row, with what was received. Then **History**: scroll the issuer activity list. | "The claim's settlement is recorded on chain. [beat] And this is the issuer's activity on the real tokens, read straight from mainnet. PreStocks told us nothing is announced in advance, so this is the only warning a holder gets." | none |
 | 9 | 2:28–2:40 | **Back to Overview,** cursor still. | [slow, land it] "Seven companies, one token, and when the issuer acts, you still get your share out." | none |
 
@@ -53,7 +53,7 @@ You record it in Screen Studio. The whole story happens on one screen, the Overv
 ## If a step is slow
 
 - **Keep talking.** A spare line for any wait: "This is a real transaction on devnet; it lands in a few seconds." Cut the dead air in Screen Studio afterwards. Never cut a result.
-- **Pause, over 10 s (it happened once in 20 runs, at 12.4 s).** Say the spare line and wait. The control can't hang any more: it re-signs on a fresh blockhash and answers within 50 s. If the answer is lost, the app reads the chain and shows what actually happened.
+- **Pause or Buy in, over 10 s (each happened once in the final 16 runs: 12.9 s and 10.9 s).** Say the spare line and wait. The control can't hang any more: it re-signs on a fresh blockhash and answers within 50 s. If the answer is lost, the app reads the chain and shows what actually happened.
 - **Any step showing a red "failed":**
   - stop the take;
   - if Anthropic is paused, press Resume;
@@ -85,3 +85,19 @@ Cut in this order:
 ## What's proven about this flow
 
 The rehearsal runs the same flow in a real browser against the live site: test tokens, buy in, pause, redeem everything, resume, settle, then Claims, a USDC buy and the Basket values. Each run uses a fresh wallet and checks every figure the app shows against an independent chain read. The results are in "Rehearsal results" at the end of this file.
+
+## Rehearsal results
+
+The same flow, run in a real browser against the live site with a fresh wallet each time (`web/e2e/holder/repeat.sh`; the records are in `web/e2e/holder/runs/2026-09-25-devnet-overview.json`). Each round ran on the build with the previous round's fixes.
+
+| Round | Result | Cause of failures | Fixed |
+|---|---|---|---|
+| 1 | 8 of 10 | A USDC ticket's second transaction outlived its blockhash (off the filmed path). One run hung with no log. | A fresher blockhash, faster confirmation, expiry read from block height. No step can hang (60 s limit, traces kept). |
+| 2 | 9 of 10 | The issuer's Resume request timed out on the server; nothing reached the chain. | The issuer control is idempotent, confirms over HTTP, re-signs on a fresh blockhash, and has a 50 s deadline. The app reads the chain if the answer is lost. |
+| 3 | 4 of 4 | Then the test funder ran out of devnet SOL (11 runs never started). | Topped up. The script now stops cleanly when the funder is low. |
+| 4 | 14 of 15 | The Claims route stayed blank once: a code chunk request never completed. | Route code is preloaded and retried. |
+| Confirm | 1 of 1 | – | On the final build. |
+
+- **The filmed part** (buy in, pause, redeem, resume, settle) passed in every run of rounds 3 and 4 that reached it: 19 of 19, first time.
+- **Every figure** was checked against an independent chain read.
+- **The Phantom caveat stands:** the rehearsal uses a test wallet, so do one dry run with Phantom yourself.
