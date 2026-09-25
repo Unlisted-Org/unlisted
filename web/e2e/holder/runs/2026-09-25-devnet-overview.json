@@ -348,6 +348,23 @@
           "signatures": [
             "3bNvFqTaFef1woSzmJvJBcWsFXYsfJNRTVhWWkfERrTHzQqA8jZLyuHJKgAgMbq3uckv2WUjpmrEtZJA1ZxSSPzq"
           ]
+        },
+        {
+          "step": "(added later) the broken-version run's redemption landed before the check failed; its ANTHROPIC claim was left open",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "37QWahkvrv6wz3oQ7XxLkLR7AQoeJLF7tTf2y7axREggq7GRX5rfwonbP8PPBYQ8U4aQxGCUwHftTDyuQeGRwRCS"
+          ],
+          "slot": 504002384,
+          "note": "reported by the docs agent; not captured by the run itself"
+        },
+        {
+          "step": "cleanup: the open ANTHROPIC claim settled to its owner (permissionless; app key as cranker; e2e/holder/devnet/settle-open-claims.spec.ts)",
+          "by": "funder (harness)",
+          "signatures": [
+            "4KxbW87EnKAfcsTGnh7HpdCUvkYUoNgZ537Ju2ZHW9VKLSofKBZDkckkNWuY5KzXZxaHQZptXyAjMt6e1TJPR8yS"
+          ],
+          "slot": 504021122
         }
       ],
       "screenshots": [
@@ -1371,6 +1388,110 @@
         "e2e/holder/runs/2026-09-25-devnet-overview-3-claim-paid.png",
         "e2e/holder/runs/2026-09-25-devnet-claims-settled.png"
       ]
+    },
+    {
+      "startedAt": "2026-09-25T14:02:01.578Z",
+      "finishedAt": "2026-09-25T14:03:01.262Z",
+      "outcome": "failed",
+      "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 4549662n\nReceived: 4504165n",
+      "cluster": "devnet",
+      "label": "devnet",
+      "verification": "devnet",
+      "mutation": null,
+      "rpc": "https://devnet.helius-rpc.com/?api-key=<redacted>",
+      "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+      "basket": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+      "programs": {
+        "basket": {
+          "builtFrom": "program@399b7b0 (canonical devnet basket, Agent A's tests/program/devnet/canonical.json)",
+          "id": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+          "upgradeAuthority": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb"
+        },
+        "fixtureAmm": {
+          "id": "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF",
+          "source": "Agent C, ops:fixtures/registry.json"
+        }
+      },
+      "wallet": {
+        "address": "9sCP5LbawBwvjF2QWramxskhzqCBy6yi5SEEZQC8MECc",
+        "kind": "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)"
+      },
+      "valuationApi": {
+        "url": "http://127.0.0.1:8907"
+      },
+      "steps": [
+        {
+          "step": "0.08 SOL to the fresh wallet from the app key",
+          "by": "funder (harness)",
+          "signatures": [
+            "3rxws3K62Xxc99ngk428nQGynxXfmdvRFuuH1CySFxNypXjsNyQ4aiCLMxWPRjDc7TDUL4eNQYVxviANuxT2i6px"
+          ]
+        },
+        {
+          "step": "get test tokens (app faucet: server signs as the fixture mint authority, the wallet pays)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "gnsWehXMMR3N8XxXkNRpCQdAsVnkMKQEXe4jMgZGZhxppbh53KYtkPaB6oxWBPKC6svSZwvUD4ASAREb7YVmaNa",
+            "GJX1haWpGahYTJR233YLmghAhBomoEgip7ANMYdjY3TkvGsy4bwvYHDsoFGpBwgiT5y78FEveUYFrRDJSJmqs75"
+          ],
+          "checks": {
+            "legs": {
+              "OPENAI": "10227963",
+              "ANTHROPIC": "19363694",
+              "NEURALINK": "47351688",
+              "ANDURIL": "123528126",
+              "POLYMARKET": "137212324",
+              "KALSHI": "22552536",
+              "FIGUREAI": "113038057"
+            },
+            "usdc": "50000000"
+          }
+        },
+        {
+          "step": "buy in: deposit in kind (Overview)",
+          "by": "test wallet (browser)",
+          "signatures": [
+            "4yp1wR2PSGZJLbYKn4NLUMhZpkRiT5z7vkCCo3vGhD4yUsJxtxV3Euo48QG5cpd55uHnB2ZXWWwAuUU4cpqxLDti"
+          ],
+          "slot": 504021785,
+          "checks": {
+            "sharesMinted": "178668455",
+            "appPredicted": "178668455"
+          }
+        },
+        {
+          "step": "issuer pauses ANTHROPIC (the app's fixture-issuer control, passcode-gated)",
+          "by": "fixture issuer (app control)",
+          "signatures": [
+            "2bfjziAuTz9E3ns7K8RYfUPdCqyVyjdsiMgjuEiekof6bmtrfoWWcZma5Xm3caAqFvRJaYgV2eCCJB5LovXhYuiT"
+          ]
+        },
+        {
+          "step": "cleanup: issuer resumes ANTHROPIC after the failure",
+          "by": "fixture issuer (harness)",
+          "signatures": [
+            "ZaiZt5HXadoX76FYVtWVsqFLsrLrNwgMMnSQKZebEjpa4NBeeRVhLq1aFB5ZErpiwzCUcDhzqMJYKS3oqpdJZdL"
+          ]
+        },
+        {
+          "step": "cleanup: settle this run's open claims after the failure",
+          "by": "funder (harness)",
+          "signatures": [
+            "4Co7QLeYCp8wChoZp1i8uC6ypWTBB6AAGLcVSFXxoN2GqvZKD5BXFvLEkPpy5UJUJRwYwYLoDkgDRi9e6FcvKzv5"
+          ]
+        },
+        {
+          "step": "return 0.06376488 SOL to the app key",
+          "by": "test wallet (harness)",
+          "signatures": [
+            "5re9xkVnoiw1KY5WcxTZxADbaGiEXXxtKLzD7NywdfuSYHkUKxnpKVc2YrqrGab3Rt4BmHkNFhRCUphzqGoBkynU"
+          ]
+        }
+      ],
+      "screenshots": [
+        "e2e/holder/runs/2026-09-25-devnet-overview-mutant2-failure.png"
+      ],
+      "note": "broken version (again, to prove the failure cleanup): Overview tile reported gross instead of net; killed; the harness resumed ANTHROPIC and settled the open claim"
     }
   ]
 }

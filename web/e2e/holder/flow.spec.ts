@@ -19,7 +19,7 @@ import { join } from "node:path";
 import { readFileSync } from "node:fs";
 import { BasketClient, TOKEN_PROGRAM_ID, openClaims, parseEventsFromLogs } from "@unlisted/sdk";
 import fixtures from "../../lib/fixtures.json";
-import { RunRecord, conn, saveTestWallet, depositTickets, feeBpsByRpc, fundSol, issuerAction, loadEnv, returnSol, mintPausedByRpc, multipliersByRpc, redemptionTickets, ticketOpenedBy, ticketOwnedByRpc, tokenAmount, tokenAmounts, txOk } from "./harness";
+import { RunRecord, conn, saveTestWallet, settleOpenClaims, depositTickets, feeBpsByRpc, fundSol, issuerAction, loadEnv, returnSol, mintPausedByRpc, multipliersByRpc, redemptionTickets, ticketOpenedBy, ticketOwnedByRpc, tokenAmount, tokenAmounts, txOk } from "./harness";
 
 const HERE = __dirname + "/";
 const PAUSE_LEG = process.env.E2E_PAUSE_LEG ?? "ANTHROPIC";
@@ -265,6 +265,9 @@ test("buy in, issuer pauses one, redeem anyway (claim), pause lifts, claim pays 
       const sigs = issuerAction(env, "resume", PAUSE_LEG);
       rec.add({ step: `cleanup: issuer resumes ${PAUSE_LEG} after the failure`, by: "fixture issuer (harness)", signatures: sigs });
     }
+    // Nor a claim open: settle whatever this run's wallet is still owed (after the resume above).
+    const settled = await settleOpenClaims(env, owner).catch((err) => { console.log(`claims not settled: ${err}`); return []; });
+    if (settled.length) rec.add({ step: "cleanup: settle this run's open claims after the failure", by: "funder (harness)", signatures: settled });
     console.log(`run file: ${rec.write("failed", String(e))}`);
     throw e;
   } finally {
