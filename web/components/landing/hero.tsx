@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Container } from "../container";
 import { Button } from "../ui/button";
 import { Receipt } from "./receipt";
-import { TiltOnScroll } from "./tilt";
 import { evidence, explorerTx } from "@/lib/evidence";
 
 export const COMPANIES = ["OpenAI", "Anthropic", "Neuralink", "Anduril", "Polymarket", "Kalshi", "FigureAI"];
@@ -37,13 +36,11 @@ export function Hero() {
             </Button>
           </div>
           <p className="text-[13px] text-ink-muted">
-            Runs on Solana devnet against mirrors of the real PreStocks tokens. Not endorsed by PreStocks or any of the seven companies.
+            Runs on Solana devnet against mirrors of the real PreStocks tokens. PreStocks told us it has no objection to this basket; that is not an endorsement. None of the seven companies is involved.
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <TiltOnScroll>
-            <Receipt />
-          </TiltOnScroll>
+          <Receipt />
           <p className="text-[12px] text-ink-muted">
             A real redemption from a fresh wallet, with one of the seven paused:{" "}
             <a className="text-paid underline underline-offset-2" href={explorerTx(redeem.signature, redeem.network)} target="_blank" rel="noreferrer" data-signature={redeem.signature}>

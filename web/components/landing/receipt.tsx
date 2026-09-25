@@ -15,7 +15,7 @@ export function Receipt() {
   return (
     <div
       data-testid="receipt"
-      className="w-full rounded-lg border border-line bg-surface text-[12px] text-ink shadow-xl dark:shadow-none"
+      className="receipt-enter w-full rounded-lg border border-line bg-surface text-[12px] text-ink shadow-xl dark:shadow-none"
     >
       <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <div className="flex flex-col">
@@ -26,10 +26,10 @@ export function Receipt() {
       </div>
       <table className="w-full tabular">
         <tbody>
-          {LEGS.map((leg) => {
+          {LEGS.map((leg, i) => {
             const paid = b.paidNow[leg];
             return (
-              <tr key={leg} className="border-b border-line last:border-0">
+              <tr key={leg} className={`receipt-row border-b border-line last:border-0 ${paid ? "" : "receipt-claim"}`} style={{ animationDelay: `${420 + i * 90}ms` }}>
                 <td className="px-4 py-2 font-medium">{leg}</td>
                 <td className="px-4 py-2">
                   {paid ? (
@@ -44,7 +44,7 @@ export function Receipt() {
           })}
         </tbody>
       </table>
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-ground px-4 py-3 font-mono text-[11px]">
+      <div className="receipt-row flex flex-wrap items-center justify-between gap-2 border-t border-line bg-ground px-4 py-3 font-mono text-[11px]" style={{ animationDelay: "1200ms" }}>
         <span className="text-paid">ANTHROPIC resumed → claim settled: {int(b.settled.received)} received</span>
         <span className="text-ink-muted">slot {slot(settle.slot)}</span>
       </div>

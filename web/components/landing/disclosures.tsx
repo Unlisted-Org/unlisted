@@ -21,13 +21,21 @@ const ITEMS: { q: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "PreStocks hasn't endorsed this",
+    q: "PreStocks has no objection, which is not an endorsement",
     a: (
-      <p>
-        We have asked PreStocks for a written acknowledgement and have had no reply. Their Terms appear to permit wrapping
-        and pooling without their consent, so we proceed on that basis. No fee is routed to PreStocks beyond the transfer fee
-        every token already pays.
-      </p>
+      <>
+        <p>
+          We asked PreStocks about a pooled basket over their tokens. On 2026-09-25 they told us they have no objection,
+          including to a future mainnet version, with no conditions. That is permission to proceed, not approval of the
+          product. They also confirmed that the basket's vault gets the same treatment as any other holder under their
+          pause, freeze and recovery powers.
+        </p>
+        <p>
+          They have no channel that announces fee or multiplier changes in advance. The app reads the mints directly and
+          shows every scheduled change the moment it exists on chain; that is the only advance warning a holder gets.
+          No fee is routed to PreStocks beyond the transfer fee every token already pays.
+        </p>
+      </>
     ),
   },
   {

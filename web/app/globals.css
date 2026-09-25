@@ -184,3 +184,25 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* The hero receipt: straight, and it plays in once on load (the card rises, the seven rows land in
+   order, the paused company's claim is marked, then the settlement line). CSS only, so the first
+   paint is already the right layout; under reduced motion none of this exists and it is simply there. */
+@media (prefers-reduced-motion: no-preference) {
+  .receipt-enter { animation: receipt-rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .receipt-row { animation: receipt-row 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .receipt-claim td { animation: receipt-claim 1100ms ease-out both; animation-delay: inherit; }
+}
+@keyframes receipt-rise {
+  from { opacity: 0; transform: translateY(24px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes receipt-row {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes receipt-claim {
+  0% { background-color: transparent; }
+  45% { background-color: var(--claim-soft); }
+  100% { background-color: transparent; }
+}
