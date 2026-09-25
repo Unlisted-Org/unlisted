@@ -88,6 +88,19 @@ unset GH_TOKEN AUTH
 
 This is a requirement, not a suggestion. Before a test counts toward anything, run it against a deliberately broken version of the thing it tests, confirm it **fails**, and record the mutation and the failing output next to the test. See [spec 00](docs/specs/00-agent-split.md#required-the-broken-version-comes-first).
 
-## 5. Devnet only
+## 5. Browsers for tests: keep them project-local
+
+Playwright downloads its browsers into a **shared cache** (`~/Library/Caches/ms-playwright` on macOS). When a newer version installs, it **deletes older builds** in that cache that other projects may still use.
+
+This happened on 2026-09-25: installing Chromium for template screenshots removed `chromium_headless_shell-1208` and `-1228`. **The fix,** if another project's tests fail with "Executable doesn't exist": run `npx playwright install` in that project.
+
+**Rule:** install and run browsers from a project-local path, so the shared cache is never touched:
+
+```sh
+export PLAYWRIGHT_BROWSERS_PATH="$(git rev-parse --show-toplevel)/.playwright-browsers"   # gitignored
+npx playwright install chromium
+```
+
+## 6. Devnet only
 
 Never sign a mainnet transaction. Never use `~/.config/solana/id.json` or any key under `~/.config/solana/uncross/`; they belong to another project. Record a new test wallet's key before funding it.
