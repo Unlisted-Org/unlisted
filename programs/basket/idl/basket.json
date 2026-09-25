@@ -4,7 +4,7 @@
     "name": "basket",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "Stocklana basket: partial redemption, balance-as-truth accounting, no oracle"
+    "description": "Unlisted basket program: partial redemption, balance-as-truth accounting, no oracle"
   },
   "instructions": [
     {

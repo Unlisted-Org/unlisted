@@ -1,4 +1,4 @@
-//! Stocklana `basket`: a basket of PreStocks that keeps paying out when the issuer acts.
+//! Unlisted `basket`: a basket of PreStocks that keeps paying out when the issuer acts.
 //!
 //! Share maths follows spec 01 and `spec/model/basket_model.py` to the unit:
 //! balance-as-truth `observe`, a per-leg loss index, partial redemption into claims,
