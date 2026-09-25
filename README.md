@@ -24,7 +24,13 @@ Unlisted is built so that:
 
 - **Devnet only, by design.** The failure cases are issuer actions, which only the issuer's keys can trigger on mainnet. Fixture mints mirror PreStocks extension for extension, so every issuer action can be run against the program, with signatures.
 - **Specs approved** (`docs/specs/`). The share maths is an executable model with 17 property tests (`spec/model/`).
-- **In progress** on separate branches: the program (`program`), the SDK and app (`app`), and the fixtures, valuation API and issuer-event watcher (`ops`). Nothing is deployed yet. This README is updated only when something is proven.
+- **Deployed on devnet:**
+  - the program, `GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv`, with the canonical basket over seven fixture mints;
+  - the app, at [unlisted-rosy.vercel.app/app](https://unlisted-rosy.vercel.app/app);
+  - the valuation API and issuer watcher, on Railway;
+  - every cited signature, on [/evidence](https://unlisted-rosy.vercel.app/evidence).
+- **The live app runs the whole story:** buy in, the fixture issuer pauses one company, redeem anyway (six pay now, one becomes a claim), the pause lifts, the claim pays out. A fresh-wallet browser test runs it against the live site; the records are in `web/e2e/holder/runs/`.
+- This README is updated only when something is proven.
 
 ## Read
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build docs/proven.md: every proven claim, each with its signature or transcript.
 
-Records are read from the git branches that own them (program, app, ops, main)
-with `git show`, so this runs from the main checkout before or after the merges.
+Records are read with `git show HEAD:<path>`: every agent's branch is merged into main, so
+the committed version of each record is the one cited (never an uncommitted working copy).
 The script then:
 - re-checks every signature it cites, and every signature in every devnet record
   it cites, with getSignatureStatuses on the right network;
@@ -18,15 +18,9 @@ MAINNET = "https://api.mainnet-beta.solana.com"
 B58 = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{86,88}$")
 OUT = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else "docs/proven.md"
 
-# Branch that owns each path prefix before merge; after merge, main has them all.
-OWNER = [("tests/program/", "program"), ("programs/", "program"), ("app/", "app"), ("sdk/", "app"),
-         ("fixtures/", "ops"), ("services/", "ops"), ("scripts/", "ops")]
-
 def ref_for(path):
-    for prefix, branch in OWNER:
-        if path.startswith(prefix):
-            return branch
-    return "main"
+    # All work lives on main (spec 00): the program/app/ops branches were merged and deleted.
+    return "HEAD"
 
 def J(path):
     return json.loads(subprocess.check_output(["git", "show", f"{ref_for(path)}:{path}"]))

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import "@solana/wallet-adapter-react-ui/styles.css";
 import "./holder.css";
+import { Frame } from "./frame";
 
 export const metadata: Metadata = {
-  title: "Unlisted app (devnet)",
-  description: "Hold, deposit into and redeem the Unlisted basket on Solana devnet. Paused legs become claims; nothing here is mainnet.",
+  title: { default: "Unlisted app (devnet)", template: "%s · Unlisted app (devnet)" },
+  description: "Hold, buy into and redeem the Unlisted basket on Solana devnet. Paused companies become claims; nothing here is mainnet.",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <Frame>{children}</Frame>;
 }

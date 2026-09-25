@@ -119,3 +119,76 @@
 }
 .holder .details [role="tabpanel"] { margin-top: 10px; }
 .holder .details [role="tabpanel"] > section, .holder .details [role="tabpanel"] .page > section { border-color: var(--line); background: var(--ground); }
+
+/* Routes (2026-09-25): one job per route; the Overview is the demo stage. */
+.holder main header.pagehead { display: block; margin-bottom: 4px; }
+.holder .pagehead h1 { margin-bottom: 4px; }
+.holder .page { gap: 20px; }
+.holder .deeper { margin: 12px 0 0; font-size: 12.5px; }
+.holder .deeper a { color: var(--paid); text-decoration: underline; text-underline-offset: 2px; }
+.holder main select {
+  font: inherit; color: var(--ink); background: var(--ground); border: 1px solid var(--line); border-radius: 4px; padding: 5px 8px;
+}
+.holder main button.secondary { background: transparent; color: var(--ink); border-color: var(--line); }
+.holder main button.danger { background: var(--issuer); border-color: var(--issuer); color: #fff; }
+
+/* The position, one line */
+.holder .position-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.holder .position-line .big-line { margin: 0; }
+.holder .claimlink { color: var(--claim); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Seven tiles: state as a word, the issuer's red only on the company it touched */
+/* Seven across when the column is wide enough; otherwise one compact row per company. Never an orphan. */
+.holder .tiles-wrap { padding: 0; border: 0; background: transparent; container-type: inline-size; }
+.holder .tiles { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr); }
+.holder .tile {
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 6px 12px; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface); min-width: 0;
+}
+.holder .tile-head { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.holder .tile .tile-body { align-items: flex-end; text-align: right; }
+@container (min-width: 940px) {
+  .holder .tiles { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+  .holder .tile { flex-direction: column; align-items: stretch; justify-content: space-between; gap: 10px; min-height: 108px; padding: 12px; }
+  .holder .tile .tile-body { align-items: flex-start; text-align: left; }
+}
+.holder .tile-head b { font-family: var(--display); font-size: 15px; font-weight: 600; }
+.holder .tile-state { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--paid); }
+.holder .tile.down { border-color: var(--issuer); background: var(--issuer-soft); }
+.holder .tile.down .tile-state { color: var(--issuer); }
+.holder .tile.has-claim { border-color: var(--claim); }
+.holder .tile-body { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+.holder .tile-body button { padding: 3px 10px; font-size: 12px; }
+.holder .claimword { color: var(--claim); font-weight: 600; }
+
+/* The two actions, side by side on wide screens */
+.holder .acts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 900px) { .holder .acts { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+/* The fixture issuer's control: set apart, in the issuer's colour */
+.holder .issuer-ctl { border-style: dashed; border-color: var(--issuer); background: transparent; }
+.holder .issuer-ctl h2 .pill { font-family: var(--mono); font-weight: 400; }
+.holder .issuer-ctl .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.holder .issuer-ctl .row label { margin: 0; }
+.holder .issuer-ctl input { width: 9rem; }
+
+/* The wallet adapter's modal (rendered outside .holder), in the app's tokens */
+.unlisted-wallet-modal.wallet-adapter-modal { font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif; }
+.unlisted-wallet-modal .wallet-adapter-modal-wrapper {
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.25); max-width: 380px; padding: 8px 0 12px;
+}
+.unlisted-wallet-modal .wallet-adapter-modal-title { color: var(--ink); font-size: 17px; font-weight: 600; line-height: 1.4; padding: 44px 24px 16px; }
+.unlisted-wallet-modal .wallet-adapter-modal-button-close { background: var(--ground); top: 14px; right: 14px; }
+.unlisted-wallet-modal .wallet-adapter-modal-button-close svg { fill: var(--ink-muted); }
+.unlisted-wallet-modal .wallet-adapter-modal-list { margin: 0 12px; }
+.unlisted-wallet-modal .wallet-adapter-modal-list .wallet-adapter-button {
+  color: var(--ink); background: transparent; font-family: inherit; font-size: 14px; font-weight: 500; border-radius: 6px; height: 48px; padding: 0 12px;
+}
+.unlisted-wallet-modal .wallet-adapter-modal-list .wallet-adapter-button:not([disabled]):hover { background: var(--ground); }
+.unlisted-wallet-modal .wallet-adapter-modal-list .wallet-adapter-button span { color: var(--ink-muted); font-size: 12px; opacity: 1; }
+.unlisted-wallet-modal .wallet-adapter-modal-list-more { color: var(--ink-muted); font-family: inherit; font-size: 13px; }
+.unlisted-wallet-modal .wallet-adapter-modal-list-more svg { fill: var(--ink-muted); }
+.unlisted-wallet-modal .wallet-adapter-modal-middle-button { background: var(--primary); color: var(--primary-foreground); font-family: inherit; border-radius: 6px; }
+.unlisted-wallet-modal .wallet-adapter-modal-overlay { background: rgb(0 0 0 / 0.45); }
+@media (prefers-reduced-motion: reduce) { .unlisted-wallet-modal, .unlisted-wallet-modal * { transition: none !important; } }

@@ -109,3 +109,50 @@ Every figure and signature survives the move. The evidence spec proves it: all 3
 - app `wide` and `motion` targeted `#legs`, which no longer exists.
 
 **Not re-run after the restructure:** app `hide` (the three-values panel hidden). The run hung, and it was stopped rather than waited on. Before the restructure it failed at the intended assertion. It has since been changed to fail fast (20 s), and needs one run.
+
+# App stage (2026-09-25): wallet adapter, flush sidebar, six routes, the demo on the Overview
+
+`e2e/app.spec.ts` was rewritten for the routes. Each broken version below was run first, against a production build, and failed at the assertion named.
+
+| Broken version | Mutation | Failed at |
+|---|---|---|
+| `merged` | another route's content (`legs-table`) injected into every route | `legs-table on /app: Expected 0, Received 1` |
+| `centred` | the frame re-centred in a 1440px column | `sidebar left edge at 1920px: Expected 0, Received 240` |
+| `uneven` | one sidebar item given 14px extra margin | `sidebar item spacing at 1024px: 37.5, 37.5, 51.5, 37.5, 37.5` |
+| `nowallet` | no wallet injected into the browser | `the injected wallet is listed: element(s) not found` |
+| `unstyled` | the modal panel forced to another colour | `modal panel colour: Expected "rgb(16, 21, 20)", Received "rgb(44, 45, 48)"` |
+| `twobuttons` | a second connect button in the header | `connect buttons in the header: Expected 1, Received 2` |
+| `wide` | a 2000px element in the Overview tiles | `/app scrolls sideways: scrollWidth 2284 > clientWidth 1440` |
+| `hide` | the Overview's company tiles hidden | `getByTestId('tiles')`: Expected visible, Received hidden (30.6 s) |
+| `motion` | an animation on the tiles | `animations running on /app: Expected 0, Received 1` |
+| `404` | the landing "Open app" link pointed at `/apps` | `GET /apps: Expected 200, Received 404` |
+| `allvalues` | the Basket value expander opened | `last trade folded by default: Expected hidden, Received visible` |
+| `costfirst` | the cost box moved above the Buy action | `Expected "button, then cost", Received "cost, then button"` |
+| `nopaging` | 11 entries injected into the History issuer list | `entries shown before 'Show more': Expected <= 10, Received 21` |
+| `orphan` | the tiles put back on an auto-fill grid (FigureAI was left alone on a second row at 1280px in a live run) | `tile rows at 390px: 4`, not 1 or 7 |
+
+- **Retired:** `expanded`. The Details tabs it opened no longer exist; their contents are now routes, which the `merged` check covers.
+- **The old `hide`** (value panel hidden on the previous one-page app) was run once more against the live site, where that layout still ran. It hung again: no result within 280 s, with the test never reporting. That layout is now gone. The new `hide` fails in 30.6 s.
+- **One test fault found:** the sidebar check first measured the loading frame's sidebar while the real frame replaced it (`boundingBox` null). It now waits for the real frame, marked by the Connect button. `centred` and `uneven` were re-run against the fixed check and still fail, and the real check then passed three runs in a row.
+
+**Server routes** (`scripts/mutant.mjs`, reverted byte-identical):
+- **Passcode gate.** Mutant: `passcodeOk` returns true when no passcode is configured. Killed: `passcode "wrong": Expected 403, Received 503`.
+- **A false kill, caught.** The first mutant tried (`return true;` as the first line) did not compile. The build failed before any test ran, and the tool reported the mutant as killed. The check command now runs the build separately and reports `BUILD FAILED` with its own exit code (99), so a broken build can never pass as a killed mutant.
+
+**The devnet flow on the Overview** (`e2e/holder/flow.spec.ts`). It runs the whole story at `/app`, through the app's own controls:
+- test tokens from the faucet;
+- buy in;
+- the passcode-gated issuer pauses ANTHROPIC;
+- redeem anyway;
+- resume;
+- settle on the tile.
+
+It then checks Claims, a USDC ticket on Buy, and the values and multipliers on Basket, with the wallet still connected.
+- **Real run:** passed first time, in 1.6 minutes. Every app prediction equalled the independent chain read:
+  - shares minted 179,073,207, as predicted;
+  - six legs paid exactly as the tiles said;
+  - claim units equal to the shares redeemed;
+  - settlement 8,522,834, equal to the tile's estimate.
+- **Broken version:** the tile reports the gross amount instead of what you receive. Killed at `paid now, exactly as the tile said`: expected 4,554,309, received 4,508,765 (the 1% issuer fee). The harness then resumed ANTHROPIC, and a later on-chain read showed `paused: false`.
+- **Real run:** 26 of 26 pass locally: app, landing, evidence, send, the API gate and the tile rows. On the live site, 25 of 25 passed before the tile-row check existed.
+- **Live devnet flow,** against https://unlisted-rosy.vercel.app with the Vercel-held fixture key and the Railway valuation API: **3 of 3 passed first time** (116 s, 176 s, 117 s).
