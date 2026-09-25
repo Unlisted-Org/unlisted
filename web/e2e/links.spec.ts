@@ -34,17 +34,22 @@ test(`all ${unique.length} evidence signatures resolve on the explorer, logged o
   const ctx = await browser.newContext(); // fresh: no cookies, no storage, no wallet
   const page = await ctx.newPage();
   const failures: string[] = [];
+  const check = async (url: string) => {
+    await page.goto(url, { waitUntil: "load" });
+    const outcome = await Promise.race([
+      page.getByText("Finalized", { exact: false }).first().waitFor({ timeout: 30_000 }).then(() => "finalized"),
+      page.getByText("Not Found", { exact: false }).first().waitFor({ timeout: 30_000 }).then(() => "not found"),
+    ]).catch(() => "timeout");
+    return outcome === "finalized" && (await page.locator("body").innerText()).includes("Success") ? "ok" : outcome;
+  };
   for (const s of unique) {
     const url = `https://explorer.solana.com/tx/${s.signature}${s.network === "devnet" ? "?cluster=devnet" : ""}`;
-    await page.goto(url, { waitUntil: "load" });
-    const ok = page.getByText("Finalized", { exact: false }).first();
-    const missing = page.getByText("Not Found", { exact: false }).first();
-    const outcome = await Promise.race([
-      ok.waitFor({ timeout: 30_000 }).then(() => "finalized"),
-      missing.waitFor({ timeout: 30_000 }).then(() => "not found"),
-    ]).catch(() => "timeout");
-    const body = await page.locator("body").innerText();
-    if (outcome !== "finalized" || !body.includes("Success")) failures.push(`${s.network} ${s.signature}: ${outcome}`);
+    // The explorer itself occasionally answers "Not Found" for a finalized transaction (seen 2026-09-25
+    // on 2FyJC4aN…, finalized per RPC, then found 3/3 on reload). One retry; a real miss fails both.
+    const first = await check(url);
+    const outcome = first === "ok" ? "ok" : await check(url);
+    if (outcome !== "ok") failures.push(`${s.network} ${s.signature}: ${first}, then ${outcome}`);
+    else if (first !== "ok") console.log(`explorer needed a retry for ${s.signature.slice(0, 8)}… (${first})`);
   }
   await ctx.close();
   expect(failures, failures.join("\n")).toEqual([]);

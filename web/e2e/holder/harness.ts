@@ -39,7 +39,8 @@ export function loadEnv(): E2eEnv {
     return { ...e, label: "local validator, not devnet", cluster: "localnet" };
   }
   const e = JSON.parse(readFileSync(join(HERE, "devnet/env.json"), "utf8"));
-  return { ...e, label: "devnet", cluster: "devnet" };
+  // E2E_RPC: a dedicated devnet RPC for the harness's own reads (C's scripts read DEVNET_RPC).
+  return { ...e, rpc: process.env.E2E_RPC ?? e.rpc, label: "devnet", cluster: "devnet" };
 }
 
 // One shared, polite connection per RPC URL: the public devnet RPC rate-limits new connections per IP.
@@ -79,7 +80,7 @@ export class RunRecord {
       cluster: this.env.cluster, label: this.env.label,
       verification: this.env.cluster === "devnet" ? "devnet" : "local, not devnet — built, not verified",
       mutation: process.env.E2E_MUTATION ?? null, // set when this run is a deliberate-bug check (expected to fail)
-      rpc: this.env.rpc, program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
+      rpc: this.env.rpc.replace(/([?&](?:api[-_]?key|token)=)[^&]+/i, "$1<redacted>"), program: this.env.programId, basket: this.env.basket, programs: (this.env as any).programs ?? null,
       wallet: { address: this.wallet, kind: "Unlisted Test Wallet: Wallet Standard test wallet generated fresh for this run (not Phantom)" },
       valuationApi: (this.env as any).valuationApi ?? null,
       steps: this.steps, screenshots: this.screenshots,

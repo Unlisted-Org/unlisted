@@ -13,8 +13,9 @@ export default defineConfig({
   timeout: 120_000,
   workers: 1,
   reporter: [["list"]],
-  use: { baseURL: `http://localhost:${PORT}` },
-  webServer: [
+  // E2E_BASE_URL runs the same checks against a deployed site (no local servers started).
+  use: { baseURL: process.env.E2E_BASE_URL ?? `http://localhost:${PORT}` },
+  webServer: process.env.E2E_BASE_URL ? undefined : [
     { command: `npx next start -p ${PORT}`, url: `http://localhost:${PORT}`, reuseExistingServer: false, timeout: 120_000 },
     {
       // Agent C's valuation API (spec 03) against the canonical devnet basket; the app's three values come from it.
