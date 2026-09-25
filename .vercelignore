@@ -17,3 +17,4 @@
 /evidence/symmetry-fork/out/
 **/*.png
 !web/public/**
+!web/app/*.png

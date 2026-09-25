@@ -178,3 +178,16 @@ Each check was seen failing on its broken version first:
 - **Mutants** were applied with `scripts/mutant.mjs` and reverted byte-identical. The check command builds separately, so a mutant that doesn't compile can't pass as killed.
 - **Copy:** the disclosures and footer carry PreStocks' reply of 2026-09-25 (no objection, which is not an endorsement; the vault is treated like any holder; no advance notice of changes). The same wording is on the app's Basket route.
 - **Real run:** 29 of 29 pass (landing, app, evidence, send).
+
+# The logo (2026-09-25)
+
+The new Unlisted logo (brand/, from the delivered SVG) is now in the site header and footer, the app header, the favicon, the app icon, the social image and the README banner.
+- **Broken versions, both failed at the intended assertion:**
+  - `oldlogo` (wordmark removed): `mark + 8 wordmark glyphs on /evidence: Expected 9, Received 1`;
+  - `oldicon` (the favicon without the mark): `favicon is the mark`.
+- **A real failure, caught on the live site.** The check found `/apple-icon.png: Expected 200, Received 404`: `.vercelignore` excluded every PNG outside `web/public/`, so the icon and the social image never reached Vercel. Fixed with `!web/app/*.png`. All four icon files now answer 200 live.
+- **Live run after the fix:** 26 of 27 passed. The failure was the wallet-modal test: navigating to Basket right after the deploy took more than its 5 s. Re-run 3 times, it passed 3 of 3. The navigation now has 15 s, since a cold deploy loads the route's code on first visit.
+
+**Failed runs no longer leave claims open.** The docs agent found that the first tile broken-version run had redeemed on chain before the check failed, which left an ANTHROPIC claim open on the canonical basket. That claim was settled to its owner (`4KxbW87E…TJPR8yS`), and it is now recorded in the run.
+- **The flow's failure path now settles its own open claims** (`settleOpenClaims`), after resuming any leg it paused.
+- **Proved by re-running the same broken version.** It was killed at the intended assertion. The harness then resumed ANTHROPIC and settled the claim (`4Co7QLeY…cKzv5`), and `settle-open-claims.spec.ts` found no open claim in any of the 18 saved test wallets.

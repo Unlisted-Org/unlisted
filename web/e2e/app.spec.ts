@@ -141,7 +141,7 @@ test("app: one Connect button opens a styled wallet modal listing the wallets th
   await expect(page.getByTestId("wallet-address")).toHaveAttribute("data-address", kp.publicKey.toBase58());
   // The wallet stays connected across routes (one provider around all of them).
   await page.getByTestId("nav-basket").click();
-  await expect(page).toHaveURL(/\/app\/basket$/);
+  await expect(page).toHaveURL(/\/app\/basket$/, { timeout: 15_000 }); // a cold deploy loads the route's code on first visit
   await expect(page.getByTestId("wallet-address")).toHaveAttribute("data-address", kp.publicKey.toBase58());
   await page.getByTestId("wallet-connected").click();
   await page.getByTestId("wallet-disconnect").click();
