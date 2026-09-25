@@ -1,0 +1,19 @@
+[toolchain]
+anchor_version = "0.32.1"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+basket = "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv"
+
+[programs.devnet]
+basket = "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/stocklana/program.json"
+
+[scripts]
+test = "npm --prefix tests/program test"

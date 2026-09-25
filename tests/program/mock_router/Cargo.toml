@@ -1,0 +1,17 @@
+[package]
+name = "mock_router"
+version = "0.1.0"
+edition = "2021"
+description = "Test-only router for LiteSVM: pulls amount_in from the taker, pays amount_out from its pool. Never deployed."
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+no-entrypoint = []
+
+[dependencies]
+solana-program = "2.3"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

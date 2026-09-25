@@ -1,0 +1,14 @@
+{
+ "cluster": "devnet",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "programData": "HhG93LQ79fa4anKsS17yzeJGuXYMwRtJCyqthxYUJ7Wf",
+ "upgradeAuthority": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+ "deploySignature": "3MGLsSPQtK7nU1pUvrQRRBvKXUuPsUMVSBKzYVZpunwDVhqTYhwiRtyucgjV82QtsZU5PoupQTyHPuAwBqEcpmUB",
+ "slot": 503653050,
+ "buffer": "27TxvpzpEWkSxfSmXouFmAreSTokfTn1toVEJcYm3Trz",
+ "dataLength": 374704,
+ "sha256": "80db3bace6b493dbc09513437db25455058447ba11fbb71ba47b90aa56817dcc",
+ "sha256Of": "solana program dump -ud of the deployed program = target/deploy/basket.so (no-idl default build)",
+ "programDataRentSol": 1.90437516,
+ "note": "A first `solana program deploy --use-rpc` attempt failed mid-write (RPC max retries); its buffer JBijk48Cpw7tPTQp8JRCLwScaSSzpZGDvZbFVo6sy6SR was closed and refunded, then write-buffer + deploy --buffer."
+}

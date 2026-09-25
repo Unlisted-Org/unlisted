@@ -1,0 +1,64 @@
+fork slot 450137772
+create basket lookup table: 2i42m4mUcUtU1KvX… slot 450137780 cu 10811 size 292B accounts 5 depth 2
+extend basket lookup table: 3JFFJUx11vieCmQY… slot 450137781 cu 13038 size 1060B accounts 5 depth 2
+create share mint: 5Vk4B4KGn1tggnii… slot 450137784 cu 3079 size 432B accounts 5 depth 1
+initialize_basket (7 real PreStocks mints, router = Jupiter v6): 5up2Pto51WjxUWxq… slot 450137785 cu 276174 size 573B accounts 25 depth 3
+create ATA PreweJ for DBJ6Fd: NcNJhqfJJu6jkDnD… slot 450137786 cu 19414 size 346B accounts 7 depth 2
+create ATA Pren1F for DBJ6Fd: 2LjKw6QagmcazLYe… slot 450137787 cu 19414 size 346B accounts 7 depth 2
+create ATA PrekqL for DBJ6Fd: 22HEo7hkb8aR8ARV… slot 450137788 cu 19414 size 346B accounts 7 depth 2
+create ATA PresTj for DBJ6Fd: 3y2ZMU9cUfW1EjAj… slot 450137789 cu 22414 size 346B accounts 7 depth 2
+create ATA Pre8AR for DBJ6Fd: 3W4NhxR7GFCkqcqi… slot 450137792 cu 20914 size 346B accounts 7 depth 2
+create ATA PreLWG for DBJ6Fd: 46aadL7vfsVmqgF1… slot 450137793 cu 19414 size 346B accounts 7 depth 2
+create ATA PreZad for DBJ6Fd: WyhpYgm6mb9Rp9Qc… slot 450137794 cu 19414 size 346B accounts 7 depth 2
+create share ATAs: 2qdiUwqfR3mhWu2V… slot 450137795 cu 41045 size 420B accounts 9 depth 2
+bootstrap (in kind, real mints, 1% fee measured): 48z6PW5sy41VwgqQ… slot 450137796 cu 93002 size 614B accounts 29 depth 2
+create ATA EPjFWd for 7hN1zF: JGxtpCs2mQtNJ4MT… slot 450137797 cu 20702 size 378B accounts 8 depth 2
+open_deposit_ticket: 54cH7e3wCy3hEor8… slot 450137798 cu 84469 size 511B accounts 26 depth 3
+setup accounts for leg 0: 4PURUFV7tKdafH5e… slot 450137800 cu 19566 size 446B accounts 9 depth 2
+create taker output account for leg 0: 2rGCYUwTPP9cEKw5… slot 450137803 cu 19515 size 474B accounts 9 depth 2
+setup accounts for leg 0: 4xB9KuSmeC8ZpWDS… slot 450137804 cu 9044 size 490B accounts 12 depth 1
+ticket_swap_leg OPENAI (alone, route Whirlpool → Meteora DLMM): 2arKa3fhfsra2gbW… slot 450137805 cu 186987 size 909B accounts 35 depth 4
+create taker output account for leg 1: QrRsyREr6zsC5s53… slot 450137810 cu 19515 size 474B accounts 9 depth 2
+setup accounts for leg 1: QURKU8dhZoEeEuwv… slot 450137814 cu 4606 size 415B accounts 9 depth 1
+ticket_swap_leg ANTHROPIC (alone, route Meteora DLMM): 4BmkCgHvFG7GkLr4… slot 450137815 cu 116043 size 659B accounts 24 depth 4
+setup accounts for leg 2: 2XuTMtn98Be3wrdm… slot 450137820 cu 19515 size 415B accounts 9 depth 2
+ticket_swap_leg NEURALINK (alone, route Meteora DLMM): FRffMvAwK6yyM3Dm… slot 450137821 cu 117730 size 630B accounts 25 depth 4
+setup accounts for leg 3: 5hR6NMGbDYkytRJU… slot 450137842 cu 19515 size 415B accounts 9 depth 2
+setup accounts for leg 4: 2PpLURGTzNvt7cHd… slot 450137843 cu 22515 size 415B accounts 9 depth 2
+setup accounts for leg 5: 5mPACHMPRU5vCdE9… slot 450137844 cu 23953 size 490B accounts 12 depth 2
+setup accounts for leg 6: 5jLmKeMZvUSf94Ga… slot 450137845 cu 24015 size 415B accounts 9 depth 2
+ticket_swap_leg ×2 packed (ANDURIL, POLYMARKET): 4YRuTj9PK2HGaSaz… slot 450137846 cu 237720 size 877B accounts 34 depth 4
+ticket_swap_leg ×2 packed (KALSHI, FIGUREAI): 4VWEzxnJUTm3tW26… slot 450137847 cu 298604 size 1056B accounts 45 depth 4
+packing: ["open+OPENAI+ANTHROPIC 57acc 1228B","NEURALINK+ANDURIL+POLYMARKET 44acc 1065B","KALSHI+FIGUREAI 45acc 1056B","finalize 34acc 790B"]
+finalize_deposit (closes ticket-owned intermediates): 22T1jkuhhzWdVnFZ… slot 450137848 cu 95920 size 790B accounts 34 depth 2
+full deposit (attempt 1) tx 1/4: open + OPENAI: 3Rvh4E95AffNnw5M… slot 450137881 cu 306057 size 1064B accounts 50 depth 4
+full deposit (attempt 1) tx 2/4: ANTHROPIC + NEURALINK + ANDURIL: aWuNNDmcNBgFjwTD… slot 450137882 cu 422574 size 1159B accounts 46 depth 4
+full deposit (attempt 1) tx 3/4: POLYMARKET + KALSHI: 3px2wg8yfQpXxDFn… slot 450137883 cu 361224 size 1124B accounts 45 depth 4
+full deposit (attempt 1) tx 4/4: FIGUREAI + finalize: aPE9QgcdLo11W3Pj… slot 450137884 cu 242690 size 1015B accounts 48 depth 4
+full deposit: ["open+OPENAI 50acc 1064B 306057cu","ANTHROPIC+NEURALINK+ANDURIL 46acc 1159B 422574cu","POLYMARKET+KALSHI 45acc 1124B 361224cu","FIGUREAI+finalize 48acc 1015B 242690cu"]
+redeem (Usdc mode: 7 PendingSale claims): 4MkhpoHKaDv6MJtV… slot 450137886 cu 56021 size 488B accounts 25 depth 2
+setup basket-owned route accounts for settle leg 0: 27CdiGCiAo4eBMZB… slot 450137887 cu 9087 size 353B accounts 9 depth 1
+settle_leg_usdc OPENAI (route Meteora DLMM): 4tkFcornaBoZPUNd… slot 450137888 cu 137343 size 653B accounts 25 depth 4
+setup basket-owned route accounts for settle leg 1: 2K8XsM7V4iRcHVtP… slot 450137892 cu 9087 size 353B accounts 9 depth 1
+settle_leg_usdc ANTHROPIC (route Raydium CLMM): 5sPTeZjqQ4DQcGPB… slot 450137893 cu 152323 size 588B accounts 27 depth 4
+setup basket-owned route accounts for settle leg 2: kzg3jctgEeQRPgkD… slot 450137897 cu 28503 size 427B accounts 11 depth 2
+setup basket-owned route accounts for settle leg 2: 35C78p1pnmtgvnPT… slot 450137903 cu 13525 size 427B accounts 11 depth 1
+settle_leg_usdc NEURALINK (route Meteora DLMM → Orca V2): 4ve4s9XNbbhVNcDj… slot 450137905 cu 217367 size 679B accounts 33 depth 4
+setup basket-owned route accounts for settle leg 3: 523rt5V6DcuQ1e81… slot 450137909 cu 9087 size 353B accounts 9 depth 1
+settle_leg_usdc ANDURIL (route Meteora DLMM): 5bQK1peQzc6PgDEB… slot 450137910 cu 137704 size 623B accounts 26 depth 4
+setup basket-owned route accounts for settle leg 4: 2GmoYiMzT2Hntidx… slot 450137914 cu 9087 size 353B accounts 9 depth 1
+settle_leg_usdc POLYMARKET (route Meteora DLMM): 4dsBQPCeWtDWwsU9… slot 450137915 cu 134551 size 589B accounts 24 depth 4
+setup basket-owned route accounts for settle leg 5: 2cjuLS3P7gpttCyV… slot 450137919 cu 9087 size 353B accounts 9 depth 1
+settle_leg_usdc KALSHI (route Meteora DLMM): c3hjtYnWjJ8ezXq2… slot 450137920 cu 134653 size 620B accounts 24 depth 4
+setup basket-owned route accounts for settle leg 6: 346FookF4zscoftH… slot 450137924 cu 9087 size 353B accounts 9 depth 1
+settle_leg_usdc FIGUREAI (route Meteora DLMM): 2Z9bwpkbEzQEoPzp… slot 450137925 cu 136744 size 591B accounts 25 depth 4
+flag_listing ANDURIL (≥ 7 d notice): 5Lna7LP14KkatdL7… slot 450137926 cu 16575 size 270B accounts 4 depth 1
+convert_listed_leg ANDURIL chunk → USDC reserve (route Meteora DLMM): 2e6QDukeNDteq6xR… slot 451440000 cu 131305 size 469B accounts 22 depth 4
+convert_listed_leg ANDURIL remainder → reserve (route Meteora DLMM): RRhVF1zrpK65wiCZ… slot 451440005 cu 131867 size 469B accounts 22 depth 4
+reinvest_reserve → OPENAI (slice 2592083, route Saros → Meteora DLMM): MJgFgT6kFpggdB3c… slot 451440011 cu 206438 size 622B accounts 31 depth 4
+reinvest_reserve → ANTHROPIC (slice 2592083, route Meteora DLMM): 3eS5Hnr64LwxKxAc… slot 451440015 cu 122602 size 468B accounts 21 depth 4
+reinvest_reserve → NEURALINK (slice 2592084, route Meteora DLMM): 3uHi8LzDXXPn2K9z… slot 451440020 cu 124385 size 439B accounts 22 depth 4
+reinvest_reserve → POLYMARKET (slice 2592084, route Meteora DLMM): 3dyhvgDhfFFFh52p… slot 451440026 cu 122380 size 437B accounts 21 depth 4
+reinvest_reserve → KALSHI (slice 2592084, route Saros → Meteora DLMM): 3yrYCAzptNmR1ZsC… slot 451440031 cu 201711 size 588B accounts 30 depth 4
+reinvest_reserve → FIGUREAI (slice 2592084, route Raydium CLMM): 3YkMzZyokUfPNwmD… slot 451440036 cu 126497 size 430B accounts 21 depth 4
+done; transcript transcript-final7.json

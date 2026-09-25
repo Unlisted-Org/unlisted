@@ -1,0 +1,19 @@
+{
+  "name": "basket-program-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "vectors": "python3 vectors/gen_vectors.py",
+    "test": "node --import tsx --test --test-concurrency=6 'src/**/*.test.ts'",
+    "test:model": "node --import tsx --test --test-concurrency=6 'src/model/*.test.ts'"
+  },
+  "devDependencies": {
+    "@coral-xyz/anchor": "^0.32.1",
+    "@solana/spl-token": "^0.4.15",
+    "@solana/web3.js": "^1.99.0",
+    "@types/node": "^26.6.2",
+    "litesvm": "^1.4.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

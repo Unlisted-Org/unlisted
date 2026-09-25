@@ -1,0 +1,107 @@
+{
+ "IpoRule.test_conversion_preserves_every_holders_fraction": {
+  "model_passed": true,
+  "ops": 600,
+  "scenarios": 100
+ },
+ "IpoRule.test_conversion_waits_for_open_claims": {
+  "model_passed": true,
+  "ops": 10,
+  "scenarios": 1
+ },
+ "IpoRule.test_redeem_during_conversion_gets_pro_rata_usdc": {
+  "model_passed": true,
+  "ops": 4,
+  "scenarios": 1
+ },
+ "IpoRule.test_redeem_during_conversion_gets_pro_rata_usdc__initial_shares_1e9": {
+  "model_passed": true,
+  "ops": 4,
+  "scenarios": 1
+ },
+ "PartialRedemption.test_available_legs_pay_immediately_and_claim_pays_after_resume": {
+  "model_passed": true,
+  "ops": 2600,
+  "scenarios": 400
+ },
+ "PartialRedemption.test_claim_shares_a_later_seizure_pro_rata": {
+  "model_passed": true,
+  "ops": 7,
+  "scenarios": 1
+ },
+ "PartialRedemption.test_claim_shares_a_later_seizure_pro_rata__initial_shares_1e9": {
+  "model_passed": true,
+  "ops": 7,
+  "scenarios": 1
+ },
+ "PartialRedemption.test_multiple_paused_legs_and_deposit_refused": {
+  "model_passed": true,
+  "ops": 8,
+  "scenarios": 1
+ },
+ "PartialRedemption.test_other_holders_unaffected_while_claim_open": {
+  "model_passed": true,
+  "ops": 2000,
+  "scenarios": 400
+ },
+ "PartialRedemption.test_usdc_mode_claims_settle_to_the_in_kind_amounts": {
+  "model_passed": true,
+  "ops": 3400,
+  "scenarios": 400
+ },
+ "RoundingFavoursVault.test_entitlements_never_exceed_balance": {
+  "model_passed": true,
+  "ops": 25464,
+  "scenarios": 300
+ },
+ "RoundingFavoursVault.test_mint_never_dilutes_existing_holders": {
+  "model_passed": true,
+  "ops": 1500,
+  "scenarios": 300
+ },
+ "RoundingFavoursVault.test_redeem_never_dilutes_remaining_holders": {
+  "model_passed": true,
+  "ops": 1500,
+  "scenarios": 300
+ },
+ "RoundingFavoursVault.test_redeem_pays_floor": {
+  "model_passed": true,
+  "ops": 2,
+  "scenarios": 1
+ },
+ "RoundingFavoursVault.test_redeem_pays_floor__initial_shares_1e9": {
+  "model_passed": true,
+  "ops": 2,
+  "scenarios": 1
+ },
+ "Shortfall.test_later_depositors_do_not_make_holders_whole": {
+  "model_passed": true,
+  "ops": 1400,
+  "scenarios": 200
+ },
+ "Shortfall.test_open_ticket_bears_shortfall_pro_rata": {
+  "model_passed": true,
+  "ops": 11,
+  "scenarios": 1
+ },
+ "Shortfall.test_open_ticket_bears_shortfall_pro_rata__initial_shares_1e9": {
+  "model_passed": true,
+  "ops": 11,
+  "scenarios": 1
+ },
+ "Shortfall.test_seizure_is_shared_pro_rata_and_observed": {
+  "model_passed": true,
+  "ops": 1200,
+  "scenarios": 200
+ },
+ "TransferFee.test_fee_change_mid_position_needs_no_stored_fee": {
+  "model_passed": true,
+  "ops": 10,
+  "scenarios": 1
+ },
+ "TransferFee.test_mint_credits_measured_net_not_gross": {
+  "model_passed": true,
+  "ops": 2,
+  "scenarios": 1
+ }
+}

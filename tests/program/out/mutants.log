@@ -1,0 +1,58 @@
+mutated redeem-rounds-up
+  [redeem-rounds-up] ✖ RoundingFavoursVault.test_entitlements_never_exceed_balance (2032.20675ms)
+  [redeem-rounds-up] ✔ RoundingFavoursVault.test_mint_never_dilutes_existing_holders (74095.134917ms)
+  [redeem-rounds-up] ✖ RoundingFavoursVault.test_redeem_never_dilutes_remaining_holders (232.255208ms)
+  [redeem-rounds-up] ✖ RoundingFavoursVault.test_redeem_pays_floor (INITIAL_SHARES variant) (128.113542ms)
+  [redeem-rounds-up] ℹ pass 1
+  [redeem-rounds-up] ℹ fail 3
+  [redeem-rounds-up] ✖ failing tests:
+  [redeem-rounds-up] ✖ RoundingFavoursVault.test_entitlements_never_exceed_balance (2032.20675ms)
+  [redeem-rounds-up]   Error: [RoundingFavoursVault.test_entitlements_never_exceed_balance#0:pause] op "redeem_in_kind" {"owner":"h1","shares":"142958962"}: leg 0 paid: model 59623413327 chain 59623413328
+  [redeem-rounds-up] ✖ RoundingFavoursVault.test_redeem_never_dilutes_remaining_holders (232.255208ms)
+  [redeem-rounds-up]   Error: [RoundingFavoursVault.test_redeem_never_dilutes_remaining_holders#0:pause] op "redeem_in_kind" {"owner":"h2","shares":"50438893"}: leg 0 paid: model 2692601920 chain 2692601921
+  [redeem-rounds-up] ✖ RoundingFavoursVault.test_redeem_pays_floor (INITIAL_SHARES variant) (128.113542ms)
+  [redeem-rounds-up]   Error: [RoundingFavoursVault.test_redeem_pays_floor__initial_shares_1e9#0:pause] op "redeem_in_kind" {"owner":"seed","shares":"1"}: leg 0 paid: model 3 chain 4
+mutated ticket-escapes-shortfall
+  [ticket-escapes-shortfall] ✔ Shortfall.test_seizure_is_shared_pro_rata_and_observed (35602.107167ms)
+  [ticket-escapes-shortfall] ✔ Shortfall.test_later_depositors_do_not_make_holders_whole (41819.705208ms)
+  [ticket-escapes-shortfall] ✖ Shortfall.test_open_ticket_bears_shortfall_pro_rata (INITIAL_SHARES variant) (168.448584ms)
+  [ticket-escapes-shortfall] ℹ pass 2
+  [ticket-escapes-shortfall] ℹ fail 1
+  [ticket-escapes-shortfall] ✖ failing tests:
+  [ticket-escapes-shortfall] ✖ Shortfall.test_open_ticket_bears_shortfall_pro_rata (INITIAL_SHARES variant) (168.448584ms)
+  [ticket-escapes-shortfall]   Error: [Shortfall.test_open_ticket_bears_shortfall_pro_rata__initial_shares_1e9#0:pause] op "finalize_ticket" {"ticket":"t0","min_shares":"0"}: program failed: LegEmpty
+mutated pay-paused-leg
+  [pay-paused-leg] ✖ PartialRedemption.test_available_legs_pay_immediately_and_claim_pays_after_resume (355.020792ms)
+  [pay-paused-leg] ✖ PartialRedemption.test_other_holders_unaffected_while_claim_open (291.162084ms)
+  [pay-paused-leg] ✖ PartialRedemption.test_claim_shares_a_later_seizure_pro_rata (INITIAL_SHARES variant) (210.663875ms)
+  [pay-paused-leg] ✔ PartialRedemption.test_usdc_mode_claims_settle_to_the_in_kind_amounts (81529.720375ms)
+  [pay-paused-leg] ✖ PartialRedemption.test_multiple_paused_legs_and_deposit_refused (257.641667ms)
+  [pay-paused-leg] ✖ one leg paused mid-redemption: six legs paid now, the paused leg becomes a claim, settles after resume (256.028625ms)
+  [pay-paused-leg] ✖ several legs unavailable at once (pause, hook, frozen vault): each becomes its own claim with its reason (258.910792ms)
+  [pay-paused-leg] ✖ every leg paused: redemption still succeeds, burns the shares and turns every leg into a claim (245.8105ms)
+  [pay-paused-leg] ✖ seizure while a claim is open: the claimant and the holders lose the same fraction; observe emits it (203.43675ms)
+  [pay-paused-leg] ✔ USDC mode with a paused leg: PendingSale claims sell through the router at the measured amount; paused leg waits (217.996959ms)
+  [pay-paused-leg] ✖ frozen vault and hook each behave like a pause: refusal to deposit, claim on redeem, settle after (230.797167ms)
+  [pay-paused-leg] ℹ pass 2
+  [pay-paused-leg] ℹ fail 9
+  [pay-paused-leg] ✖ failing tests:
+  [pay-paused-leg] ✖ PartialRedemption.test_available_legs_pay_immediately_and_claim_pays_after_resume (355.020792ms)
+  [pay-paused-leg]   Error: [PartialRedemption.test_available_legs_pay_immediately_and_claim_pays_after_resume#0:pause] op "redeem_in_kind" {"owner":"h0","shares":"196474326"}: program failed: custom:67
+  [pay-paused-leg] ✖ PartialRedemption.test_other_holders_unaffected_while_claim_open (291.162084ms)
+  [pay-paused-leg]   Error: [PartialRedemption.test_other_holders_unaffected_while_claim_open#0:pause] op "redeem_in_kind" {"owner":"h0","shares":"425701255"}: program failed: custom:67
+  [pay-paused-leg] ✖ PartialRedemption.test_claim_shares_a_later_seizure_pro_rata (INITIAL_SHARES variant) (210.663875ms)
+  [pay-paused-leg]   Error: [PartialRedemption.test_claim_shares_a_later_seizure_pro_rata__initial_shares_1e9#0:pause] op "redeem_in_kind" {"owner":"u","shares":"1000000000"}: program failed: custom:67
+mutated no-loss-index
+  [no-loss-index] ✖ Shortfall.test_seizure_is_shared_pro_rata_and_observed (368.276208ms)
+  [no-loss-index] ✖ Shortfall.test_later_depositors_do_not_make_holders_whole (317.09ms)
+  [no-loss-index] ✖ Shortfall.test_open_ticket_bears_shortfall_pro_rata (INITIAL_SHARES variant) (193.187ms)
+  [no-loss-index] ℹ pass 0
+  [no-loss-index] ℹ fail 3
+  [no-loss-index] ✖ failing tests:
+  [no-loss-index] ✖ Shortfall.test_seizure_is_shared_pro_rata_and_observed (368.276208ms)
+  [no-loss-index]   Error: [Shortfall.test_seizure_is_shared_pro_rata_and_observed#0:pause] op "observe" {"legs":[5]}: state differs:
+  [no-loss-index] ✖ Shortfall.test_later_depositors_do_not_make_holders_whole (317.09ms)
+  [no-loss-index]   Error: [Shortfall.test_later_depositors_do_not_make_holders_whole#0:pause] op "observe" {"legs":[0]}: state differs:
+  [no-loss-index] ✖ Shortfall.test_open_ticket_bears_shortfall_pro_rata (INITIAL_SHARES variant) (193.187ms)
+  [no-loss-index]   Error: [Shortfall.test_open_ticket_bears_shortfall_pro_rata__initial_shares_1e9#0:pause] op "finalize_ticket" {"ticket":"t0","min_shares":"0"}: program failed: LegEmpty
+80db3bace6b493dbc09513437db25455058447ba11fbb71ba47b90aa56817dcc  /Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/target/deploy/basket.so

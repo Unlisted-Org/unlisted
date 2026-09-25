@@ -1,0 +1,288 @@
+{
+ "scenario": "refund-path",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "basket": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+ "router": "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF",
+ "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+ "startedAt": "2026-09-24T22:50:22.708Z",
+ "steps": [
+  {
+   "label": "open_deposit_ticket (3 × $1 fixture USDC)",
+   "signature": "5mnBkpCnWG9setDTFDeiSwcQH5wdQ1EfSR1THYDogpyZRNS5tvwaZ6YXxBFByPAUUadew7CmXEc3QicnUsm2avbo",
+   "slot": 503692057,
+   "fee": 5000,
+   "cu": 64645,
+   "cpiDepth": 3,
+   "events": []
+  },
+  {
+   "label": "create a ticket-owned intermediate (Token-2022 OPENAI account, as a Jupiter route's taker output)",
+   "signature": "4mzCAFNiNma7zG8KrPW99pn5pcDHESRtJkdajk2JeYekpXSGonKKypLeAGLWPo1wxZq2NJRWVXX2VTur1cjqrCNG",
+   "slot": 503692072,
+   "fee": 5000,
+   "cu": 21149,
+   "cpiDepth": 2,
+   "events": []
+  },
+  {
+   "label": "ticket_swap_leg ×3 through fixture_amm (OPENAI, ANTHROPIC, NEURALINK)",
+   "signature": "4iLFvrrGcWHKwQkB57YcrrpzL59WVoMdwTfcFp5eMFC7XFpkYb8B6mkAwJoSJPyYNZ2ce2yEoBQRZ93MgfZ48p67",
+   "slot": 503692086,
+   "fee": 5000,
+   "cu": 123648,
+   "cpiDepth": 3,
+   "events": []
+  },
+  {
+   "label": "BROKEN (a): abort_deposit before unwinding the landed legs",
+   "simulated": true,
+   "simulatedAtSlot": 503692102,
+   "err": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6022
+     }
+    ]
+   },
+   "errorCode": "LegsStillLanded",
+   "logs": [
+    "Program log: Instruction: AbortDeposit",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:483. Error Code: LegsStillLanded. Error Number: 6022. Error Message: Deposit ticket still holds landed legs; unwind them first.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1786"
+   ],
+   "postState": [
+    {
+     "account": "2dJhsRo3CmizxTzWeWxqDEVvrhf3cBdAzrdAzPNGagR2",
+     "exists": false,
+     "lamports": 0
+    },
+    {
+     "account": "6DodPhQ4N63LSr5U4SHZCTFAaKoaCsZWnLw1QqkCiz3T",
+     "exists": false,
+     "lamports": 0
+    },
+    {
+     "account": "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC",
+     "exists": false,
+     "lamports": 0
+    }
+   ]
+  },
+  {
+   "label": "unwind_leg OPENAI: sell 505046 raw back to USDC into the escrow (basket-signed, fixture_amm)",
+   "signature": "v5LVkVhAxy6ppSUGVE5sne6beNYwbNXhz8CuWCK3N69m7MSp6McAiwALNsWYHjWgiSf6ZnFRQSkcyraVAs3KpqQ",
+   "slot": 503692122,
+   "fee": 5000,
+   "cu": 44916,
+   "cpiDepth": 3,
+   "events": []
+  },
+  {
+   "label": "unwind_leg ANTHROPIC: sell 956154 raw back to USDC into the escrow (basket-signed, fixture_amm)",
+   "signature": "3kAEUJdC1ZwBsn7KZaMnzpzssHz7ELhkuTFK3MkH9pZAhDU5VMapHXmjZesqdn2mk4ggrb1jfbPikkiR1CRFLjCJ",
+   "slot": 503692144,
+   "fee": 5000,
+   "cu": 44916,
+   "cpiDepth": 3,
+   "events": []
+  },
+  {
+   "label": "unwind_leg NEURALINK: sell 2338532 raw back to USDC into the escrow (basket-signed, fixture_amm)",
+   "signature": "q6gTQRRgXTWktvpaMM1Q7qGx7rMDVRZdmZhHF7BnWhywkRXZ7XPWdAEW5USBBZCYYLs6RfmghaHt5wjgCPDRiff",
+   "slot": 503692176,
+   "fee": 5000,
+   "cu": 44916,
+   "cpiDepth": 3,
+   "events": []
+  },
+  {
+   "label": "BROKEN (b): abort_deposit that skips the ticket-owned intermediate",
+   "simulated": true,
+   "simulatedAtSlot": 503692208,
+   "err": null,
+   "logs": [
+    "Program log: Instruction: AbortDeposit"
+   ],
+   "postState": [
+    {
+     "account": "2dJhsRo3CmizxTzWeWxqDEVvrhf3cBdAzrdAzPNGagR2",
+     "exists": false,
+     "lamports": 0
+    },
+    {
+     "account": "6DodPhQ4N63LSr5U4SHZCTFAaKoaCsZWnLw1QqkCiz3T",
+     "exists": false,
+     "lamports": 0
+    },
+    {
+     "account": "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC",
+     "exists": true,
+     "lamports": 1620520
+    }
+   ]
+  },
+  {
+   "label": "abort_deposit (escrow → owner, closes escrow, intermediate and ticket; rent → owner)",
+   "signature": "4mnuhQABT6zLdBDiZ7NbsbUP51fThBtR8br967Qbo9k39HzLye7WtB7n1MrdY7yxW51fnxCvrsZBsk4cZxQhmKgc",
+   "slot": 503692226,
+   "fee": 5000,
+   "cu": 24280,
+   "cpiDepth": 2,
+   "events": []
+  }
+ ],
+ "checks": [
+  {
+   "what": "all 3 legs landed (landed_mask 7)",
+   "ok": true
+  },
+  {
+   "what": "broken (a) refused by the program with LegsStillLanded",
+   "ok": true,
+   "got": "LegsStillLanded"
+  },
+  {
+   "what": "OPENAI: vault gave back exactly the ticket's 505046 raw; escrow +975201 = pool output 975201",
+   "ok": true
+  },
+  {
+   "what": "ANTHROPIC: vault gave back exactly the ticket's 956154 raw; escrow +975202 = pool output 975202",
+   "ok": true
+  },
+  {
+   "what": "NEURALINK: vault gave back exactly the ticket's 2338532 raw; escrow +975205 = pool output 975205",
+   "ok": true
+  },
+  {
+   "what": "each unwound vault is back at its balance before the ticket",
+   "ok": true,
+   "before": [
+    "54053422",
+    "102312394",
+    "250284244"
+   ],
+   "after": [
+    "54053422",
+    "102312394",
+    "250284244"
+   ]
+  },
+  {
+   "what": "basket pending_norm and accounted restored for the unwound legs",
+   "ok": true
+  },
+  {
+   "what": "ticket landed_mask is 0 after the unwinds",
+   "ok": true
+  },
+  {
+   "what": "escrow at abort 2925608 = after swaps 0 + unwind proceeds 2925608",
+   "ok": true
+  },
+  {
+   "what": "broken (b) caught: the program would accept it (simulation ok), but the check finds 1 ticket-owned account not closed (1620520 lamports of the owner's rent stranded)",
+   "ok": true,
+   "missing": [
+    "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC"
+   ]
+  },
+  {
+   "what": "the real abort closes every ticket-owned account",
+   "ok": true,
+   "owned": [
+    "6DodPhQ4N63LSr5U4SHZCTFAaKoaCsZWnLw1QqkCiz3T",
+    "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC"
+   ]
+  },
+  {
+   "what": "nothing left behind: ticket, escrow and intermediate closed; no token account owned by the ticket",
+   "ok": true
+  },
+  {
+   "what": "owner received the escrow: +2925608 = 2925608",
+   "ok": true
+  },
+  {
+   "what": "owner USDC: before 9993000000 − usdc_in 3000000 + unspent 0 + unwind proceeds 2925608 = 9992925608",
+   "ok": true
+  },
+  {
+   "what": "owner SOL: before 2733052920 − fees 35000 = after 2733017920 (every rent lamport returned)",
+   "ok": true
+  }
+ ],
+ "ticket": "2dJhsRo3CmizxTzWeWxqDEVvrhf3cBdAzrdAzPNGagR2",
+ "nonce": 100,
+ "escrow": "6DodPhQ4N63LSr5U4SHZCTFAaKoaCsZWnLw1QqkCiz3T",
+ "intermediate": "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC",
+ "legs": [
+  "OPENAI",
+  "ANTHROPIC",
+  "NEURALINK"
+ ],
+ "usdcIn": "3000000",
+ "before": {
+  "ownerLamports": "2733052920",
+  "ownerUsdc": "9993000000",
+  "vaults": [
+   "54053422",
+   "102312394",
+   "250284244"
+  ]
+ },
+ "escrowAfterSwaps": "0",
+ "unwinds": [
+  {
+   "leg": "OPENAI",
+   "amount": "505046",
+   "transferFee": "5051",
+   "expectedUsdc": "975201",
+   "escrowDelta": "975201",
+   "vaultDecrease": "505046"
+  },
+  {
+   "leg": "ANTHROPIC",
+   "amount": "956154",
+   "transferFee": "9562",
+   "expectedUsdc": "975202",
+   "escrowDelta": "975202",
+   "vaultDecrease": "956154"
+  },
+  {
+   "leg": "NEURALINK",
+   "amount": "2338532",
+   "transferFee": "23386",
+   "expectedUsdc": "975205",
+   "escrowDelta": "975205",
+   "vaultDecrease": "2338532"
+  }
+ ],
+ "brokenCaught": {
+  "version": "abort skips the intermediate",
+  "programAccepts": true,
+  "ticketOwnedAccounts": [
+   "6DodPhQ4N63LSr5U4SHZCTFAaKoaCsZWnLw1QqkCiz3T",
+   "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC"
+  ],
+  "notClosedByTheAbort": [
+   "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC"
+  ],
+  "strandedRentLamports": 1620520,
+  "simulatedPostStateOfIntermediate": {
+   "account": "GFrKgHkTXs9BAKQH8gBfGtvzSiVyG5NXamKZFR6rd8qC",
+   "exists": true,
+   "lamports": 1620520
+  }
+ },
+ "after": {
+  "ownerLamports": "2733017920",
+  "ownerUsdc": "9992925608",
+  "feesPaid": "35000",
+  "netUsdcCost": "74392"
+ },
+ "finishedAt": "2026-09-24T22:50:58.191Z",
+ "passed": true
+}

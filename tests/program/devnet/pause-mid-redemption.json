@@ -1,0 +1,585 @@
+{
+ "scenario": "pause-mid-redemption",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "startedAt": "2026-09-24T21:06:55.631Z",
+ "keys": {
+  "payerAuthorityAndFixtureIssuer": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+  "alice": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+  "bob": "5J7sqUV7fuh2tdMmGDZnC2W9y82evGWUSLvLbexJZR26"
+ },
+ "note": "Fixture mints created by this suite with the program key as issuer (Agent C's registry not available).",
+ "steps": [
+  {
+   "label": "create share mint (authority = basket PDA)",
+   "signature": "2HfFfyuHtxEtsEZJG8j3kMT2Y8xzReXwgRnqqLJXao2axV9oR5BqWZXsh1hYC3Bcdnx678heu1LgdCbTC9YCDGiy",
+   "slot": 503654640,
+   "ok": true,
+   "cu": 45437,
+   "size": 654,
+   "events": []
+  },
+  {
+   "label": "initialize_basket",
+   "signature": "2yHtHy1kMUDvDksVnK1VKdU2ZvkoAjZPx6tqCohQc6EDQwdu9afcWtsDqBdXXVgZsSsTh5HBz3kGmvLpqDVRdN2w",
+   "slot": 503654690,
+   "ok": true,
+   "cu": 246558,
+   "size": 851,
+   "events": []
+  },
+  {
+   "label": "fixture issuer mints 1000000000000 raw of each leg to the authority",
+   "signature": "5g7vMJnYdQ6rN2hjraoKyaJgiCFT63dG3sEMKBPFUrJAtX8Q33ishqdwuf4SLhtasUznbzK5KBXFqpW116WxhZ7a",
+   "slot": 503654695,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "bootstrap (INITIAL_SHARES, in kind)",
+   "signature": "5jrPMDRXNbasiScv8QjLthJVbL4jUfZaEmjfDbL4Gb8PqU1x9DWe7cweX6bwnXP9xpkLVpqHMP5zSa7ULGdCReox",
+   "slot": 503654715,
+   "ok": true,
+   "cu": 92259,
+   "size": 893,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "e680992c00",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 500000000000 raw of each leg to alice",
+   "signature": "3gEUbQ2yakoAeKfCuGryTRzaGfzDnhhFUgLreikk8jYp66TZyysvRC9KASnqZhrQereJPeEwDswdbXBUsmEkuaVZ",
+   "slot": 503654721,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "alice deposit_in_kind",
+   "signature": "4ptYT8KUKjJtQKcWHDpzSVzGLtEJkit4AgqJFLgPbBzsVQMCgq97E3Dw8ZsfXBvyaHTrUSCZhRH7hXqu8sTkv37g",
+   "slot": 503654734,
+   "ok": true,
+   "cu": 105593,
+   "size": 997,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "shares": "1dcd6500",
+      "deltas": [
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "73404c9600",
+       "00"
+      ],
+      "path": {
+       "InKind": {}
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER pauses ANTHROPIC",
+   "signature": "5v24J1KmennZW6GQNUj2iWGNLG7TqccwqQTZW7MeLZHro4JuvRfQzRcKNjw2FpQTBTT96qkQCVLCiPGcmcHBMzsm",
+   "slot": 503654748,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "alice redeems 1/4 with OPENAI… leg 1 (ANTHROPIC) paused: six legs paid, one claim",
+   "signature": "2jShDvn43AK1ReyA8LJF74DDXBgiUfwagPhFRRKy3uQqji7VLFBXEADW5Fhn3rETj7kkQKJLdeKDaf66MXd1dQd7",
+   "slot": 503655019,
+   "ok": true,
+   "cu": 111075,
+   "size": 983,
+   "events": [
+    {
+     "name": "ClaimCreated",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "HCFAVwhTrJwbw73axQJabipA4m4HXmQD95uQqadYEMhT",
+      "leg": 1,
+      "units": "07735940",
+      "reason": {
+       "Paused": {}
+      }
+     }
+    },
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "HCFAVwhTrJwbw73axQJabipA4m4HXmQD95uQqadYEMhT",
+      "shares": "07735940",
+      "paid": [
+       "1c86506520",
+       "00",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "00"
+      ],
+      "claims_mask": 2
+     }
+    }
+   ]
+  },
+  {
+   "label": "settle_claim while ANTHROPIC is paused",
+   "refused": true,
+   "simulatedAtSlot": 503655224,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: SettleClaim",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "ISSUER resumes ANTHROPIC",
+   "signature": "2WYsJ97XLasHnN6VzspzMG8kYZtH6VxKmvjNdSwPZDRAFiSn6wbeAURPR4Sjz7MPvTJcbxKs5EsxRkxUrPQa3H3",
+   "slot": 503655230,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "bob (a third party) settles alice's ANTHROPIC claim after resume",
+   "signature": "4pois1iLUcfHM5NQr8uotgMRGyqF6pSBWEnHC4MvcMrNss6BMAh6whjYKwC12zj7KHvaFH5tyZcSHxupBKQ29cbs",
+   "slot": 503655256,
+   "ok": true,
+   "cu": 35113,
+   "size": 520,
+   "events": [
+    {
+     "name": "ClaimSettled",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "HCFAVwhTrJwbw73axQJabipA4m4HXmQD95uQqadYEMhT",
+      "leg": 1,
+      "units": "07735940",
+      "amount": "1cd0132580",
+      "received": "1c86506520"
+     }
+    }
+   ]
+  },
+  {
+   "label": "fixture issuer mints 1000000000 raw of each leg to bob",
+   "signature": "4E4U51bycMUuqA5caRyyAzQN2rGzCVXb4m2MBCAnwVMmoFQ6GRGkyTEwkDKUkMMtSYBprRvqLzdWhmBcyBo3Dx9u",
+   "slot": 503655271,
+   "ok": true,
+   "cu": 23817,
+   "size": 578,
+   "events": []
+  },
+  {
+   "label": "ISSUER pauses ANDURIL",
+   "signature": "51mJLnopRncY9W4fxoCPdaddJwz57PkHNDe6aXCkpxAxFUMUYPmfdYELfxN5nYC8ZHGEkrHKhX3o6SWmh1Wn9vZZ",
+   "slot": 503655444,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "ISSUER pauses KALSHI",
+   "signature": "KhphbjNd6eJctss7rLmB9KojYi8SyBBaLjr5S24UGt5TJzsTehZ2jXR1xoNvRu3D1vD4kkS4LMLBeL8UHaUD5pT",
+   "slot": 503655544,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "bob deposit_in_kind while two legs are paused",
+   "refused": true,
+   "simulatedAtSlot": 503655546,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: DepositInKind",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "alice redeems 1/4 with legs 3 and 5 paused: five paid, two claims",
+   "signature": "2KNKJ6Q7P4qCNEH6k5dPeKuxriYJybtUgoK3Nh2uvycKLsbmFX8EGjSwXXWpJHBRijnnxc1yTmeJ1k7PpxBp4EKy",
+   "slot": 503655596,
+   "ok": true,
+   "cu": 102211,
+   "size": 983,
+   "events": [
+    {
+     "name": "ClaimCreated",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "8LRLmW7HBGtHx2JKwVAVozdcCJEcNeU7Wb3ZrpaDK3c5",
+      "leg": 3,
+      "units": "07735940",
+      "reason": {
+       "Paused": {}
+      }
+     }
+    },
+    {
+     "name": "ClaimCreated",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "8LRLmW7HBGtHx2JKwVAVozdcCJEcNeU7Wb3ZrpaDK3c5",
+      "leg": 5,
+      "units": "07735940",
+      "reason": {
+       "Paused": {}
+      }
+     }
+    },
+    {
+     "name": "Redeemed",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "8LRLmW7HBGtHx2JKwVAVozdcCJEcNeU7Wb3ZrpaDK3c5",
+      "shares": "07735940",
+      "paid": [
+       "1c86506520",
+       "1c86506520",
+       "1c86506520",
+       "00",
+       "1c86506520",
+       "00",
+       "1c86506520",
+       "00"
+      ],
+      "claims_mask": 40
+     }
+    }
+   ]
+  },
+  {
+   "label": "ISSUER resumes ANDURIL",
+   "signature": "66hT4SSpe6HxNXawJRmtzj3dLRspbrXhv3m7mbXHr8gVaih9YHHzo9gYxEYX6sn8uPDGfpaYhdg492uvEnECWwni",
+   "slot": 503655801,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "ISSUER seizes 272250000000 raw ANDURIL from the vault (permanent-delegate burn; the vault does not sign)",
+   "signature": "3kqJ8dwVDsbH2XngHfD5AAAu39rrGsJceonx5CdbLHv8sj54AD522scViETCVv76MixJk9SkVVyvvexiYBEBKiat",
+   "slot": 503655807,
+   "ok": true,
+   "cu": 4112,
+   "size": 291,
+   "events": []
+  },
+  {
+   "label": "ISSUER pauses ANDURIL",
+   "signature": "3RxZyRm6NMbvQd6veZ94uAyEZK6QQtiAUv7dfwxQ9kqjGHEkapyedNfXFfD5Dq6Wgg6UhzkXDrp5E5kmHMhQJCwg",
+   "slot": 503655812,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "observe: ShortfallObserved on ANDURIL while the claim is open",
+   "signature": "3b31GkrxJZHmCCzLPb5iGZqbCQVCfFHfvogCU4RarppdQFSYj1vguPMfjWtro27SqcbzqZ76fjoNUPgmmZhEBxDy",
+   "slot": 503655825,
+   "ok": true,
+   "cu": 18845,
+   "size": 323,
+   "events": [
+    {
+     "name": "ShortfallObserved",
+     "data": {
+      "leg": 3,
+      "expected": "013cf0d29c80",
+      "actual": "fd8d754a00",
+      "loss_index": "0b1a2bc2ec500000",
+      "slot": "1e052d91"
+     }
+    }
+   ]
+  },
+  {
+   "label": "settle_claim on leg 5 while paused",
+   "refused": true,
+   "simulatedAtSlot": 503655833,
+   "error": {
+    "InstructionError": [
+     1,
+     {
+      "Custom": 6000
+     }
+    ]
+   },
+   "errorCode": "LegUnavailable",
+   "logs": [
+    "Program log: Instruction: SettleClaim",
+    "Program log: AnchorError thrown in programs/basket/src/lib.rs:111. Error Code: LegUnavailable. Error Number: 6000. Error Message: Leg unavailable: mint paused, transfer hook set, or vault frozen.",
+    "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1770"
+   ]
+  },
+  {
+   "label": "ISSUER resumes ANDURIL",
+   "signature": "5KVT9FqmxFeSGjF8ZjJGQ1JMAieoELNeenf5eWrDkFhn2NMR48zVK5g1RQUopj6Dj2CtAyxk2L6BgWh34a17YKM6",
+   "slot": 503655839,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "ISSUER resumes KALSHI",
+   "signature": "5BJMHWj3wCMgw1vnbMGWsdLbcSeg1hFUBF5cmaEp7YiXAGFpKBPVj3BX5gymceswDL8a2Co1MNP38z2QmK8pQxgD",
+   "slot": 503655885,
+   "ok": true,
+   "cu": 2213,
+   "size": 250,
+   "events": []
+  },
+  {
+   "label": "claim on the seized leg settles after resume, at the post-seizure pro-rata value",
+   "signature": "665w2eBorbu9xD5cfhCd84zBPHqLBBFTCFhHW1ErVtgeBiSniihzP64biFBroEr2xk4UxmdX8DtmShXTP9MxQbpS",
+   "slot": 503655948,
+   "ok": true,
+   "cu": 35116,
+   "size": 520,
+   "events": [
+    {
+     "name": "ClaimSettled",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "8LRLmW7HBGtHx2JKwVAVozdcCJEcNeU7Wb3ZrpaDK3c5",
+      "leg": 3,
+      "units": "07735940",
+      "amount": "170cdc1e00",
+      "received": "16d1d9ea80"
+     }
+    }
+   ]
+  },
+  {
+   "label": "claim on leg 5 settles after resume",
+   "signature": "5HjMh1KvgcePyhHsruS8KKgjGtWGc6yvSfZkqEcbUR3UHb554DVHHzmgTZuM3NC45rooJviHCzowAU1Z6tPwAr74",
+   "slot": 503655999,
+   "ok": true,
+   "cu": 35113,
+   "size": 520,
+   "events": [
+    {
+     "name": "ClaimSettled",
+     "data": {
+      "owner": "DMsA8bQVeaYARXKu4VuUjv5Gt9puEFTbpqXTpYSD4bZE",
+      "ticket": "8LRLmW7HBGtHx2JKwVAVozdcCJEcNeU7Wb3ZrpaDK3c5",
+      "leg": 5,
+      "units": "07735940",
+      "amount": "1cd0132580",
+      "received": "1c86506520"
+     }
+    }
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "what": "bootstrap minted INITIAL_SHARES",
+   "ok": true
+  },
+  {
+   "what": "OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANTHROPIC became a claim of 125000000 units",
+   "ok": true,
+   "ticketLeg": {
+    "Claim": {
+     "units": "07735940",
+     "reason": {
+      "Paused": {}
+     }
+    }
+   }
+  },
+  {
+   "what": "NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANDURIL paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "KALSHI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "settle_claim while ANTHROPIC is paused → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  },
+  {
+   "what": "ANTHROPIC claim settled: amount 123750000000 = floor(units·owned/(S+C)) at settlement, received 122512500000",
+   "ok": true
+  },
+  {
+   "what": "bob deposit_in_kind while two legs are paused → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  },
+  {
+   "what": "OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANTHROPIC paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ANDURIL became a claim of 125000000 units",
+   "ok": true,
+   "ticketLeg": {
+    "Claim": {
+     "units": "07735940",
+     "reason": {
+      "Paused": {}
+     }
+    }
+   }
+  },
+  {
+   "what": "POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "KALSHI became a claim of 125000000 units",
+   "ok": true,
+   "ticketLeg": {
+    "Claim": {
+     "units": "07735940",
+     "reason": {
+      "Paused": {}
+     }
+    }
+   }
+  },
+  {
+   "what": "FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000",
+   "ok": true,
+   "expect": "123750000000"
+  },
+  {
+   "what": "ClaimCreated emitted for exactly the unavailable legs",
+   "ok": true
+  },
+  {
+   "what": "ShortfallObserved on leg 3",
+   "ok": true
+  },
+  {
+   "what": "settle_claim on leg 5 while paused → LegUnavailable",
+   "ok": true,
+   "got": "LegUnavailable"
+  },
+  {
+   "what": "ANDURIL claim settled: amount 99000000000 = floor(units·owned/(S+C)) at settlement, received 98010000000",
+   "ok": true
+  },
+  {
+   "what": "KALSHI claim settled: amount 123750000000 = floor(units·owned/(S+C)) at settlement, received 122512500000",
+   "ok": true
+  }
+ ],
+ "basket": "6U7WP5NZmRQ5T47DoqzusP7rPn5x3H3AjLJwtspADKAK",
+ "shareMint": "3dZvCY2xPXgQmwTW6r1fUjArTGcx87F3DN4LUS9qZW2F",
+ "vaults": [
+  "5NMx9juTdZnuyb79NZZANWpWhU8jf9PHmyVufmCk7dKb",
+  "2MJfte1y7YpiiXStvq6emAaNN8rKeuarcMV6gurJWEiL",
+  "C3ntHLbnXgWwUwxxbXZyHyocCHQTbkABHsKZBjiLJHAH",
+  "F6ePFMBhRib363Sv1Hk7gEz2TVcsxD7xD4MQeapXK9uu",
+  "EmbkbBY17XbAvMeL71k1uKR5Q2SoNNS1PSPTA3yzTKM2",
+  "5uCy16HtQWm7qFNH7LnxdpFBBdZEJWWJBn79k8TYtqMj",
+  "3Q9dpx3JGRjgKM3Ywhb83B7FsmwUkVcEoepD1KxeUVRY"
+ ],
+ "issuerSolSpent": 0.02736364,
+ "finishedAt": "2026-09-24T21:10:51.744Z",
+ "passed": true
+}

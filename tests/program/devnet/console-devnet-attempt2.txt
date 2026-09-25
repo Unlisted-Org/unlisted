@@ -1,0 +1,373 @@
+create fixture mint ANDURIL (extensions): 22JdDdhmDLFxPRNW9FzGk3uYdAWsigtHZQFCrehWBVQ5oVMQaMnJG79q48PFhjh5Aw4JN6tgVsUsTDUHTskVivmM
+init fixture mint ANDURIL (mint + metadata): 5Vpuo9NYGBRTQuvHwmyGPRL2C5k7BowTrNBJh81pmWZLUgUfgM3mDtaG3rE5JDp7bYZuwJjKxAcPTncCHeiiV2zq
+create fixture mint POLYMARKET (extensions): BYbA4Y8TJG5zT4Hn9WY1QuvyjhhZ78HVbNE7zzLaSE88ELmcxQb9nCbmD38Mty3Y2vmpBYnv4rdQ24Bhok9CfK4
+init fixture mint POLYMARKET (mint + metadata): 2caT18yzquB9UhQKrgKYgBJpbYzFmNJuCkv2WVjRiQTGyPXX9mJkosd2ZZiDQBxTjCNMSzzEU8UirQEuiaXgmLaP
+create fixture mint KALSHI (extensions): AQ958dQU962t7s4FGsHqtSocVxWGkbu6ZyXzhtZgyuMbZSYBAMtigB5fNGHbi9Y7NnvmSNQnccmVs399W7xK2fA
+init fixture mint KALSHI (mint + metadata): 2pYqJe3HqH62BwQAH7pR9X1FXzT2rabjGupE3XVNJk3roNQYcNtvtd8TMbeV2mvTtEqifHuSxmL3qMQ7DxQJpJPa
+create fixture mint FIGUREAI (extensions): 5brEnSGMjfAXPeY1eFJTkMt2ChGv2sJtFFnmxdmAmQQTduWPTmUC6AY5oy1qiud7HSZB6pFqDixzHk16HvGZikJQ
+init fixture mint FIGUREAI (mint + metadata): 2xAGEAEmw6huEmjJkPdH24cmJDbJvFnratbkmhFgQVDJjbXXuK1ov5GvtMdkDkK8Zc7Pr5LLQp3Cn2QtsXpxp4Xd
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+create fixture USDC (classic SPL, 6 decimals): 4Um7BohxxyKCqVJ4VSzavY9ixtTBxDziH8qgHcWP8PKyWP3a1a5jGCyJ3ZhgUeobHPUkG5RWNqjjkLeeGQ4WVDcR
+create lookup table: nf7EsuhQHkwAJLDxqjiPg9Pw94fX2mXJjWRWnmYuMqChSg8FrpTpuY97x5Um9qWta2Wk82LrpN6nRJ396M8oxbv
+extend lookup table: 3r4v5ju1Lgm9CbqJNDKdrcFEmYnKB2uVm1w3ssiRgF5Ehi2nDrNYeGby1g6BBryVoQVEsySRm1d8GwdU9DcZ18d7
+fund alice and bob with 0.03 SOL each (redemption ticket rent): 3f7cB9EoycaUUjJ421Pp8nygLEGEH1Xu5HVQjJq6Sf3qj5dnxH48WGdVqEv8E2VbS3qaMn1ticDdFSAhgkcY2VgA
+token accounts for the authority (1/2): 38JcfbRV2kLqZiRbLm6MJ2TdMTAytUzoV4VA4YpJkgf3nTkDLrGXdmcysq2VRdUt76FFnjsP6waXNmGwsH2bfngn
+token accounts for the authority (2/2): CQfAKbbsmpJf6fT3hCScDSbrt3eL7KT8wLEKnZLu7ZrJKUxEAJgajS32pHy5JLUZYYHjhgyixvA8JrZZZbxKAUg
+token accounts for alice (1/2): NxJkb5P4UdUwCtyrKs2Mt695qGh1EzFWqjeHyJ1Qe8BUTmy61tNSCU4hrsCjAMt2MYLbN5ybUb4PPhGwwPryNXv
+token accounts for alice (2/2): 2DefX79uv2GK6gqL4NK1coMHZLCAf137hDGCAwSABBa6m4Rqy5Mzd7aK8SStVZfEEHZVLaqfwjCedmuK7HtdUJZK
+token accounts for bob (1/2): xsVkie1k1UrvFjBiTeKZCBq8EnfFGL5f4TgPisLSs9sszJFUBBbXmSzEkcGFJMUvNGXYBLPp5rRnsV43zauVPiZ
+token accounts for bob (2/2): 4kDu8VHngtRLh3gMmmxD8Du1PueVNMXDctB7pNk77h5jqYqjzLVFxSGHKNf7YQHwaef1rMyS6QmQoqDA4oApBkNM
+issuer SOL spent on setup: 0.123742
+
+== seizure
+create share mint (authority = basket PDA): 3DcTgWLaYSih6zm1EEXWcERHPDcYt77HFXz6PBToe4pNq9LBLZeNfXHBswN51aRzpbbyUY6Bo6F6qkQqPSBB5khn
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+initialize_basket: hmdSDDFcdzmjVVcfkBconEW8HD2cr6efKGvEGETKmPDy8GxDEz5YQXhQ2sXwmNqsFiET6ckMLPrPTSBcJk1qsNZ
+fixture issuer mints 1000000000000 raw of each leg to the authority: 5y3xuH53CNgAVCjrSLxcMq4eEx72UAXHhm2GgrmwYgdeN5dKhVkctaXH6M4kGcfdNtgLZT8uWyfWuUxu9YtMm39j
+bootstrap (INITIAL_SHARES, in kind): 3RPPJgTt9PD2gXVH1Y3hR8k5m22VkFVefoiYKVMBaMZDk28ZaK7Jm28zSpX6T1CuH7c5i5LsBMo3eyuYPXWzxdEx
+fixture issuer mints 500000000000 raw of each leg to alice: 5ztNDH8WmJiUm1FwLyFCG36Evsuqk4hpv7pZ6QtuoaRjhdyTNmRu7kmcpHjQHTbhfZ8ExzbPzi538sCGLj1JXkrf
+alice deposit_in_kind: 4kc49c8w7MuGkTZ65WUirG6BRvH6XfYTaunudNS5u28koUNJ3J1TXkvo9YvV9QUH6Z33wNwu73TCFseFXqLZNDrH
+  ✔ bootstrap minted INITIAL_SHARES
+ISSUER seizes 371250000000 raw NEURALINK from the vault (permanent-delegate burn; the vault does not sign): RdiTG5MnYvPmLiHkKPjrhPbhKmMaRhWaoLcMSHXCtDUaayE5CDUiiyVe1v9oLDxNfygk4b9Z1G3W8Q2VEp83GCL
+observe (permissionless) emits ShortfallObserved: 4NHSajqyThX7Ai4B3Ye8R88GZLwYHjYgm9CLok4wCnyz7HJN6Zq9ZjbewJHJ8a7igcd1tCbuKvAJPLo6FbJmnZos
+  ✔ ShortfallObserved { expected: A, actual: B }
+ws error: Unexpected server response: 429
+alice redeems half in kind: leg 2 pays pro-rata less: 3GyqdBmrRr8cq8x1cwUmXcKFppE5K4yXtj13Be3m64tUaBPJ26smyBy3jRLPd2N6gQvTNS8qd3oRdvkaqBjv7Z7k
+  ✔ OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ NEURALINK paid now: gross 185625000000 = floor(s·owned/(S+C)), received 183768750000
+  ✔ ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ POLYMARKET paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ FIGUREAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+fixture issuer mints 125000000001 raw of each leg to bob: 3iwUC45bYnLoP32MSfo4BvmaZt2iWe3Q3FmzBS9TPKnBqUZxF8dMfjic9fBnHfYq1dSGaMAHcBcVfAZwL32CNvE3
+bob deposits in kind at the reduced composition: 4Da6fji7UkogJnHrokSiAdnZsT68w57tY4SphLzGDzNh37Kfu8s7jBKDL7EPNuPxMRp7HxDVj1ord4Tae9vHLg56
+  ✔ bob minted 125000000 shares = min_i floor(Δ_i(S+C_i)/owned_i) = 125000000; ≈ S/10 (no top-up of the seized leg)
+issuer SOL spent on seizure: 0.02729364
+
+== pause-mid-redemption
+create share mint (authority = basket PDA): 2HfFfyuHtxEtsEZJG8j3kMT2Y8xzReXwgRnqqLJXao2axV9oR5BqWZXsh1hYC3Bcdnx678heu1LgdCbTC9YCDGiy
+initialize_basket: 2yHtHy1kMUDvDksVnK1VKdU2ZvkoAjZPx6tqCohQc6EDQwdu9afcWtsDqBdXXVgZsSsTh5HBz3kGmvLpqDVRdN2w
+fixture issuer mints 1000000000000 raw of each leg to the authority: 5g7vMJnYdQ6rN2hjraoKyaJgiCFT63dG3sEMKBPFUrJAtX8Q33ishqdwuf4SLhtasUznbzK5KBXFqpW116WxhZ7a
+bootstrap (INITIAL_SHARES, in kind): 5jrPMDRXNbasiScv8QjLthJVbL4jUfZaEmjfDbL4Gb8PqU1x9DWe7cweX6bwnXP9xpkLVpqHMP5zSa7ULGdCReox
+fixture issuer mints 500000000000 raw of each leg to alice: 3gEUbQ2yakoAeKfCuGryTRzaGfzDnhhFUgLreikk8jYp66TZyysvRC9KASnqZhrQereJPeEwDswdbXBUsmEkuaVZ
+alice deposit_in_kind: 4ptYT8KUKjJtQKcWHDpzSVzGLtEJkit4AgqJFLgPbBzsVQMCgq97E3Dw8ZsfXBvyaHTrUSCZhRH7hXqu8sTkv37g
+  ✔ bootstrap minted INITIAL_SHARES
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ISSUER pauses ANTHROPIC: 5v24J1KmennZW6GQNUj2iWGNLG7TqccwqQTZW7MeLZHro4JuvRfQzRcKNjw2FpQTBTT96qkQCVLCiPGcmcHBMzsm
+alice redeems 1/4 with OPENAI… leg 1 (ANTHROPIC) paused: six legs paid, one claim: 2jShDvn43AK1ReyA8LJF74DDXBgiUfwagPhFRRKy3uQqji7VLFBXEADW5Fhn3rETj7kkQKJLdeKDaf66MXd1dQd7
+  ✔ OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANTHROPIC became a claim of 125000000 units
+  ✔ NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANDURIL paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ KALSHI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+settle_claim while ANTHROPIC is paused: refused (LegUnavailable)
+  ✔ settle_claim while ANTHROPIC is paused → LegUnavailable
+ISSUER resumes ANTHROPIC: 2WYsJ97XLasHnN6VzspzMG8kYZtH6VxKmvjNdSwPZDRAFiSn6wbeAURPR4Sjz7MPvTJcbxKs5EsxRkxUrPQa3H3
+bob (a third party) settles alice's ANTHROPIC claim after resume: 4pois1iLUcfHM5NQr8uotgMRGyqF6pSBWEnHC4MvcMrNss6BMAh6whjYKwC12zj7KHvaFH5tyZcSHxupBKQ29cbs
+  ✔ ANTHROPIC claim settled: amount 123750000000 = floor(units·owned/(S+C)) at settlement, received 122512500000
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+fixture issuer mints 1000000000 raw of each leg to bob: 4E4U51bycMUuqA5caRyyAzQN2rGzCVXb4m2MBCAnwVMmoFQ6GRGkyTEwkDKUkMMtSYBprRvqLzdWhmBcyBo3Dx9u
+ISSUER pauses ANDURIL: 51mJLnopRncY9W4fxoCPdaddJwz57PkHNDe6aXCkpxAxFUMUYPmfdYELfxN5nYC8ZHGEkrHKhX3o6SWmh1Wn9vZZ
+ISSUER pauses KALSHI: KhphbjNd6eJctss7rLmB9KojYi8SyBBaLjr5S24UGt5TJzsTehZ2jXR1xoNvRu3D1vD4kkS4LMLBeL8UHaUD5pT
+bob deposit_in_kind while two legs are paused: refused (LegUnavailable)
+  ✔ bob deposit_in_kind while two legs are paused → LegUnavailable
+alice redeems 1/4 with legs 3 and 5 paused: five paid, two claims: 2KNKJ6Q7P4qCNEH6k5dPeKuxriYJybtUgoK3Nh2uvycKLsbmFX8EGjSwXXWpJHBRijnnxc1yTmeJ1k7PpxBp4EKy
+  ✔ OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANTHROPIC paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANDURIL became a claim of 125000000 units
+  ✔ POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ KALSHI became a claim of 125000000 units
+  ✔ FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+ISSUER resumes ANDURIL: 66hT4SSpe6HxNXawJRmtzj3dLRspbrXhv3m7mbXHr8gVaih9YHHzo9gYxEYX6sn8uPDGfpaYhdg492uvEnECWwni
+ISSUER seizes 272250000000 raw ANDURIL from the vault (permanent-delegate burn; the vault does not sign): 3kqJ8dwVDsbH2XngHfD5AAAu39rrGsJceonx5CdbLHv8sj54AD522scViETCVv76MixJk9SkVVyvvexiYBEBKiat
+ISSUER pauses ANDURIL: 3RxZyRm6NMbvQd6veZ94uAyEZK6QQtiAUv7dfwxQ9kqjGHEkapyedNfXFfD5Dq6Wgg6UhzkXDrp5E5kmHMhQJCwg
+observe: ShortfallObserved on ANDURIL while the claim is open: 3b31GkrxJZHmCCzLPb5iGZqbCQVCfFHfvogCU4RarppdQFSYj1vguPMfjWtro27SqcbzqZ76fjoNUPgmmZhEBxDy
+  ✔ ShortfallObserved on leg 3
+settle_claim on leg 5 while paused: refused (LegUnavailable)
+  ✔ settle_claim on leg 5 while paused → LegUnavailable
+ws error: Unexpected server response: 429
+ISSUER resumes ANDURIL: 5KVT9FqmxFeSGjF8ZjJGQ1JMAieoELNeenf5eWrDkFhn2NMR48zVK5g1RQUopj6Dj2CtAyxk2L6BgWh34a17YKM6
+ws error: Unexpected server response: 429
+ISSUER resumes KALSHI: 5BJMHWj3wCMgw1vnbMGWsdLbcSeg1hFUBF5cmaEp7YiXAGFpKBPVj3BX5gymceswDL8a2Co1MNP38z2QmK8pQxgD
+claim on the seized leg settles after resume, at the post-seizure pro-rata value: 665w2eBorbu9xD5cfhCd84zBPHqLBBFTCFhHW1ErVtgeBiSniihzP64biFBroEr2xk4UxmdX8DtmShXTP9MxQbpS
+  ✔ ANDURIL claim settled: amount 99000000000 = floor(units·owned/(S+C)) at settlement, received 98010000000
+claim on leg 5 settles after resume: 5HjMh1KvgcePyhHsruS8KKgjGtWGc6yvSfZkqEcbUR3UHb554DVHHzmgTZuM3NC45rooJviHCzowAU1Z6tPwAr74
+  ✔ KALSHI claim settled: amount 123750000000 = floor(units·owned/(S+C)) at settlement, received 122512500000
+issuer SOL spent on pause-mid-redemption: 0.02736364
+
+== fee-change-mid-position
+create share mint (authority = basket PDA): 45epe7ALMyYD57yvCy6KLb7rGFZBQjESmMVyYfky2ZYayFAqL9TkHfJXbLsQEBwvYJLWYQT6NoQEg1MgPL43bpBU
+ws error: Unexpected server response: 429
+initialize_basket: 2A1MLrr5fJHqaZzNSNj6VbeUudjcxNtZEyHRxaEvi1x4SrQS317yQMgae7nQpiMbz7THYkAXKoMXjMX7HXgM1TUc
+fixture issuer mints 1000000000000 raw of each leg to the authority: 5pDLgKjRwVbV37HRR1FfNQbREC4oR5HfML37ZenWoeRPjT2XV3pJYVni8piPdQ144mKWm8AciW1nZZb7uoqDgunk
+bootstrap (INITIAL_SHARES, in kind): 4WEHXTpJGdbHERemqfoZwAckd7mSa8VivSLHYuaF2CPFvMhFxk6HCng4m4nG8D4jPbf4s24nrYFEALfHGFQ7rbDc
+fixture issuer mints 500000000000 raw of each leg to alice: 2UCi9tq2HhnrP2e9CBgBvvngcy2USKmpVWC3oapqqQKThjXB8jBTGdRUfzphea6d4a4zai6NAfwG3h8f7RMUVLHm
+alice deposit_in_kind: 5k6ogWf6cLDhwsmRtajij3kEjtUFva6EMf7CSP6tY5EHXSQTGz7guSzj1VAbFCUcPeLUGz9V24Z6wFW5h4E8GUsy
+  ✔ bootstrap minted INITIAL_SHARES
+ISSUER set-transfer-fee 100 → 300 bps (legs 0..3): 2BE63mgq8yjVNFX5UbfotHEWE72n5UHyX4pFZknALGGVA5vtL25Ks6Tnrbu9vY7n7GSSgEWpVyPjKUi7K5DD1Ax8
+ISSUER set-transfer-fee 100 → 300 bps (legs 4..6): 2voP2LB2YukpD3EXrEcCNr6k6Tf5rUqNtyENbQbmaDbsuWv9GZ6XpVfKkf1mgYmvKbkF8cdJ3mFZZw8whzEg3uaW
+  ✔ newer fee 300 bps effective at epoch 1167 (= current 1165 + 2)
+ws error: Unexpected server response: 429
+alice redeems with the new fee scheduled: the current (older) 100 bps applies: 378eagk8KGEUxxyMV7Xa3qmyHTL8QrHHoy4dL3ghBZ4yd1GF5fJAW4p3pQYE8UfYcSFsPmmjmJe2YNfKyBJG5swL
+  ✔ OPENAI paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ ANTHROPIC paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ NEURALINK paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ ANDURIL paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ POLYMARKET paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ KALSHI paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ FIGUREAI paid now: gross 164999999340 = floor(s·owned/(S+C)), received 163349999346
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+  ✔ recipient net = gross − ceil(gross·100/10⁴) (164999999340 → 163349999346); the program stores no fee
+issuer SOL spent on fee-change-mid-position: 0.02727864
+
+== multiplier-change-mid-position
+create share mint (authority = basket PDA): cEj1qURCbhryjrN1JzutAoUqag1PaqPgrkmJiQgM7j2vh4vDVcyzyWscbySUuE1oSMjrXvEqY2P4t5XwsmMNMjt
+initialize_basket: 5DPDasxsy7Z7LNnf4GhBSc2dRabyLpmJtifkuf45EtnSUhipR8F5Vx3Y1XeC8VdVNAA3MqmiXJkmWyfNELKFfC6G
+ws error: Unexpected server response: 429
+fixture issuer mints 1000000000000 raw of each leg to the authority: XbN9aJGgE42johhGzQCa5Zw72cYp91WgXHQGodDJzm1tKTefhELMtVgakixLxK9zKPa5iw7ZHmwXZ5VA1XuGANg
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+bootstrap (INITIAL_SHARES, in kind): 56ePkjjuA95vYijnS7aqVj15oqvtJA9y4xbvf5bSkVyn6bkk51hM14BET3mn8U5FpLk3Z5zzdHb2FRuTjeLe1kGg
+fixture issuer mints 500000000000 raw of each leg to alice: 4PrK29mA14QKpZZ2Qb6dZkzSpQRSfHYUyeo1oQexe1WF2efGW9UwHrtb7ZBLSt9pVrwCW32vhArjse64aB8V73av
+alice deposit_in_kind: 3ZSTqScdh4r1wqdAm1s3YiFXZ5Qm9nMeZka2wmRfLi9yEUhsKZwx8dsTQ63RBDtBeLCv1kVR1JexBwrPJRBw7yYL
+  ✔ bootstrap minted INITIAL_SHARES
+ws error: Unexpected server response: 429
+ISSUER update-ui-amount-multiplier OPENAI 1.4861347 → 2.0, effective in 60 s: 29fHTPJLdsGFempCbQAv2PJfV3wf2VdxfvGzWZgoQWFu2tPCb6ZX8tcjEd7dBK51tGR5KT6cMaPG17jt4JTCK3hk
+redeem before the multiplier takes effect: raw amounts by the share formula: gxHKyHGAuPxogwGiBZywmG2ScQqDjjwe8Una8GBL27MLkGtRNjgVCPq6RqQCxSpFRSEddM3kHwy6npRXLSpuiX4
+  ✔ OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANTHROPIC paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANDURIL paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ KALSHI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+redeem after the multiplier took effect: raw amounts still by the same formula (the program never reads it): 5oP2cxobVcj3ub3PKjHmNXzwtpJdxeLeZjpb5dAucjn6yfU1UJvUfuRAoVqczmnAF6nJv1fzfRo49Ki1TayVL9T6
+  ✔ OPENAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANTHROPIC paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ NEURALINK paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ANDURIL paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ POLYMARKET paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ KALSHI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ FIGUREAI paid now: gross 123750000000 = floor(s·owned/(S+C)), received 122512500000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+issuer SOL spent on multiplier-change-mid-position: 0.02728364
+
+== hook-switched-on
+create share mint (authority = basket PDA): 5uXCkwk1QDny7MNZLKLLj1ZynX7eFU6SX7Ph9STKxToKAvjj5qL6dssUZ15ejcKybGmFRnYgq73tP5S28jbgAxYi
+initialize_basket: 4H4dQgfwRSqYaiXbzs4VZSdMvjWZFuob3NdS4iVSQgQC1GHzXohbpjx8D9hMrh13ETYGoJW1Rs2huoTYWduCipiA
+fixture issuer mints 1000000000000 raw of each leg to the authority: 3okvTGtoDgByX8gKW25Y23Q84fxPLG6r281V3b1nq3r7uoa3hQMXNvAAWnmZxSCzWq85bWhJwDTgy2VEm8MCrDSG
+bootstrap (INITIAL_SHARES, in kind): 3X6ZgWHGwAXxQmx46FiqEGneTkDTUxNmvamxMYu3SHVqKs5Qstfi9MdssjzxNGJY1qeg7SSkY4bY8a4MzEit1PBW
+fixture issuer mints 500000000000 raw of each leg to alice: 2YE48tLbhr6amoQZtuUojuTnS3GFMiSUJH295v4GpxhztrZriXkHdpsgdZG2ooHswse3Z7VQd9YAAdBquRwfcLfd
+alice deposit_in_kind: 2TtQNMNpNr3seWo2uJKtm6BQyX12U47k8zrdG7U7Ri5qXDX7BPoMZXADRQhR8rGNfHhXnvHZW5e2GrpzKLnaDByT
+  ✔ bootstrap minted INITIAL_SHARES
+ws error: Unexpected server response: 429
+ISSUER sets POLYMARKET transfer hook to MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr: 4NMGaN9eNwQX87SFogXSvcdqj6kUBCc8d1LewzKE9kXnD8Npb5YcAgqjU3kC3ioVG6Z2mc6fvVrfscYBsQdBtgpJ
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+fixture issuer mints 1000000000 raw of each leg to bob: 4D4t2vCR65XcjLz2SFthNaTi17s52srbTmrj4q2uYdy8NyPEQWLtXB7f2VwNDo39Hcy4sM2AhN7qDs821tDwFpad
+bob deposit_in_kind with a hook on POLYMARKET: refused (LegUnavailable)
+  ✔ bob deposit_in_kind with a hook on POLYMARKET → LegUnavailable
+alice redeems: POLYMARKET (hook set) becomes a claim, the rest pay: 43WaupXPpKEjguiTDzrA5btYcmkAKdNwrpWtHve5YmSw3nwaHYPjUyJDQDArFXuvVMoW3P7pY1govbkws7LxvCF
+  ✔ OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ NEURALINK paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ POLYMARKET became a claim of 250000000 units
+  ✔ KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ FIGUREAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+  ✔ claim reason Hook
+settle_claim while the hook is set: refused (LegUnavailable)
+  ✔ settle_claim while the hook is set → LegUnavailable
+ISSUER sets POLYMARKET transfer hook to null: 3jCbvDmKArx5JUiTAyLNiqcN7t2iTevmbBtsgmwVpcDM8xnAnrb9SK8mNcqZ5djgcy4cY1ivuxXAxb5bGstnpz5E
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+ws error: Unexpected server response: 429
+SendTransactionError: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 1: custom program error: 0x1784. 
+Logs: 
+[
+  "Program ComputeBudget111111111111111111111111111111 invoke [1]",
+  "Program ComputeBudget111111111111111111111111111111 success",
+  "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv invoke [1]",
+  "Program log: Instruction: SettleClaim",
+  "Program log: AnchorError thrown in programs/basket/src/lib.rs:580. Error Code: NoClaim. Error Number: 6020. Error Message: No claim on this leg.",
+  "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv consumed 17557 of 599850 compute units",
+  "Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1784"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.
+    at Connection.sendEncodedTransaction (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program/node_modules/@solana/web3.js/src/connection.ts:6087:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.sendRawTransaction (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program/node_modules/@solana/web3.js/src/connection.ts:6043:20)
+    at async send (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program/devnet/scenarios.ts:81:19)
+    at async settleAndCheck (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program/devnet/scenarios.ts:284:16)
+    at async Object.hook-switched-on (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program/devnet/scenarios.ts:401:5)
+    at async main (/Users/jagadeesh/1nonly/grants/stocklana-worktrees/program/tests/program/devnet/scenarios.ts:432:5) {
+  signature: '',
+  transactionMessage: 'Transaction simulation failed: Error processing Instruction 1: custom program error: 0x1784',
+  transactionLogs: [
+    'Program ComputeBudget111111111111111111111111111111 invoke [1]',
+    'Program ComputeBudget111111111111111111111111111111 success',
+    'Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv invoke [1]',
+    'Program log: Instruction: SettleClaim',
+    'Program log: AnchorError thrown in programs/basket/src/lib.rs:580. Error Code: NoClaim. Error Number: 6020. Error Message: No claim on this leg.',
+    'Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv consumed 17557 of 599850 compute units',
+    'Program GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv failed: custom program error: 0x1784'
+  ]
+}
+exit 1

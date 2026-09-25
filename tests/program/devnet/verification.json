@@ -1,0 +1,59 @@
+{
+ "checkedAt": "2026-09-24T21:23:52.880Z",
+ "files": {
+  "deploy.json": {
+   "signatures": 1,
+   "finalizedNoError": 1,
+   "refusalsSimulated": 0,
+   "checksPassed": "-"
+  },
+  "setup.json": {
+   "signatures": 23,
+   "finalizedNoError": 23,
+   "refusalsSimulated": 0,
+   "checksPassed": "0/0"
+  },
+  "seizure.json": {
+   "signatures": 11,
+   "finalizedNoError": 11,
+   "refusalsSimulated": 0,
+   "checksPassed": "11/11",
+   "passed": true
+  },
+  "pause-mid-redemption.json": {
+   "signatures": 22,
+   "finalizedNoError": 22,
+   "refusalsSimulated": 3,
+   "checksPassed": "24/24",
+   "passed": true
+  },
+  "fee-change-mid-position.json": {
+   "signatures": 9,
+   "finalizedNoError": 9,
+   "refusalsSimulated": 0,
+   "checksPassed": "11/11",
+   "passed": true
+  },
+  "multiplier-change-mid-position.json": {
+   "signatures": 9,
+   "finalizedNoError": 9,
+   "refusalsSimulated": 0,
+   "checksPassed": "17/17",
+   "passed": true
+  },
+  "hook-switched-on.json": {
+   "signatures": 11,
+   "finalizedNoError": 11,
+   "refusalsSimulated": 2,
+   "checksPassed": "13/13",
+   "passed": true
+  },
+  "frozen-vault.json": {
+   "signatures": 11,
+   "finalizedNoError": 11,
+   "refusalsSimulated": 2,
+   "checksPassed": "13/13",
+   "passed": true
+  }
+ }
+}

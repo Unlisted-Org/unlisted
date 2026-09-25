@@ -1,0 +1,311 @@
+{
+ "steps": [
+  {
+   "label": "create basket lookup table",
+   "signature": "2pHMcjm2q8pJgDLoLYjPQqmuzVztJiDih6Ax1mZbhNB2oZWuNY8yXFnZJDv5iqPxLNCw1jF9kLqBxX8dYSEvwAEq",
+   "slot": 503662273,
+   "events": []
+  },
+  {
+   "label": "extend basket lookup table",
+   "signature": "omSKX94zQKuspegcpDtF55BR18F3qkVnVKR4Wj49TVmReGsDJuwDwgEaVRbR3D2dA4ZwsdFyeFFLLhzH9nNcXNa",
+   "slot": 503662323,
+   "events": []
+  },
+  {
+   "label": "create share mint (authority = basket PDA) and the authority's share account",
+   "signature": "F5RDCmZnkFd1evYj2GS5eknzDQanLgT8a3CtBgbNPAahUC5zTGX3vLS6bnG9z4iCrAHeRonqpF8VRhjXT2VkdiP",
+   "slot": 503662408,
+   "events": []
+  },
+  {
+   "label": "initialize_basket (C's fixture mints, router allowlist = fixture_amm)",
+   "signature": "3uzYeobJBjDQQSTJhu8o3yHGBsrJ7bWEbFFZqVMDefP9Gxw5ijB5PeSiBhjcSZWcMDT8xcaqs2SAJFqetcUg5NuU",
+   "slot": 503662441,
+   "events": []
+  },
+  {
+   "label": "bootstrap (in kind, INITIAL_SHARES)",
+   "signature": "ZhLs24LtobytL6C9kXKBDkcFb5ZksxiBH8117jrwq9Q9nBNfBbsYuZH4ivsvLUBtHZSFdh7TJ8NS1XRpYqByD8U",
+   "slot": 503662749,
+   "events": [
+    {
+     "name": "Minted",
+     "data": {
+      "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+      "shares": "3b9aca00",
+      "deltas": [
+       "03049573",
+       "05b6a758",
+       "0df972e6",
+       "24736e20",
+       "287ee1f3",
+       "06a8578b",
+       "215ea051",
+       "00"
+      ],
+      "path": {
+       "Bootstrap": {}
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "cluster": "devnet",
+ "program": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+ "basket": "GJueMRWMqH8AMRBD8JP1qXS3vBGAAsjeyNWrYBzeWwJV",
+ "shareMint": "HjpaxrkjftbtcRJuyAEm7oR8scasnWNxKNgnN26p7iqj",
+ "authority": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+ "usdcMint": "5qD6fWLePJ8MiFDa3er38G76RHY53VatQUNZRm7i8M15",
+ "usdcReserve": "CeBgkD5Yc3HXmAtsJ563ruqQK3u3SMm64qUYYM5nxVXn",
+ "routers": [
+  "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF"
+ ],
+ "legs": [
+  {
+   "symbol": "OPENAI",
+   "mint": "AoALoXQiT2d96fKyXLnEgfAwCMBCbfuktG5tAYwxVW2M",
+   "vault": "CdkukgxJDrfdLhTsPB3RwU5N5DQRfVAAD6epThejhS5y",
+   "mirror_of": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF"
+  },
+  {
+   "symbol": "ANTHROPIC",
+   "mint": "kW6VrnFFAJCpi5UZ9dGvH1wmTNSAnG1AkgQr2JGo29Q",
+   "vault": "F8QshcwaZ94DyvTrVsigxZfTTtkR1WSWaE4SyaSW9SiF",
+   "mirror_of": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw"
+  },
+  {
+   "symbol": "NEURALINK",
+   "mint": "Bopp1cziw4BSo8e65zTPnR5QCcXkG1HQ4CmGJr8obLUs",
+   "vault": "WNSuhhyK5vD9fwhpeG78mqJT55jSk6mPxdopbYdJwUF",
+   "mirror_of": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S"
+  },
+  {
+   "symbol": "ANDURIL",
+   "mint": "AFun4hysF5E6KWTePygHik9iss71XTwYcXtXeSVRtz2m",
+   "vault": "8TnxNKq43Ns7ScnEkqRK3uu4ae7ryrVuemYTRYMnJN6w",
+   "mirror_of": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB"
+  },
+  {
+   "symbol": "POLYMARKET",
+   "mint": "5TSgWpjEsygK9h4cF66ATWMat6TkXQkJvHJ5HDaM7AFg",
+   "vault": "7PHWdkJPXcL2MzkeCPYAMPPWLuRvpKRjF4yEcXbhSE5S",
+   "mirror_of": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP"
+  },
+  {
+   "symbol": "KALSHI",
+   "mint": "D9zy2VqnveEYjqH9SJhuqc3KCb6AnDYSciFnE3Qga9z9",
+   "vault": "3ixVZ9hTjtkRLuEjmGQY3cwW7U3dRBngex3SWA9P6c97",
+   "mirror_of": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua"
+  },
+  {
+   "symbol": "FIGUREAI",
+   "mint": "Ac2fWYpnj81xGTJxxPNRLPf2sP1ozj5in6fjsbxMZUqJ",
+   "vault": "6hRubtaoRPD9QgXVF4g24F3SnmfU1DP3WvMxWSTAMZPw",
+   "mirror_of": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd"
+  }
+ ],
+ "registry": {
+  "source": "/private/tmp/claude-501/-Users-jagadeesh-1nonly-grants-stocklana/c42c7ea3-d340-4631-ac1c-944b59c1b5b8/scratchpad/a-registry.json",
+  "commit": "8c50907e50f2998922148ffe18fb130d7280b50e"
+ },
+ "lookupTable": "9yH9RSWpNhjZuZgvatW5wzq4uKiXP4zj47jeUgv7uyFc",
+ "inceptionPricing": {
+  "usdPerLeg": 100,
+  "source": "Jupiter price v3 usdPricePrescaled (mainnet), as recorded in fixtures/registry.json fixture_amm.pools[].seed",
+  "legs": [
+   {
+    "symbol": "OPENAI",
+    "usdPerRaw": 0.0000019552832153689637,
+    "mainnetBlock": 450149461,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "51143486"
+   },
+   {
+    "symbol": "ANTHROPIC",
+    "usdPerRaw": 0.000001032794097573108,
+    "mainnetBlock": 450149477,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "96824720"
+   },
+   {
+    "symbol": "NEURALINK",
+    "usdPerRaw": 4.2226183752304477e-7,
+    "mainnetBlock": 450148897,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "236819885"
+   },
+   {
+    "symbol": "ANDURIL",
+    "usdPerRaw": 1.6188516510390486e-7,
+    "mainnetBlock": 450148430,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "617721827"
+   },
+   {
+    "symbol": "POLYMARKET",
+    "usdPerRaw": 1.4571594687415091e-7,
+    "mainnetBlock": 450149489,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "686266686"
+   },
+   {
+    "symbol": "KALSHI",
+    "usdPerRaw": 8.863362757425293e-7,
+    "mainnetBlock": 450145536,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "112823995"
+   },
+   {
+    "symbol": "FIGUREAI",
+    "usdPerRaw": 1.7683322129343975e-7,
+    "mainnetBlock": 450144700,
+    "fetchedAt": "2026-09-24T21:24:34Z",
+    "gross": "565504599"
+   }
+  ]
+ },
+ "bootstrapGross": [
+  "51143486",
+  "96824720",
+  "236819885",
+  "617721827",
+  "686266686",
+  "112823995",
+  "565504599"
+ ],
+ "vaultBalances": [
+  "50632051",
+  "95856472",
+  "234451686",
+  "611544608",
+  "679404019",
+  "111695755",
+  "559849553"
+ ],
+ "finishedAt": "2026-09-24T21:29:25.925Z",
+ "ticketDeposit": {
+  "steps": [
+   {
+    "label": "open_deposit_ticket (7 × $1 fixture USDC)",
+    "signature": "4jpNeWdk9BqhQ7Mo7HsruktK4cjfyyZc1cETyFvjQtdbMLXt31UxJ4Wezn6XKMd6zwTzRVhAUJbYqhLg2pCyySEt",
+    "slot": 503663101,
+    "size": 415,
+    "accounts": 25,
+    "cu": 66145,
+    "cpiDepth": 3,
+    "events": []
+   },
+   {
+    "label": "ticket_swap_leg ×5 through fixture_amm (OPENAI, ANTHROPIC, NEURALINK, ANDURIL, POLYMARKET)",
+    "signature": "wQYnTW7oCPyQTa1KNJvcS1weKBnLXZXUCpPnHikWnnzQb4U6w4yVL7Dp7n1KEqsyL33MSEKZzssAKfxzcwPCgG7",
+    "slot": 503663236,
+    "size": 1136,
+    "accounts": 35,
+    "cu": 205975,
+    "cpiDepth": 3,
+    "events": []
+   },
+   {
+    "label": "ticket_swap_leg ×2 through fixture_amm (KALSHI, FIGUREAI)",
+    "signature": "23stqexpMjb4jQmfq45NfqbUEXbdZaxv6yd1KirfAGAtQw8YRUjmMkm4GGZLFGJwG3Av9BaxdBZ4mVeAXN4JK57U",
+    "slot": 503663340,
+    "size": 641,
+    "accounts": 20,
+    "cu": 82480,
+    "cpiDepth": 3,
+    "events": []
+   },
+   {
+    "label": "finalize_deposit (mints shares, refunds leftover USDC, closes the ticket)",
+    "signature": "4tgiPRfHeyfnN2zpJmgNUTKrj3ZF4UhQwKrG3BQM1hHRoZZafririXsbiqsYPvFHmqx95CJMCneGa4trX8f5wamw",
+    "slot": 503663425,
+    "size": 430,
+    "accounts": 25,
+    "cu": 50805,
+    "cpiDepth": 2,
+    "events": [
+     {
+      "name": "Minted",
+      "data": {
+       "owner": "DBJ6FdxbtWEZsVjUsZ3PBMefpxvmtQX8pMp7sDULoFgb",
+       "shares": "9833a9",
+       "deltas": [
+        "07b4dc",
+        "0e9704",
+        "23af42",
+        "5d1495",
+        "676874",
+        "110014",
+        "5535ca",
+        "00"
+       ],
+       "path": {
+        "Ticket": {}
+       }
+      }
+     }
+    ]
+   }
+  ],
+  "ticket": "7CzqLBfbJHJ2VMFFeWLmP5uiqiN82iV8soHkFim5Jam3",
+  "escrow": "32mMSk2bzHFqkmvZPykXcnn7zVRWQyd7zUJVPxf4kjx6",
+  "usdcPerLeg": "1000000",
+  "router": "aznyZehUyR37Zr9iRM22jgWoPQ43PznYB9TDUxYMTqF",
+  "legs": [
+   {
+    "leg": "OPENAI",
+    "pool": "Ciz3eg49sUTtizztUNmtg36otfebjzVh1Mbqc6uDYLhe",
+    "expectedNet": "505052",
+    "minOut": "494950",
+    "measuredDelta": "505052"
+   },
+   {
+    "leg": "ANTHROPIC",
+    "pool": "FD7PUGpAKFyg7aXSF9TnMwLDB3SyGuKQXi62PfKQ7SW4",
+    "expectedNet": "956164",
+    "minOut": "937040",
+    "measuredDelta": "956164"
+   },
+   {
+    "leg": "NEURALINK",
+    "pool": "Ae61FfRZHuHEqspMVgxpPEfMnvazWevMzMZUofYNrh7Y",
+    "expectedNet": "2338626",
+    "minOut": "2291853",
+    "measuredDelta": "2338626"
+   },
+   {
+    "leg": "ANDURIL",
+    "pool": "ChEbZyQMUX5T3DZd2gma6Pyo1F89Me2hUoTq4yXcZL2e",
+    "expectedNet": "6100117",
+    "minOut": "5978114",
+    "measuredDelta": "6100117"
+   },
+   {
+    "leg": "POLYMARKET",
+    "pool": "5P21LBbjvUgQF583eyLwYDLQ62YzYi3jc3uWjA4cP9EJ",
+    "expectedNet": "6776948",
+    "minOut": "6641409",
+    "measuredDelta": "6776948"
+   },
+   {
+    "leg": "KALSHI",
+    "pool": "4W7cwipT8Rsts4Nh546BDRK8X1jnjE6a2eRfGErVBPXh",
+    "expectedNet": "1114132",
+    "minOut": "1091849",
+    "measuredDelta": "1114132"
+   },
+   {
+    "leg": "FIGUREAI",
+    "pool": "4tyZqv3tt7Kcm8xnWGuDesC4XMfgyJDdhz8mSseVgBq4",
+    "expectedNet": "5584330",
+    "minOut": "5472643",
+    "measuredDelta": "5584330"
+   }
+  ],
+  "landedMask": 127,
+  "sharesMinted": "9974697",
+  "ticketClosed": true
+ }
+}

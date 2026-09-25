@@ -1,0 +1,672 @@
+{
+ "at": "2026-09-24T20:47:57.676Z",
+ "rpc": "https://api.mainnet-beta.solana.com",
+ "takers": {
+  "wallet": "H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS",
+  "pda": "2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ",
+  "program": "G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf"
+ },
+ "results": [
+  {
+   "amm": "BisonFi",
+   "leg": "OPENAI",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=BisonFi%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "BisonFi",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4994707",
+   "simSlot": 450141263,
+   "ok": true,
+   "err": null,
+   "cu": 138381,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program BiSoNHVpsVZW2F7rx2eQ59yQwKxzU5NvBcmKshCSUypi invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "BisonFi",
+   "leg": "OPENAI",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=BisonFi%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "BisonFi",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4993702",
+   "simSlot": 450141271,
+   "ok": true,
+   "err": null,
+   "cu": 169267,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner"
+   ]
+  },
+  {
+   "amm": "BisonFi",
+   "leg": "OPENAI",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=BisonFi%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "BisonFi",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995509",
+   "simSlot": 450141280,
+   "ok": true,
+   "err": null,
+   "cu": 144135,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program BiSoNHVpsVZW2F7rx2eQ59yQwKxzU5NvBcmKshCSUypi invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Flux",
+   "leg": "OPENAI",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=Flux%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Flux",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995220",
+   "simSlot": 450141289,
+   "ok": true,
+   "err": null,
+   "cu": 118110,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program FLUX6xBayGxLX9UcimVRxXFMHH6q43mAbRvDzSpCsvfK invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Flux",
+   "leg": "OPENAI",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=Flux%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Flux",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995233",
+   "simSlot": 450141297,
+   "ok": true,
+   "err": null,
+   "cu": 146221,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]"
+   ]
+  },
+  {
+   "amm": "Flux",
+   "leg": "OPENAI",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=Flux%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Flux",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995720",
+   "simSlot": 450141306,
+   "ok": true,
+   "err": null,
+   "cu": 123279,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program FLUX6xBayGxLX9UcimVRxXFMHH6q43mAbRvDzSpCsvfK invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "ANDURIL",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Meteora DLMM"
+   ],
+   "outAmount": "59792571",
+   "simSlot": 450141313,
+   "ok": true,
+   "err": null,
+   "cu": 74123,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "ANDURIL",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Meteora DLMM"
+   ],
+   "outAmount": "59792571",
+   "simSlot": 450141322,
+   "ok": true,
+   "err": null,
+   "cu": 89314,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "ANDURIL",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Meteora DLMM"
+   ],
+   "outAmount": "59792571",
+   "simSlot": 450141330,
+   "ok": true,
+   "err": null,
+   "cu": 82009,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "OPENAI",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Quantum",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4996160",
+   "simSlot": 450141339,
+   "ok": true,
+   "err": null,
+   "cu": 105099,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program QuaNtZsgYRe5Z9Bk4LZ4cTD9tbkVoyCNf1R2BN9bBDv invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "OPENAI",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Quantum",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4996181",
+   "simSlot": 450141348,
+   "ok": true,
+   "err": null,
+   "cu": 137865,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "OPENAI",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Quantum",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4996606",
+   "simSlot": 450141356,
+   "ok": true,
+   "err": null,
+   "cu": 112946,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program QuaNtZsgYRe5Z9Bk4LZ4cTD9tbkVoyCNf1R2BN9bBDv invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "KALSHI",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Quantum",
+    "Meteora DLMM"
+   ],
+   "outAmount": "11282015",
+   "simSlot": 450141364,
+   "ok": true,
+   "err": null,
+   "cu": 97884,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program QuaNtZsgYRe5Z9Bk4LZ4cTD9tbkVoyCNf1R2BN9bBDv invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "KALSHI",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Quantum",
+    "Meteora DLMM"
+   ],
+   "outAmount": "11282943",
+   "simSlot": 450141372,
+   "ok": true,
+   "err": null,
+   "cu": 134912,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]"
+   ]
+  },
+  {
+   "amm": "Quantum",
+   "leg": "KALSHI",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=Quantum%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "Quantum",
+    "Meteora DLMM"
+   ],
+   "outAmount": "11283068",
+   "simSlot": 450141380,
+   "ok": true,
+   "err": null,
+   "cu": 109983,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program QuaNtZsgYRe5Z9Bk4LZ4cTD9tbkVoyCNf1R2BN9bBDv invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "TesseraV",
+   "leg": "KALSHI",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=TesseraV%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "TesseraV",
+    "Meteora DLMM"
+   ],
+   "outAmount": "11282298",
+   "simSlot": 450141389,
+   "ok": true,
+   "err": null,
+   "cu": 144460,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program TessVdML9pBGgG9yGks7o4HewRaXVAMuoVj4x83GLQH invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "TesseraV",
+   "leg": "KALSHI",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=TesseraV%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "TesseraV",
+    "Meteora DLMM"
+   ],
+   "outAmount": "11282573",
+   "simSlot": 450141397,
+   "ok": true,
+   "err": null,
+   "cu": 180843,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner"
+   ]
+  },
+  {
+   "amm": "TesseraV",
+   "leg": "KALSHI",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=TesseraV%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "TesseraV",
+    "Meteora DLMM"
+   ],
+   "outAmount": "11281341",
+   "simSlot": 450141406,
+   "ok": true,
+   "err": null,
+   "cu": 158932,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program TessVdML9pBGgG9yGks7o4HewRaXVAMuoVj4x83GLQH invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Hadron",
+   "leg": "ANTHROPIC",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=Hadron",
+   "status": 200,
+   "route": [
+    "Hadron"
+   ],
+   "outAmount": "9459283",
+   "simSlot": 450141414,
+   "ok": true,
+   "err": null,
+   "cu": 87247,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program HADRoNbLovyqhCsocfYQYB7QdfCAAinN9HTePvBCVDQ8 invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Hadron",
+   "leg": "ANTHROPIC",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=Hadron",
+   "status": 200,
+   "route": [
+    "Hadron"
+   ],
+   "outAmount": "9459283",
+   "simSlot": 450141422,
+   "ok": true,
+   "err": null,
+   "cu": 106938,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program HADRoNbLovyqhCsocfYQYB7QdfCAAinN9HTePvBCVDQ8 invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "Hadron",
+   "leg": "ANTHROPIC",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=Hadron",
+   "status": 200,
+   "route": [
+    "Hadron"
+   ],
+   "outAmount": "9459283",
+   "simSlot": 450141431,
+   "ok": true,
+   "err": null,
+   "cu": 93724,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program HADRoNbLovyqhCsocfYQYB7QdfCAAinN9HTePvBCVDQ8 invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "1DEX",
+   "leg": "OPENAI",
+   "taker": "wallet",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=H8sMJSCQxfKiFTCfDR3DUMLPwcRbM61LGFJ8N4dK3WjS&dexes=1DEX%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "1DEX",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995541",
+   "simSlot": 450141439,
+   "ok": true,
+   "err": null,
+   "cu": 145622,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program DEXYosS6oEGvk8uCDayvwEZz4qEyDJRf9nFgYCaqPMTm invoke [2]",
+    "Program LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo invoke [2]",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 invoke [2]"
+   ]
+  },
+  {
+   "amm": "1DEX",
+   "leg": "OPENAI",
+   "taker": "pda",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=2nLVuDGMC3AM6BFuge5qSyZ6S1Ne5w1vMo5V9RqCBLdQ&dexes=1DEX%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "1DEX",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995541",
+   "simSlot": 450141447,
+   "ok": true,
+   "err": null,
+   "cu": 175981,
+   "keyLogs": [
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner"
+   ]
+  },
+  {
+   "amm": "1DEX",
+   "leg": "OPENAI",
+   "taker": "program",
+   "url": "https://api.jup.ag/swap/v2/build?slippageBps=300&maxAccounts=30&inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF&amount=10000000&taker=G54nsrBx9a59YVqiqk2Sg3yX9wQauRz5MEugdWDjvmsf&dexes=1DEX%2CMeteora+DLMM",
+   "status": 200,
+   "route": [
+    "1DEX",
+    "Meteora DLMM"
+   ],
+   "outAmount": "4995541",
+   "simSlot": 450141456,
+   "ok": false,
+   "err": {
+    "InstructionError": [
+     5,
+     {
+      "Custom": 26000
+     }
+    ]
+   },
+   "cu": 54408,
+   "keyLogs": [
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program 11111111111111111111111111111111 invoke [2]",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program log: Instruction: InitializeImmutableOwner",
+    "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]",
+    "Program DEXYosS6oEGvk8uCDayvwEZz4qEyDJRf9nFgYCaqPMTm invoke [2]",
+    "Program log: AnchorError caused by account: user. Error Code: OwnerSystemProgramID. Error Number: 26000. Error Message: Owner: should be system program ID.",
+    "Program DEXYosS6oEGvk8uCDayvwEZz4qEyDJRf9nFgYCaqPMTm failed: custom program error: 0x6590",
+    "Program JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4 failed: custom program error: 0x6590"
+   ]
+  }
+ ],
+ "programOwnedTaker": {
+  "owner": "BASKT7aKd8n7ibpUbwLP3Wiyxyi3yoiXsxBk4Hpumate",
+  "dataLen": 30659,
+  "onCurve": false
+ },
+ "pdaTaker": {
+  "exists": false,
+  "onCurve": false
+ }
+}

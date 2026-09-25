@@ -1,0 +1,25 @@
+open_deposit_ticket (3 × $1 fixture USDC): 5mnBkpCnWG9setDTFDeiSwcQH5wdQ1EfSR1THYDogpyZRNS5tvwaZ6YXxBFByPAUUadew7CmXEc3QicnUsm2avbo
+create a ticket-owned intermediate (Token-2022 OPENAI account, as a Jupiter route's taker output): 4mzCAFNiNma7zG8KrPW99pn5pcDHESRtJkdajk2JeYekpXSGonKKypLeAGLWPo1wxZq2NJRWVXX2VTur1cjqrCNG
+ticket_swap_leg ×3 through fixture_amm (OPENAI, ANTHROPIC, NEURALINK): 4iLFvrrGcWHKwQkB57YcrrpzL59WVoMdwTfcFp5eMFC7XFpkYb8B6mkAwJoSJPyYNZ2ce2yEoBQRZ93MgfZ48p67
+  ✔ all 3 legs landed (landed_mask 7)
+BROKEN (a): abort_deposit before unwinding the landed legs: simulated (LegsStillLanded)
+  ✔ broken (a) refused by the program with LegsStillLanded
+unwind_leg OPENAI: sell 505046 raw back to USDC into the escrow (basket-signed, fixture_amm): v5LVkVhAxy6ppSUGVE5sne6beNYwbNXhz8CuWCK3N69m7MSp6McAiwALNsWYHjWgiSf6ZnFRQSkcyraVAs3KpqQ
+  ✔ OPENAI: vault gave back exactly the ticket's 505046 raw; escrow +975201 = pool output 975201
+unwind_leg ANTHROPIC: sell 956154 raw back to USDC into the escrow (basket-signed, fixture_amm): 3kAEUJdC1ZwBsn7KZaMnzpzssHz7ELhkuTFK3MkH9pZAhDU5VMapHXmjZesqdn2mk4ggrb1jfbPikkiR1CRFLjCJ
+  ✔ ANTHROPIC: vault gave back exactly the ticket's 956154 raw; escrow +975202 = pool output 975202
+unwind_leg NEURALINK: sell 2338532 raw back to USDC into the escrow (basket-signed, fixture_amm): q6gTQRRgXTWktvpaMM1Q7qGx7rMDVRZdmZhHF7BnWhywkRXZ7XPWdAEW5USBBZCYYLs6RfmghaHt5wjgCPDRiff
+  ✔ NEURALINK: vault gave back exactly the ticket's 2338532 raw; escrow +975205 = pool output 975205
+  ✔ each unwound vault is back at its balance before the ticket
+  ✔ basket pending_norm and accounted restored for the unwound legs
+  ✔ ticket landed_mask is 0 after the unwinds
+  ✔ escrow at abort 2925608 = after swaps 0 + unwind proceeds 2925608
+BROKEN (b): abort_deposit that skips the ticket-owned intermediate: simulated (ok)
+  ✔ broken (b) caught: the program would accept it (simulation ok), but the check finds 1 ticket-owned account not closed (1620520 lamports of the owner's rent stranded)
+  ✔ the real abort closes every ticket-owned account
+abort_deposit (escrow → owner, closes escrow, intermediate and ticket; rent → owner): 4mnuhQABT6zLdBDiZ7NbsbUP51fThBtR8br967Qbo9k39HzLye7WtB7n1MrdY7yxW51fnxCvrsZBsk4cZxQhmKgc
+  ✔ nothing left behind: ticket, escrow and intermediate closed; no token account owned by the ticket
+  ✔ owner received the escrow: +2925608 = 2925608
+  ✔ owner USDC: before 9993000000 − usdc_in 3000000 + unspent 0 + unwind proceeds 2925608 = 9992925608
+  ✔ owner SOL: before 2733052920 − fees 35000 = after 2733017920 (every rent lamport returned)
+net cost of the round trip: 74392 fixture USDC raw (AMM LP fees + 1% leg transfer fees both ways) and 35000 lamports of fees

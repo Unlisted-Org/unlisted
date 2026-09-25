@@ -1,0 +1,60 @@
+issuer SOL spent on setup: 0
+
+== hook-switched-on
+create share mint (authority = basket PDA): 2euxe5yMKPhUfhFPTMwSx2HZS4N7kUqzSoUv5vmyTWZnXuo7fPjL64i21FYEbQ7oECGEfkf6pTGfQyxzYwxSNVbq
+initialize_basket: 2CrKAoTWsz2dQ1SB4SbjSEAyU6N1DrR47ngHE2kBLt7Xnu8YQvKGRxvnqcRxkSjpE753giA6JuiSnz5S3bLdArK2
+fixture issuer mints 1000000000000 raw of each leg to the authority: 3kvpfqZcvJrmobZPKwuSuUJC3FyznzudLh2Gu5aE2T4jR8D1ZsjwBr9yh4nSxu4ydZTLqpohs2ytKX83T4fu99uc
+bootstrap (INITIAL_SHARES, in kind): 3ampLz3RXXr8WX195xrcgTHYKUpiqxaVNNiNrCRuNKWxCYLzPfLCqPA68bSXLhPMvyG27asQbJoMTqEvy2z6q96P
+fixture issuer mints 500000000000 raw of each leg to alice: 3rq7GYdFCeYkf3knhKtyxCrwU5En68WiMoYXUfYwx2ZERoZzQen7XnVF7ZBWNfZQEaEZ3aVrjLDDYachxRzHmf3u
+alice deposit_in_kind: 59dTq3V9ebRSckwYU8Qz6aMmaHTZE4b3L61kZu6V9MHBzNUQTWZFZNvCeu5v2Epa5rqLeHsqx6x7M4oft3yDYM3i
+  ✔ bootstrap minted INITIAL_SHARES
+ISSUER sets POLYMARKET transfer hook to MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr: 35FoPcCiBEv5JsJRiecxmKyEECqyBEExehfL8AX4pvsSNSkG9DtsS3X6KoX3xdw8c8mfGYoU13UmZXFUpHjXYNoo
+fixture issuer mints 1000000000 raw of each leg to bob: 5o2LaCjhadNzMcECvwKAYVQeCpHP9jMeLCKroidZtxwYQ9qRN4oBN5DAe1MfWvX6kmypVKHdnrEVKtjGQSQ81VGf
+bob deposit_in_kind with a hook on POLYMARKET: refused (LegUnavailable)
+  ✔ bob deposit_in_kind with a hook on POLYMARKET → LegUnavailable
+alice redeems: POLYMARKET (hook set) becomes a claim, the rest pay: 2YDjBJSBUubZhdJ5GjKvLsLC6XKF5cEPCLNKvSHPX4Kp2mbs2K6HUpSJRJoYKAK84u6gptuHX2QecK5KB4EU9fNe
+  ✔ OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ NEURALINK paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ POLYMARKET became a claim of 250000000 units
+  ✔ KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ FIGUREAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+  ✔ claim reason Hook
+settle_claim while the hook is set: refused (LegUnavailable)
+  ✔ settle_claim while the hook is set → LegUnavailable
+ISSUER sets POLYMARKET transfer hook to null: 479Sgzoz7c68hkwQmUVeSQpNg9232G1DHv4fQLXAUfVNL27BWwi1yT9rkhiFivDoeLr2AmjPJxV8QcX66qx99Tk7
+hook removed: the claim settles: 4G1DVR6c9LJGzkzBFDFAH9829JS17EHiQx92gUGCtGytrNgaN77Y5L2qSZGHKG8KrjTWMLmGu3rXea97o1NDXKui
+  ✔ POLYMARKET claim settled: amount 247500000000 = floor(units·owned/(S+C)) at settlement, received 245025000000
+issuer SOL spent on hook-switched-on: 0.02729364
+
+== frozen-vault
+create share mint (authority = basket PDA): 2Mg14KpnaKV1ZVL4jwS9q37DaDkvonxg2a2eH1Ru188x2T7fXGS2uPPt7XPTMs7go829p1CVFwAABuHoxFNqGNxa
+initialize_basket: 2Q2ecXFHhxfvjToP48S8datPpuRYLQAmWrqVwpWHNP9bdWRjsWByfF8Endhn83hKcaKbDwycXAzL6Tk6dhoGst78
+fixture issuer mints 1000000000000 raw of each leg to the authority: 2Xj8CatiJ7hTVXfZrsFmjXweZrMU5VLv6utP4QkszaX81eUz4dDKAprB2GimqB4aV8YoQpaJvyy6rAv5WkygfdFt
+bootstrap (INITIAL_SHARES, in kind): 8pZccZcfE96BjKrHctEjRcoXtKJu3iYCWdSRBkyFwt2djCDpPxhChK3dTR84TGBWm2WVsM22yLZFh1gy5G3xCe7
+fixture issuer mints 500000000000 raw of each leg to alice: VCvfU3MjgqNWjyP5hCWo9LL7uQS9EUyK9JJB1HNRRx1pKzanxdGqr5dqLbdnvArn4u5HMeboGS1m7W4t8aLz2Dr
+alice deposit_in_kind: 5shsHbnW1eCN7xg1xjRWHo597U5ebuvUKZXh5b32SMVzNCXJaXMxdvmnNLsoZgBWm13vd3bdKJZWfsQZjBrHw64Q
+  ✔ bootstrap minted INITIAL_SHARES
+ISSUER freezes the basket's FIGUREAI vault: 4rmpzqjTtvEE6dnRrhdmGG28dndBH655qtdrLBkCvXVKh7c73ipigbLMmSm3pgKQKZyvpZCKLKiAp9gqqh3BsSXE
+fixture issuer mints 1000000000 raw of each leg to bob: 4ZAN9QbzH1M21fwdSkKoLysnxsXFzFxontxsKLa1kb6yojfUvWocTh3eMf8oNQJ9J43sMmbpWQzF8rJ1b9YFT2t1
+bob deposit_in_kind with the FIGUREAI vault frozen: refused (LegUnavailable)
+  ✔ bob deposit_in_kind with the FIGUREAI vault frozen → LegUnavailable
+alice redeems: the frozen FIGUREAI vault becomes a claim, the rest pay: 5bb3tt6tBtskqRMd5ixAZnm4CQDcPoweHqNXLNZ7GsNRzrKmdxGjQjxbj5fL42DYvjPaJtoKeo9FPbQQWv9DvqGL
+  ✔ OPENAI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANTHROPIC paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ NEURALINK paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ ANDURIL paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ POLYMARKET paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ KALSHI paid now: gross 247500000000 = floor(s·owned/(S+C)), received 245025000000
+  ✔ FIGUREAI became a claim of 250000000 units
+  ✔ ClaimCreated emitted for exactly the unavailable legs
+  ✔ claim reason Frozen
+settle_claim while the vault is frozen: refused (LegUnavailable)
+  ✔ settle_claim while the vault is frozen → LegUnavailable
+ISSUER thaws the basket's FIGUREAI vault: 5x4N3oEYbLHJhj7yRXRvcjQxVoqvZfqLHBzSx8TMq6trPHsnBPRjnJkkFNezEgboWFFZcsNmFSj8WhjMZpyrUe94
+vault thawed: the claim settles: 3DjmwAdYYbnKwPunSjEPaARmBXELrpZBXw1NReTW1mxtQAmJuWPMMzzw9eCyDMzBCtFcgEwS8sDeN5BbBD4gstjy
+  ✔ FIGUREAI claim settled: amount 247500000000 = floor(units·owned/(S+C)) at settlement, received 245025000000
+issuer SOL spent on frozen-vault: 0.02729364
+exit 0

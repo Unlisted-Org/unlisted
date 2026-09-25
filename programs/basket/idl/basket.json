@@ -1,0 +1,2136 @@
+{
+  "address": "GyiHodshTGFo7hXSXGQiHLTCzH9yF2QWWHy6s7sm6QQv",
+  "metadata": {
+    "name": "basket",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Unlisted basket program: partial redemption, balance-as-truth accounting, no oracle"
+  },
+  "instructions": [
+    {
+      "name": "abort_deposit",
+      "docs": [
+        "Remaining accounts: any ticket-owned intermediate token accounts to close."
+      ],
+      "discriminator": [
+        107,
+        165,
+        252,
+        184,
+        33,
+        231,
+        230,
+        219
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "basket",
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "activate_router",
+      "discriminator": [
+        191,
+        3,
+        98,
+        236,
+        136,
+        46,
+        101,
+        188
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "basket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "router",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "bootstrap",
+      "docs": [
+        "Authority-only, once, into an empty basket: mints exactly INITIAL_SHARES."
+      ],
+      "discriminator": [
+        101,
+        108,
+        31,
+        241,
+        5,
+        211,
+        182,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "depositor",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        },
+        {
+          "name": "share_mint",
+          "writable": true
+        },
+        {
+          "name": "depositor_share_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "gross",
+          "type": {
+            "vec": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "cancel_listing",
+      "discriminator": [
+        41,
+        183,
+        50,
+        232,
+        230,
+        233,
+        157,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "basket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "close_redemption",
+      "discriminator": [
+        142,
+        112,
+        145,
+        176,
+        205,
+        140,
+        236,
+        90
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "convert_listed_leg",
+      "discriminator": [
+        122,
+        85,
+        208,
+        64,
+        32,
+        228,
+        0,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        },
+        {
+          "name": "leg_mint"
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "usdc_reserve",
+          "writable": true
+        },
+        {
+          "name": "router_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "min_usdc_out",
+          "type": "u64"
+        },
+        {
+          "name": "route_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "deposit_in_kind",
+      "discriminator": [
+        99,
+        180,
+        186,
+        64,
+        121,
+        239,
+        59,
+        98
+      ],
+      "accounts": [
+        {
+          "name": "depositor",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        },
+        {
+          "name": "share_mint",
+          "writable": true
+        },
+        {
+          "name": "depositor_share_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "gross",
+          "type": {
+            "vec": "u64"
+          }
+        },
+        {
+          "name": "min_shares",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "finalize_deposit",
+      "discriminator": [
+        240,
+        178,
+        165,
+        14,
+        221,
+        29,
+        104,
+        47
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true
+        },
+        {
+          "name": "share_mint",
+          "writable": true
+        },
+        {
+          "name": "owner_share_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "min_shares",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "flag_listing",
+      "discriminator": [
+        18,
+        0,
+        45,
+        163,
+        90,
+        40,
+        65,
+        32
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "basket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        },
+        {
+          "name": "convert_after",
+          "type": "i64"
+        },
+        {
+          "name": "deadline",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "harvest",
+      "discriminator": [
+        228,
+        241,
+        31,
+        182,
+        53,
+        169,
+        59,
+        199
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "basket"
+        },
+        {
+          "name": "leg_mint",
+          "writable": true
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initialize_basket",
+      "discriminator": [
+        246,
+        234,
+        106,
+        12,
+        103,
+        95,
+        178,
+        166
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  97,
+                  115,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "share_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "share_mint",
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "usdc_reserve",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "n_legs",
+          "type": "u8"
+        },
+        {
+          "name": "mirror_of",
+          "type": {
+            "vec": "pubkey"
+          }
+        },
+        {
+          "name": "max_convert_chunk",
+          "type": "u64"
+        },
+        {
+          "name": "routers",
+          "type": {
+            "vec": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "observe",
+      "docs": [
+        "Remaining accounts: (mint, vault) of each leg in `legs`, in leg order."
+      ],
+      "discriminator": [
+        204,
+        78,
+        178,
+        115,
+        194,
+        147,
+        65,
+        74
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "legs",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "open_deposit_ticket",
+      "discriminator": [
+        120,
+        179,
+        157,
+        67,
+        252,
+        110,
+        226,
+        57
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  112,
+                  111,
+                  115,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "basket"
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "arg",
+                "path": "nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "escrow",
+          "writable": true
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "usdc_in",
+          "type": "u64"
+        },
+        {
+          "name": "expiry_slots",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "propose_router",
+      "discriminator": [
+        198,
+        78,
+        12,
+        116,
+        75,
+        207,
+        43,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "basket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "router",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "redeem",
+      "discriminator": [
+        184,
+        12,
+        86,
+        149,
+        70,
+        196,
+        97,
+        225
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        },
+        {
+          "name": "share_mint",
+          "writable": true
+        },
+        {
+          "name": "owner_share_ata",
+          "writable": true
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  101,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "basket"
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "arg",
+                "path": "nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "usdc_reserve",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "shares",
+          "type": "u64"
+        },
+        {
+          "name": "mode",
+          "type": {
+            "defined": {
+              "name": "RedeemMode"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reinvest_reserve",
+      "discriminator": [
+        151,
+        109,
+        174,
+        81,
+        17,
+        30,
+        136,
+        187
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "usdc_reserve",
+          "writable": true
+        },
+        {
+          "name": "leg_mint"
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "router_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        },
+        {
+          "name": "usdc_amount",
+          "type": "u64"
+        },
+        {
+          "name": "min_out",
+          "type": "u64"
+        },
+        {
+          "name": "route_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "remove_router",
+      "docs": [
+        "Removal is immediate (spec 02). Not listed as its own instruction in spec 02; reported."
+      ],
+      "discriminator": [
+        237,
+        158,
+        68,
+        56,
+        210,
+        38,
+        168,
+        88
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "basket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "router",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "set_deposits_enabled",
+      "discriminator": [
+        21,
+        145,
+        113,
+        169,
+        210,
+        73,
+        35,
+        161
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "basket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "enabled",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "settle_claim",
+      "discriminator": [
+        205,
+        203,
+        21,
+        66,
+        255,
+        231,
+        209,
+        155
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "basket",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "leg_mint"
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "owner_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "share_mint"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "settle_leg_usdc",
+      "discriminator": [
+        252,
+        45,
+        215,
+        240,
+        109,
+        13,
+        43,
+        85
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "leg_mint"
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true
+        },
+        {
+          "name": "router_program"
+        },
+        {
+          "name": "share_mint"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        },
+        {
+          "name": "min_usdc_out",
+          "type": "u64"
+        },
+        {
+          "name": "route_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "ticket_swap_leg",
+      "discriminator": [
+        39,
+        162,
+        66,
+        3,
+        144,
+        44,
+        108,
+        24
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "leg_mint"
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "router_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        },
+        {
+          "name": "usdc_amount",
+          "type": "u64"
+        },
+        {
+          "name": "min_out",
+          "type": "u64"
+        },
+        {
+          "name": "route_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "unwind_leg",
+      "discriminator": [
+        38,
+        187,
+        177,
+        102,
+        1,
+        10,
+        148,
+        191
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "basket",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "leg_mint"
+        },
+        {
+          "name": "leg_vault",
+          "writable": true
+        },
+        {
+          "name": "router_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "leg",
+          "type": "u8"
+        },
+        {
+          "name": "min_usdc_out",
+          "type": "u64"
+        },
+        {
+          "name": "route_data",
+          "type": "bytes"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Basket",
+      "discriminator": [
+        219,
+        79,
+        107,
+        135,
+        231,
+        243,
+        218,
+        248
+      ]
+    },
+    {
+      "name": "DepositTicket",
+      "discriminator": [
+        147,
+        140,
+        28,
+        139,
+        216,
+        92,
+        230,
+        198
+      ]
+    },
+    {
+      "name": "RedemptionTicket",
+      "discriminator": [
+        134,
+        239,
+        22,
+        113,
+        25,
+        135,
+        201,
+        241
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "ClaimCreated",
+      "discriminator": [
+        12,
+        137,
+        189,
+        74,
+        127,
+        86,
+        118,
+        130
+      ]
+    },
+    {
+      "name": "ClaimSettled",
+      "discriminator": [
+        144,
+        220,
+        131,
+        115,
+        8,
+        187,
+        224,
+        236
+      ]
+    },
+    {
+      "name": "LegConverted",
+      "discriminator": [
+        147,
+        134,
+        128,
+        41,
+        52,
+        82,
+        111,
+        77
+      ]
+    },
+    {
+      "name": "LegListing",
+      "discriminator": [
+        1,
+        116,
+        83,
+        159,
+        124,
+        207,
+        56,
+        37
+      ]
+    },
+    {
+      "name": "LegRetired",
+      "discriminator": [
+        175,
+        248,
+        117,
+        175,
+        73,
+        206,
+        183,
+        248
+      ]
+    },
+    {
+      "name": "Minted",
+      "discriminator": [
+        174,
+        131,
+        21,
+        57,
+        88,
+        117,
+        114,
+        121
+      ]
+    },
+    {
+      "name": "Redeemed",
+      "discriminator": [
+        14,
+        29,
+        183,
+        71,
+        31,
+        165,
+        107,
+        38
+      ]
+    },
+    {
+      "name": "RouterProposed",
+      "discriminator": [
+        2,
+        131,
+        239,
+        227,
+        0,
+        152,
+        242,
+        91
+      ]
+    },
+    {
+      "name": "ShortfallObserved",
+      "discriminator": [
+        238,
+        147,
+        218,
+        208,
+        7,
+        95,
+        60,
+        79
+      ]
+    },
+    {
+      "name": "SurplusObserved",
+      "discriminator": [
+        146,
+        12,
+        234,
+        226,
+        53,
+        127,
+        65,
+        87
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "LegUnavailable",
+      "msg": "Leg unavailable: mint paused, transfer hook set, or vault frozen"
+    },
+    {
+      "code": 6001,
+      "name": "SlippageExceeded",
+      "msg": "Measured output below the caller's minimum"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientShares",
+      "msg": "Insufficient shares"
+    },
+    {
+      "code": 6003,
+      "name": "TicketIncomplete",
+      "msg": "Deposit ticket incomplete: not every active leg has landed"
+    },
+    {
+      "code": 6004,
+      "name": "TicketExpired",
+      "msg": "Deposit ticket expired"
+    },
+    {
+      "code": 6005,
+      "name": "RouterNotAllowed",
+      "msg": "Router not in allowlist"
+    },
+    {
+      "code": 6006,
+      "name": "NotBootstrapped",
+      "msg": "Basket not bootstrapped"
+    },
+    {
+      "code": 6007,
+      "name": "AlreadyBootstrapped",
+      "msg": "Basket already bootstrapped"
+    },
+    {
+      "code": 6008,
+      "name": "LegEmpty",
+      "msg": "Leg empty"
+    },
+    {
+      "code": 6009,
+      "name": "ListingNoticeTooShort",
+      "msg": "Listing notice or deadline margin too short"
+    },
+    {
+      "code": 6010,
+      "name": "ConversionNotOpen",
+      "msg": "Conversion not open"
+    },
+    {
+      "code": 6011,
+      "name": "OutstandingClaims",
+      "msg": "Outstanding claims on this leg"
+    },
+    {
+      "code": 6012,
+      "name": "DepositsDisabled",
+      "msg": "Deposits disabled"
+    },
+    {
+      "code": 6013,
+      "name": "UnexpectedExtensionSet",
+      "msg": "Mint does not carry the expected extension set"
+    },
+    {
+      "code": 6014,
+      "name": "HookNotNull",
+      "msg": "Transfer hook program is not null"
+    },
+    {
+      "code": 6015,
+      "name": "VaultFrozen",
+      "msg": "Vault account frozen"
+    },
+    {
+      "code": 6016,
+      "name": "MathOverflow",
+      "msg": "Math overflow"
+    },
+    {
+      "code": 6017,
+      "name": "ChunkTooLarge",
+      "msg": "Chunk larger than max_convert_chunk"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidAccount",
+      "msg": "Account does not match the basket's records"
+    },
+    {
+      "code": 6019,
+      "name": "Unauthorized",
+      "msg": "Signer not authorised for this action"
+    },
+    {
+      "code": 6020,
+      "name": "NoClaim",
+      "msg": "No claim on this leg"
+    },
+    {
+      "code": 6021,
+      "name": "RouteViolation",
+      "msg": "Route spent more than allowed or touched a basket account it may not"
+    },
+    {
+      "code": 6022,
+      "name": "LegsStillLanded",
+      "msg": "Deposit ticket still holds landed legs; unwind them first"
+    },
+    {
+      "code": 6023,
+      "name": "RouterNotPending",
+      "msg": "Router allowlist full or router not pending"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidArgument",
+      "msg": "Invalid argument"
+    }
+  ],
+  "types": [
+    {
+      "name": "Basket",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "share_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_reserve",
+            "type": "pubkey"
+          },
+          {
+            "name": "accounted_usdc_reserve",
+            "type": "u64"
+          },
+          {
+            "name": "n_legs",
+            "type": "u8"
+          },
+          {
+            "name": "legs",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "Leg"
+                  }
+                },
+                8
+              ]
+            }
+          },
+          {
+            "name": "router_allowlist",
+            "type": {
+              "array": [
+                "pubkey",
+                4
+              ]
+            }
+          },
+          {
+            "name": "pending_router",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "PendingRouter"
+                }
+              }
+            }
+          },
+          {
+            "name": "max_convert_chunk",
+            "type": "u64"
+          },
+          {
+            "name": "deposits_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "bootstrapped",
+            "type": "bool"
+          },
+          {
+            "name": "reinvest_mask",
+            "docs": [
+              "Legs still owed an equal slice of the USDC reserve after a retirement (IPO rule step 4)."
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ClaimCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket",
+            "type": "pubkey"
+          },
+          {
+            "name": "leg",
+            "type": "u8"
+          },
+          {
+            "name": "units",
+            "type": "u64"
+          },
+          {
+            "name": "reason",
+            "type": {
+              "defined": {
+                "name": "ClaimReason"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ClaimReason",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Paused"
+          },
+          {
+            "name": "Hook"
+          },
+          {
+            "name": "Frozen"
+          },
+          {
+            "name": "PendingSale"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ClaimSettled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket",
+            "type": "pubkey"
+          },
+          {
+            "name": "leg",
+            "type": "u8"
+          },
+          {
+            "name": "units",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "docs": [
+              "Gross debited from the vault: floor(units × owned / (S + C))."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "received",
+            "docs": [
+              "The owner's measured receipt (net of the transfer fee; USDC for settle_leg_usdc)."
+            ],
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DepositTicket",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "basket",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "nonce",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "escrow",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_in",
+            "type": "u64"
+          },
+          {
+            "name": "norm",
+            "type": {
+              "array": [
+                "u128",
+                8
+              ]
+            }
+          },
+          {
+            "name": "landed_mask",
+            "type": "u8"
+          },
+          {
+            "name": "created_slot",
+            "type": "u64"
+          },
+          {
+            "name": "expiry_slot",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Leg",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "accounted",
+            "type": "u64"
+          },
+          {
+            "name": "claim_units",
+            "type": "u64"
+          },
+          {
+            "name": "pending_norm",
+            "type": "u128"
+          },
+          {
+            "name": "loss_index",
+            "type": "u128"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "LegStatus"
+              }
+            }
+          },
+          {
+            "name": "mirror_of",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LegConverted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "leg",
+            "type": "u8"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "usdc",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LegListing",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "leg",
+            "type": "u8"
+          },
+          {
+            "name": "convert_after",
+            "type": "i64"
+          },
+          {
+            "name": "deadline",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LegRetired",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "leg",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LegStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Listing",
+            "fields": [
+              {
+                "name": "convert_after",
+                "type": "i64"
+              },
+              {
+                "name": "deadline",
+                "type": "i64"
+              }
+            ]
+          },
+          {
+            "name": "Retired"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintPath",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InKind"
+          },
+          {
+            "name": "Ticket"
+          },
+          {
+            "name": "Bootstrap"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Minted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          },
+          {
+            "name": "deltas",
+            "type": {
+              "array": [
+                "u64",
+                8
+              ]
+            }
+          },
+          {
+            "name": "path",
+            "type": {
+              "defined": {
+                "name": "MintPath"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PendingRouter",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "router",
+            "type": "pubkey"
+          },
+          {
+            "name": "effective_ts",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedeemMode",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InKind"
+          },
+          {
+            "name": "Usdc",
+            "fields": [
+              {
+                "name": "min_usdc_out",
+                "type": "u64"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Redeemed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          },
+          {
+            "name": "paid",
+            "type": {
+              "array": [
+                "u64",
+                8
+              ]
+            }
+          },
+          {
+            "name": "claims_mask",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedemptionTicket",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "basket",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "nonce",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "mode",
+            "type": {
+              "defined": {
+                "name": "RedeemMode"
+              }
+            }
+          },
+          {
+            "name": "shares_burned",
+            "type": "u64"
+          },
+          {
+            "name": "legs",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "TicketLeg"
+                  }
+                },
+                8
+              ]
+            }
+          },
+          {
+            "name": "usdc_out",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RouterProposed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "router",
+            "type": "pubkey"
+          },
+          {
+            "name": "effective_ts",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ShortfallObserved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "leg",
+            "type": "u8"
+          },
+          {
+            "name": "expected",
+            "type": "u64"
+          },
+          {
+            "name": "actual",
+            "type": "u64"
+          },
+          {
+            "name": "loss_index",
+            "type": "u128"
+          },
+          {
+            "name": "slot",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SurplusObserved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "leg",
+            "type": "u8"
+          },
+          {
+            "name": "expected",
+            "type": "u64"
+          },
+          {
+            "name": "actual",
+            "type": "u64"
+          },
+          {
+            "name": "slot",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TicketLeg",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Paid",
+            "fields": [
+              {
+                "name": "amount",
+                "type": "u64"
+              },
+              {
+                "name": "received",
+                "type": "u64"
+              }
+            ]
+          },
+          {
+            "name": "Claim",
+            "fields": [
+              {
+                "name": "units",
+                "type": "u64"
+              },
+              {
+                "name": "reason",
+                "type": {
+                  "defined": {
+                    "name": "ClaimReason"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "None"
+          }
+        ]
+      }
+    }
+  ]
+}

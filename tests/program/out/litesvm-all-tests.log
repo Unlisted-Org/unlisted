@@ -1,0 +1,64 @@
+✔ router allowlist: unknown router refused; propose → 48 h timelock → activate; removal immediate (296.863375ms)
+✔ measured delta, not the router's word: min_out is checked against what actually landed net of the fee (202.047875ms)
+✔ basket-signed routes are confined: another leg's vault, a hostile approve, or over-selling are refused (190.221208ms)
+✔ authority: can stop new deposits only; redemption and claims keep working; no instruction moves vault tokens (213.776875ms)
+✔ bootstrap: authority only, once; deposits need a bootstrapped basket (165.570041ms)
+✔ initialize_basket refuses a mint without the PreStocks extension set, and one with a hook set (239.718167ms)
+✔ IPO rule: ≥ 7 d notice and margin; conversion waits for convert_after; chunk cap; cancel only before (211.470417ms)
+✔ deposit ticket lifecycle: expiry, incomplete finalize, unwind + abort refund, intermediates closed to owner (181.304667ms)
+✔ full USDC ticket: 7 legs land, finalize mints by the spec formula, refunds and closes; fee change mid-ticket (214.733709ms)
+✔ harvest moves the vault's withheld fees to the mint and changes no accounting (172.538125ms)
+✔ donation is surplus to holders, not to open tickets; observe is permissionless (173.472542ms)
+  IpoRule.test_conversion_preserves_every_holders_fraction: 100 scenarios, 600 model ops, 6015 transactions, 0 refusals matched
+  IpoRule.test_conversion_waits_for_open_claims: 3 scenarios, 30 model ops, 192 transactions, 3 refusals matched
+  IpoRule.test_redeem_during_conversion_gets_pro_rata_usdc__initial_shares_1e9: 1 scenarios, 4 model ops, 50 transactions, 0 refusals matched
+✔ IpoRule.test_conversion_preserves_every_holders_fraction (21033.114416ms)
+✔ IpoRule.test_conversion_waits_for_open_claims (737.222417ms)
+✔ IpoRule.test_redeem_during_conversion_gets_pro_rata_usdc (INITIAL_SHARES variant) (191.345833ms)
+  PartialRedemption.test_available_legs_pay_immediately_and_claim_pays_after_resume: 400 scenarios, 2600 model ops, 21815 transactions, 0 refusals matched
+  PartialRedemption.test_other_holders_unaffected_while_claim_open: 400 scenarios, 2000 model ops, 21215 transactions, 0 refusals matched
+  PartialRedemption.test_claim_shares_a_later_seizure_pro_rata__initial_shares_1e9: 1 scenarios, 7 model ops, 54 transactions, 0 refusals matched
+  PartialRedemption.test_claim_shares_a_later_seizure_pro_rata__initial_shares_1e9: 1 scenarios, 7 model ops, 52 transactions, 0 refusals matched
+  PartialRedemption.test_claim_shares_a_later_seizure_pro_rata__initial_shares_1e9: 1 scenarios, 7 model ops, 54 transactions, 0 refusals matched
+  PartialRedemption.test_usdc_mode_claims_settle_to_the_in_kind_amounts: 400 scenarios, 3400 model ops, 22615 transactions, 0 refusals matched
+  PartialRedemption.test_multiple_paused_legs_and_deposit_refused: 1 scenarios, 8 model ops, 84 transactions, 1 refusals matched
+  PartialRedemption.test_multiple_paused_legs_and_deposit_refused: 1 scenarios, 8 model ops, 80 transactions, 1 refusals matched
+  PartialRedemption.test_multiple_paused_legs_and_deposit_refused: 1 scenarios, 8 model ops, 80 transactions, 1 refusals matched
+✔ PartialRedemption.test_available_legs_pay_immediately_and_claim_pays_after_resume (84687.490916ms)
+✔ PartialRedemption.test_other_holders_unaffected_while_claim_open (79610.567875ms)
+✔ PartialRedemption.test_claim_shares_a_later_seizure_pro_rata (INITIAL_SHARES variant) (556.222ms)
+✔ PartialRedemption.test_usdc_mode_claims_settle_to_the_in_kind_amounts (139373.401541ms)
+✔ PartialRedemption.test_multiple_paused_legs_and_deposit_refused (876.7905ms)
+  RoundingFavoursVault.test_entitlements_never_exceed_balance: 300 scenarios, 25464 model ops, 53507 transactions, 2645 refusals matched
+  RoundingFavoursVault.test_mint_never_dilutes_existing_holders: 300 scenarios, 1500 model ops, 18615 transactions, 0 refusals matched
+  RoundingFavoursVault.test_redeem_never_dilutes_remaining_holders: 300 scenarios, 1500 model ops, 15915 transactions, 0 refusals matched
+  RoundingFavoursVault.test_redeem_pays_floor__initial_shares_1e9: 1 scenarios, 2 model ops, 38 transactions, 0 refusals matched
+✔ RoundingFavoursVault.test_entitlements_never_exceed_balance (249552.890208ms)
+✔ RoundingFavoursVault.test_mint_never_dilutes_existing_holders (104086.040333ms)
+✔ RoundingFavoursVault.test_redeem_never_dilutes_remaining_holders (54183.695917ms)
+✔ RoundingFavoursVault.test_redeem_pays_floor (INITIAL_SHARES variant) (133.607042ms)
+  Shortfall.test_seizure_is_shared_pro_rata_and_observed: 200 scenarios, 1200 model ops, 10815 transactions, 0 refusals matched
+  Shortfall.test_later_depositors_do_not_make_holders_whole: 200 scenarios, 1400 model ops, 12815 transactions, 0 refusals matched
+  Shortfall.test_open_ticket_bears_shortfall_pro_rata__initial_shares_1e9: 1 scenarios, 11 model ops, 50 transactions, 0 refusals matched
+✔ Shortfall.test_seizure_is_shared_pro_rata_and_observed (41098.494041ms)
+✔ Shortfall.test_later_depositors_do_not_make_holders_whole (49658.887792ms)
+✔ Shortfall.test_open_ticket_bears_shortfall_pro_rata (INITIAL_SHARES variant) (182.126625ms)
+  TransferFee.test_mint_credits_measured_net_not_gross: 1 scenarios, 2 model ops, 47 transactions, 0 refusals matched
+  TransferFee.test_fee_change_mid_position_needs_no_stored_fee: 1 scenarios, 10 model ops, 55 transactions, 0 refusals matched
+✔ TransferFee.test_mint_credits_measured_net_not_gross (256.014125ms)
+✔ TransferFee.test_fee_change_mid_position_needs_no_stored_fee (227.112667ms)
+✔ one leg paused mid-redemption: six legs paid now, the paused leg becomes a claim, settles after resume (301.802792ms)
+✔ several legs unavailable at once (pause, hook, frozen vault): each becomes its own claim with its reason (277.181583ms)
+✔ every leg paused: redemption still succeeds, burns the shares and turns every leg into a claim (258.126458ms)
+✔ seizure while a claim is open: the claimant and the holders lose the same fraction; observe emits it (226.241209ms)
+✔ USDC mode with a paused leg: PendingSale claims sell through the router at the measured amount; paused leg waits (231.864458ms)
+✔ frozen vault and hook each behave like a pause: refusal to deposit, claim on redeem, settle after (508.480291ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 411459.358792
+node --import tsx --test --test-concurrency=4 'src/**/*.test.ts'  712.37s user 12.74s system 176% cpu 6:51.50 total
