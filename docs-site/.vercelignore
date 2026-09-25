@@ -6,3 +6,5 @@ dist
 .astro
 **/*.keypair.json
 **/id.json
+proof
+BROKEN-VERSIONS.md

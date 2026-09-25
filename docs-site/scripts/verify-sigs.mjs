@@ -1,7 +1,8 @@
 // Checks every transaction signature the built docs show. Run after `npm run build`:
 //
-//   node scripts/verify-sigs.mjs [--dist <dir>]
+//   node scripts/verify-sigs.mjs [--dist <dir>] [--origin https://…]
 //
+// With --origin, each page listed in dist/ is fetched from the deployed site and checked as served.
 // For each page in dist/:
 // 1. Every signature appears only as a Solana Explorer link, whose URL names its network
 //    (`?cluster=devnet`, or no cluster for mainnet). A full signature in the page text, or in
@@ -21,6 +22,7 @@ const DIST = opt('--dist', new URL('../dist/', import.meta.url).pathname);
 const REPO = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
 const RPC = { devnet: 'https://api.devnet.solana.com', mainnet: 'https://api.mainnet-beta.solana.com' };
 const SIG = /[1-9A-HJ-NP-Za-km-z]{86,88}/g;
+const ORIGIN = opt('--origin', null)?.replace(/\/$/, '');
 
 const htmlFiles = [];
 (function walk(dir) {
@@ -36,6 +38,11 @@ const cited = new Map(); // sig -> { network, slot, pages }
 for (const f of htmlFiles) {
 	const page = '/' + relative(DIST, f).replace(/index\.html$/, '');
 	let html = readFileSync(f, 'utf8');
+	if (ORIGIN) {
+		const r = await fetch(ORIGIN + page);
+		if (!r.ok && page !== '/404.html') problems.push(`${page}: ${r.status} from ${ORIGIN}`);
+		html = await r.text();
+	}
 	// Pagefind's and Starlight's own scripts carry no signatures; drop them so they can't hide one.
 	html = html.replace(/<script[\s\S]*?<\/script>/g, '');
 	const linkRe = /<a\s[^>]*href="https:\/\/explorer\.solana\.com\/tx\/([1-9A-HJ-NP-Za-km-z]{86,88})(\?cluster=([a-z-]+))?"[^>]*>/g;
@@ -107,7 +114,7 @@ for (const [network, url] of Object.entries(RPC)) {
 
 const withSlot = [...cited.values()].filter((v) => v.slot !== null).length;
 console.log(
-	`signatures: ${cited.size} cited across ${htmlFiles.length} pages (devnet ${counts.devnet}, mainnet ${counts.mainnet}); ` +
+	`${ORIGIN ? ORIGIN + ': ' : ''}signatures: ${cited.size} cited across ${htmlFiles.length} pages (devnet ${counts.devnet}, mainnet ${counts.mainnet}); ` +
 		`${withSlot} with a stated slot; ${known.size} signature-shaped strings in committed records`,
 );
 if (problems.length) {

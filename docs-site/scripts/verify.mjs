@@ -173,7 +173,17 @@ let searchOk = false;
 	await page.click('button[data-open-modal]');
 	await page.fill('dialog[open] input', QUERY);
 	await page.waitForSelector('dialog[open] .pagefind-ui__result-link', { timeout: 10_000 });
-	const hits = await page.$$eval('dialog[open] .pagefind-ui__result-link', (as) => as.map((a) => a.getAttribute('href')));
+	// Pagefind renders results as their fragments load, and the order can change while it does
+	// (seen against the deployed site: read too early, the top result wasn't there yet). Read
+	// only once the list has stopped changing for a second.
+	const read = () => page.$$eval('dialog[open] .pagefind-ui__result-link', (as) => as.map((a) => a.getAttribute('href')));
+	let hits = await read();
+	for (let i = 0, stable = 0; i < 40 && stable < 2; i++) {
+		await page.waitForTimeout(500);
+		const next = await read();
+		stable = JSON.stringify(next) === JSON.stringify(hits) ? stable + 1 : 0;
+		hits = next;
+	}
 	searchOk = hits.some((h) => h.startsWith(EXPECT));
 	console.log(`search "${QUERY}": ${hits.length} results, first ${hits.slice(0, 3).join(', ')} — ${searchOk ? 'ok' : 'FAIL: ' + EXPECT + ' not found'}`);
 	if (SHOTS) {
