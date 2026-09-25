@@ -1,0 +1,19 @@
+# Top-level folders are anchored with a leading "/": an unanchored "app/" also matched web/app/ (the
+# Next.js pages), which deployed a site with no pages. Never upload secrets or local state to Vercel (the site builds from web/ and ../sdk only).
+.env*
+!.env.example
+**/*.keypair.json
+**/id.json
+**/.local/
+**/node_modules/
+/target/
+/.anchor/
+/.playwright-browsers/
+**/.next/
+**/test-results/
+/tests/
+/app/
+/services/
+/evidence/symmetry-fork/out/
+**/*.png
+!web/public/**
