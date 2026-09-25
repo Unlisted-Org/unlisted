@@ -9,6 +9,7 @@ import {
 import type { AppConfig } from "./config";
 import { Connected, connect, onWalletsChanged, signAll, usableWallets } from "./wallet";
 import { useBasket, useEvents, usePosition } from "./state";
+import { sendSequentialWithRetry } from "./send";
 import { HttpValuation, MockValuation, Valuation } from "./valuation/api";
 import type { BasketResponse, EventsResponse, QuoteDepositResponse } from "./valuation/types";
 import {
@@ -85,11 +86,13 @@ export function App({ config }: { config: AppConfig }) {
     const update = () => setLog((l) => l.map((x) => (x.id === id ? { ...rec, signatures: [...rec.signatures] } : x)));
     try {
       const fresh = await client.fetchBasket(); // plan against the latest state, not the rendered one
-      const { blockhash } = await conn.getLatestBlockhash("confirmed");
+      // Finalized: every RPC node already has it, so a lagging node can't answer "Blockhash not found".
+      const { blockhash } = await conn.getLatestBlockhash("finalized");
       const txs = await build(fresh, wallet.publicKey, blockhash);
       const signed = await signAll(wallet, txs); // ONE approval for every transaction of the flow
       rec.approvals = 1;
-      const sent = await sendSequential(conn, signed, (_i, sig) => { rec.signatures.push(sig); update(); });
+      const sent = await sendSequentialWithRetry(conn, signed, (_i, sig) => { rec.signatures.push(sig); update(); },
+        { onRetry: (i, a, why) => { rec.retries = [...(rec.retries ?? []), `tx ${i + 1} attempt ${a + 1}: ${why}`]; update(); } });
       const failed = sent.find((s) => s.err);
       rec.status = failed || sent.length < signed.length ? "failed" : "ok";
       if (failed) rec.error = `transaction ${failed.signature} failed: ${JSON.stringify(failed.err)}`;

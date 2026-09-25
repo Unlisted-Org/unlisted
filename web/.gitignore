@@ -43,3 +43,4 @@ test-results/
 playwright-report/
 e2e/holder/.build/
 e2e/holder/.local/
+*.mutant-backup

@@ -443,7 +443,7 @@ export function Disclosures({ upgradeAuthority, authority }: { upgradeAuthority:
 
 // ---------------------------------------------------------------- tx log
 
-export interface TxRecord { id: string; label: string; signatures: string[]; status: "ok" | "failed" | "pending"; error?: string; approvals: number; at: string }
+export interface TxRecord { id: string; label: string; signatures: string[]; status: "ok" | "failed" | "pending"; error?: string; approvals: number; at: string; retries?: string[] }
 
 export function TxLog({ log, explorer }: { log: TxRecord[]; explorer: string | null }) {
   if (!log.length) return null;
@@ -454,6 +454,7 @@ export function TxLog({ log, explorer }: { log: TxRecord[]; explorer: string | n
         {log.map((t, i) => (
           <li key={t.id} data-testid={`tx-${i}`} data-status={t.status}>
             <b>{t.label}</b>: <span data-testid={`tx-status-${i}`}>{t.status}</span> · {t.signatures.length} transaction(s), {t.approvals} wallet approval(s)
+            {t.retries?.length ? <div className="muted" data-testid={`tx-retries-${i}`}>Re-sent after a transient RPC error ({t.retries.length}×; same signed transaction): {t.retries.join("; ")}</div> : null}
             {t.error && <div className="warnline">{t.error}</div>}
             {t.signatures.map((s) => (
               <div key={s} className="mono" data-testid="tx-signature">{explorer ? <a href={explorer.replace("{sig}", s)} target="_blank" rel="noreferrer">{s}</a> : s}</div>

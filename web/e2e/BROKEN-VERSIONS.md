@@ -64,3 +64,22 @@ This is Agent B's flow, ported to `/app`, and run on 2026-09-25 with the valuati
 - **Screenshots:** `e2e/holder/runs/2026-09-25-devnet-*.png`, showing the claim open, then settled.
 
 **Broken version, run on the new UI:** B's `price-panel-not-api` mutant, applied to the ported `Panels.tsx` (the sell-now card shows the API's last-trade figure). It was killed at the intended assertion: `Expected: "match"`, `Received: panel ["698.977388","698.977388","650.299763"]`. The mutant was reverted, and the file was confirmed byte-identical to B's original. B's other mutants target the shared SDK or localnet-only flows; they were killed against B's UI on 2026-09-24 (`app/e2e/runs/2026-09-24-localnet-mutations.json`), and the SDK code they mutate is unchanged.
+
+# Sending with retries (`e2e/send.spec.ts`), and the exact-revert mutant tool
+
+**Retry logic** (`app/app/_holder/send.ts`). The app now takes a `finalized` blockhash. On a transient RPC error (`Blockhash not found`, 429, 5xx, timeouts) it re-sends the same signed bytes, while that blockhash is still valid.
+- **Broken version:** `SEND_BROKEN=1` allows one attempt. The transient case fails with `Rejected: … Blockhash not found`.
+- **Real run:** all 3 pass:
+  - a transient error is retried and succeeds;
+  - a program error (`0x1771`) is never retried;
+  - an expired blockhash stops the retries and asks for a new signature.
+
+**`scripts/mutant.mjs`** replaces hand-reverted mutants:
+- It refuses a target that occurs more than once, which was the slip where a revert matched a second identical line.
+- It restores the original bytes, then checks sha256.
+- Checked on a scratch file:
+  - an ambiguous target is refused, with the file untouched;
+  - a killed mutant and a survived mutant are both restored, sha256 identical;
+  - an interrupt (SIGTERM) restores at once and exits 130;
+  - a hard kill (SIGKILL) leaves `<file>.mutant-backup` for recovery.
+- The first version used a blocking `spawnSync`, so an interrupt was only handled after the command ended and was misreported as "survived". It was fixed with an async spawn and re-tested.
