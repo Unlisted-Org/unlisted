@@ -192,3 +192,26 @@ The new Unlisted logo (brand/, from the delivered SVG) is now in the site header
 - **The flow's failure path now settles its own open claims** (`settleOpenClaims`), after resuming any leg it paused.
 - **Proved by re-running the same broken version.** It was killed at the intended assertion. The harness then resumed ANTHROPIC and settled the claim (`4Co7QLeY…cKzv5`), and `settle-open-claims.spec.ts` found no open claim in any of the 18 saved test wallets.
 - **Run records list everything a run puts on chain.** The docs agent found that run 7's redemption (`4dmbGHhg…`, slot 504,021,866) was missing from the record: the check failed before the step was written. It is backfilled, and verified on chain as a `Redeem`. The flow now records every app transaction the moment it lands, before any check on it. The same broken version was re-run to prove it (run 8): the record lists `landed: Redeem in kind` (`2hJcp55E…`), then the cleanup's resume and settlement.
+
+# The issuer control, open to judges (2026-09-26)
+
+The demo passcode (`fjord-basalt-meadow-339`) is now the Passcode field's value, not a placeholder, and it is published in the README and the docs. Beside the field, a note says:
+- this is a devnet demo control on fixture mints, not a real PreStocks action;
+- a pause is global;
+- please resume what you pause.
+
+The server's gate is unchanged. Each check was seen failing first:
+
+| Broken version | What it was | Failed at |
+|---|---|---|
+| no pre-fill | the code before the change | `pre-filled value: Expected "fjord-basalt-meadow-339", Received ""` |
+| a gate that accepts anything | `passcodeOk` mutated to always true (`scripts/mutant.mjs`, reverted byte-identical) | `a wrong passcode must fail: Expected "failed", Received "ok"` |
+
+- **The accept-anything mutant really paused KALSHI.** The check's cleanup resumed it, and a later chain read showed `paused: false`.
+- **The first attempt at the no-pre-fill run didn't count.** It timed out at 300 s instead of failing at the assertion: the check's own chain read went through the rate-limited public RPC. It was re-run with the dedicated RPC and then failed at the intended assertion.
+- **Real run,** locally and on the live site, in fresh sessions with no storage:
+  - the field is pre-filled at 1440 and 390, in both themes;
+  - one click pauses KALSHI (read back on chain), and Resume resumes it;
+  - a wrong value is refused, and nothing is paused.
+
+  5 of 5 pass on each, and the rest of the suite passes: 32 of 32.
