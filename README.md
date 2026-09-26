@@ -37,6 +37,12 @@ Unlisted is built so that:
   - the valuation API and issuer watcher, on Railway;
   - every cited signature, on [/evidence](https://unlisted-basket.vercel.app/evidence).
 - **The live app runs the whole story:** buy in, the fixture issuer pauses one company, redeem anyway (six pay now, one becomes a claim), the pause lifts, the claim pays out. A fresh-wallet browser test runs it against the live site; the records are in `web/e2e/holder/runs/`.
+- **Try the whole story yourself** at [/app](https://unlisted-basket.vercel.app/app):
+  - connect a devnet wallet, get test tokens and buy in;
+  - pause a company with the issuer control at the bottom of the Overview. The demo passcode is **`fjord-basalt-meadow-339`**, already filled in. It acts only on the devnet fixture mints, not on PreStocks' real tokens;
+  - redeem, resume, then settle the claim.
+
+  A pause is global, so anyone else on the app sees it too. Please resume what you pause.
 - This README is updated only when something is proven.
 
 ## Read

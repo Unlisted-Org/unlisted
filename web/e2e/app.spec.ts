@@ -258,3 +258,89 @@ test("api: resuming a company that isn't paused returns at once and sends nothin
   expect(j.already, "already in that state").toBe(true);
   expect(j.signature, "no transaction sent").toBeUndefined();
 });
+
+// ---------------------------------------------------------------- the issuer control, open to judges
+// The passcode arrives pre-filled (the field's value, not a placeholder), so one click on Pause gets
+// through on any device; the gate itself stays, and a wrong value is still refused. Devnet: these sign.
+const DEMO_PASSCODE = "fjord-basalt-meadow-339";
+const TRY = "KALSHI"; // a company the demo script doesn't use, paused for a few seconds and resumed
+
+async function kalshiPaused(): Promise<boolean> {
+  const { loadEnv, mintPausedByRpc } = await import("./holder/harness");
+  const { PublicKey } = await import("@solana/web3.js");
+  const env = loadEnv();
+  return mintPausedByRpc(env, new PublicKey(env.legs.find((l) => l.symbol === TRY)!.mint));
+}
+
+async function resumeIfPaused(request: import("@playwright/test").APIRequestContext) {
+  if (await kalshiPaused().catch(() => false)) await request.post("/api/issuer", { data: { action: "resume", symbol: TRY, passcode: DEMO_PASSCODE } });
+}
+
+async function openIssuer(browser: import("@playwright/test").Browser, width: number, scheme: "light" | "dark") {
+  const ctx = await browser.newContext({ viewport: { width, height: 900 }, colorScheme: scheme }); // a fresh session: no storage
+  const page = await ctx.newPage();
+  await page.goto("/app", { waitUntil: "load" });
+  await expect(page.getByTestId("issuer-control")).toBeVisible({ timeout: 120_000 });
+  return { ctx, page };
+}
+
+for (const width of [1440, 390]) {
+  test(`issuer control (${width}): the passcode arrives pre-filled and one click gets through`, async ({ browser, request }) => {
+    test.skip(process.env.E2E_ENV !== "devnet", "signs a pause and a resume on devnet");
+    test.setTimeout(300_000);
+    expect(await kalshiPaused(), `${TRY} must start unpaused`).toBe(false);
+    const { ctx, page } = await openIssuer(browser, width, "light");
+    try {
+      await expect(page.getByTestId("issuer-passcode"), "pre-filled value").toHaveValue(DEMO_PASSCODE);
+      await expect(page.getByTestId("issuer-open-note")).toContainText(/not a real PreStocks action/i);
+      await page.getByTestId("issuer-symbol").selectOption(TRY);
+      await expect(page.getByTestId("issuer-pause")).toBeEnabled();
+      mkdirSync(SHOTS, { recursive: true });
+      await page.getByTestId("issuer-control").screenshot({ path: `${SHOTS}/issuer-prefilled-${width}-light.png` });
+      await page.getByTestId("issuer-pause").click(); // the one click
+      const entry = page.getByTestId("tx-0");
+      await expect(entry).toContainText(`pauses ${TRY}`);
+      await expect(entry).toHaveAttribute("data-status", "ok", { timeout: 90_000 });
+      expect(await kalshiPaused(), "paused on chain").toBe(true);
+      await page.getByTestId("issuer-resume").click();
+      await expect(entry).toContainText(`resumes ${TRY}`);
+      await expect(entry).toHaveAttribute("data-status", "ok", { timeout: 90_000 });
+      expect(await kalshiPaused(), "resumed on chain").toBe(false);
+    } finally {
+      await resumeIfPaused(request);
+      await ctx.close();
+    }
+  });
+  test(`issuer control (${width}, dark): pre-filled and ready`, async ({ browser }) => {
+    test.skip(process.env.E2E_ENV !== "devnet", "devnet issuer configuration");
+    test.setTimeout(180_000);
+    const { ctx, page } = await openIssuer(browser, width, "dark");
+    await expect(page.getByTestId("issuer-passcode")).toHaveValue(DEMO_PASSCODE);
+    await expect(page.getByTestId("issuer-pause")).toBeEnabled();
+    const { sw, cw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
+    expect(sw).toBeLessThanOrEqual(cw);
+    await page.getByTestId("issuer-control").screenshot({ path: `${SHOTS}/issuer-prefilled-${width}-dark.png` });
+    await ctx.close();
+  });
+}
+
+test("issuer control: a wrong passcode is still refused, and nothing is paused", async ({ browser, request }) => {
+  test.skip(process.env.E2E_ENV !== "devnet", "the devnet issuer configuration is what's being tested");
+  test.setTimeout(300_000);
+  expect(await kalshiPaused(), `${TRY} must start unpaused`).toBe(false);
+  const { ctx, page } = await openIssuer(browser, 1440, "light");
+  try {
+    await page.getByTestId("issuer-passcode").fill("not-the-passcode");
+    await page.getByTestId("issuer-symbol").selectOption(TRY);
+    await page.getByTestId("issuer-pause").click();
+    const entry = page.getByTestId("tx-0");
+    await expect(entry).toContainText(`pauses ${TRY}`);
+    await expect(entry).toHaveAttribute("data-status", /ok|failed/, { timeout: 90_000 });
+    expect(await entry.getAttribute("data-status"), "a wrong passcode must fail").toBe("failed");
+    await expect(entry).toContainText("wrong or missing demo passcode");
+    expect(await kalshiPaused(), "nothing paused on chain").toBe(false);
+  } finally {
+    await resumeIfPaused(request);
+    await ctx.close();
+  }
+});

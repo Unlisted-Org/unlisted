@@ -73,8 +73,10 @@ The most recent action: its name, whether it succeeded, how many transactions it
 
 A dashed box marked **Issuer · devnet fixture**. PreStocks can pause any of its tokens at any time; this control does the same to the devnet fixture mints, so you can watch the basket keep paying.
 
-- Pick a company, enter the passcode, and press **Pause** *company* or **Resume**.
-- **It needs the presenter's demo passcode.** The app's server checks it and then signs the pause or resume as the devnet fixture issuer. Your wallet isn't asked for anything.
+- Pick a company and press **Pause** *company* or **Resume**.
+- **The demo passcode is `fjord-basalt-meadow-339`, and it arrives already filled in**, so one click gets through. The app's server still checks it (a wrong value is refused), then signs the pause or resume as the devnet fixture issuer. Your wallet isn't asked for anything.
+- **It's a devnet demo control on fixture mints, not a real PreStocks action.** It can't touch mainnet.
+- **A pause is global:** anyone else using the app sees it too. Please resume anything you pause when you're done.
 - The app then sees the pause exactly as it would see a real one: by reading the mint.
 
 ## The story on the Overview, recorded

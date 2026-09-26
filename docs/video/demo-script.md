@@ -22,7 +22,7 @@ You record it in Screen Studio. The whole story happens on one screen, the Overv
 3. **Test tokens (once per wallet).**
    - Open `/app`, connect, and press **Get test tokens** in the Buy in box. You get 50 test USDC and about $20 of each company.
    - It works once per wallet. Don't film it: it's a devnet convenience, and the story doesn't need it.
-4. **The issuer control.** Scroll to "Issuer (devnet fixture)" at the bottom of the Overview and type the passcode. The tab remembers it; a new tab needs it again.
+4. **The issuer control.** The passcode (`fjord-basalt-meadow-339`) is already filled in, so there is nothing to type. Check that the Passcode field at the bottom of the Overview shows it.
 5. **Start state.**
    - All seven tiles say AVAILABLE; if Anthropic is paused, press Resume.
    - The Claims item in the sidebar has no count; if it has, open Claims and settle.

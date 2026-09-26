@@ -170,7 +170,9 @@
 .holder .issuer-ctl h2 .pill { font-family: var(--mono); font-weight: 400; }
 .holder .issuer-ctl .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 .holder .issuer-ctl .row label { margin: 0; }
-.holder .issuer-ctl input { width: 9rem; }
+.holder .issuer-ctl input { width: 13.5rem; }
+.holder .issuer-ctl .issuer-note { margin: 10px 0 0; font-size: 12.5px; color: var(--ink-muted); max-width: 72ch; }
+.holder .issuer-ctl .issuer-note b { color: var(--issuer); font-weight: 600; }
 
 /* The wallet adapter's modal (rendered outside .holder), in the app's tokens */
 .unlisted-wallet-modal.wallet-adapter-modal { font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif; }

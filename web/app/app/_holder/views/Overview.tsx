@@ -12,6 +12,8 @@ import { Banners, claimsOf, issuerBanners, TxLog, type ClaimRow } from "../compo
 import { fmtRaw, fmtShares, fmtUsd, parseUnits } from "../format";
 
 const REASON: Record<string, string> = { paused: "Paused by the issuer", hook: "Transfer hook set", frozen: "Vault frozen", vault_missing: "Vault missing" };
+/** The demo passcode, published in the README and the docs so judges can use the issuer control. */
+const DEMO_PASSCODE = "fjord-basalt-meadow-339";
 const nameOf = (sym: string) => CONSTITUENTS.find((c) => c.symbol === sym)?.name ?? sym;
 
 /** The most shares the wallet's own leg balances can mint, net of the issuer's transfer fee. */
@@ -179,7 +181,9 @@ function IssuerControl() {
   const h = useHolder();
   const v = h.view!;
   const [sym, setSym] = useState("ANTHROPIC");
-  const [code, setCode] = useState<string>(() => { try { return sessionStorage.getItem("unlisted-demo-passcode") ?? ""; } catch { return ""; } });
+  // The demo passcode is public (it's in the README and the docs) and arrives filled in, so anyone can try
+  // the control with one click. The server still checks it: a wrong value is refused.
+  const [code, setCode] = useState<string>(() => { try { return sessionStorage.getItem("unlisted-demo-passcode") || DEMO_PASSCODE; } catch { return DEMO_PASSCODE; } });
   const leg = v.legs.find((l) => l.symbol === sym)!;
   const paused = leg.unavailable.includes("paused");
   const act = (a: "pause" | "resume") => {
@@ -189,16 +193,19 @@ function IssuerControl() {
   return (
     <section className="issuer-ctl" data-testid="issuer-control">
       <h2>Issuer <span className="pill alert">devnet fixture</span></h2>
-      <p className="muted">PreStocks can pause any of its tokens at any time. This control does the same to the devnet fixtures, so you can watch the basket keep paying. It needs the presenter's demo passcode.</p>
-      <p className="muted" data-testid="issuer-simulation-note"><b>A devnet simulation.</b> The control signs with a test key that controls only this app's fixture mints on devnet. It can't touch PreStocks' real tokens or anything on mainnet.</p>
+      <p className="muted">PreStocks can pause any of its tokens at any time. This control does the same to the devnet fixtures, so you can watch the basket keep paying.</p>
       <div className="row">
         <label>Company <select value={sym} onChange={(e) => setSym(e.target.value)} data-testid="issuer-symbol">
           {v.legs.map((l) => <option key={l.symbol} value={l.symbol}>{nameOf(l.symbol)}{l.unavailable.includes("paused") ? " (paused)" : ""}</option>)}
         </select></label>
-        <label>Passcode <input type="password" autoComplete="off" value={code} onChange={(e) => setCode(e.target.value)} data-testid="issuer-passcode" /></label>
+        <label>Passcode <input type="text" autoComplete="off" spellCheck={false} value={code} onChange={(e) => setCode(e.target.value)} data-testid="issuer-passcode" /></label>
         <button className="danger" disabled={h.busy || !code || paused} onClick={() => act("pause")} data-testid="issuer-pause">Pause {nameOf(sym)}</button>
         <button className="secondary" disabled={h.busy || !code || !paused} onClick={() => act("resume")} data-testid="issuer-resume">Resume</button>
       </div>
+      <p className="issuer-note" data-testid="issuer-open-note">
+        <b>Devnet demo control on fixture mints, not a real PreStocks action</b>; it can't touch mainnet. The passcode is filled in for you.
+        A pause is global, so anyone else on the app sees it too: please resume anything you pause when you're done.
+      </p>
     </section>
   );
 }

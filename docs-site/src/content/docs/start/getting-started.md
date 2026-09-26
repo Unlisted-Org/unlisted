@@ -13,7 +13,9 @@ To try it:
 
 1. **Connect a wallet** set to devnet, with a little devnet SOL for fees ([faucet.solana.com](https://faucet.solana.com)). See [Wallet connection](/app/wallet/).
 2. **Get test tokens** on the Overview: 50 fixture USDC and about $20 of each company, once per wallet.
-3. **Buy in**, then **Redeem** on the Overview. The issuer control that pauses a company needs the presenter's passcode, so you'll see a pause only when a presenter runs one, or when a leg is already unavailable.
+3. **Buy in** on the Overview.
+4. **Pause a company** with the issuer control at the bottom of the Overview. The demo passcode, `fjord-basalt-meadow-339`, is already filled in. It acts only on the devnet fixture mints, never PreStocks' real tokens. A pause is global, so please resume what you pause when you're done.
+5. **Redeem** while it's paused: six companies pay now and the paused one becomes a claim. Then **Resume**, and **Settle** the claim on its tile.
 
 What each part of the screen does is on the [Dashboard guide](/app/dashboard/).
 
@@ -69,7 +71,7 @@ The command the project uses, from `web/e2e/holder/repeat.sh` (run from `web/`, 
 N=1 E2E_BASE_URL=https://unlisted-basket.vercel.app e2e/holder/repeat.sh
 ```
 
-These docs didn't re-run it. **It needs the project's own secrets, so it can't run from a fresh clone:** the presenter's demo passcode for the issuer control (`E2E_DEMO_PASSCODE`), a dedicated devnet RPC key read from the repository root's `.env.local`, and the project key that sends the fresh wallet its SOL. None of them is committed. To check the flow without running it, read the recorded runs: every signature in `web/e2e/holder/runs/2026-09-25-devnet-overview.json` is on devnet, and [The user flow](/product/user-flow/) links those of one run.
+These docs didn't re-run it. **It needs the project's own secrets, so it can't run from a fresh clone:** a dedicated devnet RPC key read from the repository root's `.env.local`, and the project key that sends the fresh wallet its SOL. None of them is committed. To check the flow without running it, read the recorded runs: every signature in `web/e2e/holder/runs/2026-09-25-devnet-overview.json` is on devnet, and [The user flow](/product/user-flow/) links those of one run.
 
 <div class="sources">
 
